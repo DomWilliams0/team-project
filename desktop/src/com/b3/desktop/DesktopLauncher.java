@@ -1,12 +1,12 @@
-package com.searchalisation.desktop;
+package com.b3.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.searchalisation.SearchalisationGame;
+import com.b3.MainGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new SearchalisationGame(), config);
+		new LwjglApplication(new MainGame(), config);
 	}
 }
