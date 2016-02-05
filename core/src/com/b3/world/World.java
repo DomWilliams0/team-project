@@ -1,10 +1,8 @@
 package com.b3.world;
 
 import com.b3.Utils;
-import com.b3.entity.component.PositionComponent;
+import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.component.RenderComponent;
-import com.b3.entity.component.VelocityComponent;
-import com.b3.entity.system.MovementSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
 import com.badlogic.ashley.core.Engine;
@@ -23,6 +21,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.ArrayList;
@@ -40,6 +39,7 @@ public class World implements Disposable {
 	private BuildingModelCache buildingCache;
 
 	private Engine engine;
+	private com.badlogic.gdx.physics.box2d.World physicsWorld;
 
 	private EventGenerator eventGenerator;
 	private WorldObserver worldObserver;
@@ -67,10 +67,11 @@ public class World implements Disposable {
 
 		// entities
 		engine = new Engine();
+		physicsWorld = new com.badlogic.gdx.physics.box2d.World(Vector2.Zero, true);
 	}
 
 	public void initEngine(PerspectiveCamera camera) {
-		engine.addSystem(new MovementSystem());
+//		engine.addSystem(new MovementSystem());
 		engine.addSystem(new RenderSystem(camera));
 
 		// debug: test entity
@@ -100,9 +101,13 @@ public class World implements Disposable {
 
 	public Entity addAgent(Vector2 tilePos) {
 		Entity e = new Entity();
-		e.add(new PositionComponent(tilePos.x, tilePos.y));
-		e.add(new VelocityComponent(10, 10)); // debug: test movement
+//		e.add(new PositionComponent(tilePos.x, tilePos.y));
+//		e.add(new VelocityComponent(10, 10)); // debug: test movement
 		e.add(new RenderComponent(Color.BLUE, 2f));
+
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.DynamicBody;
+		e.add(new PhysicsComponent(physicsWorld, bodyDef, tilePos));
 
 		engine.addEntity(e);
 		return e;
@@ -130,6 +135,9 @@ public class World implements Disposable {
 	// todo remove buildings too
 
 	public void render(WorldCamera camera) {
+		// tick physics
+		physicsWorld.step(Gdx.graphics.getRawDeltaTime(), 6, 4);
+
 		// render world
 		camera.positionMapRenderer(renderer);
 		renderer.render();
@@ -149,6 +157,7 @@ public class World implements Disposable {
 	public void dispose() {
 		buildingCache.dispose();
 		engine.removeAllEntities();
+		physicsWorld.dispose();
 	}
 
 	public Vector2 getTileSize() {
