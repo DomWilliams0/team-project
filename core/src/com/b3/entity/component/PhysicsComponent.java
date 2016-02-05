@@ -11,8 +11,7 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public class PhysicsComponent implements Component, Steerable<Vector2> {
 
-	private static final SteeringAcceleration<Vector2> steeringOutput =
-			new SteeringAcceleration<>(new Vector2());
+	private static final SteeringAcceleration<Vector2> steeringOutput = new SteeringAcceleration<>(new Vector2());
 	private final World world;
 	private final BodyDef bodyDef;
 
@@ -31,20 +30,21 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 	public SteeringBehavior<Vector2> steeringBehavior;
 
 
-	public PhysicsComponent(World world, BodyDef bodyDef, Vector2 tilePos) {
+	public PhysicsComponent(World world, BodyDef bodyDef, Vector2 tilePos, float radius) {
 		bodyDef.position.set(tilePos);
 		body = world.createBody(bodyDef);
 
-		// is a fixture needed?
 		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = new CircleShape();
+		CircleShape circleShape = new CircleShape();
+		circleShape.setRadius(radius);
+		fixtureDef.shape = circleShape;
 		body.createFixture(fixtureDef);
 
 		maxLinearSpeed = 100;
 		maxLinearAcceleration = 100;
 		maxAngularSpeed = 100;
 		maxAngularAcceleration = 100;
-		boundingRadius = 5f;
+		boundingRadius = radius; // todo needs conversion?
 		tagged = false;
 		zeroThreshold = 0.001f;
 
@@ -234,6 +234,6 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 
 	@Override
 	public Location<Vector2> newLocation() {
-		return new PhysicsComponent(world, bodyDef, new Vector2(0, 0));
+		return new PhysicsComponent(world, bodyDef, new Vector2(0, 0), boundingRadius);
 	}
 }

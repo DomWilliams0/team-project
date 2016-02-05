@@ -1,5 +1,6 @@
 package com.b3.world;
 
+import com.b3.DebugRenderer;
 import com.b3.Utils;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.component.RenderComponent;
@@ -31,6 +32,7 @@ public class World implements Disposable {
 
 	private Vector2 tileSize, pixelSize;
 
+	private DebugRenderer debugRenderer;
 	private TiledMapRenderer renderer;
 	private Environment environment;
 
@@ -68,6 +70,8 @@ public class World implements Disposable {
 		// entities
 		engine = new Engine();
 		physicsWorld = new com.badlogic.gdx.physics.box2d.World(Vector2.Zero, true);
+
+		debugRenderer = new DebugRenderer(physicsWorld);
 	}
 
 	public void initEngine(PerspectiveCamera camera) {
@@ -103,11 +107,12 @@ public class World implements Disposable {
 		Entity e = new Entity();
 //		e.add(new PositionComponent(tilePos.x, tilePos.y));
 //		e.add(new VelocityComponent(10, 10)); // debug: test movement
-		e.add(new RenderComponent(Color.BLUE, 2f));
+		float radius = 2f;
+		e.add(new RenderComponent(Color.BLUE, radius));
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		e.add(new PhysicsComponent(physicsWorld, bodyDef, tilePos));
+		e.add(new PhysicsComponent(physicsWorld, bodyDef, tilePos, radius));
 
 		engine.addEntity(e);
 		return e;
@@ -151,6 +156,8 @@ public class World implements Disposable {
 				.filter(building -> building.isVisible(camera))
 				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
 		buildingBatch.end();
+
+		debugRenderer.render(camera);
 	}
 
 	@Override
