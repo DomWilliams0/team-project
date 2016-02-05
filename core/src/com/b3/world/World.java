@@ -115,7 +115,7 @@ public class World implements Disposable {
 		Entity e = new Entity();
 //		e.add(new PositionComponent(tilePos.x, tilePos.y));
 //		e.add(new VelocityComponent(10, 10)); // debug: test movement
-		float radius = 2f;
+		float radius = 0.5f;
 		e.add(new RenderComponent(Color.BLUE, radius));
 
 		BodyDef bodyDef = new BodyDef();
