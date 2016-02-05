@@ -22,7 +22,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.ArrayList;
@@ -41,7 +44,9 @@ public class World implements Disposable {
 	private BuildingModelCache buildingCache;
 
 	private Engine engine;
+
 	private com.badlogic.gdx.physics.box2d.World physicsWorld;
+	private Body buildingBody; // all buildings will be fixtures on a single body
 
 	private EventGenerator eventGenerator;
 	private WorldObserver worldObserver;
@@ -65,13 +70,16 @@ public class World implements Disposable {
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
-		createDefaultBuildings();
-
 		// entities
 		engine = new Engine();
 		physicsWorld = new com.badlogic.gdx.physics.box2d.World(Vector2.Zero, true);
+		BodyDef buildingBodyDef = new BodyDef();
+		buildingBodyDef.type = BodyDef.BodyType.StaticBody;
+		buildingBody = physicsWorld.createBody(buildingBodyDef);
 
 		debugRenderer = new DebugRenderer(physicsWorld);
+
+		createDefaultBuildings();
 	}
 
 	public void initEngine(PerspectiveCamera camera) {
@@ -133,6 +141,18 @@ public class World implements Disposable {
 
 		Building building = new Building(pos, dimensions, instance);
 		buildings.add(building);
+
+		// physics
+		FixtureDef buildingDef = new FixtureDef();
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(
+				dimensions.x / 2, dimensions.y / 2,
+				new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
+				0f
+		);
+		buildingDef.shape = shape;
+		buildingBody.createFixture(buildingDef);
+		shape.dispose(); // todo reuse shape and fixture for all buildings
 
 		return building;
 	}
