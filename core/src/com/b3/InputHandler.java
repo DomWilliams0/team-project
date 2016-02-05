@@ -12,14 +12,30 @@ import java.util.TreeMap;
 
 public class InputHandler {
 
+	enum Key {
+		UP(Input.Keys.UP),
+		DOWN(Input.Keys.DOWN),
+		LEFT(Input.Keys.LEFT),
+		RIGHT(Input.Keys.RIGHT),
+		ZOOM_IN(Input.Keys.PLUS),
+		ZOOM_OUT(Input.Keys.MINUS),;
+
+
+		private int binding;
+
+		Key(int key) {
+
+			this.binding = key;
+		}
+	}
+
 	private static final Set<Integer> CONTROL_KEYS;
 
 	static {
-		CONTROL_KEYS = new HashSet<>(4);
-		CONTROL_KEYS.add(Input.Keys.W);
-		CONTROL_KEYS.add(Input.Keys.A);
-		CONTROL_KEYS.add(Input.Keys.S);
-		CONTROL_KEYS.add(Input.Keys.D);
+		CONTROL_KEYS = new HashSet<>(Key.values().length);
+
+		for (Key key : Key.values())
+			CONTROL_KEYS.add(key.binding);
 	}
 
 	private Map<Integer, Boolean> keys;
@@ -60,31 +76,32 @@ public class InputHandler {
 	 */
 	public void pollMovement(Vector2 delta, float d) {
 		delta.setZero();
-		for (Map.Entry<Integer, Boolean> pressedKeys : keys.entrySet()) {
-			if (pressedKeys.getValue()) {
-				switch (pressedKeys.getKey()) {
-					case Input.Keys.W:
-						delta.y = d;
-						break;
-					case Input.Keys.A:
-						delta.x = -d;
-						break;
-					case Input.Keys.S:
-						delta.y = -d;
-						break;
-					case Input.Keys.D:
-						delta.x = d;
-						break;
-					default:
-						throw new IllegalArgumentException("Invalid input key: " + pressedKeys.getKey());
-				}
-
-			}
-		}
+		keys.entrySet().stream().filter(Map.Entry::getValue).forEach(pressedKeys -> {
+			Integer i = pressedKeys.getKey();
+			if (i == Key.UP.binding)
+				delta.y = d;
+			else if (i == Key.LEFT.binding)
+				delta.x = -d;
+			else if (i == Key.DOWN.binding)
+				delta.y = -d;
+			else if (i == Key.RIGHT.binding)
+				delta.x = d;
+		});
 	}
 
 	public int pollZoom() {
-		int ret = zoomDelta;
+		int ret = zoomDelta; // mouse zoom
+
+		// check keyboard zoom
+		if (ret == 0) {
+			Boolean kbIn = keys.get(Key.ZOOM_IN.binding);
+			Boolean kbOut = keys.get(Key.ZOOM_OUT.binding);
+
+			// only zoom if one is true
+			if (kbIn == Boolean.TRUE || kbOut == Boolean.TRUE)
+				ret = kbIn ? -1 : 1;
+		}
+
 		zoomDelta = 0;
 		return ret;
 	}
