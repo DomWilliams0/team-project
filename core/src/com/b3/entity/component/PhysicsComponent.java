@@ -109,11 +109,11 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 			 */
 
 			// Apply steering acceleration
-			applySteering(steeringOutput, deltaTime);
+			applySteering(deltaTime);
 		}
 	}
 
-	protected void applySteering(SteeringAcceleration<Vector2> steering, float deltaTime) {
+	protected void applySteering(float deltaTime) {
 		boolean anyAccelerations = false;
 
 		// Update position and linear velocity.

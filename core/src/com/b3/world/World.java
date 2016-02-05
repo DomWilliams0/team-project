@@ -4,11 +4,14 @@ import com.b3.DebugRenderer;
 import com.b3.Utils;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.component.RenderComponent;
+import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.ai.steer.behaviors.Wander;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -85,6 +88,7 @@ public class World implements Disposable {
 	public void initEngine(PerspectiveCamera camera) {
 //		engine.addSystem(new MovementSystem());
 		engine.addSystem(new RenderSystem(camera));
+		engine.addSystem(new PhysicsSystem());
 
 		// debug: test entity
 		addAgent(new Vector2(50, 50));
@@ -120,7 +124,14 @@ public class World implements Disposable {
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		e.add(new PhysicsComponent(physicsWorld, bodyDef, tilePos, radius));
+		PhysicsComponent physics = new PhysicsComponent(physicsWorld, bodyDef, tilePos, radius);
+
+		// debug stupid wander behaviour
+		Wander<Vector2> wander = new Wander<>(physics);
+		wander.setWanderRate(1f);
+		wander.setWanderRadius(0.8f);
+		physics.setSteeringBehavior(wander);
+		e.add(physics);
 
 		engine.addEntity(e);
 		return e;
@@ -161,14 +172,16 @@ public class World implements Disposable {
 
 	public void render(WorldCamera camera) {
 		// tick physics
-		physicsWorld.step(Gdx.graphics.getRawDeltaTime(), 6, 4);
+		float delta = Gdx.graphics.getRawDeltaTime();
+		physicsWorld.step(delta, 6, 4);
+		GdxAI.getTimepiece().update(delta);
 
 		// render world
 		camera.positionMapRenderer(renderer);
 		renderer.render();
 
 		// render entities
-		engine.update(Gdx.graphics.getRawDeltaTime());
+		engine.update(delta);
 
 		// render buildings
 		buildingBatch.begin(camera);
