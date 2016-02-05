@@ -29,6 +29,7 @@ public class MainGame extends ApplicationAdapter {
 
 		camera.setWorld(world);
 		world.initEngine(camera);
+		world.initEventGenerator();
 	}
 
 	@Override

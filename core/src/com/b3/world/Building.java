@@ -42,6 +42,8 @@ public class Building {
 		return dimensions;
 	}
 
+	public Vector2 getEntryPoint() { return null; }
+
 	public ModelInstance getModelInstance() {
 		return modelInstance;
 	}

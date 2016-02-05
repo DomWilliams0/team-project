@@ -6,6 +6,7 @@ import com.b3.entity.component.RenderComponent;
 import com.b3.entity.component.VelocityComponent;
 import com.b3.entity.system.MovementSystem;
 import com.b3.entity.system.RenderSystem;
+import com.b3.event.EventGenerator;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -40,6 +41,9 @@ public class World implements Disposable {
 
 	private Engine engine;
 
+	private EventGenerator eventGenerator;
+	private WorldObserver worldObserver;
+
 	public World(String fileName) {
 		TiledMap map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
@@ -73,6 +77,18 @@ public class World implements Disposable {
 		addAgent(new Vector2(50, 50));
 	}
 
+	public void initEventGenerator() {
+		// Uncomment for event generator (not working atm)
+		//worldObserver = new WorldObserver();
+		//eventGenerator = new EventGenerator(this);
+		//eventGenerator.addObserver(worldObserver);
+		//new Thread(eventGenerator).start();
+	}
+
+	public Engine getEngine() {
+		return engine;
+	}
+
 	private void createDefaultBuildings() {
 		Vector3 dim = new Vector3(2, 2, 0);
 		float space = 4f;
@@ -90,6 +106,10 @@ public class World implements Disposable {
 
 		engine.addEntity(e);
 		return e;
+	}
+
+	public List<Building> getBuildings() {
+		return buildings;
 	}
 
 	/**
