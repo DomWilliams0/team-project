@@ -1,27 +1,60 @@
 package com.b3;
 
+import com.b3.world.World;
+import com.b3.world.WorldCamera;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+
 
 public class MainGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+
+	private World world;
+	private WorldCamera camera;
+	private InputHandler inputHandler;
 
 	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("core/assets/arch.png");
+	public void create() {
+		world = new World("core/assets/world/world.tmx");
+		inputHandler = new InputHandler();
+
+		Vector2 cameraPos = new Vector2(world.getTileSize());
+		camera = new WorldCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camera.position.set(cameraPos.x, cameraPos.y, Utils.CAMERA_HEIGHT);
+		camera.near = 1f;
+		camera.far = 300f;
+		camera.lookAt(cameraPos.x, cameraPos.y, 0);
+		camera.update();
+
+		camera.setWorld(world);
+		world.initEngine(camera);
 	}
 
 	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+	public void resize(int width, int height) {
+		camera.viewportWidth = width;
+		camera.viewportHeight = height;
+		camera.update();
+	}
+
+	@Override
+	public void render() {
+		// clear screen
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+		// camera movement
+		camera.move(inputHandler);
+		camera.update();
+
+		// world rendering
+		world.render(camera);
+	}
+
+
+	@Override
+	public void dispose() {
+		world.dispose();
 	}
 }

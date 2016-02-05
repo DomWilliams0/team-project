@@ -1,0 +1,78 @@
+package com.b3.world;
+
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.BoundingBox;
+
+public class Building {
+
+	private static Vector3 tempCullingPosition = new Vector3();
+
+	// id?
+	// door locations?
+	// collision box?
+	private Vector2 tilePosition;
+	private Vector3 dimensions;
+
+	private Vector3 centre;
+	private Vector3 cullingDimensions;
+
+	private ModelInstance modelInstance;
+
+	public Building(Vector2 tilePosition, Vector3 dimensions, ModelInstance modelInstance) {
+		this.tilePosition = tilePosition;
+		this.dimensions = dimensions;
+		this.modelInstance = modelInstance;
+
+		centre = new Vector3();
+		cullingDimensions = new Vector3();
+		BoundingBox boundingBox = new BoundingBox();
+		modelInstance.calculateBoundingBox(boundingBox);
+		boundingBox.getCenter(centre);
+		boundingBox.getDimensions(cullingDimensions);
+	}
+
+	public Vector2 getTilePosition() {
+		return tilePosition;
+	}
+
+	public Vector3 getDimensions() {
+		return dimensions;
+	}
+
+	public ModelInstance getModelInstance() {
+		return modelInstance;
+	}
+
+	/**
+	 * Checks if an object is visible and therefore should be rendered
+	 *
+	 * @param camera The camera
+	 * @return True if the object is visible, otherwise false
+	 */
+	public boolean isVisible(PerspectiveCamera camera) {
+		modelInstance.transform.getTranslation(tempCullingPosition);
+		tempCullingPosition.add(centre);
+		return camera.frustum.boundsInFrustum(tempCullingPosition, cullingDimensions);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Building building = (Building) o;
+
+		return tilePosition.equals(building.tilePosition) && dimensions.equals(building.dimensions);
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = tilePosition.hashCode();
+		result = 31 * result + dimensions.hashCode();
+		return result;
+	}
+}
