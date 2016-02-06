@@ -1,6 +1,7 @@
 package com.b3.world;
 
 import com.b3.InputHandler;
+import com.b3.util.Config;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -16,20 +17,12 @@ public class WorldCamera extends PerspectiveCamera {
 	private Vector3 lastPosition;
 	private Vector2 inputDelta;
 
-	private float closestZoom;
-	private float furthestZoom;
-	private int zoomSpeed;
-
 	public WorldCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
 		super(fieldOfViewY, viewportWidth, viewportHeight);
 
 		lastPosition = null;
 		borders = new ArrayList<>(4);
 		inputDelta = new Vector2();
-
-		closestZoom = 10f;
-		furthestZoom = 100f;
-		zoomSpeed = 3;
 	}
 
 	public void setWorld(World world) {
@@ -38,10 +31,12 @@ public class WorldCamera extends PerspectiveCamera {
 		Vector2 worldSize = world.getPixelSize();
 
 		int size = 1;
-		borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(-size, worldSize.y, 0))); // left
-		borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(worldSize.x, size, 0))); // bottom
-		borders.add(new BoundingBox(new Vector3(0, worldSize.y, 0), new Vector3(worldSize.x, worldSize.y + size, 0))); // top
-		borders.add(new BoundingBox(new Vector3(worldSize.x, 0, 0), new Vector3(worldSize.x + size, worldSize.y, 0))); // right
+		if (Config.get("camera-restrict", Boolean.class)) {
+			borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(-size, worldSize.y, 0))); // left
+			borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(worldSize.x, size, 0))); // bottom
+			borders.add(new BoundingBox(new Vector3(0, worldSize.y, 0), new Vector3(worldSize.x, worldSize.y + size, 0))); // top
+			borders.add(new BoundingBox(new Vector3(worldSize.x, 0, 0), new Vector3(worldSize.x + size, worldSize.y, 0))); // right
+		}
 	}
 
 	@Override
@@ -70,18 +65,19 @@ public class WorldCamera extends PerspectiveCamera {
 	}
 
 	public void move(InputHandler inputHandler) {
-		inputHandler.pollMovement(inputDelta, 1f);
+		inputHandler.pollMovement(inputDelta, Config.get("camera-move-speed", float.class));
 		translateSafe(inputDelta.x, inputDelta.y, 0f);
 
 		int zoom = inputHandler.pollZoom();
 		if (zoom != 0)
-			zoom(zoom * zoomSpeed); // that's a lot of zooms
+			zoom(zoom * Config.get("camera-zoom-speed", float.class)); // that's a lot of zooms
 	}
 
 	public void zoom(float delta) {
 		float newZ = position.z + delta;
 
-		if (newZ >= closestZoom && newZ <= furthestZoom)
+		if (newZ >= Config.get("camera-distance-min", float.class)
+				&& newZ <= Config.get("camera-distance-max", float.class))
 			translateSafe(0f, 0f, delta);
 	}
 }

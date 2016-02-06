@@ -1,5 +1,6 @@
 package com.b3;
 
+import com.b3.util.Config;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -16,12 +17,13 @@ public class MainGame extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+		Config.loadConfig("core/assets/reference.yml");
 		world = new World("core/assets/world/world.tmx");
 		inputHandler = new InputHandler();
 
 		Vector2 cameraPos = new Vector2(world.getTileSize());
 		camera = new WorldCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.position.set(cameraPos.x, cameraPos.y, Utils.CAMERA_HEIGHT);
+		camera.position.set(cameraPos.x, cameraPos.y, Config.get("camera-distance-default", float.class));
 		camera.near = 1f;
 		camera.far = 300f;
 		camera.lookAt(cameraPos.x, cameraPos.y, 0);

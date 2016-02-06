@@ -8,8 +8,6 @@ public class Utils {
 	public static final float TILE_SIZE = 4f;
 	public static final float WORLD_SCALE = TILESET_RESOLUTION / TILE_SIZE;
 
-	public static final float CAMERA_HEIGHT = 60f;
-
 	public static final Random RANDOM = new Random();
 
 	public static float randomRange(float min, float max) {

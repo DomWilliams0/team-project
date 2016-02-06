@@ -1,0 +1,6 @@
+camera-restrict: true
+camera-zoom-speed: 1
+camera-move-speed: 1
+camera-distance-default: 60
+camera-distance-min: 20
+camera-distance-max: 600
