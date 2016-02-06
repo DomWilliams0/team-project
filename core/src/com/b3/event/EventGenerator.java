@@ -47,7 +47,7 @@ public class EventGenerator extends Observable implements Runnable {
         int numEvents = events.size();
         Random rn = new Random();
 
-        EventType eventType = events.get(rn.nextInt(numEvents));
+        EventType eventType = EventType.FIRE; //events.get(rn.nextInt(numEvents));
         EventMessage evtMessage = new EventMessage(eventType);
         WorldEvent evt;
 

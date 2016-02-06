@@ -96,10 +96,10 @@ public class World implements Disposable {
 
 	public void initEventGenerator() {
 		// Uncomment for event generator (not working atm)
-		//worldObserver = new WorldObserver();
-		//eventGenerator = new EventGenerator(this);
-		//eventGenerator.addObserver(worldObserver);
-		//new Thread(eventGenerator).start();
+		worldObserver = new WorldObserver(this);
+		eventGenerator = new EventGenerator(this);
+		eventGenerator.addObserver(worldObserver);
+		new Thread(eventGenerator).start();
 	}
 
 	public Engine getEngine() {
