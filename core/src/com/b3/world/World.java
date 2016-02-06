@@ -196,7 +196,8 @@ public class World implements Disposable {
 				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
 		buildingBatch.end();
 
-		debugRenderer.render(camera);
+		// physics debug rendering
+		// debugRenderer.render(camera);
 	}
 
 	@Override
