@@ -51,6 +51,10 @@ public class MainGame extends ApplicationAdapter {
 
 		// world rendering
 		world.render(camera);
+
+		if (inputHandler.shouldExit())
+			Gdx.app.exit();
+
 	}
 
 

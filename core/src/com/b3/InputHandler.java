@@ -18,7 +18,8 @@ public class InputHandler {
 		LEFT(Input.Keys.LEFT),
 		RIGHT(Input.Keys.RIGHT),
 		ZOOM_IN(Input.Keys.PLUS),
-		ZOOM_OUT(Input.Keys.MINUS),;
+		ZOOM_OUT(Input.Keys.MINUS),
+		EXIT(Input.Keys.ESCAPE);
 
 
 		private int binding;
@@ -40,16 +41,23 @@ public class InputHandler {
 
 	private Map<Integer, Boolean> keys;
 	private int zoomDelta;
+	private boolean exit;
 
 
 	public InputHandler() {
 		zoomDelta = 0;
+		exit = false;
 		keys = new TreeMap<>(); // for faster iterating
 		Gdx.input.setInputProcessor(new InputAdapter() {
 			@Override
 			public boolean keyDown(int keycode) {
-				if (CONTROL_KEYS.contains(keycode))
+				if (CONTROL_KEYS.contains(keycode)) {
+					if (keycode == Key.EXIT.binding)
+						exit = true;
+
 					keys.put(keycode, true);
+
+				}
 				return false;
 			}
 
@@ -103,6 +111,12 @@ public class InputHandler {
 		}
 
 		zoomDelta = 0;
+		return ret;
+	}
+
+	public boolean shouldExit() {
+		boolean ret = exit;
+		exit = false;
 		return ret;
 	}
 
