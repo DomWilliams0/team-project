@@ -31,8 +31,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Disposable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class World implements Disposable {
 
@@ -53,6 +52,7 @@ public class World implements Disposable {
 
 	private EventGenerator eventGenerator;
 	private WorldObserver worldObserver;
+	private WorldQueryService queryService;
 
 	public World(String fileName) {
 		TiledMap map = new TmxMapLoader().load(fileName);
@@ -80,6 +80,9 @@ public class World implements Disposable {
 		buildingBodyDef.type = BodyDef.BodyType.StaticBody;
 		buildingBody = physicsWorld.createBody(buildingBodyDef);
 
+		// Query service
+		queryService = new WorldQueryService(this);
+
 		debugRenderer = new DebugRenderer(physicsWorld);
 
 		createDefaultBuildings();
@@ -106,15 +109,22 @@ public class World implements Disposable {
 		return engine;
 	}
 
+	public WorldQueryService getQueryService() {
+		return queryService;
+	}
+
 	private void createDefaultBuildings() {
 		Vector3 dim = new Vector3(1, 1, 10);
 		float space = 4f;
 
+		// Get building type
+		Random rn = new Random();
+		List<BuildingType> types = Collections.unmodifiableList(Arrays.asList(BuildingType.values()));
+		BuildingType buildingType = types.get(rn.nextInt(types.size()));
+
 		for (int x = 0; x < tileSize.x / space; x++)
 			for (int y = 0; y < tileSize.y / space; y++)
-				addBuilding(new Vector2(x * space, y * space), dim);
-
-
+				addBuilding(new Vector2(x * space, y * space), dim, buildingType);
 
 	}
 
@@ -149,7 +159,15 @@ public class World implements Disposable {
 	 * @param dimensions Building dimensions, in tiles. z is height
 	 * @return The newly constructed building
 	 */
-	public Building addBuilding(Vector2 pos, Vector3 dimensions) {
+
+	/**
+	 *
+	 * @param pos		 Tile position
+	 * @param dimensions Building dimensions, in tiles. z is height
+	 * @param type		 Building type
+     * @return The newly constructed building
+     */
+	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
 		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
 		pos = new Vector2(pos).scl(Utils.TILE_SIZE);
 
@@ -157,6 +175,7 @@ public class World implements Disposable {
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y, dimensions.z));
 
 		Building building = new Building(pos, dimensions, instance);
+		building.setType(type);
 		buildings.add(building);
 
 		// physics

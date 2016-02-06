@@ -1,7 +1,10 @@
 package com.b3.world;
 
+import com.b3.event.EventType;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -20,6 +23,10 @@ public class Building {
 	private Vector3 cullingDimensions;
 
 	private ModelInstance modelInstance;
+
+	private BuildingType type;
+
+	private EventType event;
 
 	public Building(Vector2 tilePosition, Vector3 dimensions, ModelInstance modelInstance) {
 		this.tilePosition = tilePosition;
@@ -48,6 +55,14 @@ public class Building {
 		return modelInstance;
 	}
 
+	public BuildingType getType() {
+		return type;
+	}
+
+	public void setType(BuildingType type) {
+		this.type = type;
+	}
+
 	/**
 	 * Checks if an object is visible and therefore should be rendered
 	 *
@@ -58,6 +73,23 @@ public class Building {
 		modelInstance.transform.getTranslation(tempCullingPosition);
 		tempCullingPosition.add(centre);
 		return camera.frustum.boundsInFrustum(tempCullingPosition, cullingDimensions);
+	}
+
+	public void removeEvent() {
+		event = null;
+	}
+
+	public EventType getEvent() {
+		return event;
+	}
+
+	/**
+	 * Marks this building as a target of an event
+	 * @param event The event happening
+     */
+	public void setEvent(EventType event) {
+		modelInstance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED)); // Fire (red) ~ Just testing
+		this.event = event;
 	}
 
 	@Override

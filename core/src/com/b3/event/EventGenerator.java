@@ -26,19 +26,6 @@ public class EventGenerator extends Observable implements Runnable {
         timeForNextEvent = ThreadLocalRandom.current().nextInt(minTime, maxTime + 1);
     }
 
-    // This is just dummy (it actually highlights a node)
-    /*private void triggerFire() {
-        Array<Actor> actors = proto.getGraphStage().getActors();
-        Random rn = new Random();
-        int i = rn.nextInt(actors.size);
-
-        NodeActor selectedActor = (NodeActor)actors.get(i);
-        selectedActor.setSelected(true);
-
-        setChanged();
-        notifyObservers(selectedActor.getPoint());
-    }*/
-
     /**
      * Triggers a random event in the world
      */
@@ -47,22 +34,9 @@ public class EventGenerator extends Observable implements Runnable {
         int numEvents = events.size();
         Random rn = new Random();
 
-        EventType eventType = EventType.FIRE; //events.get(rn.nextInt(numEvents));
+        EventType eventType = events.get(rn.nextInt(numEvents));
         EventMessage evtMessage = new EventMessage(eventType);
-        WorldEvent evt;
-
-        switch (eventType) {
-            case ROBBERY:
-                evt = new RobberyEvent();
-                break;
-            case DELIVERY:
-                evt = new DeliveryEvent();
-                break;
-            case FIRE:
-            default:
-                evt = new FireEvent(world);
-                break;
-        }
+        WorldEvent evt = new WorldEvent(world, eventType);
 
         Object data = evt.trigger();
         evtMessage.setMessage(data);
@@ -82,7 +56,6 @@ public class EventGenerator extends Observable implements Runnable {
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        //triggerFire();
                         triggerRandomEvent();
                     }
                 });
