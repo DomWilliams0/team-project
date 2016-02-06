@@ -17,7 +17,7 @@ public class MainGame extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		Config.loadConfig("core/assets/reference.yml");
+		Config.loadConfig("core/assets/reference.yml", "core/assets/userconfig.yml");
 		world = new World("core/assets/world/world.tmx");
 		inputHandler = new InputHandler();
 
