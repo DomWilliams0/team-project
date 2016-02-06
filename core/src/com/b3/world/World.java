@@ -107,12 +107,15 @@ public class World implements Disposable {
 	}
 
 	private void createDefaultBuildings() {
-		Vector3 dim = new Vector3(2, 2, 0);
+		Vector3 dim = new Vector3(1, 1, 10);
 		float space = 4f;
 
 		for (int x = 0; x < tileSize.x / space; x++)
 			for (int y = 0; y < tileSize.y / space; y++)
-				addBuilding(new Vector2(x * space * dim.x, y * space * dim.y), new Vector3(dim.x, dim.y, Utils.randomRange(5, 12)));
+				addBuilding(new Vector2(x * space, y * space), dim);
+
+
+
 	}
 
 	public Entity addAgent(Vector2 tilePos) {
@@ -147,6 +150,9 @@ public class World implements Disposable {
 	 * @return The newly constructed building
 	 */
 	public Building addBuilding(Vector2 pos, Vector3 dimensions) {
+		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
+		pos = new Vector2(pos).scl(Utils.TILE_SIZE);
+
 		ModelInstance instance = buildingCache.createBuilding(pos, dimensions);
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y, dimensions.z));
 

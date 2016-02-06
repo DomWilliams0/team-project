@@ -1,7 +1,6 @@
 package com.b3.world;
 
 import com.b3.InputHandler;
-import com.b3.Utils;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -36,9 +35,7 @@ public class WorldCamera extends PerspectiveCamera {
 	public void setWorld(World world) {
 		lastPosition = position;
 
-		Vector3 worldSize = new Vector3(world.getTileSize(), 0f).add(
-				world.getPixelSize().x / Utils.WORLD_SCALE,
-				world.getPixelSize().y / Utils.WORLD_SCALE, 0f);
+		Vector2 worldSize = world.getPixelSize();
 
 		int size = 1;
 		borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(-size, worldSize.y, 0))); // left
