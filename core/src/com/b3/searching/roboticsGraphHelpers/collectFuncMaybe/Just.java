@@ -1,10 +1,6 @@
 package com.b3.searching.roboticsGraphHelpers.collectFuncMaybe;
 
 
-import src_helpers.util.functions.Action;
-import src_helpers.util.functions.Function;
-import src_helpers.util.functions.Predicate;
-
 public class Just<A> implements Maybe<A> {
 
 	private final A something;

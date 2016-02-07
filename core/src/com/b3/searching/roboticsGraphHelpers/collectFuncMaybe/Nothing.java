@@ -1,10 +1,5 @@
 package com.b3.searching.roboticsGraphHelpers.collectFuncMaybe;
 
-
-import src_helpers.util.functions.Action;
-import src_helpers.util.functions.Function;
-import src_helpers.util.functions.Predicate;
-
 public class Nothing<A> implements Maybe<A> {
 
 	public Nothing() {

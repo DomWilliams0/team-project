@@ -733,6 +733,10 @@ public class worldGraph {
         return yMax;
     }
 
+    /**
+     * USE THIS TO APPLY GRAPH TO Graph<Point> that nicksgraph requires.
+     * @return Graph<Point> -- returns graph in format that nicks search requires
+     */
     public Graph<Point> getGraphNicksStyle() {
 
         String lineString = finaliseForGraphFromFile();
