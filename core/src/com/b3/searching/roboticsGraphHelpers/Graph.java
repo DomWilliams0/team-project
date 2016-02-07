@@ -1,15 +1,9 @@
 package com.b3.searching.roboticsGraphHelpers;
 
-import src_helpers.util.Point;
-import src_helpers.util.ReadFile;
-import src_helpers.util.collections.LinkedListT;
-import src_helpers.util.collections.PriorityQueueT;
-import src_helpers.util.collections.StackT;
-import src_helpers.util.collections.Takeable;
-import src_helpers.util.functions.Function2;
-import src_helpers.util.maybe.Just;
-import src_helpers.util.maybe.Maybe;
-import src_helpers.util.maybe.Nothing;
+
+
+import com.b3.searching.roboticsGraphHelpers.collectFuncMaybe.*;
+import com.b3.searching.utils.ReadFile;
 
 import java.io.IOException;
 import java.util.*;
@@ -164,14 +158,11 @@ public class Graph<A> {
 	 * @param c2 The content of the second node (destination)
 	 * @param directed If true the edge is directed. If false it is undirected
 	 */
-	public void addEdge(A c1, A c2, boolean directed, float cost1, float cost2) {
+	public void addEdge(A c1, A c2, boolean directed) {
 		// Add nodes (if not existing) and get nodes from adjacency list
 		Node<A> node1 = addNode(c1);
 		Node<A> node2 = addNode(c2);
 
-		node1.setExtraCost(cost1);
-		node2.setExtraCost(cost2);
-		
 		// Create edge
 		node1.addSuccessor(node2);
 		if (!directed)
@@ -250,11 +241,11 @@ public class Graph<A> {
 					Point pn = new Point(Integer.parseInt(coordsNeighbour[0]), Integer.parseInt(coordsNeighbour[1]));
 					
 					// Add edge between p and pn
-					g.addEdge(p, pn, true, 0, 0);
+					g.addEdge(p, pn, true);
 				}
 			}
 			else
-				g.addNode(p).setExtraCost(10);
+				g.addNode(p);
 
 		}
 
@@ -327,10 +318,8 @@ public class Graph<A> {
 			for (Node<A> s : n.getSuccessors()) {
 				// If successor has not been visited yet
 				if (!explored.contains(s)) {
-					float cost = D.get(n) + d.apply(n, s) - s.getExtraCost();
+					float cost = D.get(n) + d.apply(n, s);
 					//TODO implement extra cost into graph search
-					//Can get extra cost from right here
-					System.out.println("Overall Cost: " + cost + "; Current cost of this node: " + s.getExtraCost() + "; D.get(n): " + D.get(n) + "; d.apply(n,s): " + d.apply(n, s));
 					boolean inPending = pending.contains(s); // Without computing it 2 times
 					
 					// If s is not in the frontier or found a better path

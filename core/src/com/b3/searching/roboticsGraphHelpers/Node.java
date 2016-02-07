@@ -10,8 +10,7 @@ public class Node<A> implements Comparable<Node<A>> {
 	private A content;
 	private float f; // estimated total cost
 	private Set<Node<A>> successors;
-	private float extraCost;
-	
+
 	/**
 	 * Creates a Node instance from the content
 	 * @param content The related node's data
@@ -19,17 +18,7 @@ public class Node<A> implements Comparable<Node<A>> {
 	public Node(A content) {
 		this.content = content;
 		this.successors = new LinkedHashSet<Node<A>>();
-		this.extraCost = 0;
 	}
-
-	public void setExtraCost(float extraCost) {
-		this.extraCost = extraCost;
-	}
-
-	public float getExtraCost() {
-		return extraCost;
-	}
-
 	/**
 	 * Gets the content of the node
 	 * @return The data
