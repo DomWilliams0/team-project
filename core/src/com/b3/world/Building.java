@@ -41,6 +41,22 @@ public class Building {
 		boundingBox.getDimensions(cullingDimensions);
 	}
 
+	private void renderEvent() {
+		switch (event) {
+			case FIRE:
+				modelInstance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED));
+				break;
+
+			case ROBBERY:
+				modelInstance.materials.get(0).set(ColorAttribute.createDiffuse(Color.BLUE));
+				break;
+
+			case DELIVERY:
+				modelInstance.materials.get(0).set(ColorAttribute.createDiffuse(Color.YELLOW));
+				break;
+		}
+	}
+
 	public Vector2 getTilePosition() {
 		return tilePosition;
 	}
@@ -88,8 +104,8 @@ public class Building {
 	 * @param event The event happening
      */
 	public void setEvent(EventType event) {
-		modelInstance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED)); // Fire (red) ~ Just testing
 		this.event = event;
+		renderEvent();
 	}
 
 	@Override

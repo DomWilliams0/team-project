@@ -3,9 +3,6 @@ package com.b3.world;
 import com.b3.event.EventMessage;
 import com.b3.event.EventType;
 import com.b3.spawn.Spawner;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.math.Vector2;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -35,27 +32,14 @@ public class WorldObserver implements Observer {
         EventMessage evt = (EventMessage)arg;
         EventType eventType = evt.getEventType();
 
-        switch (eventType) {
-            case FIRE:
-                // Get target and source buildings
-                Building targetBuilding = (Building)evt.getMessage();
-                targetBuilding.setEvent(eventType);
-                Building sourceBuilding = world.getQueryService().getRandomBuildingByType(getBuildingTypeFromEvent(eventType));
+        // Get target and source buildings
+        Building targetBuilding = (Building)evt.getMessage();
+        targetBuilding.setEvent(eventType);
+        Building sourceBuilding = world.getQueryService().getRandomBuildingByType(getBuildingTypeFromEvent(eventType));
 
-                //building.getEntryPoint();
-                spawner.agentFromBuilding(sourceBuilding);
+        //building.getEntryPoint();
+        spawner.agentFromBuilding(sourceBuilding);
 
-                // Perform search
-
-                break;
-
-            case ROBBERY:
-
-                break;
-
-            case DELIVERY:
-
-                break;
-        }
+        // Perform search
     }
 }
