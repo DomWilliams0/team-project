@@ -170,7 +170,7 @@ public class worldGraph {
      * @param y2 y cood of tocoordinate
      * @return true iff edge exists; false if not
      */
-    private Boolean checkExists(int x1, int y1, int x2, int y2) {
+    public Boolean checkExists(int x1, int y1, int x2, int y2) {
         for (int i = 0; i < tempGraph.size(); i++) {
             if (tempGraph.get(i).getX() == x1 & tempGraph.get(i).getY() == y1) {
                 if (tempGraph.get(i).hasSuccessors(x2, y2)) {
@@ -788,10 +788,10 @@ public class worldGraph {
                     int pCost = getNodeCost(p.getX(), p.getY());
                     int p2Cost = getNodeCost(pn.getX(), pn.getY());
 
-                    g.addEdge(p, pn, true);
+                    g.addEdge(p, pn, true, getNodeCost(p.getX(), p.getY()), getNodeCost(pn.getX(), pn.getY()));
                 }
             } else
-                g.addNode(p);
+                g.addNode(p, getNodeCost(p.getX(), p.getY()));
 
         }
 

@@ -30,19 +30,25 @@ public class wordGraphExampleUsage_DeleteLater {
         //save it to the file
         wg.saveToTextFile("default","");
 
-        //to load file must clear it beforehand
+        //to load file must clear it beforehand, otherwise will get error from loadfromfile
         wg.clearObject();
         //load from file
         wg.loadFromFile("default");
         //can edit now from here if you want to -- remember to save though
         //get maxX and maxY values
-        System.out.println(wg.getMaxXValue());
-        System.out.println(wg.getMaxYValue());
+
         //get buildings
         ArrayList<Buildings> a = wg.getBuildings();
-        //get costs
+        //get costs -- note this is for visualisation ONLY;
+        //the costs are already contained within the Graph<Point> IE Resulting object from getGraphNicksStyle();
         int onetwo = wg.getNodeCost(1, 2);
         //get graph
         Graph<Point> b = wg.getGraphNicksStyle();
+        //DO NOT edit graph in Graph<Point> format.
+        //Either go back to the original worldGraph object to edit, then call getGraphNicksStyle again.
+
+        //ONLY CALL THESE FUNCTIONS FROM GRAPH - NO OTHERS
+        b.findPathDFSwithCosts(new Point(1,1), new Point(5,5));
+
     }
 }

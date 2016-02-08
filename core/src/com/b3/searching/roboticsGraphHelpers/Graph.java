@@ -100,7 +100,7 @@ public class Graph<A> {
 	 * @param c The node's data/content
 	 * @return The new node. If it exists then simply return it.
 	 */
-	public Node<A> addNode(A c) {
+	public Node<A> addNode(A c, int cost) {
 		Node<A> node;
 		
 		if (!nodes.containsKey(c)) {
@@ -109,7 +109,9 @@ public class Graph<A> {
 		}
 		else
 			node = nodes.get(c);
-		
+
+		node.setExtraCost(cost);
+
 		return node;
 	}
 	
@@ -118,7 +120,7 @@ public class Graph<A> {
 	 * @param c The node's content to be removed
 	 * @return True if the node is in the table, false otherwise
 	 */
-	public boolean removeNode(A c) {
+	private boolean removeNode(A c) {
 		if (hasNode(c)) {
 			Node<A> removedNode = nodes.remove(c);
 			
@@ -145,7 +147,7 @@ public class Graph<A> {
 	 * @param c2 The second component
 	 * @return True if the graph has a c1 -- c2 edge, false otherwise
 	 */
-	public boolean hasEdge(A c1, A c2) {
+	private boolean hasEdge(A c1, A c2) {
 		Node<A> n1 = nodes.get(c1);
 		Node<A> n2 = nodes.get(c2);
 		
@@ -158,10 +160,10 @@ public class Graph<A> {
 	 * @param c2 The content of the second node (destination)
 	 * @param directed If true the edge is directed. If false it is undirected
 	 */
-	public void addEdge(A c1, A c2, boolean directed) {
+	public void addEdge(A c1, A c2, boolean directed, int cost1, int cost2) {
 		// Add nodes (if not existing) and get nodes from adjacency list
-		Node<A> node1 = addNode(c1);
-		Node<A> node2 = addNode(c2);
+		Node<A> node1 = addNode(c1, cost1);
+		Node<A> node2 = addNode(c2, cost2);
 
 		// Create edge
 		node1.addSuccessor(node2);
@@ -202,55 +204,13 @@ public class Graph<A> {
 		return false;
 	}
 	
-	/**
-	 * Creates a new graph from a file
-	 * @param filename The file name
-	 * @return The newly created graph
-	 */
-	public static Graph<Point> fromFile(String filename) {
-		// Open file and read lines
-		ReadFile rf = new ReadFile(filename);
-
-		System.out.println("POOOO");
-
-		String[] lines;
-		try {
-			lines = rf.readLines();
-		} catch (IOException e) {
-			return null;
-		}
-		
-		// Create graph
-		Graph<Point> g = new Graph<>();
-		
-		// Loop through file lines
-		for (String line : lines) {
-			String[] parts = line.split(":");
-			String nodeStr = parts[0];
-			String neighboursStr = parts[1].substring(1); // Without initial space
-			
-			String[] coords = nodeStr.replaceAll("[()]", "").split(",");
-			Point p = new Point(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-
-			// Add neighbours
-			if (!neighboursStr.isEmpty()) {
-				String[] neighbours = neighboursStr.split(" ");
-				
-				for (String neighbour : neighbours) {
-					String[] coordsNeighbour = neighbour.replaceAll("[()]", "").split(",");
-					Point pn = new Point(Integer.parseInt(coordsNeighbour[0]), Integer.parseInt(coordsNeighbour[1]));
-					
-					// Add edge between p and pn
-					g.addEdge(p, pn, true);
-				}
-			}
-			else
-				g.addNode(p);
-
-		}
-
-		return g;
-	}
+//	/**
+//	 * Creates a new graph from a file
+//	 * @param filename The file name
+//	 * @return The newly created graph
+//	 */
+//	public static Graph<Point> fromFile(String filename) {
+//	}
 	
 	/**
 	 * Find a node from a starting node's content and ending node's content
@@ -406,7 +366,73 @@ public class Graph<A> {
 		// No path found
 		return new Nothing<>();
 	}
-	
+
+	public Maybe<List<Node<A>>> findPathDFSwithCosts (A origin, A destination) {
+		Node<A> startNode = nodes.get(origin);
+		Node<A> destinationNode = new Node<>(destination);
+
+		if (startNode == null)
+			return new Nothing<>();
+
+		Set<Node<A>> explored = new HashSet<>();
+		Takeable<Node<A>> pending = new StackT<>();
+		Map<Node<A>, Node<A>> pred = new LinkedHashMap<>();
+
+		pending.add(startNode);
+
+		while (!pending.isEmpty()) {
+			Node<A> n = pending.take();
+
+			if (n.equals(destinationNode))
+				return new Just<>(constructPath(pred, startNode, n));
+
+			explored.add(n);
+
+			Object[] arr = n.getSuccessors().toArray();
+			arr = findLowestCost(arr);
+			for (int i=0; i<arr.length; i++) {
+				Node<A> s = (Node<A>) arr[i];
+				if (!explored.contains(s)) {
+					boolean inPending = pending.contains(s);
+
+					if (!inPending) {
+						pred.put(s, n);
+						pending.add(s);
+					}
+				}
+			}
+		}
+
+		return new Nothing<>();
+	}
+
+	private Object[] findLowestCost(Object[] arrTemp) {
+		int n = arrTemp.length;
+
+		boolean swapped = true;
+
+		while (swapped) {
+			swapped = false;
+			for (int i = 1; i < n; i++) {
+				Node<A> a = (Node<A>) arrTemp[i];
+				Node<A> b = (Node<A>) arrTemp[i - 1];
+				if (b.getExtraCost() < a.getExtraCost()) {
+					arrTemp[i] = b;
+					arrTemp[i-1] = a;
+					swapped = true;
+				}
+			}
+		}
+
+		for (int i = 0; i < arrTemp.length; i++) {
+			System.out.println(arrTemp[i]);
+		}
+
+		System.out.println("NEXT");
+
+		return arrTemp;
+	}
+
 	@Override
 	public String toString() {
 		String str = "";
