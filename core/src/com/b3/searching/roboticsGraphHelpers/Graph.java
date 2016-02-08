@@ -367,6 +367,57 @@ public class Graph<A> {
 		return new Nothing<>();
 	}
 
+	/**
+	 * Does BFS - note does not take into account costs as that would be dikstra's
+	 * @param origin
+	 * @param destination
+     * @return
+     */
+	public Maybe<List<Node<A>>> findPathBFS (A origin, A destination) {
+		Node<A> startNode = nodes.get(origin);
+		Node<A> destinationNode = new Node<>(destination);
+
+		if (startNode == null)
+			return new Nothing<>();
+
+		Set<Node<A>> explored = new HashSet<>();
+		Takeable<Node<A>> pending = new LinkedListT<>();
+		Map<Node<A>, Node<A>> pred = new LinkedHashMap<>();
+
+		pending.add(startNode);
+
+		while (!pending.isEmpty()) {
+			Node<A> n = pending.take();
+
+			if (n.equals(destinationNode))
+				return new Just<>(constructPath(pred, startNode, n));
+
+			explored.add(n);
+
+			Object[] arr = n.getSuccessors().toArray();
+			arr = findLowestCost(arr);
+			for (int i=0; i<arr.length; i++) {
+				Node<A> s = (Node<A>) arr[i];
+				if (!explored.contains(s)) {
+					boolean inPending = pending.contains(s);
+
+					if (!inPending) {
+						pred.put(s, n);
+						pending.add(s);
+					}
+				}
+			}
+		}
+
+		return new Nothing<>();
+	}
+
+	/**
+	 * Does DFS with costs - IE smaller nodes are expanded first
+	 * @param origin
+	 * @param destination
+	 * @return
+	 */
 	public Maybe<List<Node<A>>> findPathDFSwithCosts (A origin, A destination) {
 		Node<A> startNode = nodes.get(origin);
 		Node<A> destinationNode = new Node<>(destination);
