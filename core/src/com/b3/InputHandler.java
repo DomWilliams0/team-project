@@ -107,7 +107,7 @@ public class InputHandler {
 
 			// only zoom if one is true
 			if (kbIn == Boolean.TRUE || kbOut == Boolean.TRUE)
-				ret = kbIn ? -1 : 1;
+				ret = kbIn != null && kbIn ? -1 : 1;
 		}
 
 		zoomDelta = 0;
@@ -119,7 +119,6 @@ public class InputHandler {
 		exit = false;
 		return ret;
 	}
-
 
 
 }
