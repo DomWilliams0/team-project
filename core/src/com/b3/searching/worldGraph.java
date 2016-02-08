@@ -37,6 +37,7 @@ public class worldGraph {
     }
 
     /**
+     //TODO make graph work with > 10 sizes -- load file will crash if size > 10
      * Generates a graph with x and y dimentions as specified in parameters
      * does not add any blocks or buildings, will add every single possible successor to each node
      * an integrity check is computed at the end to check if every node has at least one successor, does not mean graph is accurate or correct - visual inspection recommended.
@@ -469,6 +470,8 @@ public class worldGraph {
         tempGraph.clear();
         costs.clear();
         coords.clear();
+        xMax = -1;
+        yMax = -1;
     }
 
     /**
@@ -561,7 +564,7 @@ public class worldGraph {
 
     /**
      * @param fileName
-     * @return -1 if object not empty (call clearObject() before calling this)
+     * @return -1 if object not empty (call clearObject() before calling this); 0 if cannot load; 1 if success
      */
     public int loadFromFile(String fileName) {
 
@@ -577,6 +580,9 @@ public class worldGraph {
         try {
             costLines = rf.readLines();
         } catch (IOException e) {
+            System.err.println("Cannot load costs file");
+            return 0;
+
         }
 
 
@@ -587,6 +593,8 @@ public class worldGraph {
         try {
             buildingsLines = rf.readLines();
         } catch (IOException e) {
+            System.err.println("Cannot load buildings file");
+            return 0;
         }
 
         //Load buildings
@@ -596,11 +604,16 @@ public class worldGraph {
         try {
             graphLines = rf.readLines();
         } catch (IOException e) {
+            System.err.println("Cannot load graph file");
+            return 0;
         }
 
         processCosts(costLines);
         processBuildings(buildingsLines);
         processGraph(graphLines);
+
+        xMax = getMaxXValue();
+        yMax = getMaxYValue();
 
         return 1;
     }
@@ -679,7 +692,6 @@ public class worldGraph {
                 }
             }
         }
-        System.out.println(tempGraph);
     }
 
     private void processCosts(String[] costLines) {
@@ -722,7 +734,12 @@ public class worldGraph {
      * @return max x value of graph
      */
     public int getMaxXValue() {
-        return xMax;
+        int maxX = 0;
+        for (int i = 0; i < tempGraph.size(); i++) {
+            if (tempGraph.get(i).getX() > maxX)
+                maxX = tempGraph.get(i).getX();
+        }
+        return maxX+1;
     }
 
     /**
@@ -730,7 +747,12 @@ public class worldGraph {
      * @return max y value of graph
      */
     public int getMaxYValue() {
-        return yMax;
+        int maxY = 0;
+        for (int i = 0; i < tempGraph.size(); i++) {
+            if (tempGraph.get(i).getY() > maxY)
+                maxY = tempGraph.get(i).getY();
+        }
+        return maxY+1;
     }
 
     /**
