@@ -44,6 +44,5 @@ public class wordGraphExampleUsage_DeleteLater {
         int onetwo = wg.getNodeCost(1, 2);
         //get graph
         Graph<Point> b = wg.getGraphNicksStyle();
-
     }
 }
