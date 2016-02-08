@@ -20,4 +20,21 @@ public class Config {
 	public static <T> T get(String key, Class<T> type) {
 		return configFile.get(key, type);
 	}
+
+	// helpers
+	public static String getString(String key) {
+		return get(key, String.class);
+	}
+
+	public static Integer getInt(String key) {
+		return get(key, Integer.class);
+	}
+
+	public static Boolean getBoolean(String key) {
+		return get(key, Boolean.class);
+	}
+
+	public static Float getFloat(String key) {
+		return get(key, Float.class);
+	}
 }

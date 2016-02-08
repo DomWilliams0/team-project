@@ -31,7 +31,7 @@ public class WorldCamera extends PerspectiveCamera {
 		Vector2 worldSize = world.getPixelSize();
 
 		int size = 1;
-		if (Config.get("camera-restrict", Boolean.class)) {
+		if (Config.getBoolean("camera-restrict")) {
 			borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(-size, worldSize.y, 0))); // left
 			borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(worldSize.x, size, 0))); // bottom
 			borders.add(new BoundingBox(new Vector3(0, worldSize.y, 0), new Vector3(worldSize.x, worldSize.y + size, 0))); // top
@@ -65,19 +65,19 @@ public class WorldCamera extends PerspectiveCamera {
 	}
 
 	public void move(InputHandler inputHandler) {
-		inputHandler.pollMovement(inputDelta, Config.get("camera-move-speed", float.class));
+		inputHandler.pollMovement(inputDelta, Config.getFloat("camera-move-speed"));
 		translateSafe(inputDelta.x, inputDelta.y, 0f);
 
 		int zoom = inputHandler.pollZoom();
 		if (zoom != 0)
-			zoom(zoom * Config.get("camera-zoom-speed", float.class)); // that's a lot of zooms
+			zoom(zoom * Config.getFloat("camera-zoom-speed")); // that's a lot of zooms
 	}
 
 	public void zoom(float delta) {
 		float newZ = position.z + delta;
 
-		if (newZ >= Config.get("camera-distance-min", float.class)
-				&& newZ <= Config.get("camera-distance-max", float.class))
+		if (newZ >= Config.getFloat("camera-distance-min")
+				&& newZ <= Config.getFloat("camera-distance-max"))
 			translateSafe(0f, 0f, delta);
 	}
 }

@@ -23,7 +23,7 @@ public class MainGame extends ApplicationAdapter {
 
 		Vector2 cameraPos = new Vector2(world.getTileSize());
 		camera = new WorldCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.position.set(cameraPos.x, cameraPos.y, Config.get("camera-distance-default", float.class));
+		camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat("camera-distance-default"));
 		camera.near = 1f;
 		camera.far = 300f;
 		camera.lookAt(cameraPos.x, cameraPos.y, 0);
