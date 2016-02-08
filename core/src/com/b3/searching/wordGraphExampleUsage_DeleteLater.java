@@ -28,7 +28,7 @@ public class wordGraphExampleUsage_DeleteLater {
         wg.addCostNode(2,3,10);
         wg.addCostNode(5,5,3);
         //save it to the file
-        wg.saveToTextFile("default","");
+        wg.saveToFile("default");
 
         //to load file must clear it beforehand, otherwise will get error from loadfromfile
         wg.clearObject();
@@ -42,11 +42,15 @@ public class wordGraphExampleUsage_DeleteLater {
         ArrayList<Buildings> a = wg.getBuildings();
         //get costs -- note this is for visualisation ONLY
         //the costs are already contained within the Graph<Point> IE Resulting object from getGraphNicksStyle();
-        int onetwo = wg.getNodeCost(1, 2);
+        int onetwo = wg.getNodeCost(2,3);
         //get graph
         Graph<Point> b = wg.getGraphNicksStyle();
         //DO NOT edit graph in Graph<Point> format.
         //Either go back to the original worldGraph object to edit, then call getGraphNicksStyle again.
+
+        System.out.println(a);
+        System.out.println(onetwo);
+        System.out.println(b);
 
         //ONLY CALL THESE FUNCTIONS FROM Graph CLASS - NO OTHERS
         b.findPathDFSwithCosts(new Point(1,1), new Point(5,5));

@@ -1,11 +1,12 @@
 package com.b3.searching.utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Nishanth on 02/02/2016.
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
 
     private final int x;
     private final int y;

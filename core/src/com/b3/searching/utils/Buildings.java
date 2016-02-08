@@ -1,9 +1,11 @@
 package com.b3.searching.utils;
 
+import java.io.Serializable;
+
 /**
  * Created by Nishanth on 04/02/2016.
  */
-public class Buildings {
+public class Buildings implements Serializable{
 
     private Coordinates coord;
     private int buildingSize;

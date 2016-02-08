@@ -475,12 +475,6 @@ public class Graph<A> {
 			}
 		}
 
-		for (int i = 0; i < arrTemp.length; i++) {
-			System.out.println(arrTemp[i]);
-		}
-
-		System.out.println("NEXT");
-
 		return arrTemp;
 	}
 

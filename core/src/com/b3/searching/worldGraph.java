@@ -9,21 +9,23 @@ import com.b3.searching.utils.ReadFile;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by Nishanth on 07/02/2016.
  */
-public class worldGraph {
+public class worldGraph implements Serializable {
 
     private ArrayList<Coordinates> tempGraph;
-    private final ArrayList<Buildings> tempBuildings;
-    private final ArrayList<Coordinates> coords;
-    private final ArrayList<Integer> costs;
+    private ArrayList<Buildings> tempBuildings;
+    private ArrayList<Coordinates> coords;
+    private ArrayList<Integer> costs;
 
     private int xMax;
     private int yMax;
+    private ArrayList<Coordinates> graph;
 
 
     /**
@@ -510,201 +512,31 @@ public class worldGraph {
     }
 
     /**
-     * Saves three files
-     * filename-graphGen.txt containing the graph in Nick's graph file loader's format
-     * filename-buildings.txt containing the buildings placed on filename's grid.
-     * filename-costs.txt containing nodes with their respective costs. Lack of mention in node in file means default to default cost. IE only lists non-default cost numbers.
-     * <p>
+     * Saves the object as a serialisation, containing all information in this object.
      * Converts the internal structure to a file that can be read by Nick's graph converter / loader in Graph.java (or something)
      * After this is done, it can be read and used by Graph.java
      * After this is done, any changes to the original object are not reflected on saved file
      * Call this method again if you make changes to object and want to save them to file
      *
-     * @param filename  file name (must NOT end in 'txt'). eg "text1" would NOT be valid
-     * @param directory what directory to be saved into (not tested yet), leave blank / input "" to save in current folder
+     * @param filename  file name (must NOT end in 'txt'). eg "text1.txt" would NOT be valid
      */
-    public void saveToTextFile(String filename, String directory) {
+    public void saveToFile (String filename) {
+        Serializer ser = new Serializer();
+        ser.serializeAddress(filename + ".ser", this);
 
-        String textToFile = finaliseForGraphFromFile();
-
-        try {
-            File file = new File(filename + "-graphGen.txt");
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(textToFile);
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        textToFile = finaliseForBuildingsFromFile();
-
-        try {
-            File file = new File(filename + "-buildings.txt");
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(textToFile);
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        textToFile = finaliseCostsForFile();
-
-        try {
-            File file = new File(filename + "-costs.txt");
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(textToFile);
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
      * @param fileName
-     * @return -1 if object not empty (call clearObject() before calling this); 0 if cannot load; 1 if success
      */
-    public int loadFromFile(String fileName) {
+    public void loadFromFile(String fileName) {
+        Serializer ser = new Serializer();
+        worldGraph temp = ser.deserialzeAddress(fileName + ".ser");
 
-        if (tempBuildings.size() > 0 | tempGraph.size() > 0 | coords.size() > 0 | costs.size() > 0) {
-            System.err.println("Have to clear object before loading from file. Use graph.clearObject();");
-            return -1;
-        }
-
-        //Load costs
-        ReadFile rf = new ReadFile(fileName + "-costs.txt");
-
-        String[] costLines = new String[0];
-        try {
-            costLines = rf.readLines();
-        } catch (IOException e) {
-            System.err.println("Cannot load costs file");
-            return 0;
-
-        }
-
-
-        //Load buildings
-        rf = new ReadFile(fileName + "-buildings.txt");
-
-        String[] buildingsLines = new String[0];
-        try {
-            buildingsLines = rf.readLines();
-        } catch (IOException e) {
-            System.err.println("Cannot load buildings file");
-            return 0;
-        }
-
-        //Load buildings
-        rf = new ReadFile(fileName + "-graphGen.txt");
-
-        String[] graphLines = new String[0];
-        try {
-            graphLines = rf.readLines();
-        } catch (IOException e) {
-            System.err.println("Cannot load graph file");
-            return 0;
-        }
-
-        processCosts(costLines);
-        processBuildings(buildingsLines);
-        processGraph(graphLines);
-
-        xMax = getMaxXValue();
-        yMax = getMaxYValue();
-
-        return 1;
-    }
-
-    private void processBuildings(String[] buildingsLines) {
-        for (String currentLine : buildingsLines) {
-            if (currentLine.length() > 0) {
-                int x = Integer.parseInt("" + currentLine.charAt(1));
-                int y = Integer.parseInt("" + currentLine.charAt(3));
-                int buildType = Integer.parseInt(currentLine.substring(6, currentLine.length()));
-
-                tempBuildings.add(new Buildings(new Coordinates(x, y), buildType));
-            }
-        }
-    }
-
-    private void processGraph(String[] graphLines) {
-        for (String currentLine : graphLines) {
-            if (currentLine.length() > 0) {
-                int x = Integer.parseInt("" + currentLine.charAt(1));
-                int y = Integer.parseInt("" + currentLine.charAt(3));
-
-                if (currentLine.length() == 6 | currentLine.length() == 7) {
-                    tempGraph.add(new Coordinates(x, y));
-                } else if (currentLine.length() == 12 | currentLine.length() == 13) {
-                    int x1 = Integer.parseInt("" + currentLine.charAt(8));
-                    int y1 = Integer.parseInt("" + currentLine.charAt(10));
-                    Coordinates coo = new Coordinates(x, y);
-                    coo.addSuccessor(x1, y1);
-                    tempGraph.add(coo);
-                } else if (currentLine.length() == 18 | currentLine.length() == 19) {
-                    int x1 = Integer.parseInt("" + currentLine.charAt(8));
-                    int y1 = Integer.parseInt("" + currentLine.charAt(10));
-
-                    int x2 = Integer.parseInt("" + currentLine.charAt(14));
-                    int y2 = Integer.parseInt("" + currentLine.charAt(16));
-
-                    Coordinates coo = new Coordinates(x, y);
-                    coo.addSuccessor(x1, y1);
-                    coo.addSuccessor(x2, y2);
-                    tempGraph.add(coo);
-                } else if (currentLine.length() == 25 | currentLine.length() == 26) {
-                    int x1 = Integer.parseInt("" + currentLine.charAt(8));
-                    int y1 = Integer.parseInt("" + currentLine.charAt(10));
-
-                    int x2 = Integer.parseInt("" + currentLine.charAt(14));
-                    int y2 = Integer.parseInt("" + currentLine.charAt(16));
-
-                    int x3 = Integer.parseInt("" + currentLine.charAt(20));
-                    int y3 = Integer.parseInt("" + currentLine.charAt(22));
-
-                    Coordinates coo = new Coordinates(x, y);
-                    coo.addSuccessor(x1, y1);
-                    coo.addSuccessor(x2, y2);
-                    coo.addSuccessor(x3, y3);
-                    tempGraph.add(coo);
-                } else if (currentLine.length() == 30 | currentLine.length() == 31) {
-                    int x1 = Integer.parseInt("" + currentLine.charAt(8));
-                    int y1 = Integer.parseInt("" + currentLine.charAt(10));
-
-                    int x2 = Integer.parseInt("" + currentLine.charAt(14));
-                    int y2 = Integer.parseInt("" + currentLine.charAt(16));
-
-                    int x3 = Integer.parseInt("" + currentLine.charAt(20));
-                    int y3 = Integer.parseInt("" + currentLine.charAt(22));
-
-                    int x4 = Integer.parseInt("" + currentLine.charAt(26));
-                    int y4 = Integer.parseInt("" + currentLine.charAt(28));
-
-                    Coordinates coo = new Coordinates(x, y);
-                    coo.addSuccessor(x1, y1);
-                    coo.addSuccessor(x2, y2);
-                    coo.addSuccessor(x3, y3);
-                    coo.addSuccessor(x4, y4);
-                    tempGraph.add(coo);
-                }
-            }
-        }
-    }
-
-    private void processCosts(String[] costLines) {
-        for (String currentLine : costLines) {
-            if (currentLine.length() > 0) {
-                int x = Integer.parseInt("" + currentLine.charAt(1));
-                int y = Integer.parseInt("" + currentLine.charAt(3));
-                int cost = Integer.parseInt(currentLine.substring(6, currentLine.length()));
-
-                coords.add(new Coordinates(x, y));
-                costs.add(cost);
-            }
-        }
+        tempBuildings = temp.getBuildings();
+        tempGraph = temp.getGraph();
+        costs = temp.getCosts();
+        coords = temp.getCoords();
     }
 
     /**
@@ -798,4 +630,15 @@ public class worldGraph {
         return g;
     }
 
+    public ArrayList<Coordinates> getGraph() {
+        return tempGraph;
+    }
+
+    public ArrayList<Integer> getCosts() {
+        return costs;
+    }
+
+    public ArrayList<Coordinates> getCoords() {
+        return coords;
+    }
 }
