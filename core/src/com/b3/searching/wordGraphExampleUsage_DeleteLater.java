@@ -15,7 +15,7 @@ public class wordGraphExampleUsage_DeleteLater {
         //create an empty worldGraph
         worldGraph wg = new worldGraph();
         //generate a 9 x 10 graph -- must do this first before anything OR load file NOTHING ELSE
-        wg.generateGraph(9,10);
+        wg.generateGraph(100,100);
         //add some buildings at (x, y, size (2,3,4))
         if (wg.addBuilding(5, 5, 2)) System.out.println("added"); else System.out.println("not");
         if (wg.addBuilding(6, 6, 3)) System.out.println("added"); else System.out.println("not");
@@ -24,9 +24,9 @@ public class wordGraphExampleUsage_DeleteLater {
         int[] arr = {2,2,2,3,3,3,3,4,4};
         wg.randomTheGraph(arr);
         //add costs to nodes - all other nodes default to 0
-        wg.addCostNode(1,1,1);
-        wg.addCostNode(2,3,10);
-        wg.addCostNode(5,5,3);
+        wg.addCostNode(2,1,10);
+        wg.addCostNode(2,2,10);
+        wg.addCostNode(3,2,10);
         //save it to the file
         wg.saveToFile("default");
 
@@ -48,13 +48,10 @@ public class wordGraphExampleUsage_DeleteLater {
         //DO NOT edit graph in Graph<Point> format.
         //Either go back to the original worldGraph object to edit, then call getGraphNicksStyle again.
 
-        System.out.println(a);
-        System.out.println(onetwo);
-        System.out.println(b);
-
         //ONLY CALL THESE FUNCTIONS FROM Graph CLASS - NO OTHERS
-        b.findPathDFSwithCosts(new Point(1,1), new Point(5,5));
-        b.findPathBFS(new Point(1,1), new Point(5,5));
+        System.out.println(b.findPathDFSwithCosts(new Point(1,1), new Point(5,5)));
+        System.out.println(b.findPathBFS(new Point(1,1), new Point(5,5)));
+        System.out.println(b.findPathFromASTAR(new Point(1,1), new Point(5,5)));
 
     }
 }

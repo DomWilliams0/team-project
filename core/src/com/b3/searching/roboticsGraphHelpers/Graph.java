@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static com.b3.searching.roboticsGraphHelpers.SearchParameters.euclideanDistance;
+
 /**
  * Represents a graph using the adjacency list approach
  * (undirected, directed or mixed)
@@ -203,40 +205,18 @@ public class Graph<A> {
 		
 		return false;
 	}
-	
-//	/**
-//	 * Creates a new graph from a file
-//	 * @param filename The file name
-//	 * @return The newly created graph
-//	 */
-//	public static Graph<Point> fromFile(String filename) {
-//	}
-	
-	/**
-	 * Find a node from a starting node's content and ending node's content
-	 * @param origin The content of the node at the start
-	 * @param destination The content of the node at the end
-	 * @param params Search parameters
-	 * @return Maybe a node
-	 */
-	public Maybe<Node<A>> findNodeFrom(A origin, A destination, SearchParameters<A> params) {
-		// Get path
-		ArrayList<Node<A>> path = (ArrayList<Node<A>>)findPathFrom(origin, destination, params).fromMaybe();
-		
-		// Return last item if there is a path
-		return path == null ?
-				new Nothing<>() :
-				new Just<>(path.get(path.size() - 1));
-	}
+
 	
 	/**
 	 * Find a path from the origin to the destination given search parameters
 	 * @param origin The content of the starting node
 	 * @param destination The content of the destination node
-	 * @param params Search parameters (algorithm, heuristic and distance functions)
 	 * @return Maybe a path
 	 */
-	public Maybe<List<Node<A>>> findPathFrom(A origin, A destination, SearchParameters<A> params) {
+	public Maybe<List<Node<A>>> findPathFromASTAR(A origin, A destination) {
+
+		SearchParameters<A> params = (SearchParameters<A>) new SearchParameters<>().AStarParams();
+
 		// Get origin node from nodes map and create destination node with the specified content
 		Node<A> startNode = nodes.get(origin);
 		Node<A> destinationNode = new Node<>(destination);
@@ -279,7 +259,6 @@ public class Graph<A> {
 				// If successor has not been visited yet
 				if (!explored.contains(s)) {
 					float cost = D.get(n) + d.apply(n, s);
-					//TODO implement extra cost into graph search
 					boolean inPending = pending.contains(s); // Without computing it 2 times
 					
 					// If s is not in the frontier or found a better path
@@ -287,11 +266,12 @@ public class Graph<A> {
 						// Update predecessor, actual and estimated cost
 						pred.put(s, n);
 						D.put(s, cost);
-						s.setF(D.get(s) + h.apply(s, destinationNode));
+						if (s.getExtraCost() > 0) System.out.println("working");
+						s.setF(D.get(s) + h.apply(s, destinationNode) - s.getExtraCost());
 						
 						if (!inPending)
 							pending.add(s);
-					} else System.out.println("NOT GOING THERE");
+					}
 				}
 			}
 		}

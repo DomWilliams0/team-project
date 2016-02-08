@@ -39,7 +39,6 @@ public class worldGraph implements Serializable {
     }
 
     /**
-     //TODO make graph work with > 10 sizes -- load file will crash if size > 10
      * Generates a graph with x and y dimentions as specified in parameters
      * does not add any blocks or buildings, will add every single possible successor to each node
      * an integrity check is computed at the end to check if every node has at least one successor, does not mean graph is accurate or correct - visual inspection recommended.
