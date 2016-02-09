@@ -200,7 +200,7 @@ public class World implements Disposable {
 //		wander.setWanderRate(1f);
 //		wander.setWanderRadius(0.8f);
 //		physics.setSteeringBehavior(wander);
-//		e.add(physics);
+		e.add(physics);
 
 		engine.addEntity(e);
 		return e;
@@ -251,6 +251,8 @@ public class World implements Disposable {
 			PhysicsComponent phys = e.getComponent(PhysicsComponent.class);
 			if (phys != null)
 				physicsWorld.destroyBody(phys.body);
+
+			e.removeAll();
 
 			engine.removeEntity(e);
 		});
