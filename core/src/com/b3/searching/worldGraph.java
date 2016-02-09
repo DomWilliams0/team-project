@@ -247,14 +247,17 @@ public class worldGraph implements Serializable {
 
                 if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax
                         | !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
-                        | !checkExists(tempX, tempY + 1, tempX + 1, tempY + 1) | !checkExists(tempX + 1, tempY + 1, tempX + 2, tempY + 1)) {
+                        | !checkExists(tempX, tempY + 1, tempX + 1, tempY + 1) | !checkExists(tempX + 1, tempY + 1, tempX + 2, tempY + 1)
+                        | !checkExists(tempX+1,tempY+1,tempX+1, tempY) | !checkExists(tempX+1,tempY+2,tempX+1, tempY+1) | !checkExists(tempX+1, tempY, tempX+1, tempY+1)) {
                     System.out.println("NOT ADDED");
                     return false;
                 } else {
                     revert = !(removeEdges(tempX, tempY, tempX + 1, tempY) & removeEdges(tempX + 1, tempY, tempX, tempY) &
                             removeEdges(tempX + 1, tempY, tempX + 2, tempY) & removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
                             removeEdges(tempX, tempY + 1, tempX + 1, tempY + 1) & removeEdges(tempX + 1, tempY + 1, tempX, tempY + 1) &
-                            removeEdges(tempX + 1, tempY + 1, tempX + 2, tempY + 1) & removeEdges(tempX + 2, tempY + 1, tempX + 1, tempY + 1));
+                            removeEdges(tempX + 1, tempY + 1, tempX + 2, tempY + 1) & removeEdges(tempX + 2, tempY + 1, tempX + 1, tempY + 1) &
+                            removeEdges(tempX+1, tempY-1, tempX+1, tempY) & removeEdges(tempX+1, tempY+2, tempX+1, tempY+1) & removeEdges(tempX+1, tempY, tempX+1, tempY+1)
+                    );
 
                     if (revert) System.out.println("SOMETHING WENT WRONG; delete this object and start again");
 
@@ -397,7 +400,10 @@ public class worldGraph implements Serializable {
                             | !checkExists(tempX, tempY, tempX + 1, tempY)
                             | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
                             | !checkExists(tempX, tempY + 1, tempX + 1, tempY + 1)
-                            | !checkExists(tempX + 1, tempY + 1, tempX + 2, tempY + 1)) {
+                            | !checkExists(tempX + 1, tempY + 1, tempX + 2, tempY + 1)
+                            | !checkExists(tempX+1,tempY+1,tempX+1, tempY)
+                            | !checkExists(tempX+1,tempY+2,tempX+1, tempY+1)
+                            | !checkExists(tempX+1, tempY, tempX+1, tempY+1)) {
                         System.out.println("FAILED with (" + tempX + "," + tempY + "): Rechoosing another random number");
                         tempX = rdm.nextInt(xMax);
                         tempY = rdm.nextInt(yMax);
@@ -410,14 +416,12 @@ public class worldGraph implements Serializable {
                     }
 
                     System.out.println("Randomly removing " + tempX + "; " + tempY + " by four");
-                    revert = !(removeEdges(tempX, tempY, tempX + 1, tempY)
-                            & removeEdges(tempX + 1, tempY, tempX, tempY)
-                            & removeEdges(tempX + 1, tempY, tempX + 2, tempY)
-                            & removeEdges(tempX + 2, tempY, tempX + 1, tempY)
-                            & removeEdges(tempX, tempY + 1, tempX + 1, tempY + 1)
-                            & removeEdges(tempX + 1, tempY + 1, tempX, tempY + 1)
-                            & removeEdges(tempX + 1, tempY + 1, tempX + 2, tempY + 1)
-                            & removeEdges(tempX + 2, tempY + 1, tempX + 1, tempY + 1));
+                    revert = !(removeEdges(tempX, tempY, tempX + 1, tempY) & removeEdges(tempX + 1, tempY, tempX, tempY) &
+                            removeEdges(tempX + 1, tempY, tempX + 2, tempY) & removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
+                            removeEdges(tempX, tempY + 1, tempX + 1, tempY + 1) & removeEdges(tempX + 1, tempY + 1, tempX, tempY + 1) &
+                            removeEdges(tempX + 1, tempY + 1, tempX + 2, tempY + 1) & removeEdges(tempX + 2, tempY + 1, tempX + 1, tempY + 1) &
+                            removeEdges(tempX+1, tempY-1, tempX+1, tempY) & removeEdges(tempX+1, tempY+2, tempX+1, tempY+1) & removeEdges(tempX+1, tempY, tempX+1, tempY+1)
+                    );
 
                     if (revert) {
                         System.out.println("Revertion anyway, skipping");
