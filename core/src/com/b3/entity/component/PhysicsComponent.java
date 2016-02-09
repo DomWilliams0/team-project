@@ -40,11 +40,11 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 		fixtureDef.shape = circleShape;
 		body.createFixture(fixtureDef);
 
-		maxLinearSpeed = 100;
-		maxLinearAcceleration = 100;
-		maxAngularSpeed = 100;
-		maxAngularAcceleration = 100;
-		boundingRadius = radius; // todo needs conversion?
+		maxLinearSpeed = 3.5f;
+		maxLinearAcceleration = 800f;
+		maxAngularSpeed = 20f;
+		maxAngularAcceleration = 10f;
+		boundingRadius = radius;
 		tagged = false;
 		zeroThreshold = 0.001f;
 
@@ -109,6 +109,7 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 			 */
 
 			// Apply steering acceleration
+			System.out.println("steeringOutput.linear = " + steeringOutput.linear);
 			applySteering(deltaTime);
 		}
 	}

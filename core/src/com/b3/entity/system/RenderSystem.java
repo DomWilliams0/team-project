@@ -1,5 +1,6 @@
 package com.b3.entity.system;
 
+import com.b3.Utils;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.component.RenderComponent;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -41,6 +42,6 @@ public class RenderSystem extends IteratingSystem {
 		Vector2 pos = phys.getPosition();
 
 		shapeRenderer.setColor(render.colour);
-		shapeRenderer.circle(pos.x, pos.y, render.radius, 10);
+		shapeRenderer.circle(pos.x * Utils.WORLD_SCALE, pos.y * Utils.WORLD_SCALE, render.radius * Utils.WORLD_SCALE, 20);
 	}
 }

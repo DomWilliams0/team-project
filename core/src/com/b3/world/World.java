@@ -7,11 +7,13 @@ import com.b3.entity.component.RenderComponent;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
+import com.b3.util.Config;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
-import com.badlogic.gdx.ai.steer.behaviors.Wander;
+import com.badlogic.gdx.ai.steer.behaviors.FollowPath;
+import com.badlogic.gdx.ai.steer.utils.paths.LinePath;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -29,6 +31,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
@@ -86,15 +89,21 @@ public class World implements Disposable {
 		debugRenderer = new DebugRenderer(physicsWorld);
 
 		createDefaultBuildings();
+
+		// debug test agent
+//		addAgentWithPath(false, Array.with(
+//				new Vector2(25, 25),
+//				new Vector2(45, 25),
+//				new Vector2(45, 45),
+//				new Vector2(25, 45),
+//				new Vector2(25, 25)
+//		));
+
 	}
 
 	public void initEngine(PerspectiveCamera camera) {
-//		engine.addSystem(new MovementSystem());
 		engine.addSystem(new RenderSystem(camera));
 		engine.addSystem(new PhysicsSystem());
-
-		// debug: test entity
-		addAgent(new Vector2(50, 50));
 	}
 
 	public void initEventGenerator() {
@@ -128,25 +137,60 @@ public class World implements Disposable {
 
 	}
 
+	/**
+	 * Spawns an agent at the given tile
+	 *
+	 * @param tilePos Tile position
+	 * @return The new entity
+	 */
 	public Entity addAgent(Vector2 tilePos) {
 		Entity e = new Entity();
-//		e.add(new PositionComponent(tilePos.x, tilePos.y));
-//		e.add(new VelocityComponent(10, 10)); // debug: test movement
-		float radius = 0.5f;
+
+		float diameter = 0.5f;
+		float radius = diameter / 2f;
 		e.add(new RenderComponent(Color.BLUE, radius));
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		PhysicsComponent physics = new PhysicsComponent(physicsWorld, bodyDef, tilePos, radius);
-
-		// debug stupid wander behaviour
-		Wander<Vector2> wander = new Wander<>(physics);
-		wander.setWanderRate(1f);
-		wander.setWanderRadius(0.8f);
-		physics.setSteeringBehavior(wander);
-		e.add(physics);
+		bodyDef.linearDamping = 0.9f;
+		e.add(new PhysicsComponent(physicsWorld, bodyDef, tilePos, radius));
 
 		engine.addEntity(e);
+		return e;
+	}
+
+	/**
+	 * Spawns an agent at the start point of the path, and sets its behaviour to follow the given path
+	 *
+	 * @param arrive True if the agent should stop when he arrives at the final point
+	 * @param points The path to follow
+	 * @return The new entity
+	 */
+	public Entity addAgentWithPath(boolean arrive, Array<Vector2> points) {
+		if (points.size < 2)
+			throw new IllegalArgumentException("Given path is too short in addAgentWithPath");
+
+		// move to centres of tiles
+		for (int i = 0; i < points.size; i++)
+			points.get(i).add(0.5f, -0.5f);
+
+
+		LinePath<Vector2> path = new LinePath<>(points, true);
+
+		Entity e = addAgent(path.getStartPoint());
+		PhysicsComponent phys = e.getComponent(PhysicsComponent.class);
+
+		FollowPath<Vector2, LinePath.LinePathParam> behaviour =
+				new FollowPath<>(phys, path);
+		behaviour.setArriveEnabled(arrive);
+		behaviour.setPathOffset(1f);
+		behaviour.setPredictionTime(1f);
+		behaviour.setArrivalTolerance(1f);
+		behaviour.setDecelerationRadius(0f);
+
+		phys.setSteeringBehavior(behaviour);
+
+
 		return e;
 	}
 
@@ -161,15 +205,14 @@ public class World implements Disposable {
 	 */
 
 	/**
-	 *
-	 * @param pos		 Tile position
+	 * @param pos        Tile position
 	 * @param dimensions Building dimensions, in tiles. z is height
-	 * @param type		 Building type
-     * @return The newly constructed building
-     */
+	 * @param type       Building type
+	 * @return The newly constructed building
+	 */
 	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
-		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
-		pos = new Vector2(pos).scl(Utils.TILE_SIZE);
+		dimensions = new Vector3(dimensions).scl(Utils.WORLD_SCALE, Utils.WORLD_SCALE, 1); // height isn't scaled
+		pos = new Vector2(pos).scl(Utils.WORLD_SCALE);
 
 		ModelInstance instance = buildingCache.createBuilding(pos, dimensions);
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y, dimensions.z));
@@ -179,16 +222,19 @@ public class World implements Disposable {
 		buildings.add(building);
 
 		// physics
-		FixtureDef buildingDef = new FixtureDef();
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(
-				dimensions.x / 2, dimensions.y / 2,
-				new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
-				0f
-		);
-		buildingDef.shape = shape;
-		buildingBody.createFixture(buildingDef);
-		shape.dispose(); // todo reuse shape and fixture for all buildings
+		if (Config.get("building-collisions", Boolean.class)) {
+
+			FixtureDef buildingDef = new FixtureDef();
+			PolygonShape shape = new PolygonShape();
+			shape.setAsBox(
+					dimensions.x / 2, dimensions.y / 2,
+					new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
+					0f
+			);
+			buildingDef.shape = shape;
+			buildingBody.createFixture(buildingDef);
+			shape.dispose(); // todo reuse shape and fixture for all buildings
+		}
 
 		return building;
 	}
