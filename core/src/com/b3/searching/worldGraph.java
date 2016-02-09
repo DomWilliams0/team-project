@@ -218,14 +218,21 @@ public class worldGraph implements Serializable {
 
             case 3:
                 System.out.println("REMOVING 2 edges, horizonal");
-                if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX + 2, tempY)) {
+                if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
+                    | !checkExists(tempX + 1, tempY - 1, tempX+1, tempY) | !checkExists(tempX + 1, tempY + 1, tempX + 1, tempY) ) {
                     System.out.println("NOT ADDED");
                     return false;
                 } else {
                     revert = !(removeEdges(tempX, tempY, tempX + 1, tempY) &
                             removeEdges(tempX + 1, tempY, tempX + 2, tempY) &
                             removeEdges(tempX + 1, tempY, tempX, tempY) &
-                            removeEdges(tempX + 2, tempY, tempX + 1, tempY));
+                            removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
+
+                            removeEdges(tempX + 1, tempY+1, tempX + 1, tempY) &
+                            removeEdges(tempX + 1, tempY-1, tempX + 1, tempY) &
+
+                            removeEdges(tempX + 1, tempY, tempX + 1, tempY+1) &
+                            removeEdges(tempX + 1, tempY, tempX + 1, tempY-1));
 
                     if (revert) System.out.println("SOMETHING WENT WRONG; delete this object and start again");
 
@@ -347,8 +354,10 @@ public class worldGraph implements Serializable {
                 case 3:
                     System.out.println("REMOVING 2 edges, horizonal");
                     counterRevert = 0;
-                    if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX + 2, tempY)) {
-                        while (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX + 2, tempY)) {
+                    if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
+                            | !checkExists(tempX + 1, tempY + 1, tempX+1, tempY) | !checkExists(tempX+1, tempY-1, tempX+1, tempY) ) {
+                        while (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
+                                | !checkExists(tempX + 1, tempY+1, tempX+1, tempY) | !checkExists(tempX+1, tempY-1, tempX+1, tempY+1)) {
                             System.out.println("FAILED with (" + tempX + "," + tempY + "): Rechoosing another random number");
                             tempX = rdm.nextInt(xMax);
                             tempY = rdm.nextInt(yMax);
@@ -366,7 +375,12 @@ public class worldGraph implements Serializable {
                     revert = !(removeEdges(tempX, tempY, tempX + 1, tempY) &
                             removeEdges(tempX + 1, tempY, tempX + 2, tempY) &
                             removeEdges(tempX + 1, tempY, tempX, tempY) &
-                            removeEdges(tempX + 2, tempY, tempX + 1, tempY));
+                            removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
+
+                            removeEdges(tempX + 1, tempY + 1, tempX + 1, tempY) &
+                            removeEdges(tempX + 1, tempY-1, tempX + 1, tempY) &
+                            removeEdges(tempX + 1, tempY, tempX + 1, tempY+1) &
+                            removeEdges(tempX + 1, tempY, tempX + 1, tempY-1));
 
                     if (revert) {
                         System.out.println("Revertion anyway, skipping");
