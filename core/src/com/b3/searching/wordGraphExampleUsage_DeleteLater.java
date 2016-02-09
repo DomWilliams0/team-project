@@ -19,10 +19,10 @@ public class wordGraphExampleUsage_DeleteLater {
         //add some buildings at (x, y, size (2,3,4))
         if (wg.addBuilding(5, 5, 2)) System.out.println("added"); else System.out.println("not");
         if (wg.addBuilding(6, 6, 3)) System.out.println("added"); else System.out.println("not");
-        if (wg.addBuilding(7, 7, 4)) System.out.println("added"); else System.out.println("not");
+        if (wg.addBuilding(8, 8, 4)) System.out.println("added"); else System.out.println("not");
         //generate random graph with 3 2-sized buildings, 4 3-sized buildings and 2 4-sized buildings
         int[] arr = {2,2,2,3,3,3,3,4,4};
-        wg.randomTheGraph(arr);
+//        wg.randomTheGraph(arr);
         //add costs to nodes - all other nodes default to 0
         wg.addCostNode(2,1,10);
         wg.addCostNode(2,2,10);
