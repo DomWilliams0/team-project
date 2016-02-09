@@ -325,15 +325,24 @@ public class worldGraph implements Serializable {
                 case 2:
                     System.out.println("REMOVING 2 edges, vertical");
                     counterRevert = 0;
-                    if (tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax | !checkExists(tempX, tempY, tempX, tempY + 1) | !checkExists(tempX, tempY + 1, tempX, tempY + 2)) {
-                        while (tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax | !checkExists(tempX, tempY, tempX, tempY + 1) | !checkExists(tempX, tempY + 1, tempX, tempY + 2)) {
+                    if (tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax
+                            | !checkExists(tempX, tempY, tempX, tempY + 1)
+                            | !checkExists(tempX, tempY + 1, tempX, tempY + 2)
+                            | !checkExists(tempX, tempY+1, tempX, tempY)
+                            | !checkExists(tempX, tempY+2, tempX, tempY+1) ) {
+                        while (tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax
+                                | !checkExists(tempX, tempY, tempX, tempY + 1)
+                                | !checkExists(tempX, tempY + 1, tempX, tempY + 2)
+                                | !checkExists(tempX, tempY+1, tempX, tempY)
+                                | !checkExists(tempX, tempY+2, tempX, tempY+1)
+                                ) {
                             System.out.println("FAILED with (" + tempX + "," + tempY + "): Rechoosing another random number");
                             tempY = rdm.nextInt(yMax);
                             tempX = rdm.nextInt(xMax);
                             counterRevert++;
                             if (counterRevert > maxRevert) {
                                 revert = true;
-                                System.err.println("Can't place all buildings - they all won't fit on the graph");
+                                System.err.println("Can't place all buildings - they all won't fit on the graph 2 " + tempX + "; " + tempY + "| " +counterRevert + "|" + maxRevert);
                                 break;
                             }
                         }
@@ -346,6 +355,8 @@ public class worldGraph implements Serializable {
                             removeEdges(tempX, tempY + 1, tempX, tempY) &
                             removeEdges(tempX, tempY + 2, tempX, tempY + 1));
 
+                    System.out.println("Removing 2 :" + tempX + "; " + tempY + "| revert = " + revert);
+
                     if (revert) {
                         System.out.println("Revertion anyway, skipping");
                         break;
@@ -357,18 +368,31 @@ public class worldGraph implements Serializable {
                 case 3:
                     System.out.println("REMOVING 2 edges, horizonal");
                     counterRevert = 0;
-                    if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
-                            | !checkExists(tempX + 1, tempY + 1, tempX+1, tempY) | !checkExists(tempX+1, tempY-1, tempX+1, tempY) ) {
-                        while (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
-                                | !checkExists(tempX + 1, tempY+1, tempX+1, tempY) | !checkExists(tempX+1, tempY-1, tempX+1, tempY+1)) {
+                    if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax
+                            | !checkExists(tempX, tempY, tempX + 1, tempY)
+                            | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
+                            | !checkExists(tempX + 1, tempY, tempX, tempY)
+                            | !checkExists(tempX + 2, tempY, tempX + 1, tempY)
+                            | !checkExists(tempX + 1, tempY + 1, tempX + 1, tempY)
+                            | !checkExists(tempX + 1, tempY-1, tempX + 1, tempY)
+                            | !checkExists(tempX + 1, tempY, tempX + 1, tempY+1)
+                            | !checkExists(tempX + 1, tempY, tempX + 1, tempY-1) ) {
+                        while (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax
+                                | !checkExists(tempX, tempY, tempX + 1, tempY)
+                                | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
+                                | !checkExists(tempX + 1, tempY, tempX, tempY)
+                                | !checkExists(tempX + 2, tempY, tempX + 1, tempY)
+                                | !checkExists(tempX + 1, tempY + 1, tempX + 1, tempY)
+                                | !checkExists(tempX + 1, tempY-1, tempX + 1, tempY)
+                                | !checkExists(tempX + 1, tempY, tempX + 1, tempY+1)
+                                | !checkExists(tempX + 1, tempY, tempX + 1, tempY-1)) {
                             System.out.println("FAILED with (" + tempX + "," + tempY + "): Rechoosing another random number");
                             tempX = rdm.nextInt(xMax);
                             tempY = rdm.nextInt(yMax);
                             counterRevert++;
                             if (counterRevert > maxRevert) {
                                 revert = true;
-                                System.err.println("Can't place all buildings - they all won't fit on the graph");
-                                break;
+                                System.err.println("Can't place all buildings - they all won't fit on the graph 3 " + tempX + "; " + tempY + "| " +counterRevert + "|" + maxRevert);                                break;
                             }
                         }
                     }
@@ -379,11 +403,12 @@ public class worldGraph implements Serializable {
                             removeEdges(tempX + 1, tempY, tempX + 2, tempY) &
                             removeEdges(tempX + 1, tempY, tempX, tempY) &
                             removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
-
                             removeEdges(tempX + 1, tempY + 1, tempX + 1, tempY) &
                             removeEdges(tempX + 1, tempY-1, tempX + 1, tempY) &
                             removeEdges(tempX + 1, tempY, tempX + 1, tempY+1) &
                             removeEdges(tempX + 1, tempY, tempX + 1, tempY-1));
+
+                    System.out.println("Removing 3 :" + tempX + "; " + tempY + "| revert = " + revert);
 
                     if (revert) {
                         System.out.println("Revertion anyway, skipping");
@@ -396,32 +421,37 @@ public class worldGraph implements Serializable {
                     System.out.println("REMOVING 4 edges");
                     counterRevert = 0;
 
-                    while (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax
-                            | !checkExists(tempX, tempY, tempX + 1, tempY)
-                            | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
-                            | !checkExists(tempX, tempY + 1, tempX + 1, tempY + 1)
-                            | !checkExists(tempX + 1, tempY + 1, tempX + 2, tempY + 1)
-                            | !checkExists(tempX+1,tempY+1,tempX+1, tempY)
-                            | !checkExists(tempX+1,tempY+2,tempX+1, tempY+1)
-                            | !checkExists(tempX+1, tempY, tempX+1, tempY+1)) {
+                    while (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax |
+                    !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX, tempY) |
+                            !checkExists(tempX + 1, tempY, tempX + 2, tempY) | !checkExists(tempX + 2, tempY, tempX + 1, tempY) |
+                            !checkExists(tempX, tempY + 1, tempX + 1, tempY + 1) | !checkExists(tempX + 1, tempY + 1, tempX, tempY + 1) |
+                            !checkExists(tempX + 1, tempY + 1, tempX + 2, tempY + 1) | !checkExists(tempX + 2, tempY + 1, tempX + 1, tempY + 1) |
+                            !checkExists(tempX+1, tempY-1, tempX+1, tempY) | !checkExists(tempX, tempY-1, tempX+1, tempY-1) |
+                            !checkExists(tempX+1, tempY+2, tempX+1, tempY+1) | !checkExists(tempX+1, tempY+1, tempX+1, tempY+2) |
+                            !checkExists(tempX+1, tempY, tempX+1, tempY+1) | !checkExists(tempX+1, tempY+1, tempX+1, tempY)) {
                         System.out.println("FAILED with (" + tempX + "," + tempY + "): Rechoosing another random number");
                         tempX = rdm.nextInt(xMax);
                         tempY = rdm.nextInt(yMax);
                         counterRevert++;
                         if (counterRevert > maxRevert) {
                             revert = true;
-                            System.err.println("Can't place all buildings - they all won't fit on the graph");
+                            System.err.println("Can't place all buildings - they all won't fit on the graph 2 " + tempX + "; " + tempY + "| " +counterRevert + "|" + maxRevert);
                             break;
                         }
                     }
 
                     System.out.println("Randomly removing " + tempX + "; " + tempY + " by four");
-                    revert = !(removeEdges(tempX, tempY, tempX + 1, tempY) & removeEdges(tempX + 1, tempY, tempX, tempY) &
-                            removeEdges(tempX + 1, tempY, tempX + 2, tempY) & removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
-                            removeEdges(tempX, tempY + 1, tempX + 1, tempY + 1) & removeEdges(tempX + 1, tempY + 1, tempX, tempY + 1) &
-                            removeEdges(tempX + 1, tempY + 1, tempX + 2, tempY + 1) & removeEdges(tempX + 2, tempY + 1, tempX + 1, tempY + 1) &
-                            removeEdges(tempX+1, tempY-1, tempX+1, tempY) & removeEdges(tempX+1, tempY+2, tempX+1, tempY+1) & removeEdges(tempX+1, tempY, tempX+1, tempY+1)
+                    revert = !(
+                            removeEdges(tempX, tempY, tempX + 1, tempY) & removeEdges(tempX + 1, tempY, tempX, tempY) &
+                                    removeEdges(tempX + 1, tempY, tempX + 2, tempY) & removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
+                                    removeEdges(tempX, tempY + 1, tempX + 1, tempY + 1) & removeEdges(tempX + 1, tempY + 1, tempX, tempY + 1) &
+                                    removeEdges(tempX + 1, tempY + 1, tempX + 2, tempY + 1) & removeEdges(tempX + 2, tempY + 1, tempX + 1, tempY + 1) &
+                                    removeEdges(tempX+1, tempY-1, tempX+1, tempY) & removeEdges(tempX, tempY-1, tempX+1, tempY-1) &
+                                    removeEdges(tempX+1, tempY+2, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX+1, tempY+2) &
+                                    removeEdges(tempX+1, tempY, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX+1, tempY)
                     );
+
+                    System.out.println("Removing 4 :" + tempX + "; " + tempY + "| revert = " + revert);
 
                     if (revert) {
                         System.out.println("Revertion anyway, skipping");
@@ -439,6 +469,7 @@ public class worldGraph implements Serializable {
             System.err.println("FAILED TO ADD ALL HOUSES USING RANDOM FUNCTION");
             System.err.println("<<<<<<<<<<<<<<<<<<<<<<REVERTING>>>>>>>>>>>>>>>>>>>>>");
             tempGraph = backupGraph;
+            tempBuildings.clear();
             if (counterRevert != 0) {
                 return -1;
             } else {
