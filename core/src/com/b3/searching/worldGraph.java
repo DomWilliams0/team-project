@@ -1,14 +1,11 @@
 package com.b3.searching;
 
+
 import com.b3.searching.roboticsGraphHelpers.Graph;
 import com.b3.searching.roboticsGraphHelpers.Point;
 import com.b3.searching.utils.Buildings;
 import com.b3.searching.utils.Coordinates;
-import com.b3.searching.utils.ReadFile;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
@@ -149,11 +146,11 @@ public class worldGraph implements Serializable {
         for (int i = 0; i < tempGraph.size(); i++) {
             if (tempGraph.get(i).getX() == x1 & tempGraph.get(i).getY() == y1) {
                 if (tempGraph.get(i).hasSuccessors(x2, y2)) {
-                    System.out.println("Removed");
+                    //System.out.println("Removed");
                     tempGraph.get(i).removeSuccessor(x2, y2);
                     return true;
                 } else {
-                    System.out.println("NOT REMOVED");
+//                    System.out.println("NOT REMOVED");
                     return false;
                 }
             }
@@ -175,8 +172,10 @@ public class worldGraph implements Serializable {
         for (int i = 0; i < tempGraph.size(); i++) {
             if (tempGraph.get(i).getX() == x1 & tempGraph.get(i).getY() == y1) {
                 if (tempGraph.get(i).hasSuccessors(x2, y2)) {
+                    //System.out.println("("+x1+","+y1+") is connected to ("+x2+","+y2+")");
                     return true;
                 } else {
+                    //System.out.println("("+x1+","+y1+") is not connected to ("+x2+","+y2+")");
                     return false;
                 }
             }
@@ -186,7 +185,7 @@ public class worldGraph implements Serializable {
 
     /**
      * Add a building to the graph
-     * Should be safe - ie return false if placment of building will result in overlapping buildings.
+     * Should be safe - ie return false if placement of building will result in overlapping buildings.
      *
      * @param tempX the xcoordinate of top left of building
      * @param tempY the ycoordinate of top left of building
@@ -195,89 +194,123 @@ public class worldGraph implements Serializable {
      */
     public Boolean addBuilding(int tempX, int tempY, int size) {
 
-        Boolean revert;
+        Boolean revert = false;
 
         switch (size) {
             case 2:
-                System.out.println("REMOVING 2 edges, vertical");
-                if (tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax
-                        | !checkExists(tempX, tempY, tempX, tempY + 1)
-                        | !checkExists(tempX, tempY + 1, tempX, tempY + 2)
+                if (      !checkExists(tempX, tempY, tempX-1, tempY)
+                        | !checkExists(tempX, tempY, tempX+1, tempY)
+                        | !checkExists(tempX, tempY, tempX, tempY-1)
+                        | !checkExists(tempX, tempY, tempX, tempY+1)
                         | !checkExists(tempX, tempY+1, tempX, tempY)
-                        | !checkExists(tempX, tempY+2, tempX, tempY+1) ) {
+                        | !checkExists(tempX, tempY+1, tempX+1, tempY+1)
+                        | !checkExists(tempX, tempY+1, tempX-1, tempY+1)
+                        | !checkExists(tempX, tempY+1, tempX, tempY+2)
+                        ) {
                     System.out.println("NOT ADDED");
                     return false;
                 } else {
-                    revert = !(removeEdges(tempX, tempY, tempX, tempY + 1) &
-                            removeEdges(tempX, tempY + 1, tempX, tempY + 2) &
-                            removeEdges(tempX, tempY + 1, tempX, tempY) &
-                            removeEdges(tempX, tempY + 2, tempX, tempY + 1));
+                    revert = !(
+                            removeEdges(tempX, tempY, tempX-1, tempY) & removeEdges(tempX-1, tempY, tempX, tempY)
+                                    & removeEdges(tempX, tempY, tempX+1, tempY) & removeEdges(tempX+1, tempY, tempX, tempY)
+                                    & removeEdges(tempX, tempY, tempX, tempY-1) & removeEdges(tempX, tempY-1, tempX, tempY)
+                                    & removeEdges(tempX, tempY, tempX, tempY+1) & removeEdges(tempX, tempY+1, tempX, tempY)
+                                    //& removeEdges(tempX, tempY+1, tempX, tempY) & removeEdges(tempX, tempY, tempX, tempY+1)
+                                    & removeEdges(tempX, tempY+1, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX, tempY+1)
+                                    & removeEdges(tempX, tempY+1, tempX-1, tempY+1) & removeEdges(tempX-1, tempY+1, tempX, tempY+1)
+                                    & removeEdges(tempX, tempY+1, tempX, tempY+2) & removeEdges(tempX, tempY+2, tempX, tempY+1)
+                    );
 
-                    if (revert) System.err.println("SOMETHING WENT WRONG; delete this object and start again");
+                    if (revert) {
+                        tempBuildings.clear();
+                        System.err.println("SOMETHING WENT WRONG; delete this object and start again. Building's cleared, graph now corrupt");
+                    }
 
-                    System.out.println("ADDED");
+
                     tempBuildings.add(new Buildings(new Coordinates(tempX, tempY), 2));
                     return true;
                 }
 
             case 3:
-                System.out.println("REMOVING 2 edges, horizonal");
-                if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax
-                        | !checkExists(tempX, tempY, tempX + 1, tempY)
-                        | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
-                        | !checkExists(tempX + 1, tempY, tempX, tempY)
-                        | !checkExists(tempX + 2, tempY, tempX + 1, tempY)
-                        | !checkExists(tempX + 1, tempY + 1, tempX + 1, tempY)
-                        | !checkExists(tempX + 1, tempY-1, tempX + 1, tempY)
-                        | !checkExists(tempX + 1, tempY, tempX + 1, tempY+1)
-                        | !checkExists(tempX + 1, tempY, tempX + 1, tempY-1) ) {
+                if (
+                        !checkExists(tempX, tempY, tempX+1, tempY)
+                                | !checkExists(tempX, tempY, tempX-1, tempY)
+                                | !checkExists(tempX, tempY, tempX, tempY+1)
+                                | !checkExists(tempX, tempY, tempX, tempY-1)
+                                | !checkExists(tempX+1, tempY, tempX, tempY)
+                                | !checkExists(tempX+1, tempY, tempX+2, tempY)
+                                | !checkExists(tempX+1, tempY, tempX+1, tempY+1)
+                                | !checkExists(tempX+1, tempY, tempX+1, tempY-1)
+                        ) {
                     System.out.println("NOT ADDED");
                     return false;
                 } else {
-                    revert = !(removeEdges(tempX, tempY, tempX + 1, tempY) &
-                            removeEdges(tempX + 1, tempY, tempX + 2, tempY) &
-                            removeEdges(tempX + 1, tempY, tempX, tempY) &
-                            removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
-                            removeEdges(tempX + 1, tempY + 1, tempX + 1, tempY) &
-                            removeEdges(tempX + 1, tempY-1, tempX + 1, tempY) &
-                            removeEdges(tempX + 1, tempY, tempX + 1, tempY+1) &
-                            removeEdges(tempX + 1, tempY, tempX + 1, tempY-1));
+                    revert = !(removeEdges(tempX, tempY, tempX+1, tempY) & removeEdges(tempX+1, tempY, tempX, tempY)
+                            & removeEdges(tempX, tempY, tempX-1, tempY) & removeEdges(tempX-1, tempY, tempX, tempY)
+                            & removeEdges(tempX, tempY, tempX, tempY+1) & removeEdges(tempX, tempY+1, tempX, tempY)
+                            & removeEdges(tempX, tempY, tempX, tempY-1) & removeEdges(tempX, tempY-1, tempX, tempY)
+                            //& removeEdges(tempX+1, tempY, tempX, tempY) & removeEdges(tempX, tempY, tempX+1, tempY)
+                            & removeEdges(tempX+1, tempY, tempX+2, tempY) & removeEdges(tempX+2, tempY, tempX+1, tempY)
+                            & removeEdges(tempX+1, tempY, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX+1, tempY)
+                            & removeEdges(tempX+1, tempY, tempX+1, tempY-1) & removeEdges(tempX+1, tempY-1, tempX+1, tempY)
 
-                    if (revert) System.out.println("SOMETHING WENT WRONG; delete this object and start again");
+                    );
 
-                    System.out.println("ADDED");
                     tempBuildings.add(new Buildings(new Coordinates(tempX, tempY), 3));
                     return true;
                 }
 
 
             case 4:
-                System.out.println("REMOVING 4 edges");
+                if (!checkExists(tempX, tempY, tempX-1, tempY) |
+                        !checkExists(tempX, tempY, tempX+1, tempY) |
+                        !checkExists(tempX, tempY, tempX, tempY+1) |
+                        !checkExists(tempX, tempY, tempX, tempY-1) |
 
-                if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax |
-                        !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX, tempY) |
-                        !checkExists(tempX + 1, tempY, tempX + 2, tempY) | !checkExists(tempX + 2, tempY, tempX + 1, tempY) |
-                        !checkExists(tempX, tempY + 1, tempX + 1, tempY + 1) | !checkExists(tempX + 1, tempY + 1, tempX, tempY + 1) |
-                        !checkExists(tempX + 1, tempY + 1, tempX + 2, tempY + 1) | !checkExists(tempX + 2, tempY + 1, tempX + 1, tempY + 1) |
-                        !checkExists(tempX+1, tempY-1, tempX+1, tempY) | !checkExists(tempX, tempY-1, tempX+1, tempY-1) |
-                        !checkExists(tempX+1, tempY+2, tempX+1, tempY+1) | !checkExists(tempX+1, tempY+1, tempX+1, tempY+2) |
-                        !checkExists(tempX+1, tempY, tempX+1, tempY+1) | !checkExists(tempX+1, tempY+1, tempX+1, tempY)) {
+                        !checkExists(tempX+1, tempY, tempX, tempY) |
+                        !checkExists(tempX+1, tempY, tempX+2, tempY) |
+                        !checkExists(tempX+1, tempY, tempX+1, tempY+1) |
+                        !checkExists(tempX+1, tempY, tempX+1, tempY-1) |
+                        !checkExists(tempX, tempY+1, tempX+1, tempY+1) |
+
+                        !checkExists(tempX, tempY+1, tempX-1, tempY+1) |
+                        !checkExists(tempX, tempY+1, tempX, tempY+2) |
+                        !checkExists(tempX, tempY+1, tempX, tempY) |
+                        !checkExists(tempX, tempY+1, tempX, tempY) |
+
+                        !checkExists(tempX+1, tempY+1, tempX+2, tempY+1) |
+                        !checkExists(tempX+1, tempY+1, tempX, tempY+1) |
+                        !checkExists(tempX+1, tempY+1, tempX+1, tempY+2) |
+                        !checkExists(tempX+1, tempY+1, tempX+1, tempY)
+                        ) {
                     System.out.println("NOT ADDED");
                     return false;
                 } else {
-                    revert = !(removeEdges(tempX, tempY, tempX + 1, tempY) & removeEdges(tempX + 1, tempY, tempX, tempY) &
-                            removeEdges(tempX + 1, tempY, tempX + 2, tempY) & removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
-                            removeEdges(tempX, tempY + 1, tempX + 1, tempY + 1) & removeEdges(tempX + 1, tempY + 1, tempX, tempY + 1) &
-                            removeEdges(tempX + 1, tempY + 1, tempX + 2, tempY + 1) & removeEdges(tempX + 2, tempY + 1, tempX + 1, tempY + 1) &
-                            removeEdges(tempX+1, tempY-1, tempX+1, tempY) & removeEdges(tempX, tempY-1, tempX+1, tempY-1) &
-                            removeEdges(tempX+1, tempY+2, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX+1, tempY+2) &
-                            removeEdges(tempX+1, tempY, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX+1, tempY)
+                    revert = !(removeEdges(tempX, tempY, tempX-1, tempY) & removeEdges(tempX-1, tempY, tempX, tempY) &
+                            removeEdges(tempX, tempY, tempX+1, tempY) & removeEdges(tempX+1, tempY, tempX, tempY) &
+                            removeEdges(tempX, tempY, tempX, tempY+1) & removeEdges(tempX, tempY+1, tempX, tempY) &
+                            removeEdges(tempX, tempY, tempX, tempY-1) & removeEdges(tempX, tempY-1, tempX, tempY) &
+
+                            //removeEdges(tempX+1, tempY, tempX, tempY) & removeEdges(tempX, tempY, tempX+1, tempY) &
+                            removeEdges(tempX+1, tempY, tempX+2, tempY) & removeEdges(tempX+2, tempY, tempX+1, tempY) &
+                            removeEdges(tempX+1, tempY, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX+1, tempY) &
+                            removeEdges(tempX+1, tempY, tempX+1, tempY-1) & removeEdges(tempX+1, tempY-1, tempX+1, tempY) &
+
+                            removeEdges(tempX, tempY+1, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX, tempY+1) &
+                            removeEdges(tempX, tempY+1, tempX-1, tempY+1) & removeEdges(tempX-1, tempY+1, tempX, tempY+1) &
+                            removeEdges(tempX, tempY+1, tempX, tempY+2) & removeEdges(tempX, tempY+2, tempX, tempY+1) &
+                            //removeEdges(tempX, tempY+1, tempX, tempY) & removeEdges(tempX, tempY, tempX, tempY+1) &
+
+                            removeEdges(tempX+1, tempY+1, tempX+2, tempY+1) & removeEdges(tempX+2, tempY+1, tempX+1, tempY+1) &
+                            //removeEdges(tempX+1, tempY+1, tempX, tempY+1) & removeEdges(tempX, tempY+1, tempX+1, tempY+1) &
+                            removeEdges(tempX+1, tempY+1, tempX+1, tempY+2) & removeEdges(tempX+1, tempY+2, tempX+1, tempY+1) //&
+                            //removeEdges(tempX+1, tempY+1, tempX+1, tempY) & removeEdges(tempX+1, tempY, tempX+1, tempY+1)
                     );
 
                     if (revert) System.out.println("SOMETHING WENT WRONG; delete this object and start again");
 
-                    System.out.println("ADDED");
                     tempBuildings.add(new Buildings(new Coordinates(tempX, tempY), 4));
+
                     return true;
                 }
         }
@@ -306,10 +339,9 @@ public class worldGraph implements Serializable {
      *                     "Revertion anyway, skipping" -> failed to place a building, should not happen as checks should occur and should keep generating random x and y until it find a place to place the building
      *                     "Can't place all buildings..." -> too many buildings to place on small map without overlapping, will revert.
      * @return 1  = successfully randomised
-     * //TODO  2  = successfully randomised but more than 75% of edges have been deleted.
      * 0  = invalid input
      * -1 = failed due to too many buildings being attempted to be placed onto grid
-     * -2 = failed due to above bug in program, recommend retry a few times until works. If still doesn't reduce number of 'large' / 4 -sized buildings in input
+     * //GONE CAUSE OF BETTER REFACTOR (LINKED TO addbuildings now) -2 = failed due to above bug in program, recommend retry a few times until works. If still doesn't reduce number of 'large' / 4 -sized buildings in input
      */
     public int randomTheGraph(int[] arrBuildings) {
 
@@ -320,179 +352,47 @@ public class worldGraph implements Serializable {
         int counterRevert = 0;
         int maxRevert = 1000;
 
+        Random rnd = new Random();
+
         for (int i = 0; i < arrBuildings.length; i++) {
-            int typeOfRemoval = arrBuildings[i];
+            int tempX = rnd.nextInt(xMax);
+            int tempY = rnd.nextInt(yMax);
+            int sizeB = arrBuildings[i];
 
-            Random rdm = new Random();
-            int tempX = rdm.nextInt(xMax);
-            int tempY = rdm.nextInt(yMax);
+            counterRevert = 0;
 
-            switch (typeOfRemoval) {
-                case 1:
-                    System.out.println("REMOVING 1 edge");
-                    System.out.println("Randomly removing " + tempX + "; " + tempY);
-                    if (!removeEdges(tempX, tempY, tempX + 1, tempY))
-                        if (!removeEdges(tempX, tempY, tempX - 1, tempY))
-                            if (!removeEdges(tempX, tempY, tempX, tempY + 1))
-                                if (!removeEdges(tempX, tempY, tempX, tempY - 1))
-                                    System.err.printf("FAILED TO ADD ONE");
-                    break;
-                case 2:
-                    System.out.println("REMOVING 2 edges, vertical");
-                    counterRevert = 0;
-                    if (tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax
-                            | !checkExists(tempX, tempY, tempX, tempY + 1)
-                            | !checkExists(tempX, tempY + 1, tempX, tempY + 2)
-                            | !checkExists(tempX, tempY+1, tempX, tempY)
-                            | !checkExists(tempX, tempY+2, tempX, tempY+1) ) {
-                        while (tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax
-                                | !checkExists(tempX, tempY, tempX, tempY + 1)
-                                | !checkExists(tempX, tempY + 1, tempX, tempY + 2)
-                                | !checkExists(tempX, tempY+1, tempX, tempY)
-                                | !checkExists(tempX, tempY+2, tempX, tempY+1)
-                                ) {
-                            System.out.println("FAILED with (" + tempX + "," + tempY + "): Rechoosing another random number");
-                            tempY = rdm.nextInt(yMax);
-                            tempX = rdm.nextInt(xMax);
-                            counterRevert++;
-                            if (counterRevert > maxRevert) {
-                                revert = true;
-                                System.err.println("Can't place all buildings - they all won't fit on the graph 2 " + tempX + "; " + tempY + "| " +counterRevert + "|" + maxRevert);
-                                break;
-                            }
-                        }
-                    }
-
-                    System.out.println("Randomly removing " + tempX + "; " + tempY + " by two");
-
-                    revert = !(removeEdges(tempX, tempY, tempX, tempY + 1) &
-                            removeEdges(tempX, tempY + 1, tempX, tempY + 2) &
-                            removeEdges(tempX, tempY + 1, tempX, tempY) &
-                            removeEdges(tempX, tempY + 2, tempX, tempY + 1));
-
-                    System.out.println("Removing 2 :" + tempX + "; " + tempY + "| revert = " + revert);
-
-                    if (revert) {
-                        System.out.println("Revertion anyway, skipping");
+            if (!addBuilding(tempX, tempY, sizeB))
+                while (addBuilding(tempX, tempY, sizeB) == false) {
+                    System.out.println("Failed to place with (" + tempX + "," + tempY + "): Rechoosing another random number");
+                    counterRevert++;
+                    tempX = rnd.nextInt(xMax);
+                    tempY = rnd.nextInt(yMax);
+                    if (counterRevert > maxRevert) {
+                        revert = true;
+                        System.err.println("Can't place all buildings - they all won't fit on the graph x:" + tempX + "; y:" + tempY + "; size: " + sizeB + "|" +counterRevert + "|" + maxRevert);
                         break;
-                    } else tempBuildings.add(new Buildings(new Coordinates(tempX, tempY), 2));
-
-                    break;
-
-
-                case 3:
-                    System.out.println("REMOVING 2 edges, horizonal");
-                    counterRevert = 0;
-                    if (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax
-                            | !checkExists(tempX, tempY, tempX + 1, tempY)
-                            | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
-                            | !checkExists(tempX + 1, tempY, tempX, tempY)
-                            | !checkExists(tempX + 2, tempY, tempX + 1, tempY)
-                            | !checkExists(tempX + 1, tempY + 1, tempX + 1, tempY)
-                            | !checkExists(tempX + 1, tempY-1, tempX + 1, tempY)
-                            | !checkExists(tempX + 1, tempY, tempX + 1, tempY+1)
-                            | !checkExists(tempX + 1, tempY, tempX + 1, tempY-1) ) {
-                        while (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax
-                                | !checkExists(tempX, tempY, tempX + 1, tempY)
-                                | !checkExists(tempX + 1, tempY, tempX + 2, tempY)
-                                | !checkExists(tempX + 1, tempY, tempX, tempY)
-                                | !checkExists(tempX + 2, tempY, tempX + 1, tempY)
-                                | !checkExists(tempX + 1, tempY + 1, tempX + 1, tempY)
-                                | !checkExists(tempX + 1, tempY-1, tempX + 1, tempY)
-                                | !checkExists(tempX + 1, tempY, tempX + 1, tempY+1)
-                                | !checkExists(tempX + 1, tempY, tempX + 1, tempY-1)) {
-                            System.out.println("FAILED with (" + tempX + "," + tempY + "): Rechoosing another random number");
-                            tempX = rdm.nextInt(xMax);
-                            tempY = rdm.nextInt(yMax);
-                            counterRevert++;
-                            if (counterRevert > maxRevert) {
-                                revert = true;
-                                System.err.println("Can't place all buildings - they all won't fit on the graph 3 " + tempX + "; " + tempY + "| " +counterRevert + "|" + maxRevert);                                break;
-                            }
-                        }
                     }
-
-                    System.out.println("Randomly removing " + tempX + "; " + tempY + " by two to right");
-
-                    revert = !(removeEdges(tempX, tempY, tempX + 1, tempY) &
-                            removeEdges(tempX + 1, tempY, tempX + 2, tempY) &
-                            removeEdges(tempX + 1, tempY, tempX, tempY) &
-                            removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
-                            removeEdges(tempX + 1, tempY + 1, tempX + 1, tempY) &
-                            removeEdges(tempX + 1, tempY-1, tempX + 1, tempY) &
-                            removeEdges(tempX + 1, tempY, tempX + 1, tempY+1) &
-                            removeEdges(tempX + 1, tempY, tempX + 1, tempY-1));
-
-                    System.out.println("Removing 3 :" + tempX + "; " + tempY + "| revert = " + revert);
-
-                    if (revert) {
-                        System.out.println("Revertion anyway, skipping");
-                        break;
-                    } else tempBuildings.add(new Buildings(new Coordinates(tempX, tempY), 3));
-
-                    break;
-
-                case 4:
-                    System.out.println("REMOVING 4 edges");
-                    counterRevert = 0;
-
-                    while (tempX + 2 == xMax | tempX + 1 == xMax | tempX == xMax | tempY + 2 == yMax | tempY + 1 == yMax | tempY == yMax |
-                            !checkExists(tempX, tempY, tempX + 1, tempY) | !checkExists(tempX + 1, tempY, tempX, tempY) |
-                            !checkExists(tempX + 1, tempY, tempX + 2, tempY) | !checkExists(tempX + 2, tempY, tempX + 1, tempY) |
-                            !checkExists(tempX, tempY + 1, tempX + 1, tempY + 1) | !checkExists(tempX + 1, tempY + 1, tempX, tempY + 1) |
-                            !checkExists(tempX + 1, tempY + 1, tempX + 2, tempY + 1) | !checkExists(tempX + 2, tempY + 1, tempX + 1, tempY + 1) |
-                            !checkExists(tempX+1, tempY-1, tempX+1, tempY) | !checkExists(tempX, tempY-1, tempX+1, tempY-1) |
-                            !checkExists(tempX+1, tempY+2, tempX+1, tempY+1) | !checkExists(tempX+1, tempY+1, tempX+1, tempY+2) |
-                            !checkExists(tempX+1, tempY, tempX+1, tempY+1) | !checkExists(tempX+1, tempY+1, tempX+1, tempY)) {
-                        System.out.println("FAILED with (" + tempX + "," + tempY + "): Rechoosing another random number");
-                        tempX = rdm.nextInt(xMax);
-                        tempY = rdm.nextInt(yMax);
-                        counterRevert++;
-                        if (counterRevert > maxRevert) {
-                            revert = true;
-                            System.err.println("Can't place all buildings - they all won't fit on the graph 2 " + tempX + "; " + tempY + "| " +counterRevert + "|" + maxRevert);
-                            break;
-                        }
-                    }
-
-                    System.out.println("Randomly removing " + tempX + "; " + tempY + " by four");
-                    revert = !(removeEdges(tempX, tempY, tempX + 1, tempY) & removeEdges(tempX + 1, tempY, tempX, tempY) &
-                                    removeEdges(tempX + 1, tempY, tempX + 2, tempY) & removeEdges(tempX + 2, tempY, tempX + 1, tempY) &
-                                    removeEdges(tempX, tempY + 1, tempX + 1, tempY + 1) & removeEdges(tempX + 1, tempY + 1, tempX, tempY + 1) &
-                                    removeEdges(tempX + 1, tempY + 1, tempX + 2, tempY + 1) & removeEdges(tempX + 2, tempY + 1, tempX + 1, tempY + 1) &
-                                    removeEdges(tempX+1, tempY-1, tempX+1, tempY) & removeEdges(tempX, tempY-1, tempX+1, tempY-1) &
-                                    removeEdges(tempX+1, tempY+2, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX+1, tempY+2) &
-                                    removeEdges(tempX+1, tempY, tempX+1, tempY+1) & removeEdges(tempX+1, tempY+1, tempX+1, tempY)
-                    );
-
-                    System.out.println("Removing 4 :" + tempX + "; " + tempY + "| revert = " + revert);
-
-                    if (revert) {
-                        System.out.println("Revertion anyway, skipping");
-                        break;
-                    } else tempBuildings.add(new Buildings(new Coordinates(tempX, tempY), 4));
-                    break;
-            }
+                }
 
             if (revert) {
-                System.err.println("Revertion was enabled for some reason (see above). Reverting, cancelling and stopping algorithm loop.");
+                System.out.println("Revertion anyway, skipping");
                 break;
+            } else {
+                System.out.println("Randomly placed " + tempX + "; " + tempY + " by " + sizeB);
             }
         }
+
         if (revert) {
             System.err.println("FAILED TO ADD ALL HOUSES USING RANDOM FUNCTION");
             System.err.println("<<<<<<<<<<<<<<<<<<<<<<REVERTING>>>>>>>>>>>>>>>>>>>>>");
             tempGraph = backupGraph;
             tempBuildings.clear();
-            if (counterRevert != 0) {
-                return -1;
-            } else {
-                return -2;
-            }
+            return -1;
         } else {
-            System.out.println("Successfully randomised");
+            System.out.println("Success");
             return 1;
         }
+
     }
 
     /**
@@ -599,6 +499,9 @@ public class worldGraph implements Serializable {
         tempGraph = temp.getGraph();
         costs = temp.getCosts();
         coords = temp.getCoords();
+
+        xMax = temp.getMaxXValue();
+        yMax = temp.getMaxYValue();
     }
 
     /**

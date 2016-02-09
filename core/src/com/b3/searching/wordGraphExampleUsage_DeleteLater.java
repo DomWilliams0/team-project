@@ -18,8 +18,8 @@ public class wordGraphExampleUsage_DeleteLater {
         wg.generateGraph(100,100);
         //add some buildings at (x, y, size (2,3,4))
         if (wg.addBuilding(5, 5, 2)) System.out.println("added"); else System.out.println("not");
-        if (wg.addBuilding(6, 6, 3)) System.out.println("added"); else System.out.println("not");
-        if (wg.addBuilding(8, 8, 4)) System.out.println("added"); else System.out.println("not");
+        if (wg.addBuilding(7, 7, 3)) System.out.println("added"); else System.out.println("not");
+        if (wg.addBuilding(9, 9, 4)) System.out.println("added"); else System.out.println("not");
         //generate random graph with 3 2-sized buildings, 4 3-sized buildings and 2 4-sized buildings
         int[] arr = {2,2,2,3,3,3,3,4,4};
 //        wg.randomTheGraph(arr);
@@ -49,9 +49,9 @@ public class wordGraphExampleUsage_DeleteLater {
         //Either go back to the original worldGraph object to edit, then call getGraphNicksStyle again.
 
         //ONLY CALL THESE FUNCTIONS FROM Graph CLASS - NO OTHERS
-        System.out.println(b.findPathDFSwithCosts(new Point(1,1), new Point(5,5)));
-        System.out.println(b.findPathBFS(new Point(1,1), new Point(5,5)));
-        System.out.println(b.findPathFromASTAR(new Point(1,1), new Point(5,5)));
+        System.out.println(b.findPathDFSwithCosts(new Point(1,1), new Point(25,25))); //returns nothing if building on top
+        System.out.println(b.findPathBFS(new Point(1,1), new Point(25,25))); //returns nothing if building on top
+        System.out.println(b.findPathFromASTAR(new Point(1,1), new Point(25,25)));//returns nothing if building on top
 
     }
 }
