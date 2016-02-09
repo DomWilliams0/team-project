@@ -109,7 +109,6 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 			 */
 
 			// Apply steering acceleration
-			System.out.println("steeringOutput.linear = " + steeringOutput.linear);
 			applySteering(deltaTime);
 		}
 	}
