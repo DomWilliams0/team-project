@@ -7,13 +7,10 @@ import com.b3.entity.component.RenderComponent;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
-import com.b3.util.Config;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
-import com.badlogic.gdx.ai.steer.behaviors.FollowPath;
-import com.badlogic.gdx.ai.steer.utils.paths.LinePath;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -27,16 +24,14 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
 
 public class World implements Disposable {
+
+	private static short ENTITY_CULL_TAG = 10101;
 
 	private Vector2 tileSize, pixelSize;
 
@@ -56,6 +51,8 @@ public class World implements Disposable {
 	private EventGenerator eventGenerator;
 	private WorldObserver worldObserver;
 	private WorldQueryService queryService;
+
+	private Set<Entity> deadEntities;
 
 	public World(String fileName) {
 		TiledMap map = new TmxMapLoader().load(fileName);
@@ -78,10 +75,12 @@ public class World implements Disposable {
 
 		// entities
 		engine = new Engine();
+		deadEntities = new HashSet<>();
 		physicsWorld = new com.badlogic.gdx.physics.box2d.World(Vector2.Zero, true);
 		BodyDef buildingBodyDef = new BodyDef();
 		buildingBodyDef.type = BodyDef.BodyType.StaticBody;
 		buildingBody = physicsWorld.createBody(buildingBodyDef);
+		initEntityBoundaries();
 
 		// Query service
 		queryService = new WorldQueryService(this);
@@ -89,21 +88,67 @@ public class World implements Disposable {
 		debugRenderer = new DebugRenderer(physicsWorld);
 
 		createDefaultBuildings();
+	}
 
-		// debug test agent
-//		addAgentWithPath(false, Array.with(
-//				new Vector2(25, 25),
-//				new Vector2(45, 25),
-//				new Vector2(45, 45),
-//				new Vector2(25, 45),
-//				new Vector2(25, 25)
-//		));
+	private void initEntityBoundaries() {
+		FixtureDef boundaryDef = new FixtureDef();
+		PolygonShape shape = new PolygonShape();
+		boundaryDef.shape = shape;
+		boundaryDef.isSensor = true;
+		boundaryDef.filter.groupIndex = ENTITY_CULL_TAG;
 
+		float thickness = 1f;
+		float offset = 5f;
+
+		shape.setAsBox(offset + pixelSize.x / 2f, thickness, new Vector2(pixelSize.x / 2f, thickness / 2f - offset), 0f); // bottom
+		buildingBody.createFixture(boundaryDef);
+
+		shape.setAsBox(offset + pixelSize.x / 2f, thickness, new Vector2(pixelSize.x / 2f, pixelSize.y + thickness / 2f + offset), 0f); // top
+		buildingBody.createFixture(boundaryDef);
+
+		shape.setAsBox(thickness, offset + pixelSize.y / 2f, new Vector2(-thickness / 2f - offset, pixelSize.y / 2f), 0f); // left
+		buildingBody.createFixture(boundaryDef);
+
+		shape.setAsBox(thickness, offset + pixelSize.y / 2f, new Vector2(pixelSize.x + thickness / 2f + offset, pixelSize.y / 2f), 0f); // right
+		buildingBody.createFixture(boundaryDef);
+
+		physicsWorld.setContactFilter((fixA, fixB) ->
+				fixA.getFilterData().groupIndex == ENTITY_CULL_TAG ||
+						fixB.getFilterData().groupIndex == ENTITY_CULL_TAG);
+
+		physicsWorld.setContactListener(new ContactListener() {
+			@Override
+			public void beginContact(Contact contact) {
+				Fixture f = contact.getFixtureA().getFilterData().groupIndex == ENTITY_CULL_TAG ? contact.getFixtureB() : contact.getFixtureA();
+				Entity entity = (Entity) f.getBody().getUserData();
+
+				deadEntities.add(entity);
+			}
+
+			@Override
+			public void endContact(Contact contact) {
+
+			}
+
+			@Override
+			public void preSolve(Contact contact, Manifold manifold) {
+
+			}
+
+			@Override
+			public void postSolve(Contact contact, ContactImpulse contactImpulse) {
+
+			}
+		});
 	}
 
 	public void initEngine(PerspectiveCamera camera) {
 		engine.addSystem(new RenderSystem(camera));
 		engine.addSystem(new PhysicsSystem());
+
+		// debug: test entities
+//		for (int i = 0; i < 2000; i++)
+//			addAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 	}
 
 	public void initEventGenerator() {
@@ -137,12 +182,6 @@ public class World implements Disposable {
 
 	}
 
-	/**
-	 * Spawns an agent at the given tile
-	 *
-	 * @param tilePos Tile position
-	 * @return The new entity
-	 */
 	public Entity addAgent(Vector2 tilePos) {
 		Entity e = new Entity();
 
@@ -153,44 +192,17 @@ public class World implements Disposable {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 		bodyDef.linearDamping = 0.9f;
-		e.add(new PhysicsComponent(physicsWorld, bodyDef, tilePos, radius));
+		PhysicsComponent physics = new PhysicsComponent(physicsWorld, bodyDef, tilePos, radius);
+		physics.body.setUserData(e);
+
+		// debug stupid wander behaviour
+//		Wander<Vector2> wander = new Wander<>(physics);
+//		wander.setWanderRate(1f);
+//		wander.setWanderRadius(0.8f);
+//		physics.setSteeringBehavior(wander);
+//		e.add(physics);
 
 		engine.addEntity(e);
-		return e;
-	}
-
-	/**
-	 * Spawns an agent at the start point of the path, and sets its behaviour to follow the given path
-	 *
-	 * @param arrive True if the agent should stop when he arrives at the final point
-	 * @param points The path to follow
-	 * @return The new entity
-	 */
-	public Entity addAgentWithPath(boolean arrive, Array<Vector2> points) {
-		if (points.size < 2)
-			throw new IllegalArgumentException("Given path is too short in addAgentWithPath");
-
-		// move to centres of tiles
-		for (int i = 0; i < points.size; i++)
-			points.get(i).add(0.5f, -0.5f);
-
-
-		LinePath<Vector2> path = new LinePath<>(points, true);
-
-		Entity e = addAgent(path.getStartPoint());
-		PhysicsComponent phys = e.getComponent(PhysicsComponent.class);
-
-		FollowPath<Vector2, LinePath.LinePathParam> behaviour =
-				new FollowPath<>(phys, path);
-		behaviour.setArriveEnabled(arrive);
-		behaviour.setPathOffset(1f);
-		behaviour.setPredictionTime(1f);
-		behaviour.setArrivalTolerance(1f);
-		behaviour.setDecelerationRadius(0f);
-
-		phys.setSteeringBehavior(behaviour);
-
-
 		return e;
 	}
 
@@ -201,18 +213,12 @@ public class World implements Disposable {
 	/**
 	 * @param pos        Tile position
 	 * @param dimensions Building dimensions, in tiles. z is height
-	 * @return The newly constructed building
-	 */
-
-	/**
-	 * @param pos        Tile position
-	 * @param dimensions Building dimensions, in tiles. z is height
 	 * @param type       Building type
 	 * @return The newly constructed building
 	 */
 	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
-		dimensions = new Vector3(dimensions).scl(Utils.WORLD_SCALE, Utils.WORLD_SCALE, 1); // height isn't scaled
-		pos = new Vector2(pos).scl(Utils.WORLD_SCALE);
+		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
+		pos = new Vector2(pos).scl(Utils.TILE_SIZE);
 
 		ModelInstance instance = buildingCache.createBuilding(pos, dimensions);
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y, dimensions.z));
@@ -222,19 +228,16 @@ public class World implements Disposable {
 		buildings.add(building);
 
 		// physics
-		if (Config.get("building-collisions", Boolean.class)) {
-
-			FixtureDef buildingDef = new FixtureDef();
-			PolygonShape shape = new PolygonShape();
-			shape.setAsBox(
-					dimensions.x / 2, dimensions.y / 2,
-					new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
-					0f
-			);
-			buildingDef.shape = shape;
-			buildingBody.createFixture(buildingDef);
-			shape.dispose(); // todo reuse shape and fixture for all buildings
-		}
+		FixtureDef buildingDef = new FixtureDef();
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(
+				dimensions.x / 2, dimensions.y / 2,
+				new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
+				0f
+		);
+		buildingDef.shape = shape;
+		buildingBody.createFixture(buildingDef);
+		shape.dispose(); // todo reuse shape and fixture for all buildings
 
 		return building;
 	}
@@ -242,6 +245,17 @@ public class World implements Disposable {
 	// todo remove buildings too
 
 	public void render(WorldCamera camera) {
+		// remove dead entities
+		deadEntities.forEach(e -> {
+
+			PhysicsComponent phys = e.getComponent(PhysicsComponent.class);
+			if (phys != null)
+				physicsWorld.destroyBody(phys.body);
+
+			engine.removeEntity(e);
+		});
+		deadEntities.clear();
+
 		// tick physics
 		float delta = Gdx.graphics.getRawDeltaTime();
 		physicsWorld.step(delta, 6, 4);
