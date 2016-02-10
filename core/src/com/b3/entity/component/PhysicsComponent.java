@@ -15,19 +15,19 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 	private final World world;
 	private final BodyDef bodyDef;
 
-	public Body body;
+	private Body body;
 
-	public float boundingRadius;
-	public boolean tagged;
-	public float zeroThreshold;
+	private float boundingRadius;
+	private boolean tagged;
+	private float zeroThreshold;
 
-	public float maxLinearSpeed;
-	public float maxLinearAcceleration;
-	public float maxAngularSpeed;
-	public float maxAngularAcceleration;
+	private float maxLinearSpeed;
+	private float maxLinearAcceleration;
+	private float maxAngularSpeed;
+	private float maxAngularAcceleration;
 
-	public boolean independentFacing;
-	public SteeringBehavior<Vector2> steeringBehavior;
+	private boolean independentFacing;
+	private SteeringBehavior<Vector2> steeringBehavior;
 
 
 	public PhysicsComponent(World world, BodyDef bodyDef, Vector2 tilePos, float radius) {
@@ -65,6 +65,11 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 	@Override
 	public float getOrientation() {
 		return body.getAngle();
+	}
+
+	@Override
+	public void setOrientation(float orientation) {
+		body.setTransform(body.getPosition(), orientation);
 	}
 
 	@Override
@@ -113,6 +118,10 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 		}
 	}
 
+	//
+	// Limiter implementation
+	//
+
 	protected void applySteering(float deltaTime) {
 		boolean anyAccelerations = false;
 
@@ -157,10 +166,6 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 			}
 		}
 	}
-
-	//
-	// Limiter implementation
-	//
 
 	@Override
 	public float getMaxLinearSpeed() {
@@ -225,11 +230,6 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 	@Override
 	public void setZeroLinearSpeedThreshold(float value) {
 		this.zeroThreshold = value;
-	}
-
-	@Override
-	public void setOrientation(float orientation) {
-		body.setTransform(body.getPosition(), orientation);
 	}
 
 	@Override

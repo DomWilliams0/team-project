@@ -25,6 +25,11 @@ public class WorldCamera extends PerspectiveCamera {
 		inputDelta = new Vector2();
 	}
 
+	/**
+	 * Sets the camera boundaries to the given world's borders
+	 *
+	 * @param world The world
+	 */
 	public void setWorld(World world) {
 		lastPosition = position;
 
@@ -32,6 +37,7 @@ public class WorldCamera extends PerspectiveCamera {
 
 		int size = 1;
 		if (Config.getBoolean("camera-restrict")) {
+			borders.clear();
 			borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(-size, worldSize.y, 0))); // left
 			borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(worldSize.x, size, 0))); // bottom
 			borders.add(new BoundingBox(new Vector3(0, worldSize.y, 0), new Vector3(worldSize.x, worldSize.y + size, 0))); // top
@@ -45,6 +51,9 @@ public class WorldCamera extends PerspectiveCamera {
 		super.translate(x, y, z);
 	}
 
+	/**
+	 * Translates by the given coordinates, and reverts to the last position if moved outside of the boundaries
+	 */
 	public void translateSafe(float x, float y, float z) {
 		translate(x, y, z);
 		update();
@@ -52,11 +61,19 @@ public class WorldCamera extends PerspectiveCamera {
 		update();
 	}
 
+	/**
+	 * Moves to the last position if currently outside of the boundaries
+	 */
 	public void ensureBounds() {
 		if (borders.stream().anyMatch(frustum::boundsInFrustum))
 			position.set(lastPosition);
 	}
 
+	/**
+	 * Updates the given renderer with the current camera position
+	 *
+	 * @param renderer The renderer
+	 */
 	public void positionMapRenderer(TiledMapRenderer renderer) {
 		renderer.setView(combined,
 				position.x - viewportWidth / 2,
@@ -64,6 +81,11 @@ public class WorldCamera extends PerspectiveCamera {
 				viewportWidth, viewportHeight);
 	}
 
+	/**
+	 * Polls the given InputHandler, and moves/zooms appropriately
+	 *
+	 * @param inputHandler The input handler
+	 */
 	public void move(InputHandler inputHandler) {
 		inputHandler.pollMovement(inputDelta, Config.getFloat("camera-move-speed"));
 		translateSafe(inputDelta.x, inputDelta.y, 0f);
@@ -73,6 +95,10 @@ public class WorldCamera extends PerspectiveCamera {
 			zoom(zoom * Config.getFloat("camera-zoom-speed")); // that's a lot of zooms
 	}
 
+	/**
+	 * Zooms by the given amount, given that the new zoom value is within the zoom bounds
+	 * @param delta The amount to zoom in/out; negative zooms out, positive zooms in
+	 */
 	public void zoom(float delta) {
 		float newZ = position.z + delta;
 

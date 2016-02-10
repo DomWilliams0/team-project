@@ -11,7 +11,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
  * updated. This is really just a convenience class as most systems iterate over a list of entities.
  *
  * @author Stefan Bachmann
- *         <p>
  *         Modified by Dom Williams
  */
 public abstract class IteratingSystem extends EntitySystem {

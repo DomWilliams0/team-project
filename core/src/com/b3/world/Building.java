@@ -28,6 +28,11 @@ public class Building {
 
 	private EventType event;
 
+	/**
+	 * @param tilePosition  The tile to place this building at
+	 * @param dimensions    The (width, length, height) of the building
+	 * @param modelInstance The building's model
+	 */
 	public Building(Vector2 tilePosition, Vector3 dimensions, ModelInstance modelInstance) {
 		this.tilePosition = tilePosition;
 		this.dimensions = dimensions;
@@ -41,6 +46,9 @@ public class Building {
 		boundingBox.getDimensions(cullingDimensions);
 	}
 
+	/**
+	 * Updates the building's model to correspond to its current event
+	 */
 	private void renderEvent() {
 		switch (event) {
 			case FIRE:
@@ -65,7 +73,12 @@ public class Building {
 		return dimensions;
 	}
 
-	public Vector2 getEntryPoint() { return null; }
+	/**
+	 * @return The position of the building's entry and exit point
+	 */
+	public Vector2 getEntryPoint() {
+		return null;
+	}
 
 	public ModelInstance getModelInstance() {
 		return modelInstance;
@@ -101,8 +114,9 @@ public class Building {
 
 	/**
 	 * Marks this building as a target of an event
+	 *
 	 * @param event The event happening
-     */
+	 */
 	public void setEvent(EventType event) {
 		this.event = event;
 		renderEvent();

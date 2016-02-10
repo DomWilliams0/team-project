@@ -15,6 +15,9 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Maintains a set of building Models for reuse
+ */
 public class BuildingModelCache implements Disposable {
 	private Map<Vector3, Model> models;
 	private ModelBuilder builder;
@@ -24,6 +27,14 @@ public class BuildingModelCache implements Disposable {
 		builder = new ModelBuilder();
 	}
 
+	/**
+	 * Creates a building with the given position and dimensions
+	 * If a model already exists for the given dimensions, it is reused,
+	 *  otherwise a new model is created and cached for future use.
+	 * @param pos The tile position
+	 * @param dimensions (width, length, height) of the building
+	 * @return The newly created building model instance
+	 */
 	public ModelInstance createBuilding(Vector2 pos, Vector3 dimensions) {
 		Model model = models.get(dimensions);
 		if (model == null) {
@@ -37,6 +48,9 @@ public class BuildingModelCache implements Disposable {
 		return new ModelInstance(model, pos.x + dimensions.x / 2, pos.y + dimensions.y / 2, dimensions.z / 2);
 	}
 
+	/**
+	 * @return A random building colour
+	 */
 	private Color makeBuildingColour() {
 		float c = Utils.randomRange(40f / 255f, 100f / 255f);
 		return new Color(c, c, c, 1f);

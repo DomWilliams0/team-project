@@ -49,6 +49,13 @@ public class ConfigurationFile {
 
 	}
 
+	/**
+	 * Gets a value from the loaded config file(s)
+	 *
+	 * @param key  Key for the desired value
+	 * @param type The desired return type
+	 * @return The config value. Null is never returned, an exception is thrown if the key does not exist.
+	 */
 	public <T> T get(String key, Class<T> type) {
 		return provider.getProperty(key, type);
 	}

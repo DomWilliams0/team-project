@@ -80,7 +80,7 @@ public class World implements Disposable {
 		BodyDef buildingBodyDef = new BodyDef();
 		buildingBodyDef.type = BodyDef.BodyType.StaticBody;
 		buildingBody = physicsWorld.createBody(buildingBodyDef);
-		initEntityBoundaries();
+		initEntityBoundaries(1f, 5f);
 
 		// Query service
 		queryService = new WorldQueryService(this);
@@ -90,15 +90,21 @@ public class World implements Disposable {
 		createDefaultBuildings();
 	}
 
-	private void initEntityBoundaries() {
+	/**
+	 * Creates an invisible border around the world, which kills entities when touched.
+	 * <p>
+	 * It does this by setting a ContactFilter and ContactListener on the physicsWorld;
+	 * this will have to be refactored if any other collision processing is needed.
+	 *
+	 * @param thickness The thickness of each border
+	 * @param offset    The gap between the world edge and the start of the border
+	 */
+	private void initEntityBoundaries(float thickness, float offset) {
 		FixtureDef boundaryDef = new FixtureDef();
 		PolygonShape shape = new PolygonShape();
 		boundaryDef.shape = shape;
 		boundaryDef.isSensor = true;
 		boundaryDef.filter.groupIndex = ENTITY_CULL_TAG;
-
-		float thickness = 1f;
-		float offset = 5f;
 
 		shape.setAsBox(offset + pixelSize.x / 2f, thickness, new Vector2(pixelSize.x / 2f, thickness / 2f - offset), 0f); // bottom
 		buildingBody.createFixture(boundaryDef);
@@ -127,21 +133,23 @@ public class World implements Disposable {
 
 			@Override
 			public void endContact(Contact contact) {
-
 			}
 
 			@Override
 			public void preSolve(Contact contact, Manifold manifold) {
-
 			}
 
 			@Override
 			public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-
 			}
 		});
 	}
 
+	/**
+	 * Initiates entity systems with the given camera
+	 *
+	 * @param camera The world camera
+	 */
 	public void initEngine(PerspectiveCamera camera) {
 		engine.addSystem(new RenderSystem(camera));
 		engine.addSystem(new PhysicsSystem());
@@ -151,6 +159,9 @@ public class World implements Disposable {
 //			addAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 	}
 
+	/**
+	 * Creates the event generator thread and starts it
+	 */
 	public void initEventGenerator() {
 		// Uncomment for event generator (not working atm)
 		worldObserver = new WorldObserver(this);
@@ -167,14 +178,16 @@ public class World implements Disposable {
 		return queryService;
 	}
 
+	/**
+	 * Used for debugging: creates a regular grid of buildings across the world
+	 */
 	private void createDefaultBuildings() {
 		Vector3 dim = new Vector3(1, 1, 10);
 		float space = 4f;
 
 		// Get building type
-		Random rn = new Random();
 		List<BuildingType> types = Collections.unmodifiableList(Arrays.asList(BuildingType.values()));
-		BuildingType buildingType = types.get(rn.nextInt(types.size()));
+		BuildingType buildingType = types.get(Utils.RANDOM.nextInt(types.size()));
 
 		for (int x = 0; x < tileSize.x / space; x++)
 			for (int y = 0; y < tileSize.y / space; y++)
@@ -182,7 +195,17 @@ public class World implements Disposable {
 
 	}
 
+	/**
+	 * Spawns a new entity in the world, at the given tile position
+	 *
+	 * @param tilePos The tile position to spawn the entity at
+	 * @return The newly created entity
+	 */
 	public Entity addAgent(Vector2 tilePos) {
+		// bounds check
+		if (!isInBounds(tilePos))
+			throw new IllegalArgumentException("Tile position is out of range: " + tilePos);
+
 		Entity e = new Entity();
 
 		float diameter = 0.5f;
@@ -211,10 +234,12 @@ public class World implements Disposable {
 	}
 
 	/**
+	 * Adds a building to the world at the given coordinates
+	 *
 	 * @param pos        Tile position
 	 * @param dimensions Building dimensions, in tiles. z is height
 	 * @param type       Building type
-	 * @return The newly constructed building
+	 * @return The newly created building
 	 */
 	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
 		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
@@ -244,6 +269,14 @@ public class World implements Disposable {
 
 	// todo remove buildings too
 
+	/**
+	 * Updates and renders the world, by:
+	 * Clearing up all entities marked as dead
+	 * Updating physics
+	 * Rendering the world
+	 *
+	 * @param camera The world camera, for relative rendering
+	 */
 	public void render(WorldCamera camera) {
 		// remove dead entities
 		deadEntities.forEach(e -> {
@@ -294,5 +327,16 @@ public class World implements Disposable {
 
 	public Vector2 getPixelSize() {
 		return new Vector2(pixelSize);
+	}
+
+	/**
+	 * Checks if the given tile position is within the worlds bounds
+	 *
+	 * @param tilePos The tile position to check
+	 * @return True if the tile is in bounds, otherwise false
+	 */
+	public boolean isInBounds(Vector2 tilePos) {
+		return tilePos.x >= 0 && tilePos.x < tileSize.x
+				&& tilePos.y >= 0 && tilePos.y < tileSize.y;
 	}
 }
