@@ -12,7 +12,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -53,6 +52,7 @@ public class World implements Disposable {
 	private WorldQueryService queryService;
 
 	private Set<Entity> deadEntities;
+	private WorldCamera worldCamera;
 
 	public World(String fileName) {
 		TiledMap map = new TmxMapLoader().load(fileName);
@@ -150,9 +150,11 @@ public class World implements Disposable {
 	 *
 	 * @param camera The world camera
 	 */
-	public void initEngine(PerspectiveCamera camera) {
+	public void initEngine(WorldCamera camera) {
 		engine.addSystem(new RenderSystem(camera));
 		engine.addSystem(new PhysicsSystem());
+
+		worldCamera = camera;
 
 		// debug: test entities
 //		for (int i = 0; i < 2000; i++)
@@ -274,10 +276,8 @@ public class World implements Disposable {
 	 * Clearing up all entities marked as dead
 	 * Updating physics
 	 * Rendering the world
-	 *
-	 * @param camera The world camera, for relative rendering
 	 */
-	public void render(WorldCamera camera) {
+	public void render() {
 		// remove dead entities
 		deadEntities.forEach(e -> {
 
@@ -297,16 +297,16 @@ public class World implements Disposable {
 		GdxAI.getTimepiece().update(delta);
 
 		// render world
-		camera.positionMapRenderer(renderer);
+		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
 
 		// render entities
 		engine.update(delta);
 
 		// render buildings
-		buildingBatch.begin(camera);
+		buildingBatch.begin(worldCamera);
 		buildings.stream()
-				.filter(building -> building.isVisible(camera))
+				.filter(building -> building.isVisible(worldCamera))
 				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
 		buildingBatch.end();
 
