@@ -82,7 +82,7 @@ public class World implements Disposable {
 		BodyDef buildingBodyDef = new BodyDef();
 		buildingBodyDef.type = BodyDef.BodyType.StaticBody;
 		buildingBody = physicsWorld.createBody(buildingBodyDef);
-		initEntityBoundaries(1f, 5f);
+		initEntityBoundaries(1f, Config.getFloat("entity-kill-distance"));
 
 		// Query service
 		queryService = new WorldQueryService(this);
@@ -108,6 +108,7 @@ public class World implements Disposable {
 		boundaryDef.isSensor = true;
 		boundaryDef.filter.groupIndex = ENTITY_CULL_TAG;
 
+		// todo this side doesn't seem quite right...
 		shape.setAsBox(offset + tileSize.x / 2f, thickness, new Vector2(tileSize.x / 2f, thickness / 2f - offset), 0f); // bottom
 		buildingBody.createFixture(boundaryDef);
 
