@@ -120,15 +120,17 @@ public class World implements Disposable {
 		shape.setAsBox(thickness, offset + tileSize.y / 2f, new Vector2(tileSize.x + thickness / 2f + offset, tileSize.y / 2f), 0f); // right
 		buildingBody.createFixture(boundaryDef);
 
-		physicsWorld.setContactFilter((fixA, fixB) ->
-				fixA.getFilterData().groupIndex == ENTITY_CULL_TAG ||
-						fixB.getFilterData().groupIndex == ENTITY_CULL_TAG);
-
 		physicsWorld.setContactListener(new ContactListener() {
 			@Override
 			public void beginContact(Contact contact) {
+				// one must be a sensor
+				if (!contact.getFixtureA().isSensor() || contact.getFixtureB().isSensor())
+					return;
+
 				Fixture f = contact.getFixtureA().getFilterData().groupIndex == ENTITY_CULL_TAG ? contact.getFixtureB() : contact.getFixtureA();
 				Entity entity = (Entity) f.getBody().getUserData();
+				if (entity == null)
+					return;
 
 				deadEntities.add(entity);
 			}
@@ -245,16 +247,18 @@ public class World implements Disposable {
 		buildings.add(building);
 
 		// physics
-		FixtureDef buildingDef = new FixtureDef();
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(
-				dimensions.x / 2, dimensions.y / 2,
-				new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
-				0f
-		);
-		buildingDef.shape = shape;
-		buildingBody.createFixture(buildingDef);
-		shape.dispose(); // todo reuse shape and fixture for all buildings
+		if (Config.getBoolean("building-collisions")) {
+			FixtureDef buildingDef = new FixtureDef();
+			PolygonShape shape = new PolygonShape();
+			shape.setAsBox(
+					dimensions.x / 2, dimensions.y / 2,
+					new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
+					0f
+			);
+			buildingDef.shape = shape;
+			buildingBody.createFixture(buildingDef);
+			shape.dispose(); // todo reuse shape and fixture for all buildings
+		}
 
 		return building;
 	}
