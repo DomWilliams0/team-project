@@ -2,8 +2,9 @@ package com.b3.world;
 
 import com.b3.DebugRenderer;
 import com.b3.Utils;
+import com.b3.entity.Agent;
+import com.b3.entity.ai.PathFollowingBehaviour;
 import com.b3.entity.component.PhysicsComponent;
-import com.b3.entity.component.RenderComponent;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
@@ -12,7 +13,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -25,6 +25,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
@@ -160,7 +161,7 @@ public class World implements Disposable {
 		// debug: test entities
 		Integer debugCount = Config.getInt("debug-entity-count");
 		for (int i = 0; i < debugCount; i++)
-			addAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
+			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 	}
 
 	/**
@@ -203,34 +204,21 @@ public class World implements Disposable {
 	 * Spawns a new entity in the world, at the given tile position
 	 *
 	 * @param tilePos The tile position to spawn the entity at
-	 * @return The newly created entity
+	 * @return The newly created agent
 	 */
-	public Entity addAgent(Vector2 tilePos) {
-		// bounds check
-		if (!isInBounds(tilePos))
-			throw new IllegalArgumentException("Tile position is out of range: " + tilePos);
+	public Agent spawnAgent(Vector2 tilePos) {
+		return new Agent(this, tilePos);
+	}
 
-		Entity e = new Entity();
-
-		float diameter = 0.5f;
-		float radius = diameter / 2f;
-		e.add(new RenderComponent(Color.BLUE, radius));
-
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.linearDamping = 0.9f;
-		PhysicsComponent physics = new PhysicsComponent(physicsWorld, bodyDef, tilePos, radius);
-		physics.getBody().setUserData(e);
-
-		// debug stupid wander behaviour
-//		Wander<Vector2> wander = new Wander<>(physics);
-//		wander.setWanderRate(1f);
-//		wander.setWanderRadius(0.8f);
-//		physics.setSteeringBehavior(wander);
-		e.add(physics);
-
-		engine.addEntity(e);
-		return e;
+	/**
+	 * Spawns an agent at the start point of the path, and sets its behaviour to follow the given path
+	 *
+	 * @param arrive True if the agent should stop when he arrives at the final point
+	 * @param points The path to follow
+	 * @return The new agent
+	 */
+	public Agent spawnAgentWithPath(boolean arrive, Array<Vector2> points) {
+		return new Agent(this, Vector2.Zero, new PathFollowingBehaviour(points, arrive));
 	}
 
 	public List<Building> getBuildings() {
@@ -341,5 +329,9 @@ public class World implements Disposable {
 	public boolean isInBounds(Vector2 tilePos) {
 		return tilePos.x >= 0 && tilePos.x < tileSize.x
 				&& tilePos.y >= 0 && tilePos.y < tileSize.y;
+	}
+
+	public com.badlogic.gdx.physics.box2d.World getPhysicsWorld() {
+		return physicsWorld;
 	}
 }

@@ -12,7 +12,7 @@ public class Spawner {
     }
 
     public void agentFromBuilding(Building sourceBuilding) {
-        world.addAgent(sourceBuilding.getTilePosition());
+        world.spawnAgent(sourceBuilding.getTilePosition());
         // ...
     }
 
