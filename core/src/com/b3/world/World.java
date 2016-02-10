@@ -7,6 +7,7 @@ import com.b3.entity.component.RenderComponent;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
+import com.b3.util.Config;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -157,7 +158,8 @@ public class World implements Disposable {
 		worldCamera = camera;
 
 		// debug: test entities
-		for (int i = 0; i < 2000; i++)
+		Integer debugCount = Config.getInt("debug-entity-count");
+		for (int i = 0; i < debugCount; i++)
 			addAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 	}
 
@@ -311,7 +313,8 @@ public class World implements Disposable {
 		buildingBatch.end();
 
 		// physics debug rendering
-		 debugRenderer.render(worldCamera);
+		if (Config.getBoolean("debug-physics-rendering"))
+			debugRenderer.render(worldCamera);
 	}
 
 	@Override

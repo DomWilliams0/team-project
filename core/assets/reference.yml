@@ -5,3 +5,5 @@ camera-distance-default: 20
 camera-distance-min: 10
 camera-distance-max: 35
 building-collisions: true
+debug-entity-count: 0
+debug-physics-rendering: false
