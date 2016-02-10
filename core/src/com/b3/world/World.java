@@ -216,7 +216,7 @@ public class World implements Disposable {
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 		bodyDef.linearDamping = 0.9f;
 		PhysicsComponent physics = new PhysicsComponent(physicsWorld, bodyDef, tilePos, radius);
-		physics.body.setUserData(e);
+		physics.getBody().setUserData(e);
 
 		// debug stupid wander behaviour
 //		Wander<Vector2> wander = new Wander<>(physics);
@@ -283,7 +283,7 @@ public class World implements Disposable {
 
 			PhysicsComponent phys = e.getComponent(PhysicsComponent.class);
 			if (phys != null)
-				physicsWorld.destroyBody(phys.body);
+				physicsWorld.destroyBody(phys.getBody());
 
 			e.removeAll();
 

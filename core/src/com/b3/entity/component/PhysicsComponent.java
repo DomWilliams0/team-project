@@ -236,4 +236,8 @@ public class PhysicsComponent implements Component, Steerable<Vector2> {
 	public Location<Vector2> newLocation() {
 		return new PhysicsComponent(world, bodyDef, new Vector2(0, 0), boundingRadius);
 	}
+
+	public Body getBody() {
+		return body;
+	}
 }
