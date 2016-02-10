@@ -61,7 +61,7 @@ public class World implements Disposable {
 				(int) map.getProperties().get("height")
 		);
 		pixelSize = new Vector2(tileSize).scl(Utils.WORLD_SCALE);
-		renderer = new OrthogonalTiledMapRenderer(map, 1 / Utils.WORLD_SCALE);
+		renderer = new OrthogonalTiledMapRenderer(map, 1f / Utils.TILESET_RESOLUTION);
 
 		// buildings and lighting
 		buildingBatch = new ModelBatch();
@@ -106,16 +106,16 @@ public class World implements Disposable {
 		boundaryDef.isSensor = true;
 		boundaryDef.filter.groupIndex = ENTITY_CULL_TAG;
 
-		shape.setAsBox(offset + pixelSize.x / 2f, thickness, new Vector2(pixelSize.x / 2f, thickness / 2f - offset), 0f); // bottom
+		shape.setAsBox(offset + tileSize.x / 2f, thickness, new Vector2(tileSize.x / 2f, thickness / 2f - offset), 0f); // bottom
 		buildingBody.createFixture(boundaryDef);
 
-		shape.setAsBox(offset + pixelSize.x / 2f, thickness, new Vector2(pixelSize.x / 2f, pixelSize.y + thickness / 2f + offset), 0f); // top
+		shape.setAsBox(offset + tileSize.x / 2f, thickness, new Vector2(tileSize.x / 2f, tileSize.y + thickness / 2f + offset), 0f); // top
 		buildingBody.createFixture(boundaryDef);
 
-		shape.setAsBox(thickness, offset + pixelSize.y / 2f, new Vector2(-thickness / 2f - offset, pixelSize.y / 2f), 0f); // left
+		shape.setAsBox(thickness, offset + tileSize.y / 2f, new Vector2(-thickness / 2f - offset, tileSize.y / 2f), 0f); // left
 		buildingBody.createFixture(boundaryDef);
 
-		shape.setAsBox(thickness, offset + pixelSize.y / 2f, new Vector2(pixelSize.x + thickness / 2f + offset, pixelSize.y / 2f), 0f); // right
+		shape.setAsBox(thickness, offset + tileSize.y / 2f, new Vector2(tileSize.x + thickness / 2f + offset, tileSize.y / 2f), 0f); // right
 		buildingBody.createFixture(boundaryDef);
 
 		physicsWorld.setContactFilter((fixA, fixB) ->
@@ -157,8 +157,8 @@ public class World implements Disposable {
 		worldCamera = camera;
 
 		// debug: test entities
-//		for (int i = 0; i < 2000; i++)
-//			addAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
+		for (int i = 0; i < 2000; i++)
+			addAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 	}
 
 	/**
@@ -244,8 +244,8 @@ public class World implements Disposable {
 	 * @return The newly created building
 	 */
 	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
-		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
-		pos = new Vector2(pos).scl(Utils.TILE_SIZE);
+//		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
+//		pos = new Vector2(pos).scl(Utils.TILE_SIZE);
 
 		ModelInstance instance = buildingCache.createBuilding(pos, dimensions);
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y, dimensions.z));
@@ -311,7 +311,7 @@ public class World implements Disposable {
 		buildingBatch.end();
 
 		// physics debug rendering
-		// debugRenderer.render(camera);
+		 debugRenderer.render(worldCamera);
 	}
 
 	@Override

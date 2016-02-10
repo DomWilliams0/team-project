@@ -17,6 +17,8 @@ public class WorldCamera extends PerspectiveCamera {
 	private Vector3 lastPosition;
 	private Vector2 inputDelta;
 
+	// todo redo camera restriction
+
 	public WorldCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
 		super(fieldOfViewY, viewportWidth, viewportHeight);
 
@@ -33,7 +35,7 @@ public class WorldCamera extends PerspectiveCamera {
 	public void setWorld(World world) {
 		lastPosition = position;
 
-		Vector2 worldSize = world.getPixelSize();
+		Vector2 worldSize = world.getTileSize();
 
 		int size = 1;
 		if (Config.getBoolean("camera-restrict")) {

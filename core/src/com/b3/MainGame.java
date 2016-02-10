@@ -21,7 +21,7 @@ public class MainGame extends ApplicationAdapter {
 		world = new World("core/assets/world/world.tmx");
 		inputHandler = new InputHandler();
 
-		Vector2 cameraPos = new Vector2(world.getTileSize());
+		Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
 		camera = new WorldCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat("camera-distance-default"));
 		camera.near = 1f;
