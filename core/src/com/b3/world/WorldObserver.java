@@ -2,7 +2,6 @@ package com.b3.world;
 
 import com.b3.event.EventMessage;
 import com.b3.event.EventType;
-import com.b3.spawn.Spawner;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -10,11 +9,8 @@ import java.util.Observer;
 public class WorldObserver implements Observer {
 
     private World world;
-    private Spawner spawner;
-
     public WorldObserver(World world) {
         this.world = world;
-        this.spawner = new Spawner(world);
     }
 
     private BuildingType getBuildingTypeFromEvent(EventType eventType) {
@@ -37,9 +33,8 @@ public class WorldObserver implements Observer {
         targetBuilding.setEvent(eventType);
         Building sourceBuilding = world.getQueryService().getRandomBuildingByType(getBuildingTypeFromEvent(eventType));
 
-        //building.getEntryPoint();
-        spawner.agentFromBuilding(sourceBuilding);
-
         // Perform search
+
+        world.spawnAgent(sourceBuilding.getTilePosition());
     }
 }

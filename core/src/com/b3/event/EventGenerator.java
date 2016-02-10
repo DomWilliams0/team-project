@@ -17,8 +17,6 @@ public class EventGenerator extends Observable implements Runnable {
         this.world = world;
         this.minTime = 3;
         this.maxTime = 10;
-        //width = Gdx.graphics.getWidth();
-        //height = Gdx.graphics.getHeight();
         generateTimeForNextEvent();
     }
 
