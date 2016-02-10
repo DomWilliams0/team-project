@@ -82,7 +82,7 @@ public class World implements Disposable {
 		BodyDef buildingBodyDef = new BodyDef();
 		buildingBodyDef.type = BodyDef.BodyType.StaticBody;
 		buildingBody = physicsWorld.createBody(buildingBodyDef);
-		initEntityBoundaries(1f, Config.getFloat("entity-kill-distance"));
+		initEntityBoundaries(1f, Config.getFloat("debug-entity-kill-distance"));
 
 		// Query service
 		queryService = new WorldQueryService(this);
@@ -190,7 +190,7 @@ public class World implements Disposable {
 	 * Used for debugging: creates a regular grid of buildings across the world
 	 */
 	private void createDefaultBuildings() {
-		Vector3 dim = new Vector3(1, 1, 10);
+		Vector3 dim = new Vector3(1, 1, 3);
 		float space = 4f;
 
 		// Get building type
@@ -199,7 +199,7 @@ public class World implements Disposable {
 
 		for (int x = 0; x < tileSize.x / space; x++)
 			for (int y = 0; y < tileSize.y / space; y++)
-				addBuilding(new Vector2(x * space, y * space), dim, buildingType);
+				addBuilding(new Vector2(x * space, y * space), new Vector3(dim.x, dim.y, Utils.randomRange(4f, 8f)), buildingType);
 
 	}
 
