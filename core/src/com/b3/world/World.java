@@ -8,7 +8,6 @@ import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
-import com.b3.event.EventMessage;
 import com.b3.event.EventType;
 import com.b3.searching.WorldGraph;
 import com.b3.searching.roboticsGraphHelpers.Graph;
@@ -26,6 +25,9 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -150,6 +152,30 @@ public class World implements Disposable {
 		}
 
 		spawnAgentWithPath(true, vPoints);
+	}
+
+	/**
+	 * Loads buildings from the "buildings" layer in the given map
+	 *
+	 * @param map The map
+	 */
+	private void loadBuildings(TiledMap map) {
+		MapLayer buildingsLayer = map.getLayers().get("buildings");
+		if (buildingsLayer == null) {
+			System.err.println("No buildings layer found in world");
+			return;
+		}
+
+		for (MapObject object : buildingsLayer.getObjects()) {
+			MapProperties props = object.getProperties();
+			Float width = (Float) props.get("width") / Utils.TILESET_RESOLUTION;
+			Float length = (Float) props.get("height") / Utils.TILESET_RESOLUTION;
+			Float height = Float.parseFloat((String) props.get("building-height"));
+			Float x = (Float) props.get("x") / Utils.TILESET_RESOLUTION;
+			Float y = (Float) props.get("y") / Utils.TILESET_RESOLUTION;
+
+			addBuilding(new Vector2(x, y), new Vector3(width, length, height), BuildingType.HOUSE);
+		}
 	}
 
 	/**
