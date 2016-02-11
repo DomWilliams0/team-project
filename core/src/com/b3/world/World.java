@@ -276,7 +276,8 @@ public class World implements Disposable {
 		Vector3 fourSize = new Vector3(2, 2, 10);
 
 		for (Buildings b : worldGraph.getBuildings()) {
-			Vector2 v2 = new Vector2(b.getXValueofCoord(),b.getYValueofCoord());
+
+			Vector2 v2 = new Vector2((float)b.getXValueofCoord()-(float)0.5, (float)b.getYValueofCoord()-(float)0.5);
 
 			switch (b.getBuildingSize()) {
 				case 2:
@@ -360,6 +361,8 @@ public class World implements Disposable {
 		ModelInstance instance = buildingCache.createBuilding(pos, dimensions);
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y, dimensions.z));
 
+
+
 		Building building = new Building(pos, dimensions, instance);
 		building.setType(type);
 		buildings.add(building);
@@ -415,16 +418,16 @@ public class World implements Disposable {
 		// render entities
 		engine.update(delta);
 
+		// render underlying graph
+		worldGraph.render(worldCamera);
+
 		// render buildings
 		buildingBatch.begin(worldCamera);
 		buildings.stream()
 				.filter(building -> building.isVisible(worldCamera))
 				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
 		buildingBatch.end();
-
-		// render underlying graph
-		worldGraph.render(worldCamera);
-
+		
 		// physics debug rendering
 		if (Config.getBoolean("debug-physics-rendering"))
 			debugRenderer.render(worldCamera);
