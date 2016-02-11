@@ -73,12 +73,24 @@ public class Coordinates implements Serializable {
      * @return true if has a successor with same x and y coordinate as passed
      */
     public Boolean hasSuccessors (int x, int y) {
+        return hasSuccessors(new Coordinates(x, y));
+    }
+
+    public Boolean hasSuccessors(Coordinates coord) {
         for (int i = 0; i < arr.size(); i++) {
-            if (arr.get(i).getX() == x & arr.get(i).getY() == y) {
+            if (arr.get(i).equals(coord)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public Coordinates plusX(int amount) {
+        return new Coordinates(x + amount, y);
+    }
+
+    public Coordinates plusY(int amount) {
+        return new Coordinates(x, y + amount);
     }
 
     /**
@@ -111,4 +123,19 @@ public class Coordinates implements Serializable {
         return " ("+x+","+y+") " + temp;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Coordinates)) return false;
+        Coordinates other = (Coordinates) obj;
+        return x == other.x && y == other.y;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + x;
+        result = prime * result + y;
+        return result;
+    }
 }

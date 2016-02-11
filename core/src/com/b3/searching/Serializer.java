@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
  */
 public class Serializer {
 
-    public void serializeAddress(String filename, worldGraph gg){
+    public void serializeAddress(String filename, WorldGraph gg){
         try {
             FileOutputStream fout = new FileOutputStream(filename);
             ObjectOutputStream oos = new ObjectOutputStream(fout);
@@ -23,15 +23,15 @@ public class Serializer {
         }
     }
 
-    public worldGraph deserialzeAddress(String filename){
+    public WorldGraph deserialzeAddress(String filename){
 
-        worldGraph address;
+        WorldGraph address;
 
         try{
 
             FileInputStream fin = new FileInputStream(filename);
             ObjectInputStream ois = new ObjectInputStream(fin);
-            address = (worldGraph) ois.readObject();
+            address = (WorldGraph) ois.readObject();
             ois.close();
 
             return address;

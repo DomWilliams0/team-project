@@ -51,13 +51,14 @@ public class EventGenerator extends Observable implements Runnable {
                 Thread.sleep(timeForNextEvent * 1000);
 
                 // Post to the main thread
-                Gdx.app.postRunnable(new Runnable() {
+                /*Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
                         triggerRandomEvent();
                     }
-                });
+                });*/
 
+                triggerRandomEvent();
                 generateTimeForNextEvent();
             }
             catch (InterruptedException e1) {

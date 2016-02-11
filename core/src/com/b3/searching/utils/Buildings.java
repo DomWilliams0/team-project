@@ -15,6 +15,10 @@ public class Buildings implements Serializable{
         this.buildingSize = buildingSize;
     }
 
+    public Coordinates getCoord() {
+        return coord;
+    }
+
     public int getXValueofCoord () {
         return coord.getX();
     }

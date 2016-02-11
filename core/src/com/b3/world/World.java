@@ -8,6 +8,14 @@ import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
+import com.b3.event.EventMessage;
+import com.b3.event.EventType;
+import com.b3.searching.WorldGraph;
+import com.b3.searching.roboticsGraphHelpers.Graph;
+import com.b3.searching.roboticsGraphHelpers.Node;
+import com.b3.searching.roboticsGraphHelpers.Point;
+import com.b3.searching.roboticsGraphHelpers.collectFuncMaybe.Maybe;
+import com.b3.searching.utils.Buildings;
 import com.b3.util.Config;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -29,6 +37,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class World implements Disposable {
 
@@ -52,6 +61,7 @@ public class World implements Disposable {
 	private EventGenerator eventGenerator;
 	private WorldObserver worldObserver;
 	private WorldQueryService queryService;
+	private WorldGraph worldGraph;
 
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
@@ -89,7 +99,57 @@ public class World implements Disposable {
 
 		debugRenderer = new DebugRenderer(physicsWorld);
 
-		createDefaultBuildings();
+		worldGraph = new WorldGraph();
+		worldGraph.generateGraph(100, 100);
+
+		//int[] arr = {2,2,2,3,3,3,3,4,4};
+		//worldGraph.randomTheGraph(arr);
+		worldGraph.addBuilding(43, 50, 4);
+		worldGraph.addBuilding(45, 50, 4);
+		worldGraph.addBuilding(47, 50, 4);
+		worldGraph.addBuilding(49, 50, 4);
+		worldGraph.addBuilding(51, 50, 4);
+		worldGraph.addBuilding(53, 50, 4);
+		createBuildings();
+		testPathFollowing();
+
+	}
+
+	public void testPathFollowing() {
+		EventType eventType = EventType.FIRE;
+
+		// Get target and source buildings
+		/*Building targetBuilding = (Building)evt.getMessage();
+		targetBuilding.setEvent(eventType);
+		Building sourceBuilding = world.getQueryService().getRandomBuildingByType(getBuildingTypeFromEvent(eventType));*/
+
+		//Vector2 src = sourceBuilding.getTilePosition();
+		Point p1 = new Point(40, 55);
+
+		//Vector2 trgt = targetBuilding.getTilePosition();
+		Point p2 = new Point(55, 45);
+
+		System.out.println(p1);
+		System.out.println(p2);
+
+		// Perform search
+		Graph<Point> g = worldGraph.getGraphNicksStyle();
+		Maybe<List<Node<Point>>> maybePath = g.findPathFromASTAR(p1, p2);
+
+		if (maybePath.isNothing()) {
+			System.out.println("Nooooo");
+			return;
+		}
+
+		List<Node<Point>> path = maybePath.fromMaybe();
+		List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors.toList());
+		Array<Vector2> vPoints = new Array<>();
+
+		for (Vector2 v : points) {
+			vPoints.add(v);
+		}
+
+		spawnAgentWithPath(true, vPoints);
 	}
 
 	/**
@@ -182,6 +242,10 @@ public class World implements Disposable {
 		return engine;
 	}
 
+	public WorldGraph getWorldGraph() {
+		return worldGraph;
+	}
+
 	public WorldQueryService getQueryService() {
 		return queryService;
 	}
@@ -203,6 +267,47 @@ public class World implements Disposable {
 
 	}
 
+	private void createBuildings() {
+		List<BuildingType> types = Collections.unmodifiableList(Arrays.asList(BuildingType.values()));
+		BuildingType buildingType = types.get(Utils.RANDOM.nextInt(types.size()));
+
+		Vector3 twoSize = new Vector3(2, 1, 10);
+		Vector3 threeSize = new Vector3(1, 2, 10);
+		Vector3 fourSize = new Vector3(2, 2, 10);
+
+		for (Buildings b : worldGraph.getBuildings()) {
+			Vector2 v2 = new Vector2(b.getXValueofCoord(),b.getYValueofCoord());
+
+			switch (b.getBuildingSize()) {
+				case 2:
+					addBuilding(v2, twoSize, buildingType);
+					break;
+
+				case 3:
+					addBuilding(v2, threeSize, buildingType);
+					break;
+
+				case 4:
+					addBuilding(v2, fourSize, buildingType);
+					break;
+			}
+		}
+
+		/*ArrayList<Integer> remaining = Utils.range(buildings.size());
+
+		int rnIndex = Utils.RANDOM.nextInt(remaining.size());
+		buildings.get(rnIndex).setType(BuildingType.POLICE_STATION);
+		remaining.remove((Object)rnIndex);
+
+		rnIndex = Utils.RANDOM.nextInt(remaining.size());
+		buildings.get(rnIndex).setType(BuildingType.FIRE_STATION);
+		remaining.remove((Object)rnIndex);
+
+		rnIndex = Utils.RANDOM.nextInt(remaining.size());
+		buildings.get(rnIndex).setType(BuildingType.RESTAURANT);
+		remaining.remove((Object)rnIndex);*/
+	}
+
 	/**
 	 * Spawns a new entity in the world, at the given tile position
 	 *
@@ -221,11 +326,23 @@ public class World implements Disposable {
 	 * @return The new agent
 	 */
 	public Agent spawnAgentWithPath(boolean arrive, Array<Vector2> points) {
-		return new Agent(this, Vector2.Zero, new PathFollowingBehaviour(points, arrive));
+		return new Agent(this, points.get(0), new PathFollowingBehaviour(points, arrive));
 	}
 
 	public List<Building> getBuildings() {
 		return buildings;
+	}
+
+	public List<Building> copyBuildings() {
+		//List<Building> clone = new ArrayList<>();
+
+		return buildings.stream().collect(Collectors.toList());
+
+		/*for (Building building : buildings) {
+			clone.add(building);
+		}
+
+		return clone;*/
 	}
 
 	/**
@@ -304,6 +421,9 @@ public class World implements Disposable {
 				.filter(building -> building.isVisible(worldCamera))
 				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
 		buildingBatch.end();
+
+		// render underlying graph
+		worldGraph.render(worldCamera);
 
 		// physics debug rendering
 		if (Config.getBoolean("debug-physics-rendering"))

@@ -12,8 +12,8 @@ import java.util.ArrayList;
 public class wordGraphExampleUsage_DeleteLater {
 
     public static void main (String args[]) {
-        //create an empty worldGraph
-        worldGraph wg = new worldGraph();
+        //create an empty WorldGraph
+        WorldGraph wg = new WorldGraph();
         //generate a 9 x 10 graph -- must do this first before anything OR load file NOTHING ELSE
         wg.generateGraph(100,100);
         //add some buildings at (x, y, size (2,3,4))
@@ -46,7 +46,7 @@ public class wordGraphExampleUsage_DeleteLater {
         //get graph
         Graph<Point> b = wg.getGraphNicksStyle();
         //DO NOT edit graph in Graph<Point> format.
-        //Either go back to the original worldGraph object to edit, then call getGraphNicksStyle again.
+        //Either go back to the original WorldGraph object to edit, then call getGraphNicksStyle again.
 
         //ONLY CALL THESE FUNCTIONS FROM Graph CLASS - NO OTHERS
         System.out.println(b.findPathDFSwithCosts(new Point(1,1), new Point(25,25))); //returns nothing if building on top

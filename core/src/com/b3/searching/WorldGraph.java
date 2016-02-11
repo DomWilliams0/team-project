@@ -5,15 +5,21 @@ import com.b3.searching.roboticsGraphHelpers.Graph;
 import com.b3.searching.roboticsGraphHelpers.Point;
 import com.b3.searching.utils.Buildings;
 import com.b3.searching.utils.Coordinates;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Created by Nishanth on 07/02/2016.
  */
-public class worldGraph implements Serializable {
+public class WorldGraph implements Serializable {
 
     private ArrayList<Coordinates> tempGraph;
     private ArrayList<Buildings> tempBuildings;
@@ -28,7 +34,7 @@ public class worldGraph implements Serializable {
     /**
      * Constructor
      */
-    public worldGraph () {
+    public WorldGraph() {
         this.tempGraph = new ArrayList<Coordinates>();
         this.tempBuildings = new ArrayList<Buildings>();
         this.coords = new ArrayList<Coordinates>();
@@ -108,7 +114,7 @@ public class worldGraph implements Serializable {
         }
 
         if (!checkIntegrity(tempGraph)) {
-            System.err.println("Integrity check failed - programming error in generateGraph() in worldGraph");
+            System.err.println("Integrity check failed - programming error in generateGraph() in WorldGraph");
             return false;
         } else return true;
     }
@@ -169,15 +175,11 @@ public class worldGraph implements Serializable {
      * @return true iff edge exists; false if not
      */
     public Boolean checkExists(int x1, int y1, int x2, int y2) {
+        //tempGraph
+
         for (int i = 0; i < tempGraph.size(); i++) {
             if (tempGraph.get(i).getX() == x1 & tempGraph.get(i).getY() == y1) {
-                if (tempGraph.get(i).hasSuccessors(x2, y2)) {
-                    //System.out.println("("+x1+","+y1+") is connected to ("+x2+","+y2+")");
-                    return true;
-                } else {
-                    //System.out.println("("+x1+","+y1+") is not connected to ("+x2+","+y2+")");
-                    return false;
-                }
+                return tempGraph.get(i).hasSuccessors(x2, y2);
             }
         }
         return false;
@@ -493,7 +495,7 @@ public class worldGraph implements Serializable {
      */
     public void loadFromFile(String fileName) {
         Serializer ser = new Serializer();
-        worldGraph temp = ser.deserialzeAddress(fileName + ".ser");
+        WorldGraph temp = ser.deserialzeAddress(fileName + ".ser");
 
         tempBuildings = temp.getBuildings();
         tempGraph = temp.getGraph();
@@ -593,6 +595,54 @@ public class worldGraph implements Serializable {
         }
 
         return g;
+    }
+
+    public void render(Camera camera) {
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.BLACK);
+
+        List<Buildings> buildings =  new ArrayList<>();
+        buildings.addAll(tempBuildings);
+        List<Coordinates> buildingCoords = buildings.stream().map(Buildings::getCoord).collect(Collectors.toList());
+
+        for (Coordinates coord : tempGraph) {
+            if (!buildingCoords.contains(coord))
+                shapeRenderer.circle(coord.getX(), coord.getY(), 0.15f, 20);
+        }
+
+        shapeRenderer.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.BLACK);
+
+        for (Coordinates coord : tempGraph) {
+            Coordinates
+                    coordLeft = coord.plusX(-1),
+                    coordTop = coord.plusY(-1),
+                    coordRight = coord.plusX(1),
+                    coordBottom = coord.plusY(1);
+            int x = coord.getX(), y = coord.getY();
+
+            if (coord.hasSuccessors(coordLeft)) {
+                shapeRenderer.line(x, y, coordLeft.getX(), coordLeft.getY());
+            }
+
+            if (coord.hasSuccessors(coordTop)) {
+                shapeRenderer.line(x, y, coordTop.getX(), coordTop.getY());
+            }
+
+            if (coord.hasSuccessors(coordRight)) {
+                shapeRenderer.line(x, y, coordRight.getX(), coordRight.getY());
+            }
+
+            if (coord.hasSuccessors(coordBottom)) {
+                shapeRenderer.line(x, y, coordBottom.getX(), coordBottom.getY());
+            }
+        }
+
+        shapeRenderer.end();
     }
 
     public ArrayList<Coordinates> getGraph() {
