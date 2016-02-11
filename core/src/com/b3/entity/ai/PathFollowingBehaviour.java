@@ -30,8 +30,8 @@ public class PathFollowingBehaviour implements Behaviour {
 			throw new IllegalArgumentException("Given path is too short in PathFollowingBehaviour");
 
 		// move to centres of tiles
-		for (int i = 0; i < path.size; i++)
-			path.get(i).add(0.5f, -0.5f);
+		//for (int i = 0; i < path.size; i++)
+		//	path.get(i).add(0.5f, -0.5f);
 
 		LinePath<Vector2> linePath = new LinePath<>(path, true);
 		PhysicsComponent phys = agent.getPhysicsComponent();

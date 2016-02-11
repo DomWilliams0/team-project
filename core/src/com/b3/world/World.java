@@ -112,6 +112,10 @@ public class World implements Disposable {
 		worldGraph.addBuilding(49, 50, 4);
 		worldGraph.addBuilding(51, 50, 4);
 		worldGraph.addBuilding(53, 50, 4);
+
+		worldGraph.addCostNode(47, 49, 50);
+		worldGraph.addCostNode(51, 45, 50);
+
 		createBuildings();
 		testPathFollowing();
 
