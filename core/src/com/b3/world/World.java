@@ -67,6 +67,8 @@ public class World implements Disposable {
 
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
+	private float counter = 5;
+	private float counter2 = 0;
 
 	public World(String fileName) {
 		TiledMap map = new TmxMapLoader().load(fileName);
@@ -104,8 +106,10 @@ public class World implements Disposable {
 		worldGraph = new WorldGraph();
 		worldGraph.generateGraph(100, 100);
 
-		//int[] arr = {2,2,2,3,3,3,3,4,4};
-		//worldGraph.randomTheGraph(arr);
+		int[] arr = {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4,
+				4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4,
+				4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4,  };
+		worldGraph.randomTheGraph(arr);
 		worldGraph.addBuilding(43, 50, 4);
 		worldGraph.addBuilding(45, 50, 4);
 		worldGraph.addBuilding(47, 50, 4);
@@ -116,8 +120,18 @@ public class World implements Disposable {
 		worldGraph.addCostNode(47, 49, 50);
 		worldGraph.addCostNode(51, 45, 50);
 
+		worldGraph.addCostNode(10, 10, 10);
+		worldGraph.addCostNode(12, 10, 20);
+		worldGraph.addCostNode(14, 10, 30);
+		worldGraph.addCostNode(16, 10, 40);
+		worldGraph.addCostNode(18, 10, 50);
+		worldGraph.addCostNode(20, 10, 70);
+		worldGraph.addCostNode(47, 54, 100);
+
 		createBuildings();
-		testPathFollowing();
+
+		//		MOVED TO RENDER SO HAVE TIME FOR OPENING ANIMATIONS
+//		testPathFollowing();
 
 	}
 
@@ -141,6 +155,8 @@ public class World implements Disposable {
 		// Perform search
 		Graph<Point> g = worldGraph.getGraphNicksStyle();
 		Maybe<List<Node<Point>>> maybePath = g.findPathFromASTAR(p1, p2);
+
+		System.out.println(maybePath.fromMaybe());
 
 		if (maybePath.isNothing()) {
 			System.out.println("Nooooo");
@@ -391,8 +407,6 @@ public class World implements Disposable {
 		ModelInstance instance = buildingCache.createBuilding(pos, dimensions);
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y, dimensions.z));
 
-
-
 		Building building = new Building(pos, dimensions, instance);
 		building.setType(type);
 		buildings.add(building);
@@ -445,13 +459,31 @@ public class World implements Disposable {
 		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
 
+		// render underlying graph
+		if (counter > 1) {
+			counter = (float) (counter - 0.25);
+			counter2 = 0;
+		}
+
+		//TODO fix building crappyness / or just delete it
+		worldGraph.render(worldCamera, counter);
+		if (counter2 != -1 & counter2 != 10 & counter2 != 11) {
+			counter2 = (float) (counter2 + 0.5);
+			for (int i = 0; i < buildings.size(); i++) {
+				Building temp = buildings.get(i);
+				Vector3 v = temp.getDimensions();
+				Vector3 newV3 = new Vector3(v.x, v.y, counter2);
+				ModelInstance tempInstance = buildingCache.createBuilding(temp.getTilePosition(), newV3);
+				buildings.set(i, new Building(temp.getTilePosition(), newV3, tempInstance));
+			}
+		}
+
+
 		// render entities
 		engine.update(delta);
 
-		// render underlying graph
-		worldGraph.render(worldCamera);
+		if (counter2 == 10) { testPathFollowing(); counter2 = 11;}
 
-		// render buildings
 		buildingBatch.begin(worldCamera);
 		buildings.stream()
 				.filter(building -> building.isVisible(worldCamera))

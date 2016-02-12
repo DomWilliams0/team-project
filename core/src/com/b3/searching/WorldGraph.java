@@ -597,12 +597,13 @@ public class WorldGraph implements Serializable {
         return g;
     }
 
-    public void render(Camera camera) {
+    public void render(Camera camera, float counter) {
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.BLACK);
+
 
         for (Coordinates coord : tempGraph) {
             Coordinates
@@ -613,44 +614,53 @@ public class WorldGraph implements Serializable {
             int x = coord.getX(), y = coord.getY();
 
             if (coord.hasSuccessors(coordLeft)) {
-                if (getNodeCost(coord.getX(), coord.getY()) >= 10 | getNodeCost(coordLeft.getX(), coordLeft.getY()) >= 10)
-                    shapeRenderer.setColor(Color.RED);
+                if (getNodeCost(coord.getX(), coord.getY()) >= 10 | getNodeCost(coordLeft.getX(), coordLeft.getY()) >= 10) {
+                    int percentageColour = (int) (((float)Math.max(getNodeCost(coord.getX(), coord.getY()), getNodeCost(coordLeft.getX(), coordLeft.getY()))+10) * 2.55);
+                    shapeRenderer.setColor(new Color((float) (percentageColour/100.0), 0, 0, 0));
+                }
                 else
                     shapeRenderer.setColor(Color.BLACK);
                 shapeRenderer.line(x, y, coordLeft.getX(), coordLeft.getY());
             }
 
             if (coord.hasSuccessors(coordTop)) {
-                if (getNodeCost(coord.getX(), coord.getY()) >= 10 | getNodeCost(coordTop.getX(), coordTop.getY()) >= 10)
-                    shapeRenderer.setColor(Color.RED);
+                if (getNodeCost(coord.getX(), coord.getY()) >= 10 | getNodeCost(coordTop.getX(), coordTop.getY()) >= 10){
+                    int percentageColour = (int) (((float)Math.max(getNodeCost(coord.getX(), coord.getY()), getNodeCost(coordTop.getX(), coordTop.getY()))+10) * 2.55);
+                    shapeRenderer.setColor(new Color((float) (percentageColour/100.0), 0, 0, 0));
+                }
                 else
                     shapeRenderer.setColor(Color.BLACK);
                 shapeRenderer.line(x, y, coordTop.getX(), coordTop.getY());
             }
 
             if (coord.hasSuccessors(coordRight)) {
-                if (getNodeCost(coord.getX(), coord.getY()) >= 10 | getNodeCost(coordRight.getX(), coordRight.getY()) >= 10)
-                    shapeRenderer.setColor(Color.RED);
+                if (getNodeCost(coord.getX(), coord.getY()) >= 10 | getNodeCost(coordRight.getX(), coordRight.getY()) >= 10) {
+                    int percentageColour = (int) (((float)Math.max(getNodeCost(coord.getX(), coord.getY()), getNodeCost(coordRight.getX(), coordRight.getY()))+10) * 2.55);
+                    shapeRenderer.setColor(new Color((float) (percentageColour/100.0), 0, 0, 0));
+                }
                 else
                     shapeRenderer.setColor(Color.BLACK);
                 shapeRenderer.line(x, y, coordRight.getX(), coordRight.getY());
             }
 
             if (coord.hasSuccessors(coordBottom)) {
-                if (getNodeCost(coord.getX(), coord.getY()) >= 10 | getNodeCost(coordBottom.getX(), coordBottom.getY()) >= 10)
-                    shapeRenderer.setColor(Color.RED);
+                if (getNodeCost(coord.getX(), coord.getY()) >= 10 | getNodeCost(coordBottom.getX(), coordBottom.getY()) >= 10) {
+                    int percentageColour = (int) (((float)Math.max(getNodeCost(coord.getX(), coord.getY()), getNodeCost(coordBottom.getX(), coordBottom.getY()))+10) * 2.55);
+                    shapeRenderer.setColor(new Color((float) (percentageColour/100.0), 0, 0, 0));
+                }
                 else
                     shapeRenderer.setColor(Color.BLACK);
                 shapeRenderer.line(x, y, coordBottom.getX(), coordBottom.getY());
             }
         }
+
         shapeRenderer.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK);
 
         for (Coordinates coord : tempGraph) {
-            shapeRenderer.circle(coord.getX(), coord.getY(), 0.15f, 20);
+            shapeRenderer.circle(coord.getX(), coord.getY(), 0.15f * counter, 20);
         }
 
         shapeRenderer.end();

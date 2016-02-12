@@ -73,6 +73,7 @@ public class Building {
 		return dimensions;
 	}
 
+
 	/**
 	 * @return The position of the building's entry and exit point
 	 */
