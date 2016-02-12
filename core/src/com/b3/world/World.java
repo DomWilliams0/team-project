@@ -13,7 +13,6 @@ import com.b3.searching.WorldGraph;
 import com.b3.searching.roboticsGraphHelpers.Graph;
 import com.b3.searching.roboticsGraphHelpers.Node;
 import com.b3.searching.roboticsGraphHelpers.Point;
-import com.b3.searching.roboticsGraphHelpers.collectFuncMaybe.Maybe;
 import com.b3.searching.utils.Buildings;
 import com.b3.util.Config;
 import com.badlogic.ashley.core.Engine;
@@ -154,16 +153,16 @@ public class World implements Disposable {
 
 		// Perform search
 		Graph<Point> g = worldGraph.getGraphNicksStyle();
-		Maybe<List<Node<Point>>> maybePath = g.findPathFromASTAR(p1, p2);
+		Optional<List<Node<Point>>> optPath = g.findPathFromASTAR(p1, p2);
 
-		System.out.println(maybePath.fromMaybe());
-
-		if (maybePath.isNothing()) {
+		if (!optPath.isPresent()) {
 			System.out.println("Nooooo");
 			return;
 		}
 
-		List<Node<Point>> path = maybePath.fromMaybe();
+		System.out.println(optPath.get());
+
+		List<Node<Point>> path = optPath.get();
 		List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors.toList());
 		Array<Vector2> vPoints = new Array<>();
 

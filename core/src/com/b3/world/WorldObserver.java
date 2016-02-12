@@ -6,13 +6,13 @@ import com.b3.searching.WorldGraph;
 import com.b3.searching.roboticsGraphHelpers.Graph;
 import com.b3.searching.roboticsGraphHelpers.Node;
 import com.b3.searching.roboticsGraphHelpers.Point;
-import com.b3.searching.roboticsGraphHelpers.collectFuncMaybe.Maybe;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class WorldObserver implements Observer {
@@ -54,14 +54,14 @@ public class WorldObserver implements Observer {
         // Perform search
         WorldGraph wg = world.getWorldGraph();
         Graph<Point> g = wg.getGraphNicksStyle();
-        Maybe<List<Node<Point>>> maybePath = g.findPathBFS(p1, p2);
+        Optional<List<Node<Point>>> optPath = g.findPathBFS(p1, p2);
 
-        if (maybePath.isNothing()) {
+        if (!optPath.isPresent()) {
             System.out.println("Nooooo");
             return;
         }
 
-        List<Node<Point>> path = maybePath.fromMaybe();
+        List<Node<Point>> path = optPath.get();
         List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors.toList());
         Array<Vector2> vPoints = new Array<>();
 

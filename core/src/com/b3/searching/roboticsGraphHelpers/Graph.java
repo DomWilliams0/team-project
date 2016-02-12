@@ -1,15 +1,9 @@
 package com.b3.searching.roboticsGraphHelpers;
 
-
-
 import com.b3.searching.roboticsGraphHelpers.collectFuncMaybe.*;
-import com.b3.searching.utils.ReadFile;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
-
-import static com.b3.searching.roboticsGraphHelpers.SearchParameters.euclideanDistance;
 
 /**
  * Represents a graph using the adjacency list approach
@@ -85,8 +79,8 @@ public class Graph<A> {
 		return new ArrayList<>(nodes.values());
 	}
 
-	public Maybe<Node<A>> getNode(A a) {
-		return hasNode(a) ? new Just<>(nodes.get(a)) : new Nothing<>();
+	public Optional<Node<A>> getNode(A a) {
+		return hasNode(a) ? Optional.of(nodes.get(a)) : Optional.empty();
 	}
 	/**
 	 * Check whether there is a specified node in the table of nodes
@@ -211,9 +205,9 @@ public class Graph<A> {
 	 * Find a path from the origin to the destination given search parameters
 	 * @param origin The content of the starting node
 	 * @param destination The content of the destination node
-	 * @return Maybe a path
+	 * @return Optional a path
 	 */
-	public Maybe<List<Node<A>>> findPathFromASTAR(A origin, A destination) {
+	public Optional<List<Node<A>>> findPathFromASTAR(A origin, A destination) {
 
 		SearchParameters<A> params = (SearchParameters<A>) new SearchParameters<>().AStarParams();
 
@@ -222,7 +216,7 @@ public class Graph<A> {
 		Node<A> destinationNode = new Node<>(destination);
 
 		if (startNode == null)
-			return new Nothing<>();
+			return Optional.empty();
 
 		// Unpack parameters: search algorithm, heuristic and distance functions
 		Function2<Node<A>, Node<A>, Float> h = params.getHeuristic();
@@ -248,7 +242,7 @@ public class Graph<A> {
 			// If it is the destination node then
 			if (n.equals(destinationNode))
 				// construct path from the map tracking and the start node
-				return new Just<>(constructPath(pred, startNode, n));
+				return Optional.of(constructPath(pred, startNode, n));
 			
 			// Add n to the explored set
 			explored.add(n);
@@ -277,10 +271,10 @@ public class Graph<A> {
 		}
 		
 		// No path found
-		return new Nothing<>();
+		return Optional.empty();
 	}
 	
-	public Maybe<Iterable<IntermediateState<A>>> findPathFromWithTrackingData(A origin, A destination, SearchParameters<A> params) {
+	public Optional<Iterable<IntermediateState<A>>> findPathFromWithTrackingData(A origin, A destination, SearchParameters<A> params) {
 		// Tracking data
 		ArrayList<IntermediateState<A>> trackingData = new ArrayList<>();
 		
@@ -289,7 +283,7 @@ public class Graph<A> {
 		Node<A> destinationNode = new Node<>(destination);
 
 		if (startNode == null)
-			return new Nothing<>();
+			return Optional.empty();
 
 		// Unpack parameters: search algorithm, heuristic and distance functions
 		Function2<Node<A>, Node<A>, Float> h = params.getHeuristic();
@@ -317,7 +311,7 @@ public class Graph<A> {
 			// If it is the destination node then
 			if (n.equals(destinationNode))
 				// construct path from the map tracking and the start node
-				return new Just<>(trackingData);
+				return Optional.of(trackingData);
 			
 			// Add n to the explored set
 			explored.add(n);
@@ -344,7 +338,7 @@ public class Graph<A> {
 		}
 		
 		// No path found
-		return new Nothing<>();
+		return Optional.empty();
 	}
 
 	/**
@@ -353,12 +347,12 @@ public class Graph<A> {
 	 * @param destination
      * @return
      */
-	public Maybe<List<Node<A>>> findPathBFS (A origin, A destination) {
+	public Optional<List<Node<A>>> findPathBFS (A origin, A destination) {
 		Node<A> startNode = nodes.get(origin);
 		Node<A> destinationNode = new Node<>(destination);
 
 		if (startNode == null)
-			return new Nothing<>();
+			return Optional.empty();
 
 		Set<Node<A>> explored = new HashSet<>();
 		Takeable<Node<A>> pending = new LinkedListT<>();
@@ -370,7 +364,7 @@ public class Graph<A> {
 			Node<A> n = pending.take();
 
 			if (n.equals(destinationNode))
-				return new Just<>(constructPath(pred, startNode, n));
+				return Optional.of(constructPath(pred, startNode, n));
 
 			explored.add(n);
 
@@ -389,7 +383,7 @@ public class Graph<A> {
 			}
 		}
 
-		return new Nothing<>();
+		return Optional.empty();
 	}
 
 	/**
@@ -398,12 +392,12 @@ public class Graph<A> {
 	 * @param destination
 	 * @return
 	 */
-	public Maybe<List<Node<A>>> findPathDFSwithCosts (A origin, A destination) {
+	public Optional<List<Node<A>>> findPathDFSwithCosts (A origin, A destination) {
 		Node<A> startNode = nodes.get(origin);
 		Node<A> destinationNode = new Node<>(destination);
 
 		if (startNode == null)
-			return new Nothing<>();
+			return Optional.empty();
 
 		Set<Node<A>> explored = new HashSet<>();
 		Takeable<Node<A>> pending = new StackT<>();
@@ -415,7 +409,7 @@ public class Graph<A> {
 			Node<A> n = pending.take();
 
 			if (n.equals(destinationNode))
-				return new Just<>(constructPath(pred, startNode, n));
+				return Optional.of(constructPath(pred, startNode, n));
 
 			explored.add(n);
 
@@ -434,7 +428,7 @@ public class Graph<A> {
 			}
 		}
 
-		return new Nothing<>();
+		return Optional.empty();
 	}
 
 	private Object[] findLowestCost(Object[] arrTemp) {
