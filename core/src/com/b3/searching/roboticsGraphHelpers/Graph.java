@@ -143,7 +143,7 @@ public class Graph<A> {
 	 * @param c2 The second component
 	 * @return True if the graph has a c1 -- c2 edge, false otherwise
 	 */
-	private boolean hasEdge(A c1, A c2) {
+	public boolean hasEdge(A c1, A c2) {
 		Node<A> n1 = nodes.get(c1);
 		Node<A> n2 = nodes.get(c2);
 		
