@@ -6,6 +6,9 @@ import com.badlogic.gdx.Gdx;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Describes the event system
+ */
 public class EventGenerator extends Observable implements Runnable {
 
     private int timeForNextEvent;
@@ -13,6 +16,10 @@ public class EventGenerator extends Observable implements Runnable {
     private int maxTime;
     private World world;
 
+    /**
+     * Initialises an EventGenerator instance
+     * @param world The world to work on
+     */
     public EventGenerator(World world) {
         this.world = world;
         this.minTime = 3;
@@ -20,6 +27,9 @@ public class EventGenerator extends Observable implements Runnable {
         generateTimeForNextEvent();
     }
 
+    /**
+     * Gets the time to wait for the next event
+     */
     private void generateTimeForNextEvent() {
         timeForNextEvent = ThreadLocalRandom.current().nextInt(minTime, maxTime + 1);
     }

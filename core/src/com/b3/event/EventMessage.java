@@ -1,5 +1,8 @@
 package com.b3.event;
 
+/**
+ * Describes an event message to pass to an event observer
+ */
 public class EventMessage {
 
     private EventType eventType;
