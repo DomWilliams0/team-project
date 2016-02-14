@@ -1,7 +1,8 @@
 package com.b3.entity;
 
 import com.b3.entity.ai.Behaviour;
-import com.b3.entity.ai.WanderBehaviour;
+import com.b3.entity.ai.BehaviourWander;
+import com.b3.entity.component.AIComponent;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.component.RenderComponent;
 import com.b3.util.Config;
@@ -15,10 +16,9 @@ public class Agent extends Entity {
 
 	private World world;
 	private PhysicsComponent physics;
+	private AIComponent ai;
 
-	private Behaviour behaviour;
-
-	public Agent(World world, Vector2 tilePos, Behaviour behaviour) {
+	public Agent(World world, Vector2 tilePos) {
 		// bounds check
 		if (!world.isInBounds(tilePos))
 			throw new IllegalArgumentException("Tile position is out of range: " + tilePos);
@@ -28,35 +28,34 @@ public class Agent extends Entity {
 		float diameter = Config.getFloat("debug-entity-diameter");
 		float radius = diameter / 2f;
 
+		// render
 		add(new RenderComponent(Color.BLUE, radius));
 
+		// physics
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.linearDamping = 0.9f;
+		bodyDef.linearDamping = 1f;
 		physics = new PhysicsComponent(world.getPhysicsWorld(), bodyDef, tilePos, radius);
 		physics.getBody().setUserData(this);
 		add(physics);
 
-		// debug stupid wander behaviour
+		// ai
+		ai = new AIComponent(new BehaviourWander(this));
+		add(ai);
 
 		world.getEngine().addEntity(this);
-
-		setBehaviour(behaviour);
-	}
-
-	public Agent(World world, Vector2 tilePos) {
-		this(world, tilePos, new WanderBehaviour());
 	}
 
 	public Behaviour getBehaviour() {
-		return behaviour;
+		return ai.behaviour;
 	}
 
 	public void setBehaviour(Behaviour behaviour) {
-		// todo "disable" old behaviour necessary?
+		ai.behaviour = behaviour;
+	}
 
-		this.behaviour = behaviour;
-		behaviour.begin(this);
+	public World getWorld() {
+		return world;
 	}
 
 	public PhysicsComponent getPhysicsComponent() {

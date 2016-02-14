@@ -7,7 +7,6 @@ import com.b3.searching.roboticsGraphHelpers.Graph;
 import com.b3.searching.roboticsGraphHelpers.Node;
 import com.b3.searching.roboticsGraphHelpers.Point;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 import java.util.List;
 import java.util.Observable;
@@ -63,12 +62,7 @@ public class WorldObserver implements Observer {
 
         List<Node<Point>> path = optPath.get();
         List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors.toList());
-        Array<Vector2> vPoints = new Array<>();
 
-        for (Vector2 v : points) {
-            vPoints.add(v);
-        }
-
-        world.spawnAgentWithPath(true, vPoints);
+        world.spawnAgentWithPath(points.get(0), points);
     }
 }

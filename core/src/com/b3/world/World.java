@@ -3,8 +3,9 @@ package com.b3.world;
 import com.b3.DebugRenderer;
 import com.b3.Utils;
 import com.b3.entity.Agent;
-import com.b3.entity.ai.PathFollowingBehaviour;
+import com.b3.entity.ai.BehaviourPathFollow;
 import com.b3.entity.component.PhysicsComponent;
+import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
@@ -18,7 +19,6 @@ import com.b3.util.Config;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -34,7 +34,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
@@ -105,9 +104,12 @@ public class World implements Disposable {
 		worldGraph = new WorldGraph();
 		worldGraph.generateGraph(100, 100);
 
-		int[] arr = {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4,
-				4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4,
-				4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4, 4,4,4,4,4,4,4,4,  };
+		int[] arr = {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,};
 		worldGraph.randomTheGraph(arr);
 		worldGraph.addBuilding(43, 50, 4);
 		worldGraph.addBuilding(45, 50, 4);
@@ -130,7 +132,7 @@ public class World implements Disposable {
 		createBuildings();
 
 		//		MOVED TO RENDER SO HAVE TIME FOR OPENING ANIMATIONS
-//		testPathFollowing();
+		//		testPathFollowing();
 
 	}
 
@@ -163,14 +165,10 @@ public class World implements Disposable {
 		System.out.println(optPath.get());
 
 		List<Node<Point>> path = optPath.get();
-		List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors.toList());
-		Array<Vector2> vPoints = new Array<>();
+		List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors
+				.toList());
 
-		for (Vector2 v : points) {
-			vPoints.add(v);
-		}
-
-		spawnAgentWithPath(true, vPoints);
+		spawnAgentWithPath(points.get(0), points);
 	}
 
 	/**
@@ -261,8 +259,9 @@ public class World implements Disposable {
 	 * @param camera The world camera
 	 */
 	public void initEngine(WorldCamera camera) {
+		engine.addSystem(new PhysicsSystem(physicsWorld));
 		engine.addSystem(new RenderSystem(camera));
-		engine.addSystem(new PhysicsSystem());
+		engine.addSystem(new AISystem());
 
 		worldCamera = camera;
 
@@ -322,7 +321,7 @@ public class World implements Disposable {
 
 		for (Buildings b : worldGraph.getBuildings()) {
 
-			Vector2 v2 = new Vector2((float)b.getXValueofCoord()-(float)0.5, (float)b.getYValueofCoord()-(float)0.5);
+			Vector2 v2 = new Vector2((float) b.getXValueofCoord() - (float) 0.5, (float) b.getYValueofCoord() - (float) 0.5);
 
 			switch (b.getBuildingSize()) {
 				case 2:
@@ -365,14 +364,23 @@ public class World implements Disposable {
 	}
 
 	/**
+	 * {@link World#spawnAgentWithPath(Vector2, List)}
+	 */
+	public Agent spawnAgentWithPath(Vector2 tilePos, Vector2... path) {
+		return spawnAgentWithPath(tilePos, Arrays.asList(path));
+	}
+
+	/**
 	 * Spawns an agent at the start point of the path, and sets its behaviour to follow the given path
 	 *
-	 * @param arrive True if the agent should stop when he arrives at the final point
-	 * @param points The path to follow
+	 * @param tilePos The tile position to spawn the entity at
+	 * @param path    A list of tiles that make up the path
 	 * @return The new agent
 	 */
-	public Agent spawnAgentWithPath(boolean arrive, Array<Vector2> points) {
-		return new Agent(this, points.get(0), new PathFollowingBehaviour(points, arrive));
+	public Agent spawnAgentWithPath(Vector2 tilePos, List<Vector2> path) {
+		Agent agent = spawnAgent(tilePos);
+		agent.setBehaviour(new BehaviourPathFollow(agent, path));
+		return agent;
 	}
 
 	public List<Building> getBuildings() {
@@ -400,11 +408,12 @@ public class World implements Disposable {
 	 * @return The newly created building
 	 */
 	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
-//		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
-//		pos = new Vector2(pos).scl(Utils.TILE_SIZE);
+		//		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
+		//		pos = new Vector2(pos).scl(Utils.TILE_SIZE);
 
 		ModelInstance instance = buildingCache.createBuilding(pos, dimensions);
-		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y, dimensions.z));
+		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y,
+				dimensions.z));
 
 		Building building = new Building(pos, dimensions, instance);
 		building.setType(type);
@@ -449,14 +458,12 @@ public class World implements Disposable {
 		});
 		deadEntities.clear();
 
-		// tick physics
-		float delta = Gdx.graphics.getRawDeltaTime();
-		physicsWorld.step(delta, 6, 4);
-		GdxAI.getTimepiece().update(delta);
-
-		// render world
+		// render tiled world
 		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
+
+		// tick entities and world
+		engine.update(Gdx.graphics.getRawDeltaTime());
 
 		// render underlying graph
 		if (counter > 1) {
@@ -477,10 +484,6 @@ public class World implements Disposable {
 			}
 		}
 
-
-		// render entities
-		engine.update(delta);
-
 		if (counter2 == 10) { testPathFollowing(); counter2 = 11;}
 
 		buildingBatch.begin(worldCamera);
@@ -488,7 +491,7 @@ public class World implements Disposable {
 				.filter(building -> building.isVisible(worldCamera))
 				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
 		buildingBatch.end();
-		
+
 		// physics debug rendering
 		if (Config.getBoolean("debug-physics-rendering"))
 			debugRenderer.render(worldCamera);

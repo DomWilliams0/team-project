@@ -17,7 +17,7 @@ public class RenderSystem extends IteratingSystem {
 	private PerspectiveCamera camera;
 
 	public RenderSystem(PerspectiveCamera camera) {
-		super(Family.all(RenderComponent.class).get());
+		super(Family.all(RenderComponent.class, PhysicsComponent.class).get());
 		this.camera = camera;
 		this.renders = ComponentMapper.getFor(RenderComponent.class);
 		this.physics = ComponentMapper.getFor(PhysicsComponent.class);
