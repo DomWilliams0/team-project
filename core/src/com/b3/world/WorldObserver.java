@@ -2,9 +2,9 @@ package com.b3.world;
 
 import com.b3.event.EventMessage;
 import com.b3.event.EventType;
-import com.b3.searching.Node;
-import com.b3.searching.Point;
-import com.b3.searching.WorldGraph;
+import com.b3.search.Node;
+import com.b3.search.Point;
+import com.b3.search.WorldGraph;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;

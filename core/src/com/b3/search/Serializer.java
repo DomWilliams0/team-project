@@ -1,4 +1,4 @@
-package com.b3.searching;
+package com.b3.search;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

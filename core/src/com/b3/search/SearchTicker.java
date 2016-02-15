@@ -1,6 +1,6 @@
-package com.b3.searching;
+package com.b3.search;
 
-import com.b3.searching.optional.*;
+import com.b3.search.optional.*;
 
 import java.util.*;
 

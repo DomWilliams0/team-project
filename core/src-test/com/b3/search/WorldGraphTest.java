@@ -1,4 +1,4 @@
-package com.b3.searching;
+package com.b3.search;
 
 import org.junit.Before;
 import org.junit.Test;

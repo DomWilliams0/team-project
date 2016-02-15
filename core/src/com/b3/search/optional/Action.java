@@ -1,4 +1,4 @@
-package com.b3.searching.optional;
+package com.b3.search.optional;
 
 public interface Action<A> {
 	void apply(A a);

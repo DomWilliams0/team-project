@@ -1,7 +1,7 @@
-package com.b3.searching.optional;
+package com.b3.search.optional;
 
-import com.b3.searching.Node;
-import com.b3.searching.Point;
+import com.b3.search.Node;
+import com.b3.search.Point;
 
 public class SearchParameters<A> {
 	

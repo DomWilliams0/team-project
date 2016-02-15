@@ -1,4 +1,4 @@
-package com.b3.searching.optional;
+package com.b3.search.optional;
 
 /**
  * Describes a search algorithm
