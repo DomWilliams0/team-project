@@ -6,25 +6,26 @@ import java.io.FileReader;
 
 public class WorldGraphBasic {
 
-	public static WorldGraph<Point> getBasicGraph() throws FileNotFoundException {
+	public static WorldGraph getBasicGraph() throws FileNotFoundException {
 		return getGraph("graph");
 	}
 
-	private static WorldGraph<Point> getGraph(String graphName) throws FileNotFoundException {
+	private static WorldGraph getGraph(String graphName) throws FileNotFoundException {
 		return fromFile("src-test/resources/" + graphName + ".txt");
 	}
 
 	/**
 	 * Creates a new graph from a file
+	 *
 	 * @param filename The file name
 	 * @return The newly created graph
 	 */
-	private static WorldGraph<Point> fromFile(String filename) throws FileNotFoundException {
+	private static WorldGraph fromFile(String filename) throws FileNotFoundException {
 		// Open file
 		BufferedReader br = new BufferedReader(new FileReader(filename));
 
 		// Create graph
-		WorldGraph<Point> g = new WorldGraph<>(30, 30);
+		WorldGraph g = new WorldGraph(30, 30);
 
 		// Loop through file lines
 		br.lines().forEach((line) -> {
@@ -44,10 +45,10 @@ public class WorldGraphBasic {
 					Point pn = new Point(Integer.parseInt(coordsNeighbour[0]), Integer.parseInt(coordsNeighbour[1]));
 
 					// Add edge between p and pn
-					g.addEdge(p, pn, true, 0, 0);
+					g.addEdge(p, pn, 1f);
 				}
 			} else {
-				g.addNode(p, 0);
+				g.addNode(p);
 			}
 
 		});

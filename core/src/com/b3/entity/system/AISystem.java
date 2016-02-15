@@ -1,7 +1,9 @@
 package com.b3.entity.system;
 
+import com.b3.entity.ai.BehaviourPathFind;
 import com.b3.entity.component.AIComponent;
 import com.b3.entity.component.PhysicsComponent;
+import com.b3.search.WorldGraph;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -16,12 +18,14 @@ public class AISystem extends IteratingSystem {
 
 	private ComponentMapper<PhysicsComponent> physicsComponents;
 	private ComponentMapper<AIComponent> aiComponents;
+	private WorldGraph worldGraph;
 
 
-	public AISystem() {
+	public AISystem(WorldGraph worldGraph) {
 		super(Family.all(PhysicsComponent.class, AIComponent.class).get());
-		physicsComponents = ComponentMapper.getFor(PhysicsComponent.class);
-		aiComponents = ComponentMapper.getFor(AIComponent.class);
+		this.worldGraph = worldGraph;
+		this.physicsComponents = ComponentMapper.getFor(PhysicsComponent.class);
+		this.aiComponents = ComponentMapper.getFor(AIComponent.class);
 	}
 
 	@Override
@@ -31,5 +35,12 @@ public class AISystem extends IteratingSystem {
 
 		ai.behaviour.tick(steeringMovement);
 		phys.getBody().applyForceToCenter(steeringMovement, true);
+
+
+		if (worldGraph.hasSearchInProgress() && ai.behaviour instanceof BehaviourPathFind) {
+			BehaviourPathFind pathFollow = (BehaviourPathFind) ai.behaviour;
+			if (pathFollow.hasArrivedForTheFirstTime())
+				worldGraph.clearCurrentSearch();
+		}
 	}
 }

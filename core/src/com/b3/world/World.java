@@ -1,28 +1,24 @@
 package com.b3.world;
 
 import com.b3.DebugRenderer;
-import com.b3.util.Utils;
 import com.b3.entity.Agent;
+import com.b3.entity.ai.BehaviourPathFind;
 import com.b3.entity.ai.BehaviourPathFollow;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
-import com.b3.search.Buildings;
-import com.b3.search.Node;
-import com.b3.search.Point;
 import com.b3.search.WorldGraph;
-import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.b3.util.Utils;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.maps.MapLayer;
@@ -38,7 +34,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class World implements Disposable {
 
@@ -62,14 +57,10 @@ public class World implements Disposable {
 	private EventGenerator eventGenerator;
 	private WorldObserver worldObserver;
 	private WorldQueryService queryService;
-	private WorldGraph<Point> worldGraph;
+	private WorldGraph worldGraph;
 
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
-	private float counter = 5;
-	private float counter2 = 0;
-
-	private SearchTicker searchTicker;
 
 	public World(String fileName) {
 		TiledMap map = new TmxMapLoader().load(fileName);
@@ -104,80 +95,15 @@ public class World implements Disposable {
 
 		debugRenderer = new DebugRenderer(physicsWorld);
 
-		worldGraph = new WorldGraph<>(100,100,this);
 
-		int[] arr = {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,};
-		worldGraph.randomTheGraph(arr);
-		worldGraph.addBuilding(43, 50, 4);
-		worldGraph.addBuilding(45, 50, 4);
-		worldGraph.addBuilding(47, 50, 4);
-		worldGraph.addBuilding(49, 50, 4);
-		worldGraph.addBuilding(51, 50, 4);
-		worldGraph.addBuilding(53, 50, 4);
+		worldGraph = new WorldGraph(this);
+		worldGraph.initRenderer();
 
-		worldGraph.addCostNode(47, 49, 50);
-		worldGraph.addCostNode(51, 45, 50);
+		// test buildings
+		addBuilding(new Vector2(50, 50), new Vector3(2, 4, 6), BuildingType.HOUSE);
 
-		worldGraph.addCostNode(10, 10, 10);
-		worldGraph.addCostNode(12, 10, 20);
-		worldGraph.addCostNode(14, 10, 30);
-		worldGraph.addCostNode(16, 10, 40);
-		worldGraph.addCostNode(18, 10, 50);
-		worldGraph.addCostNode(20, 10, 70);
-		worldGraph.addCostNode(47, 54, 100);
-
-		createBuildings();
-
-		// Search ticker
-		searchTicker = new SearchTicker(10);
-
-		Node<Point> src = worldGraph.getNode(new Point(40, 55));
-		Node<Point> trgt = worldGraph.getNode(new Point(55, 45));
-
-		searchTicker.reset(SearchAlgorithm.BREADTH_FIRST, src, trgt);
-
-		//		MOVED TO RENDER SO HAVE TIME FOR OPENING ANIMATIONS
-		//		testPathFollowing();
-
-	}
-
-	public void testPathFollowing() {
-		//EventType eventType = EventType.FIRE;
-
-		// Get target and source buildings
-		/*Building targetBuilding = (Building)evt.getMessage();
-		targetBuilding.setEvent(eventType);
-		Building sourceBuilding = world.getQueryService().getRandomBuildingByType(getBuildingTypeFromEvent(eventType));*/
-
-		//Vector2 src = sourceBuilding.getTilePosition();
-		Point p1 = new Point(40, 55);
-
-		//Vector2 trgt = targetBuilding.getTilePosition();
-		Point p2 = new Point(55, 45);
-
-		System.out.println(p1);
-		System.out.println(p2);
-
-		// Perform search
-		Optional<List<Node<Point>>> optPath = worldGraph.findPathFromASTAR(p1, p2);
-
-		if (!optPath.isPresent()) {
-			System.out.println("Nooooo");
-			return;
-		}
-
-		System.out.println(optPath.get());
-
-		List<Node<Point>> path = optPath.get();
-		List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors
-				.toList());
-
-		spawnAgentWithPath(points.get(0), points);
+		// test search
+		spawnAgentWithPathFinding(new Vector2(60, 50), new Vector2(60, 25), SearchAlgorithm.BREADTH_FIRST);
 	}
 
 	/**
@@ -270,7 +196,7 @@ public class World implements Disposable {
 	public void initEngine(WorldCamera camera) {
 		engine.addSystem(new PhysicsSystem(physicsWorld));
 		engine.addSystem(new RenderSystem(camera));
-		engine.addSystem(new AISystem());
+		engine.addSystem(new AISystem(worldGraph));
 
 		worldCamera = camera;
 
@@ -320,49 +246,6 @@ public class World implements Disposable {
 
 	}
 
-	private void createBuildings() {
-		List<BuildingType> types = Collections.unmodifiableList(Arrays.asList(BuildingType.values()));
-		BuildingType buildingType = types.get(Utils.RANDOM.nextInt(types.size()));
-
-		Vector3 twoSize = new Vector3(2, 1, 10);
-		Vector3 threeSize = new Vector3(1, 2, 10);
-		Vector3 fourSize = new Vector3(2, 2, 10);
-
-		for (int i = 0; i < worldGraph.getBuildings().size(); i++) {
-			Buildings b = (Buildings) worldGraph.getBuildings().get(i);
-
-			Vector2 v2 = new Vector2((float) b.getXValueofCoord() - (float) 0.5, (float) b.getYValueofCoord() - (float) 0.5);
-
-			switch (b.getBuildingSize()) {
-				case 2:
-					addBuilding(v2, twoSize, buildingType);
-					break;
-
-				case 3:
-					addBuilding(v2, threeSize, buildingType);
-					break;
-
-				case 4:
-					addBuilding(v2, fourSize, buildingType);
-					break;
-			}
-		}
-
-		/*ArrayList<Integer> remaining = Utils.range(buildings.size());
-
-		int rnIndex = Utils.RANDOM.nextInt(remaining.size());
-		buildings.get(rnIndex).setType(BuildingType.POLICE_STATION);
-		remaining.remove((Object)rnIndex);
-
-		rnIndex = Utils.RANDOM.nextInt(remaining.size());
-		buildings.get(rnIndex).setType(BuildingType.FIRE_STATION);
-		remaining.remove((Object)rnIndex);
-
-		rnIndex = Utils.RANDOM.nextInt(remaining.size());
-		buildings.get(rnIndex).setType(BuildingType.RESTAURANT);
-		remaining.remove((Object)rnIndex);*/
-	}
-
 	/**
 	 * Spawns a new entity in the world, at the given tile position
 	 *
@@ -393,6 +276,16 @@ public class World implements Disposable {
 		return agent;
 	}
 
+
+	private Agent spawnAgentWithPathFinding(Vector2 tilePos, Vector2 endNode, SearchAlgorithm algorithm) {
+		Agent agent = spawnAgent(tilePos);
+		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, worldGraph);
+		agent.setBehaviour(behaviour);
+		// todo only set on click
+		worldGraph.setCurrentSearch(behaviour.getTicker());
+		return agent;
+	}
+
 	public List<Building> getBuildings() {
 		return buildings;
 	}
@@ -406,14 +299,11 @@ public class World implements Disposable {
 	 * @return The newly created building
 	 */
 	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
-		//		dimensions = new Vector3(dimensions).scl(Utils.TILE_SIZE, Utils.TILE_SIZE, 1); // height isn't scaled
-		//		pos = new Vector2(pos).scl(Utils.TILE_SIZE);
-
-		ModelInstance instance = buildingCache.createBuilding(pos, dimensions);
+		Vector2 shiftedPos = new Vector2(pos).add(0.5f, 0.5f);
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y,
 				dimensions.z));
 
-		Building building = new Building(pos, dimensions, instance);
+		Building building = new Building(pos, dimensions, buildingCache);
 		building.setType(type);
 		buildings.add(building);
 
@@ -423,13 +313,15 @@ public class World implements Disposable {
 			PolygonShape shape = new PolygonShape();
 			shape.setAsBox(
 					dimensions.x / 2, dimensions.y / 2,
-					new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
+					new Vector2(shiftedPos.x + dimensions.x / 2, shiftedPos.y + dimensions.y / 2),
 					0f
 			);
 			buildingDef.shape = shape;
 			buildingBody.createFixture(buildingDef);
 			shape.dispose(); // todo reuse shape and fixture for all buildings
 		}
+
+		worldGraph.addBuilding(building);
 
 		return building;
 	}
@@ -465,29 +357,11 @@ public class World implements Disposable {
 		renderer.render();
 
 		// render underlying graph
-		if (counter > 1) {
-			counter = (float) (counter - 0.25);
-			counter2 = 0;
-		}
-
-		//TODO fix building animation crappyness / or just delete it
-		if (Config.getBoolean(ConfigKey.SHOW_GRID))
-			worldGraph.render(worldCamera, searchTicker, counter);
+		worldGraph.render(worldCamera);
 
 		// tick entities and physics
 		engine.update(Gdx.graphics.getRawDeltaTime());
 
-		if (counter2 != -1 & counter2 != 10 & counter2 != 11) {
-			counter2 = (float) (counter2 + 0.5);
-			for (int i = 0; i < buildings.size(); i++) {
-				Building temp = buildings.get(i);
-				Vector3 v = temp.getDimensions();
-				Vector3 newV3 = new Vector3(v.x, v.y, counter2);
-				ModelInstance tempInstance = buildingCache.createBuilding(temp.getTilePosition(), newV3);
-				buildings.set(i, new Building(temp.getTilePosition(), newV3, tempInstance));
-			}
-		}
-		
 		buildingBatch.begin(worldCamera);
 		buildings.stream()
 				.filter(building -> building.isVisible(worldCamera))
@@ -499,14 +373,10 @@ public class World implements Disposable {
 			debugRenderer.render(worldCamera);
 	}
 
-	//if flatten then needs to be flattened; if !flatten then needs to be grown
 	public void flattenBuildings(boolean flatten) {
-		for (int i = 0; i < buildings.size(); i++) {
-			Building temp = buildings.get(i);
-			Vector3 v = temp.getDimensions();
-			Vector3 newV3 = new Vector3(v.x, v.y, flatten ? 0 : 10);
-			ModelInstance tempInstance = buildingCache.createBuilding(temp.getTilePosition(), newV3);
-			buildings.set(i, new Building(temp.getTilePosition(), newV3, tempInstance));
+
+		for (Building building : buildings) {
+			building.setFlattened(flatten);
 		}
 	}
 

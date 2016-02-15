@@ -1,8 +1,9 @@
 package com.b3.search;
 
-import com.b3.search.util.*;
+import com.b3.search.util.Function2;
+import com.b3.search.util.SearchAlgorithm;
+import com.b3.search.util.SearchParameters;
 import com.b3.search.util.takeable.LinkedListT;
-import com.b3.search.util.takeable.PriorityQueueT;
 import com.b3.search.util.takeable.StackT;
 import com.b3.search.util.takeable.Takeable;
 
@@ -10,22 +11,22 @@ import java.util.*;
 
 public class SearchTicker {
 
-	private Takeable<Node<Point>> frontier;
-	private List<Node<Point>> lastFrontier = new ArrayList<>();
+	private Takeable<Node> frontier;
+	private List<Node> lastFrontier = new ArrayList<>();
 
-	private Set<Node<Point>> visited = new HashSet<>();
-	private Map<Node<Point>, Node<Point>> pred = new HashMap<>();
-	private Map<Node<Point>, Float> D = new LinkedHashMap<>();
-	private Function2<Node<Point>, Node<Point>, Float> d;
-	private Function2<Node<Point>, Node<Point>, Float> h;
+	private Set<Node> visited = new HashSet<>();
+	private Map<Node, Node> pred = new HashMap<>();
+	private Map<Node, Float> D = new LinkedHashMap<>();
+	private Function2<Node, Node, Float> d;
+	private Function2<Node, Node, Float> h;
 
-	private List<Node<Point>> path = new ArrayList<>();
+	private List<Node> path = new ArrayList<>();
 	private boolean pathComplete;
 	private boolean renderProgress;
-	private Node<Point> start, end;
+	private Node start, end;
 
 	private int stepsPerTick;
-	private int frameDelay = 30; // todo: use time instead, for frame rate independence
+	private int frameDelay = 3; // todo: use time instead, for frame rate independence
 	private int frameCounter = 0;
 	private SearchAlgorithm algorithm;
 
@@ -47,7 +48,7 @@ public class SearchTicker {
 		this.frameDelay = fd;
 	}
 
-	public void reset(SearchAlgorithm algorithm, Node<Point> start, Node<Point> end) {
+	public void reset(SearchAlgorithm algorithm, Node start, Node end) {
 
 		this.algorithm = algorithm;
 
@@ -61,9 +62,10 @@ public class SearchTicker {
 				d = h = SearchParameters.nothing();
 				break;
 			case A_STAR:
-				frontier = new PriorityQueueT<>();
-				d = h = SearchParameters.euclideanDistance();
-				break;
+				throw new UnsupportedOperationException("We need to somehow store f without putting it inside Nodes");
+//				frontier = new PriorityQueueT<>();
+//				d = h = SearchParameters.euclideanDistance();
+//				break;
 		}
 
 		frontier.add(start);
@@ -79,9 +81,9 @@ public class SearchTicker {
 		setAllCompleted(fromResetBtn);
 
 		/*if (start != null)
-			actorLookup.get(start.getContent()).setSelected(false);
+			actorLookup.get(start.getPoint()).setSelected(false);
 		if (end != null)
-			actorLookup.get(end.getContent()).setSelected(false);*/
+			actorLookup.get(end.getPoint()).setSelected(false);*/
 
 		lastFrontier.clear();
 		visited.clear();
@@ -103,9 +105,9 @@ public class SearchTicker {
 
 		// except start and end
 		if (start != null)
-			actorLookup.get(start.getContent()).setSelected(true);
+			actorLookup.get(start.getPoint()).setSelected(true);
 		if (end != null)
-			actorLookup.get(end.getContent()).setSelected(true);*/
+			actorLookup.get(end.getPoint()).setSelected(true);*/
 
 		// clear states
 		if (completed) {
@@ -142,7 +144,7 @@ public class SearchTicker {
 				return;
 			}
 
-			Node<Point> node = frontier.take();
+			Node node = frontier.take();
 
 			// already visited
 			if (visited.contains(node))
@@ -157,10 +159,8 @@ public class SearchTicker {
 			}
 
 			if (algorithm == SearchAlgorithm.DEPTH_FIRST) {
-				Object[] arr = node.getSuccessors().toArray();
-				arr = findLowestCost(arr);
-				for (int j=0; j<arr.length; j++) {
-					Node<Point> s = (Node<Point>) arr[j];
+				Set<Node> arr = node.getNeighbours();
+				for (Node s : arr) {
 					if (!visited.contains(s)) {
 						boolean inPending = frontier.contains(s);
 
@@ -171,7 +171,7 @@ public class SearchTicker {
 					}
 				}
 			} else {
-				for (Node<Point> child : node.getSuccessors()) {
+				for (Node child : node.getNeighbours()) {
 					if (!visited.contains(child)) {
 						float cost = D.get(node) + d.apply(node, child);
 						boolean inPending = frontier.contains(child);
@@ -179,7 +179,8 @@ public class SearchTicker {
 						if (!inPending || cost < D.get(child)) {
 							pred.put(child, node);
 							D.put(child, cost);
-							child.setF(D.get(child) + h.apply(child, end) - child.getExtraCost());
+							// todo: uh oh
+//							child.setF(D.get(child) + h.apply(child, end) - child.getExtraCost());
 
 							if (!inPending) {
 								lastFrontier.add(child);
@@ -192,64 +193,43 @@ public class SearchTicker {
 		}
 	}
 
-	private Object[] findLowestCost(Object[] arrTemp) {
-		int n = arrTemp.length;
-
-		boolean swapped = true;
-
-		while (swapped) {
-			swapped = false;
-			for (int i = 1; i < n; i++) {
-				Node<Point> a = (Node<Point>) arrTemp[i];
-				Node<Point> b = (Node<Point>) arrTemp[i - 1];
-				if (b.getExtraCost() < a.getExtraCost()) {
-					arrTemp[i] = b;
-					arrTemp[i-1] = a;
-					swapped = true;
-				}
-			}
-		}
-
-		return arrTemp;
-	}
-
 	public void render() {
 		if (!renderProgress)
 			return;
 
 		// visited nodes
-		/*for (Node<Point> visitedNode : visited)
-			actorLookup.get(visitedNode.getContent()).setNodeColour(Color.LIGHT_GRAY);
+		/*for (Node visitedNode : visited)
+			actorLookup.get(visitedNode.getPoint()).setNodeColour(Color.LIGHT_GRAY);
 
 		// last frame's frontier
-		for (Node<Point> frontierNode : lastFrontier) {
-			actorLookup.get(frontierNode.getContent()).setNodeColour(Color.FOREST);
+		for (Node frontierNode : lastFrontier) {
+			actorLookup.get(frontierNode.getPoint()).setNodeColour(Color.FOREST);
 		}
 
 		// frontier
-		for (Node<Point> frontierNode : frontier)
-			actorLookup.get(frontierNode.getContent()).setNodeColour(Color.LIME);
+		for (Node frontierNode : frontier)
+			actorLookup.get(frontierNode.getPoint()).setNodeColour(Color.LIME);
 
 		// start and end are always red
 		if (start != null)
-			actorLookup.get(start.getContent()).setNodeColour(Color.RED);
+			actorLookup.get(start.getPoint()).setNodeColour(Color.RED);
 		if (end != null)
-			actorLookup.get(end.getContent()).setNodeColour(Color.RED);*/
+			actorLookup.get(end.getPoint()).setNodeColour(Color.RED);*/
 	}
 
 
-	private List<Node<Point>> constructPath(Map<Node<Point>, Node<Point>> map, Node<Point> start, Node<Point> end) {
+	private List<Node> constructPath(Map<Node, Node> map, Node start, Node end) {
 
 		// Helper stack for inserting elements
-		Stack<Node<Point>> path = new Stack<>();
+		Stack<Node> path = new Stack<>();
 		// Array list that will contain the ordered path to return
-		ArrayList<Node<Point>> retPath = new ArrayList<>();
+		ArrayList<Node> retPath = new ArrayList<>();
 
 		// Add end node to the stack
 		path.add(end);
 
 		// Insert nodes into stack
-		Node<Point> n;
+		Node n;
 		while (!(n = path.peek()).equals(start)) {
 			path.add(map.get(n));
 		}
@@ -262,15 +242,15 @@ public class SearchTicker {
 		return retPath;
 	}
 
-	public Collection<Node<Point>> getFrontier() {
+	public Collection<Node> getFrontier() {
 		return frontier;
 	}
 
-	public Set<Node<Point>> getVisited() {
+	public Set<Node> getVisited() {
 		return visited;
 	}
 
-	public List<Node<Point>> getPath() {
+	public List<Node> getPath() {
 		return path;
 	}
 
@@ -282,19 +262,19 @@ public class SearchTicker {
 		return stepsPerTick;
 	}
 
-	public Node<Point> getStart() {
+	public Node getStart() {
 		return start;
 	}
 
-	public void setStart(Node<Point> start) {
+	public void setStart(Node start) {
 		this.start = start;
 	}
 
-	public Node<Point> getEnd() {
+	public Node getEnd() {
 		return end;
 	}
 
-	public void setEnd(Node<Point> end) {
+	public void setEnd(Node end) {
 		this.end = end;
 	}
 

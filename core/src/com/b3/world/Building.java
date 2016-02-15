@@ -22,7 +22,9 @@ public class Building {
 	private Vector3 centre;
 	private Vector3 cullingDimensions;
 
-	private ModelInstance modelInstance;
+	private boolean flattened;
+	private final ModelInstance modelInstance;
+	private final ModelInstance modelInstanceFlat;
 
 	private BuildingType type;
 
@@ -31,12 +33,16 @@ public class Building {
 	/**
 	 * @param tilePosition  The tile to place this building at
 	 * @param dimensions    The (width, length, height) of the building
-	 * @param modelInstance The building's model
+	 * @param buildingCache The {@link BuildingModelCache} of course.
 	 */
-	public Building(Vector2 tilePosition, Vector3 dimensions, ModelInstance modelInstance) {
+	public Building(Vector2 tilePosition, Vector3 dimensions, BuildingModelCache buildingCache) {
 		this.tilePosition = tilePosition;
 		this.dimensions = dimensions;
-		this.modelInstance = modelInstance;
+		Vector2 shiftedPos = new Vector2(tilePosition).add(0.5f, 0.5f);
+		this.modelInstance = buildingCache.createBuilding(shiftedPos, dimensions);
+		Vector3 flatDimensions = new Vector3(dimensions);
+		flatDimensions.z = 0;
+		this.modelInstanceFlat = buildingCache.createBuilding(shiftedPos, flatDimensions);
 
 		centre = new Vector3();
 		cullingDimensions = new Vector3();
@@ -44,6 +50,7 @@ public class Building {
 		modelInstance.calculateBoundingBox(boundingBox);
 		boundingBox.getCenter(centre);
 		boundingBox.getDimensions(cullingDimensions);
+		this.flattened = false;
 	}
 
 	/**
@@ -73,6 +80,9 @@ public class Building {
 		return dimensions;
 	}
 
+	public void setFlattened(boolean flatten) {
+		flattened = flatten;
+	}
 
 	/**
 	 * @return The position of the building's entry and exit point
@@ -82,7 +92,11 @@ public class Building {
 	}
 
 	public ModelInstance getModelInstance() {
-		return modelInstance;
+		if (flattened) {
+			return modelInstanceFlat;
+		} else {
+			return modelInstance;
+		}
 	}
 
 	public BuildingType getType() {
@@ -140,4 +154,5 @@ public class Building {
 		result = 31 * result + dimensions.hashCode();
 		return result;
 	}
+
 }

@@ -1,105 +1,86 @@
 package com.b3.search;
 
 import java.io.Serializable;
-import java.util.LinkedHashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * Describes a node in a graph
  */
-public class Node<A> implements Comparable<Node<A>>, Serializable{
-	private A content;
-	private float f; // estimated total cost
-	private Set<Node<A>> successors;
-	private int extraCost;
+public class Node implements Serializable {
+
+	private Point point;
+	private Map<Node, Float> edges;
 
 	/**
-	 * Creates a Node instance from the content
-	 * @param content The related node's data
+	 * Creates a Node instance from the point
+	 *
+	 * @param point The related node's data
 	 */
-	public Node(A content) {
-		this.content = content;
-		this.successors = new LinkedHashSet<Node<A>>();
-		this.extraCost = 0;
+	public Node(Point point) {
+		this.point = point;
+		this.edges = new HashMap<>();
 	}
 
-
-
-	/**
-	 * Gets the content of the node
-	 * @return The data
-	 */
-	public A getContent() {
-		return content;
-	}
-	
-	/**
-	 * Sets a new content
-	 * @param content
-	 */
-	public void setContent(A content) {
-		this.content = content;
-	}
-	
-	/**
-	 * @return the f
-	 */
-	public float getF() {
-		return f;
-	}
-
-	/**
-	 * @param f the f to set
-	 */
-	public void setF(float f) {
-		this.f = f;
-	}
-	
-	/**
-	 * Returns the set of successors
-	 * @return The set of neighbours
-	 */
-	public Set<Node<A>> getSuccessors() {
-		return successors;
-	}
-	
-	/**
-	 * Adds a new successor/neighbour to the current set of successors
-	 * @param succ The new successor
-	 */
-	public void addSuccessor(Node<A> succ) {
-		successors.add(succ);
-	}
-	
-	/**
-	 * Removes a specified successor
-	 * @param succ The successor to remove
-	 * @return True if the successor exists, false otherwise
-	 */
-	public boolean removeSuccessor(Node<A> succ) {
-		return successors.remove(succ);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return obj != null && content.equals(((Node<?>) obj).getContent());
-	}
-	
 	@Override
 	public String toString() {
-		return content.toString();
+		return point.toString();
+	}
+
+
+	public Point getPoint() {
+		return point;
+	}
+
+	public Map<Node, Float> getEdges() {
+		return edges;
+	}
+
+	public Set<Node> getNeighbours() {
+		return edges.keySet();
+	}
+
+	public float getEdgeCost(Node neighbour) {
+		Float cost = edges.get(neighbour);
+		if (cost == null)
+			throw new IllegalArgumentException(String.format("Tried to get non-existent edge cost to neighbour %s for node %s", neighbour, this));
+		return cost;
+	}
+
+	public void addNeighbour(Node key, float cost) {
+		edges.put(key, cost);
+	}
+
+	public boolean hasNeighbour(Node node) {
+		return edges.containsKey(node);
+	}
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		Node node = (Node) o;
+
+		return point.equals(node.point);
+
 	}
 
 	@Override
-	public int compareTo(Node<A> o) {
-		return (int)(o.getF() - getF()); // Because we want the min when popping
+	public int hashCode() {
+		return point.hashCode();
 	}
 
-	public int getExtraCost() {
-		return extraCost;
+	public boolean removeNeighbours(Node node) {
+		return edges.remove(node) != null;
 	}
 
-	public void setExtraCost(int extraCost) {
-		this.extraCost = extraCost;
+	public void clearNeighbours() {
+		edges.clear();
 	}
 }
+

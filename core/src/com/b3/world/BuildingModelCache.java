@@ -53,7 +53,7 @@ public class BuildingModelCache implements Disposable {
 	 */
 	private Color makeBuildingColour() {
 		float c = Utils.randomRange(40f / 255f, 100f / 255f);
-		return new Color(c, c, c, 1f);
+		return new Color(c, c, c, 0.8f);
 	}
 
 	@Override
