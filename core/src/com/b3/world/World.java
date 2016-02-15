@@ -429,9 +429,13 @@ public class World implements Disposable {
 
 	/**
 	 * Updates and renders the world, by:
-	 * Clearing up all entities marked as dead
-	 * Updating physics
+	 * Clearing up all entities marked as dead (which can't be done while ticking the world)
 	 * Rendering the world
+	 * Ticking entity behaviours and physics
+	 * Rendering entities
+	 * Rendering the search graph
+	 * Rendering buildings
+	 * Rendering physics/collisions (if configured)
 	 */
 	public void render() {
 		// remove dead entities
@@ -451,7 +455,7 @@ public class World implements Disposable {
 		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
 
-		// tick entities and world
+		// tick entities and physics
 		engine.update(Gdx.graphics.getRawDeltaTime());
 
 		// render underlying graph
