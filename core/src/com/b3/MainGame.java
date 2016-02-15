@@ -1,6 +1,7 @@
 package com.b3;
 
 import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -23,7 +24,7 @@ public class MainGame extends ApplicationAdapter {
 
 		Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
 		camera = new WorldCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat("camera-distance-default"));
+		camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat(ConfigKey.CAMERA_DISTANCE_DEFAULT));
 		camera.near = 1f;
 		camera.far = 300f;
 		camera.lookAt(cameraPos.x, cameraPos.y, 0);

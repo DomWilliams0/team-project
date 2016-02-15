@@ -16,6 +16,7 @@ import com.b3.searching.roboticsGraphHelpers.Node;
 import com.b3.searching.roboticsGraphHelpers.Point;
 import com.b3.searching.utils.Buildings;
 import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -94,7 +95,7 @@ public class World implements Disposable {
 		BodyDef buildingBodyDef = new BodyDef();
 		buildingBodyDef.type = BodyDef.BodyType.StaticBody;
 		buildingBody = physicsWorld.createBody(buildingBodyDef);
-		initEntityBoundaries(1f, Config.getFloat("debug-entity-kill-distance"));
+		initEntityBoundaries(1f, Config.getFloat(ConfigKey.ENTITY_CULL_DISTANCE));
 
 		// Query service
 		queryService = new WorldQueryService(this);
@@ -266,7 +267,7 @@ public class World implements Disposable {
 		worldCamera = camera;
 
 		// debug: test entities
-		Integer debugCount = Config.getInt("debug-entity-count");
+		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
 		for (int i = 0; i < debugCount; i++)
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 	}
@@ -408,7 +409,7 @@ public class World implements Disposable {
 		buildings.add(building);
 
 		// physics
-		if (Config.getBoolean("building-collisions")) {
+		if (Config.getBoolean(ConfigKey.BUILDING_COLLISIONS)) {
 			FixtureDef buildingDef = new FixtureDef();
 			PolygonShape shape = new PolygonShape();
 			shape.setAsBox(
@@ -481,7 +482,7 @@ public class World implements Disposable {
 		buildingBatch.end();
 
 		// physics debug rendering
-		if (Config.getBoolean("debug-physics-rendering"))
+		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
 			debugRenderer.render(worldCamera);
 	}
 

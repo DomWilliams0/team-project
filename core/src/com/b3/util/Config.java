@@ -35,24 +35,24 @@ public class Config {
 	 * @return The config value. Null is never returned, an exception is thrown if the key does not exist.
 	 * @see {@link ConfigurationFile#get(String, Class)}
 	 */
-	public static <T> T get(String key, Class<T> type) {
-		return configFile.get(key, type);
+	private static <T> T get(ConfigKey key, Class<T> type) {
+		return configFile.get(key.getKey(), type);
 	}
 
 	// helpers
-	public static String getString(String key) {
+	public static String getString(ConfigKey key) {
 		return get(key, String.class);
 	}
 
-	public static Integer getInt(String key) {
+	public static Integer getInt(ConfigKey key) {
 		return get(key, Integer.class);
 	}
 
-	public static Boolean getBoolean(String key) {
+	public static Boolean getBoolean(ConfigKey key) {
 		return get(key, Boolean.class);
 	}
 
-	public static Float getFloat(String key) {
+	public static Float getFloat(ConfigKey key) {
 		return get(key, Float.class);
 	}
 }

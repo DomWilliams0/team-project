@@ -2,6 +2,7 @@ package com.b3.world;
 
 import com.b3.InputHandler;
 import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -38,7 +39,7 @@ public class WorldCamera extends PerspectiveCamera {
 		Vector2 worldSize = world.getTileSize();
 
 		int size = 1;
-		if (Config.getBoolean("camera-restrict")) {
+		if (Config.getBoolean(ConfigKey.CAMERA_RESTRICT)) {
 			borders.clear();
 			borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(-size, worldSize.y, 0))); // left
 			borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(worldSize.x, size, 0))); // bottom
@@ -89,12 +90,12 @@ public class WorldCamera extends PerspectiveCamera {
 	 * @param inputHandler The input handler
 	 */
 	public void move(InputHandler inputHandler) {
-		inputHandler.pollMovement(inputDelta, Config.getFloat("camera-move-speed"));
+		inputHandler.pollMovement(inputDelta, Config.getFloat(ConfigKey.CAMERA_MOVE_SPEED));
 		translateSafe(inputDelta.x, inputDelta.y, 0f);
 
 		int zoom = inputHandler.pollZoom();
 		if (zoom != 0)
-			zoom(zoom * Config.getFloat("camera-zoom-speed")); // that's a lot of zooms
+			zoom(zoom * Config.getFloat(ConfigKey.CAMERA_ZOOM_SPEED)); // that's a lot of zooms
 	}
 
 	/**
@@ -104,8 +105,8 @@ public class WorldCamera extends PerspectiveCamera {
 	public void zoom(float delta) {
 		float newZ = position.z + delta;
 
-		if (newZ >= Config.getFloat("camera-distance-min")
-				&& newZ <= Config.getFloat("camera-distance-max"))
+		if (newZ >= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MINIMUM)
+				&& newZ <= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM))
 			translateSafe(0f, 0f, delta);
 	}
 }

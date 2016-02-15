@@ -6,6 +6,7 @@ import com.b3.entity.component.AIComponent;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.component.RenderComponent;
 import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 import com.b3.world.World;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
@@ -31,7 +32,7 @@ public class Agent extends Entity {
 
 		this.world = world;
 
-		float diameter = Config.getFloat("debug-entity-diameter");
+		float diameter = Config.getFloat(ConfigKey.ENTITY_DIAMETER);
 		float radius = diameter / 2f;
 
 		// render
