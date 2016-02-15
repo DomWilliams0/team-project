@@ -387,18 +387,6 @@ public class World implements Disposable {
 		return buildings;
 	}
 
-	public List<Building> copyBuildings() {
-		//List<Building> clone = new ArrayList<>();
-
-		return buildings.stream().collect(Collectors.toList());
-
-		/*for (Building building : buildings) {
-			clone.add(building);
-		}
-
-		return clone;*/
-	}
-
 	/**
 	 * Adds a building to the world at the given coordinates
 	 *
