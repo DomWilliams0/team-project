@@ -1,35 +1,33 @@
 package com.b3.searching;
 
-public class GraphBasic {
-/*
-	public static Graph<Point> getBasicGraph() {
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+public class WorldGraphBasic {
+
+	public static WorldGraph<Point> getBasicGraph() throws FileNotFoundException {
 		return getGraph("graph");
 	}
 
-	private static Graph<Point> getGraph(String graphName) {
+	private static WorldGraph<Point> getGraph(String graphName) throws FileNotFoundException {
 		return fromFile("src-test/resources/" + graphName + ".txt");
 	}
 
-	*//**
+	/**
 	 * Creates a new graph from a file
 	 * @param filename The file name
 	 * @return The newly created graph
-	 *//*
-	private static Graph<Point> fromFile(String filename) {
-		// Open file and read lines
-		ReadFile rf = new ReadFile(filename);
-		String[] lines;
-		try {
-			lines = rf.readLines();
-		} catch (IOException e) {
-			return null;
-		}
+	 */
+	private static WorldGraph<Point> fromFile(String filename) throws FileNotFoundException {
+		// Open file
+		BufferedReader br = new BufferedReader(new FileReader(filename));
 
 		// Create graph
-		Graph<Point> g = new Graph<>();
+		WorldGraph<Point> g = new WorldGraph<>(30, 30);
 
 		// Loop through file lines
-		for (String line : lines) {
+		br.lines().forEach((line) -> {
 			String[] parts = line.split(":");
 			String nodeStr = parts[0];
 			String neighboursStr = parts[1].substring(1); // Without initial space
@@ -52,8 +50,8 @@ public class GraphBasic {
 				g.addNode(p, 0);
 			}
 
-		}
+		});
 		return g;
-	}*/
+	}
 
 }

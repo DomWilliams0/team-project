@@ -1,14 +1,18 @@
 package com.b3.searching;
 
-public class GraphTest {
+import org.junit.Before;
+import org.junit.Test;
 
-	/*
+import java.util.List;
+import java.util.Optional;
 
-	private Graph<Point> graph;
+public class WorldGraphTest {
+
+	private WorldGraph<Point> graph;
 
 	@Before
 	public void setUp() throws Exception {
-		graph = GraphBasic.getBasicGraph();
+		graph = WorldGraphBasic.getBasicGraph();
 		if (graph == null)
 			throw new Exception("Can't start tests. Graph is null.");
 	}
@@ -40,9 +44,9 @@ public class GraphTest {
 	}
 
 	public void testGetNode(int x, int y, boolean found) throws Exception {
-		Optional<Node<Point>> node = graph.getNode(new Point(x, y));
-		if (node.isPresent() != found) {
-			throw new Exception("Node " + (node.isPresent() ? "" : "not ") + "got. Expected otherwise.");
+		Node<Point> node = graph.getNode(new Point(x, y));
+		if (found == (node == null)) {
+			throw new Exception("Node " + (node == null ? "not " : "") + "got. Expected otherwise.");
 		}
 	}
 
@@ -146,10 +150,10 @@ public class GraphTest {
 		}
 	}
 
-	*//**
+	/**
 	 * Prints a path to {@link System#err}.
 	 * @param nodes The path to print.
-	 *//*
+	 */
 	private void printPath(List<Node<Point>> nodes) {
 		System.err.print("PATH: ");
 		nodes.stream().map(Node::getContent).forEach((p) ->
@@ -157,5 +161,5 @@ public class GraphTest {
 		);
 		System.err.println();
 	}
-*/
+
 }

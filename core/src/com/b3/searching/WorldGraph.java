@@ -62,7 +62,7 @@ public class WorldGraph<A> implements Serializable {
      * @param c The node's data/content, most likely a type Point.
      * @return The new node. If it exists then simply return it.
      */
-    private Node<A> addNode(A c, int cost) {
+    protected Node<A> addNode(A c, int cost) {
         Node<A> node;
 
         if (!nodes.containsKey(c)) {
@@ -82,7 +82,7 @@ public class WorldGraph<A> implements Serializable {
      * @param c2 The content of the second node (destination). Likely a Point.
      * @param directed If true the edge is directed. If false it is undirected. Should be True for WorldGraph.
      */
-    private void addEdge(Point c1, Point c2, boolean directed, int cost1, int cost2) {
+    protected void addEdge(Point c1, Point c2, boolean directed, int cost1, int cost2) {
         // Add nodes (if not existing) and get nodes from adjacency list
         Node<A> node1 = addNode((A) c1, cost1);
         Node<A> node2 = addNode((A) c2, cost2);
@@ -198,7 +198,7 @@ public class WorldGraph<A> implements Serializable {
      * @param c2 The second Point
      * @return True if the graph has a c1 -- c2 edge, false otherwise
      */
-    private boolean hasEdge(Point c1, Point c2) {
+    protected boolean hasEdge(Point c1, Point c2) {
         Node<A> n1 = nodes.get(c1);
         Node<A> n2 = nodes.get(c2);
 
@@ -225,7 +225,7 @@ public class WorldGraph<A> implements Serializable {
      * @param c The content of the node to search
      * @return True is the node exists, false otherwise
      */
-    private boolean hasNode(A c) {
+    protected boolean hasNode(A c) {
         return nodes.containsKey(c);
     }
 
@@ -235,7 +235,7 @@ public class WorldGraph<A> implements Serializable {
      * @param c2 The content of the second node
      * @return True if the edge exists and has been removed, false otherwise
      */
-    private boolean removeEdge(Point c1, Point c2) {
+    protected boolean removeEdge(Point c1, Point c2) {
         // If there are the two nodes
         if (hasNode((A) c1) && hasNode((A) c2)) {
             Node<A> node1 = nodes.get(c1);
@@ -796,9 +796,9 @@ public class WorldGraph<A> implements Serializable {
      * Find a path from the origin to the destination using AStar with Euclidian distance
      * @param origin The content of the starting node
      * @param destination The content of the destination node
-     * @return Maybe a path
+     * @return Optional a path
      */
-    public Maybe<List<Node<A>>> findPathFromASTAR(A origin, A destination) {
+    public Optional<List<Node<A>>> findPathFromASTAR(A origin, A destination) {
 
         SearchParameters<A> params = (SearchParameters<A>) new SearchParameters<>().AStarParams();
 
@@ -807,7 +807,7 @@ public class WorldGraph<A> implements Serializable {
         Node<A> destinationNode = new Node<>(destination);
 
         if (startNode == null)
-            return new Nothing<>();
+            return Optional.empty();
 
         // Unpack parameters: search algorithm, heuristic and distance functions
         Function2<Node<A>, Node<A>, Float> h = params.getHeuristic();
@@ -833,7 +833,7 @@ public class WorldGraph<A> implements Serializable {
             // If it is the destination node then
             if (n.equals(destinationNode))
                 // construct path from the map tracking and the start node
-                return new Just<>(constructPath(pred, startNode, n));
+                return Optional.of(constructPath(pred, startNode, n));
 
             // Add n to the explored set
             explored.add(n);
@@ -862,21 +862,21 @@ public class WorldGraph<A> implements Serializable {
         }
 
         // No path found
-        return new Nothing<>();
+        return Optional.empty();
     }
 
     /**
      * Find a path from the origin to the destination using BFS
      * @param origin The content of the starting node
      * @param destination The content of the destination node
-     * @return Maybe a path
+     * @return Optional a path
      */
-    public Maybe<List<Node<A>>> findPathBFS (A origin, A destination) {
+    public Optional<List<Node<A>>> findPathBFS (A origin, A destination) {
         Node<A> startNode = nodes.get(origin);
         Node<A> destinationNode = new Node<>(destination);
 
         if (startNode == null)
-            return new Nothing<>();
+            return Optional.empty();
 
         Set<Node<A>> explored = new HashSet<>();
         Takeable<Node<A>> pending = new LinkedListT<>();
@@ -888,7 +888,7 @@ public class WorldGraph<A> implements Serializable {
             Node<A> n = pending.take();
 
             if (n.equals(destinationNode))
-                return new Just<>(constructPath(pred, startNode, n));
+                return Optional.of(constructPath(pred, startNode, n));
 
             explored.add(n);
 
@@ -907,21 +907,21 @@ public class WorldGraph<A> implements Serializable {
             }
         }
 
-        return new Nothing<>();
+        return Optional.empty();
     }
 
     /**
      * Find a path from the origin to the destination using DFS with costs
      * @param origin The content of the starting node
      * @param destination The content of the destination node
-     * @return Maybe a path
+     * @return Optional a path
      */
-    public Maybe<List<Node<A>>> findPathDFSwithCosts (A origin, A destination) {
+    public Optional<List<Node<A>>> findPathDFSwithCosts (A origin, A destination) {
         Node<A> startNode = nodes.get(origin);
         Node<A> destinationNode = new Node<>(destination);
 
         if (startNode == null)
-            return new Nothing<>();
+            return Optional.empty();
 
         Set<Node<A>> explored = new HashSet<>();
         Takeable<Node<A>> pending = new StackT<>();
@@ -933,7 +933,7 @@ public class WorldGraph<A> implements Serializable {
             Node<A> n = pending.take();
 
             if (n.equals(destinationNode))
-                return new Just<>(constructPath(pred, startNode, n));
+                return Optional.of(constructPath(pred, startNode, n));
 
             explored.add(n);
 
@@ -952,7 +952,7 @@ public class WorldGraph<A> implements Serializable {
             }
         }
 
-        return new Nothing<>();
+        return Optional.empty();
     }
 
     /**

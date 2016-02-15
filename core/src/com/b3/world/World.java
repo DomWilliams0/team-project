@@ -9,12 +9,10 @@ import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
-import com.b3.event.EventType;
 import com.b3.searching.Buildings;
 import com.b3.searching.Node;
 import com.b3.searching.Point;
 import com.b3.searching.WorldGraph;
-import com.b3.searching.optional.Maybe;
 import com.b3.searching.SearchTicker;
 import com.b3.searching.optional.SearchAlgorithm;
 import com.b3.util.Config;
@@ -166,16 +164,16 @@ public class World implements Disposable {
 		System.out.println(p2);
 
 		// Perform search
-		Maybe<List<Node<Point>>> optPath = worldGraph.findPathFromASTAR(p1, p2);
+		Optional<List<Node<Point>>> optPath = worldGraph.findPathFromASTAR(p1, p2);
 
-		if (optPath.isNothing()) {
+		if (!optPath.isPresent()) {
 			System.out.println("Nooooo");
 			return;
 		}
 
-		System.out.println(optPath.fromMaybe());
+		System.out.println(optPath.get());
 
-		List<Node<Point>> path = optPath.fromMaybe();
+		List<Node<Point>> path = optPath.get();
 		List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors
 				.toList());
 
