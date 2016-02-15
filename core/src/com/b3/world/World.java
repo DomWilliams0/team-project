@@ -357,7 +357,8 @@ public class World implements Disposable {
 		renderer.render();
 
 		// render underlying graph
-		worldGraph.render(worldCamera);
+		if (Config.getBoolean(ConfigKey.SHOW_GRID))
+			worldGraph.render(worldCamera);
 
 		// tick entities and physics
 		engine.update(Gdx.graphics.getRawDeltaTime());

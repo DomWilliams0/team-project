@@ -1,5 +1,7 @@
 package com.b3.search;
 
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 import com.b3.world.Building;
 import com.b3.world.World;
 import com.badlogic.gdx.graphics.Camera;
@@ -236,6 +238,8 @@ public class WorldGraph implements Serializable {
 	}
 
 	public void render(Camera camera) {
+		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
+
 		shapeRenderer.setProjectionMatrix(camera.combined);
 
 		// render lines
@@ -258,7 +262,7 @@ public class WorldGraph implements Serializable {
 		}
 
 		// render the path
-		if (currentSearch != null && currentSearch.isPathComplete()) {
+		if (showPaths && currentSearch != null && currentSearch.isPathComplete()) {
 			shapeRenderer.setColor(SEARCH_EDGE_COLOUR);
 
 			List<Node> path = currentSearch.getPath();
@@ -285,7 +289,7 @@ public class WorldGraph implements Serializable {
 				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS, NODE_EDGES));
 
 		// render the current search
-		if (currentSearch != null && !currentSearch.isPathComplete()) {
+		if (showPaths && currentSearch != null && !currentSearch.isPathComplete()) {
 			if (currentSearch.isRenderProgress()) {
 				Set<Node> visited = currentSearch.getVisited();
 				Collection<Node> frontier = currentSearch.getFrontier();
@@ -340,7 +344,7 @@ public class WorldGraph implements Serializable {
 		}
 
 		// render start and end over the top of search
-		if (currentSearch != null) {
+		if (showPaths && currentSearch != null) {
 			Point start = currentSearch.getStart().getPoint();
 			Point end = currentSearch.getEnd().getPoint();
 			shapeRenderer.setColor(Color.BLUE);

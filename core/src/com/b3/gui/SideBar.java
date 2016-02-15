@@ -33,6 +33,7 @@ public class SideBar extends Table implements Disposable {
     public SideBar(Stage stage, float preferredWidth) {
         // Config stuff
         Config.set(ConfigKey.SHOW_GRID, true);
+        Config.set(ConfigKey.SHOW_PATHS, true);
         Config.set(ConfigKey.FLATTEN_BUILDINGS, false);
 
         this.stage = stage;
@@ -117,7 +118,7 @@ public class SideBar extends Table implements Disposable {
 
         // Show grid checkbox
         CheckBoxComponent showGridCheckBox = new CheckBoxComponent(skin, font, "Show grid");
-        showGridCheckBox.getCheckBox().setChecked(true);
+        showGridCheckBox.getCheckBox().setChecked(Config.getBoolean(ConfigKey.SHOW_GRID));
         showGridCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -133,7 +134,9 @@ public class SideBar extends Table implements Disposable {
         settingsTab.row();
 
         // Flat buildings checkbox
+        // todo the name needs changing?
         CheckBoxComponent showLabelsCheckBox = new CheckBoxComponent(skin, font, "Flat buildings");
+        showLabelsCheckBox.getCheckBox().setChecked(Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS));
         showLabelsCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -151,10 +154,11 @@ public class SideBar extends Table implements Disposable {
 
         // Show paths checkbox
         CheckBoxComponent showPathsCheckbox = new CheckBoxComponent(skin, font, "Show paths");
+        showPathsCheckbox.getCheckBox().setChecked(Config.getBoolean(ConfigKey.SHOW_PATHS));
         showPathsCheckbox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("You checked: " + showPathsCheckbox.getCheckBox().getText());
+                Config.set(ConfigKey.SHOW_PATHS, !Config.getBoolean(ConfigKey.SHOW_PATHS));
             }
         });
 

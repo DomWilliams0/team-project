@@ -19,6 +19,7 @@ public enum ConfigKey {
 	PHYSICS_RENDERING("debug-physics-rendering"),
 
 	SHOW_GRID("show_grid"),
+	SHOW_PATHS("show_paths"),
 	FLATTEN_BUILDINGS("flatten_buildings");
 
 	private final String key;
