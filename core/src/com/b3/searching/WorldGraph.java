@@ -1,12 +1,15 @@
 package com.b3.searching;
 
 import com.b3.searching.optional.*;
+import com.b3.world.World;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Nishanth on 12/02/2016.
@@ -19,6 +22,8 @@ public class WorldGraph<A> implements Serializable {
     private int xMax;
     private int yMax;
 
+    private World world;
+
     /**
      * Constructs a new world graph with the following x and y dimensions.
      * Graph has all successors, no missing edges nor non-default edge costs
@@ -26,12 +31,7 @@ public class WorldGraph<A> implements Serializable {
      * @param yMax maximum y value (IE Point goes to max (-, yMax)
      */
     public WorldGraph(int xMax, int yMax) {
-        this.nodes = new LinkedHashMap<>();
-        this.xMax = xMax;
-        this.yMax = yMax;
-        this.buildings = new ArrayList<Buildings>();
-
-        generateEmptyGraph(xMax, yMax);
+        this(xMax, yMax, null);
     }
 
     /**
@@ -45,6 +45,16 @@ public class WorldGraph<A> implements Serializable {
         yMax = -1;
 
         loadFromFile(fileName);
+    }
+
+    public WorldGraph(int xMax, int yMax, World world) {
+        this.nodes = new LinkedHashMap<>();
+        this.xMax = xMax;
+        this.yMax = yMax;
+        this.buildings = new ArrayList<Buildings>();
+        this.world = world;
+
+        generateEmptyGraph(xMax, yMax);
     }
 
     /**
@@ -534,8 +544,7 @@ public class WorldGraph<A> implements Serializable {
         buildings = temp.getBuildings();
     }
 
-
-    public void render(Camera camera, float counter) {
+    public void render(Camera camera, SearchTicker searchTicker, float counter) {
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
 
@@ -589,7 +598,7 @@ public class WorldGraph<A> implements Serializable {
                     if (aNodePoint.getExtraCost() > 10 || entry.getValue().getExtraCost() > 10) {
                         int percentageColour = (int) (((float) Math.max(getNodeCost(a_xValue, a_yValue), getNodeCost(a_xValue-1, a_yValue)) + 10) * 2.55);
                         shapeRenderer.setColor(new Color((float) (percentageColour / 100.0), 0, 0, 0));
-                } else
+                    } else
                         shapeRenderer.setColor(Color.BLACK);
                     shapeRenderer.line(a_xValue, a_yValue, a_xValue-1, a_yValue);
                 }
@@ -598,7 +607,7 @@ public class WorldGraph<A> implements Serializable {
 
         shapeRenderer.end();
 
-
+        // Render nodes
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK);
 
@@ -606,6 +615,65 @@ public class WorldGraph<A> implements Serializable {
             Point p = (Point) entry.getValue().getContent();
             shapeRenderer.circle(p.getX(), p.getY(), 0.15f * counter, 20);
         }
+
+        // Search ticker
+        if (!searchTicker.isPathComplete()) {
+            searchTicker.tick();
+
+            if (searchTicker.isRenderProgress()) {
+                Set<Node<Point>> visited = searchTicker.getVisited();
+                Collection<Node<Point>> frontier = searchTicker.getFrontier();
+                // Last frontier
+
+                // Draw visited nodes
+                shapeRenderer.setColor(Color.LIGHT_GRAY);
+                for (Node<Point> visitedNode : visited) {
+                    shapeRenderer.circle(
+                            visitedNode.getContent().getX(),
+                            visitedNode.getContent().getY(),
+                            0.15f * counter,
+                            20
+                    );
+                }
+
+                // last frame's frontier
+                /*for (Node<Point> frontierNode : lastFrontier) {
+                    actorLookup.get(frontierNode.getContent()).setNodeColour(Color.FOREST);
+                }*/
+
+                // Draw frontier
+                shapeRenderer.setColor(Color.LIME);
+                for (Node<Point> frontierNode : frontier) {
+                    shapeRenderer.circle(
+                            frontierNode.getContent().getX(),
+                            frontierNode.getContent().getY(),
+                            0.15f * counter,
+                            20
+                    );
+                }
+            }
+
+            if (searchTicker.isPathComplete()) {
+                // Should send a message to World! (for now here)
+
+                List<Node<Point>> path = searchTicker.getPath();
+
+                System.out.println(path);
+
+                List<Vector2> points = path
+                        .stream()
+                        .map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY()))
+                        .collect(Collectors.toList());
+
+                world.spawnAgentWithPath(points.get(0), points);
+            }
+        }
+
+        // start and end are always red
+        /*if (start != null)
+            actorLookup.get(start.getContent()).setNodeColour(Color.RED);
+        if (end != null)
+            actorLookup.get(end.getContent()).setNodeColour(Color.RED);*/
 
         shapeRenderer.end();
     }
@@ -633,6 +701,14 @@ public class WorldGraph<A> implements Serializable {
      */
     public Map<A, Node<A>> getNodes() {
         return nodes;
+    }
+
+    /**
+     * @param content The key
+     * @return The node associated with the given key
+     */
+    public Node<A> getNode(A content) {
+        return nodes.get(content);
     }
 
     /**
@@ -787,7 +863,6 @@ public class WorldGraph<A> implements Serializable {
         // No path found
         return new Nothing<>();
     }
-
 
     /**
      * Find a path from the origin to the destination using BFS

@@ -15,6 +15,8 @@ import com.b3.searching.Node;
 import com.b3.searching.Point;
 import com.b3.searching.WorldGraph;
 import com.b3.searching.optional.Maybe;
+import com.b3.searching.SearchTicker;
+import com.b3.searching.optional.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.ashley.core.Engine;
@@ -62,12 +64,14 @@ public class World implements Disposable {
 	private EventGenerator eventGenerator;
 	private WorldObserver worldObserver;
 	private WorldQueryService queryService;
-	private WorldGraph worldGraph;
+	private WorldGraph<Point> worldGraph;
 
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
 	private float counter = 5;
 	private float counter2 = 0;
+
+	private SearchTicker searchTicker;
 
 	public World(String fileName) {
 		TiledMap map = new TmxMapLoader().load(fileName);
@@ -102,7 +106,7 @@ public class World implements Disposable {
 
 		debugRenderer = new DebugRenderer(physicsWorld);
 
-		worldGraph = new WorldGraph(100,100);
+		worldGraph = new WorldGraph<>(100,100,this);
 
 		int[] arr = {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
 				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
@@ -131,13 +135,21 @@ public class World implements Disposable {
 
 		createBuildings();
 
+		// Search ticker
+		searchTicker = new SearchTicker(10);
+
+		Node<Point> src = worldGraph.getNode(new Point(40, 55));
+		Node<Point> trgt = worldGraph.getNode(new Point(55, 45));
+
+		searchTicker.reset(SearchAlgorithm.BREADTH_FIRST, src, trgt);
+
 		//		MOVED TO RENDER SO HAVE TIME FOR OPENING ANIMATIONS
 		//		testPathFollowing();
 
 	}
 
 	public void testPathFollowing() {
-		EventType eventType = EventType.FIRE;
+		//EventType eventType = EventType.FIRE;
 
 		// Get target and source buildings
 		/*Building targetBuilding = (Building)evt.getMessage();
@@ -464,7 +476,7 @@ public class World implements Disposable {
 		}
 
 		//TODO fix building crappyness / or just delete it
-		worldGraph.render(worldCamera, counter);
+		worldGraph.render(worldCamera, searchTicker, counter);
 		if (counter2 != -1 & counter2 != 10 & counter2 != 11) {
 			counter2 = (float) (counter2 + 0.5);
 			for (int i = 0; i < buildings.size(); i++) {
@@ -476,7 +488,7 @@ public class World implements Disposable {
 			}
 		}
 
-		if (counter2 == 10) { testPathFollowing(); counter2 = 11;}
+		//if (counter2 == 10) { testPathFollowing(); counter2 = 11;}
 
 		buildingBatch.begin(worldCamera);
 		buildings.stream()
