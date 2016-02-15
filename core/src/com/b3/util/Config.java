@@ -1,8 +1,19 @@
 package com.b3.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Config {
 
 	private static ConfigurationFile configFile;
+
+	/**
+	 * This is a local override of the user config files.
+	 * If a config value is set using {@link Config#set(ConfigKey, Object)},
+	 * it will override the value set in the user config, unless it is
+	 * unset using {@link Config#unset(ConfigKey)}
+	 */
+	private static Map<ConfigKey, Object> gameConfig = new HashMap<>();
 
 	private Config() {
 		// no instantiation 4 u
@@ -28,7 +39,28 @@ public class Config {
 	}
 
 	/**
-	 * Gets a value from the loaded config file(s)
+	 * Sets the given key to the given value in the game config
+	 * This overrides values from the loaded user configs, unless {@link Config#unset(ConfigKey)} is called
+	 *
+	 * @param key   The config key to set
+	 * @param value The value to set it to
+	 */
+	public static void set(ConfigKey key, Object value) {
+		gameConfig.put(key, value);
+	}
+
+	/**
+	 * Unsets the given key, if it is set in the game config
+	 * Has no effect if the key does not exist
+	 *
+	 * @param key The key to unset
+	 */
+	public static void unset(ConfigKey key) {
+		gameConfig.remove(key);
+	}
+
+	/**
+	 * Gets a value from the game config, or loaded config file(s) if not found
 	 *
 	 * @param key  Key for the desired value
 	 * @param type The desired return type
@@ -36,6 +68,10 @@ public class Config {
 	 * @see {@link ConfigurationFile#get(String, Class)}
 	 */
 	private static <T> T get(ConfigKey key, Class<T> type) {
+		Object gameValue = gameConfig.get(key);
+		if (gameValue != null)
+			return (T) gameValue;
+
 		return configFile.get(key.getKey(), type);
 	}
 
