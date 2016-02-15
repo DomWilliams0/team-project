@@ -1,11 +1,7 @@
-package com.b3.searching.roboticsGraphHelpers;
-
-import com.b3.searching.utils.ReadFile;
-
-import java.io.IOException;
+package com.b3.searching;
 
 public class GraphBasic {
-
+/*
 	public static Graph<Point> getBasicGraph() {
 		return getGraph("graph");
 	}
@@ -14,11 +10,11 @@ public class GraphBasic {
 		return fromFile("src-test/resources/" + graphName + ".txt");
 	}
 
-	/**
+	*//**
 	 * Creates a new graph from a file
 	 * @param filename The file name
 	 * @return The newly created graph
-	 */
+	 *//*
 	private static Graph<Point> fromFile(String filename) {
 		// Open file and read lines
 		ReadFile rf = new ReadFile(filename);
@@ -58,6 +54,6 @@ public class GraphBasic {
 
 		}
 		return g;
-	}
+	}*/
 
 }

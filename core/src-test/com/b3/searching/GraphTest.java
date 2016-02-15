@@ -1,12 +1,8 @@
-package com.b3.searching.roboticsGraphHelpers;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.List;
-import java.util.Optional;
+package com.b3.searching;
 
 public class GraphTest {
+
+	/*
 
 	private Graph<Point> graph;
 
@@ -150,10 +146,10 @@ public class GraphTest {
 		}
 	}
 
-	/**
+	*//**
 	 * Prints a path to {@link System#err}.
 	 * @param nodes The path to print.
-	 */
+	 *//*
 	private void printPath(List<Node<Point>> nodes) {
 		System.err.print("PATH: ");
 		nodes.stream().map(Node::getContent).forEach((p) ->
@@ -161,5 +157,5 @@ public class GraphTest {
 		);
 		System.err.println();
 	}
-
+*/
 }

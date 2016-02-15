@@ -1,0 +1,11 @@
+camera-restrict: true
+camera-zoom-speed: 0.5
+camera-move-speed: 0.5
+camera-distance-default: 20
+camera-distance-min: 10
+camera-distance-max: 35
+building-collisions: true
+debug-entity-kill-distance: 1.5
+debug-entity-diameter: 0.3
+debug-entity-count: 0
+debug-physics-rendering: false

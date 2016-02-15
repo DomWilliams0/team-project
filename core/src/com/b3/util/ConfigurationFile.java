@@ -1,6 +1,5 @@
 package com.b3.util;
 
-import com.badlogic.gdx.Gdx;
 import org.cfg4j.provider.ConfigurationProvider;
 import org.cfg4j.provider.ConfigurationProviderBuilder;
 import org.cfg4j.source.ConfigurationSource;
@@ -10,6 +9,7 @@ import org.cfg4j.source.files.FilesConfigurationSource;
 import org.cfg4j.source.reload.ReloadStrategy;
 import org.cfg4j.source.reload.strategy.ImmediateReloadStrategy;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -27,15 +27,24 @@ public class ConfigurationFile {
 	 */
 	public ConfigurationFile(String referencePath, String userPath) {
 
+		File refFile = new File(referencePath);
+		File userFile = null;
+		if (userPath != null)
+			userFile = new File(userPath);
+
+		if (!refFile.exists())
+			throw new IllegalArgumentException("Could not find reference config: " + referencePath);
+		if (userFile != null && !userFile.exists())
+			throw new IllegalArgumentException("Could not find user config: " + userPath);
+
+
+		final File finalUserFile = userFile;
 		ConfigFilesProvider fileProvider = () -> {
 			ArrayList<Path> configs = new ArrayList<>(2);
-			configs.add(Paths.get(Gdx.files.absolute(referencePath).file().getAbsolutePath()));
+			configs.add(Paths.get(refFile.getAbsolutePath()));
 
-			if (userPath != null) {
-				Path user = Paths.get(Gdx.files.absolute(userPath).file().getAbsolutePath());
-				if (user.toFile().exists())
-					configs.add(user);
-			}
+			if (finalUserFile != null)
+				configs.add(Paths.get(finalUserFile.getAbsolutePath()));
 
 			return configs;
 		};
