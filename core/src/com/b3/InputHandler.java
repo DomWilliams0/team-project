@@ -1,8 +1,6 @@
 package com.b3;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.HashSet;
@@ -11,6 +9,24 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class InputHandler {
+
+	enum Key {
+		UP(Input.Keys.UP),
+		DOWN(Input.Keys.DOWN),
+		LEFT(Input.Keys.LEFT),
+		RIGHT(Input.Keys.RIGHT),
+		ZOOM_IN(Input.Keys.PLUS),
+		ZOOM_OUT(Input.Keys.MINUS),
+		EXIT(Input.Keys.ESCAPE);
+
+
+		private int binding;
+
+		Key(int key) {
+
+			this.binding = key;
+		}
+	}
 
 	private static final Set<Integer> CONTROL_KEYS;
 
@@ -24,11 +40,16 @@ public class InputHandler {
 	private Map<Integer, Boolean> keys;
 	private int zoomDelta;
 	private boolean exit;
-	public InputHandler() {
+	private InputMultiplexer inputMultiplexer;
+	private static InputHandler instance;
+
+	private InputHandler() {
 		zoomDelta = 0;
 		exit = false;
 		keys = new TreeMap<>(); // for faster iterating
-		Gdx.input.setInputProcessor(new InputAdapter() {
+
+		inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(new InputAdapter() {
 			@Override
 			public boolean keyDown(int keycode) {
 				if (CONTROL_KEYS.contains(keycode)) {
@@ -56,6 +77,21 @@ public class InputHandler {
 		});
 	}
 
+	public static InputHandler getInstance() {
+		if (instance == null) {
+			return new InputHandler();
+		}
+		return instance;
+	}
+
+	public void addProcessor(InputProcessor inputProcessor) {
+		inputMultiplexer.addProcessor(inputProcessor);
+	}
+
+	public void initInputProcessor() {
+		Gdx.input.setInputProcessor(inputMultiplexer);
+	}
+
 	/**
 	 * Polls the movement keys for 2D delta movement
 	 *
@@ -77,11 +113,6 @@ public class InputHandler {
 		});
 	}
 
-	/**
-	 * Polls the scroll wheel and zoom keys
-	 *
-	 * @return -1 for zoom out, 1 to zoom in, and 0 for no change
-	 */
 	public int pollZoom() {
 		int ret = zoomDelta; // mouse zoom
 
@@ -99,33 +130,10 @@ public class InputHandler {
 		return ret;
 	}
 
-	/**
-	 * Checks if the exit button has been pressed
-	 *
-	 * @return True if the game should exit cleanly, otherwise false
-	 */
 	public boolean shouldExit() {
 		boolean ret = exit;
 		exit = false;
 		return ret;
-	}
-
-	enum Key {
-		UP(Input.Keys.UP),
-		DOWN(Input.Keys.DOWN),
-		LEFT(Input.Keys.LEFT),
-		RIGHT(Input.Keys.RIGHT),
-		ZOOM_IN(Input.Keys.PLUS),
-		ZOOM_OUT(Input.Keys.MINUS),
-		EXIT(Input.Keys.ESCAPE);
-
-
-		private int binding;
-
-		Key(int key) {
-
-			this.binding = key;
-		}
 	}
 
 
