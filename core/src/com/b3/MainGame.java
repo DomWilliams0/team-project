@@ -3,7 +3,6 @@ package com.b3;
 import com.b3.gui.SideBar;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Settings;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -24,16 +23,13 @@ public class MainGame extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		// Config and settings
 		Config.loadConfig("core/assets/reference.yml", "core/assets/userconfig.yml");
-
 		world = new World("core/assets/world/world.tmx");
-		Settings settings = new Settings(world);
 
 		// Setup sidebar
 		sideBarStage = new Stage(new ScreenViewport());
 		sideBar = new SideBar(sideBarStage);
-		sideBar.loadSettings(settings);
+		sideBar.setWorld(world);
 		sideBarStage.addActor(sideBar);
 
 		// Setup input handlers

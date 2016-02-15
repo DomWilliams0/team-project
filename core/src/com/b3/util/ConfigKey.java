@@ -16,7 +16,10 @@ public enum ConfigKey {
 	ENTITY_SPAWN_COUNT("debug-entity-count"),
 
 	BUILDING_COLLISIONS("building-collisions"),
-	PHYSICS_RENDERING("debug-physics-rendering");
+	PHYSICS_RENDERING("debug-physics-rendering"),
+
+	SHOW_GRID("show_grid"),
+	FLATTEN_BUILDINGS("flatten_buildings");
 
 	private final String key;
 

@@ -1,18 +1,16 @@
 package com.b3.gui;
 
-import com.b3.util.Settings;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
+import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -23,16 +21,20 @@ import com.badlogic.gdx.utils.Disposable;
 public class SideBar extends Table implements Disposable {
 
     private Stage stage;
+    private World world;
     private ButtonComponent triggerBtn;
     private boolean isOpen;
     private float preferredWidth;
-    private Settings settings;
 
     public SideBar(Stage stage) {
         this(stage, 230);
     }
 
     public SideBar(Stage stage, float preferredWidth) {
+        // Config stuff
+        Config.set(ConfigKey.SHOW_GRID, true);
+        Config.set(ConfigKey.FLATTEN_BUILDINGS, false);
+
         this.stage = stage;
         this.isOpen = false;
         this.preferredWidth = preferredWidth;
@@ -119,7 +121,8 @@ public class SideBar extends Table implements Disposable {
         showGridCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                settings.toggleGrid();
+                boolean showGrid = Config.getBoolean(ConfigKey.SHOW_GRID);
+                Config.set(ConfigKey.SHOW_GRID, !showGrid);
             }
         });
 
@@ -134,7 +137,9 @@ public class SideBar extends Table implements Disposable {
         showLabelsCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                settings.toggleFlatBuildings();
+                boolean flatBuildings = Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS);
+                world.flattenBuildings(!flatBuildings);
+                Config.set(ConfigKey.FLATTEN_BUILDINGS, !flatBuildings);
             }
         });
 
@@ -230,10 +235,6 @@ public class SideBar extends Table implements Disposable {
         this.stage.addActor(triggerBtn.getTextButton());
     }
 
-    public void loadSettings(Settings settings) {
-        this.settings = settings;
-    }
-
     /*public void setPreferredWidth(float preferredWidth) {
         this.preferredWidth = preferredWidth;
 
@@ -247,6 +248,10 @@ public class SideBar extends Table implements Disposable {
             getCell(component).maxWidth(preferredWidth);
         }
     }*/
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
 
     public void act() {
         stage.act(Gdx.graphics.getDeltaTime());

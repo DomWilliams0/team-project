@@ -17,7 +17,6 @@ import com.b3.searching.SearchTicker;
 import com.b3.searching.optional.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Settings;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -472,7 +471,7 @@ public class World implements Disposable {
 		}
 
 		//TODO fix building animation crappyness / or just delete it
-		if (Settings.SHOW_GRID)
+		if (Config.getBoolean(ConfigKey.SHOW_GRID))
 			worldGraph.render(worldCamera, searchTicker, counter);
 
 		// tick entities and physics
