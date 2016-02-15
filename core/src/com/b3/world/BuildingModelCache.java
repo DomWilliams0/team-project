@@ -1,6 +1,6 @@
 package com.b3.world;
 
-import com.b3.Utils;
+import com.b3.util.Utils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;

@@ -1,7 +1,7 @@
 package com.b3.world;
 
 import com.b3.DebugRenderer;
-import com.b3.Utils;
+import com.b3.util.Utils;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourPathFollow;
 import com.b3.entity.component.PhysicsComponent;
@@ -14,7 +14,7 @@ import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
 import com.b3.search.SearchTicker;
-import com.b3.search.optional.SearchAlgorithm;
+import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.ashley.core.Engine;

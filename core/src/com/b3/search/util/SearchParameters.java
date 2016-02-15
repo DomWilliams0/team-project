@@ -1,4 +1,4 @@
-package com.b3.search.optional;
+package com.b3.search.util;
 
 import com.b3.search.Node;
 import com.b3.search.Point;

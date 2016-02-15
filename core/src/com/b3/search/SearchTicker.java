@@ -1,6 +1,10 @@
 package com.b3.search;
 
-import com.b3.search.optional.*;
+import com.b3.search.util.*;
+import com.b3.search.util.takeable.LinkedListT;
+import com.b3.search.util.takeable.PriorityQueueT;
+import com.b3.search.util.takeable.StackT;
+import com.b3.search.util.takeable.Takeable;
 
 import java.util.*;
 
