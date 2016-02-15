@@ -466,17 +466,18 @@ public class World implements Disposable {
 		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
 
-		// tick entities and physics
-		engine.update(Gdx.graphics.getRawDeltaTime());
-
 		// render underlying graph
 		if (counter > 1) {
 			counter = (float) (counter - 0.25);
 			counter2 = 0;
 		}
 
-		//TODO fix building crappyness / or just delete it
+		//TODO fix building animation crappyness / or just delete it
 		worldGraph.render(worldCamera, searchTicker, counter);
+
+		// tick entities and physics
+		engine.update(Gdx.graphics.getRawDeltaTime());
+
 		if (counter2 != -1 & counter2 != 10 & counter2 != 11) {
 			counter2 = (float) (counter2 + 0.5);
 			for (int i = 0; i < buildings.size(); i++) {
@@ -487,7 +488,6 @@ public class World implements Disposable {
 				buildings.set(i, new Building(temp.getTilePosition(), newV3, tempInstance));
 			}
 		}
-
 		//if (counter2 == 10) { testPathFollowing(); counter2 = 11;}
 
 		buildingBatch.begin(worldCamera);
