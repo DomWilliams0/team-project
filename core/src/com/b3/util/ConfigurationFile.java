@@ -35,7 +35,7 @@ public class ConfigurationFile {
 		if (!refFile.exists())
 			throw new IllegalArgumentException("Could not find reference config: " + referencePath);
 		if (userFile != null && !userFile.exists())
-			throw new IllegalArgumentException("Could not find user config: " + userPath);
+			System.err.println("Could not find user config '" + userPath + "', but continuing anyway");
 
 
 		final File finalUserFile = userFile;

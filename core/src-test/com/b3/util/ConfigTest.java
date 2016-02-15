@@ -3,8 +3,7 @@ package com.b3.util;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class ConfigTest {
 
@@ -33,6 +32,26 @@ public class ConfigTest {
 		assertFalse(Config.getBoolean(ConfigKey.CAMERA_RESTRICT));
 		assertEquals(Config.getFloat(ConfigKey.CAMERA_ZOOM_SPEED), 20.25f, EQ_THRESHOLD);
 		assertEquals(Config.getFloat(ConfigKey.CAMERA_MOVE_SPEED), 10.9f, EQ_THRESHOLD);
+	}
+
+	@Test
+	public void testReferenceConfigFound() {
+		try {
+			Config.loadConfig("definitely-doesn't-exist.yml");
+		} catch (IllegalArgumentException e) {
+			return;
+		}
+
+		fail("Reference config wasn't found but didn't throw an exception");
+	}
+
+	@Test
+	public void testUserConfigNotFound() {
+		try {
+			Config.loadConfig(REFERENCE_CONFIG, "definitely-doesn't-exist.yml");
+		} catch (Exception e) {
+			fail("User config wasn't found but did throw an exception");
+		}
 	}
 
 }
