@@ -23,6 +23,7 @@ public class SearchTicker {
 	private int stepsPerTick;
 	private int frameDelay = 30; // todo: use time instead, for frame rate independence
 	private int frameCounter = 0;
+	private SearchAlgorithm algorithm;
 
 	public SearchTicker(int stepsPerTick) {
 		this.stepsPerTick = stepsPerTick;
@@ -43,6 +44,9 @@ public class SearchTicker {
 	}
 
 	public void reset(SearchAlgorithm algorithm, Node<Point> start, Node<Point> end) {
+
+		this.algorithm = algorithm;
+
 		switch (algorithm) {
 			case DEPTH_FIRST:
 				frontier = new StackT<>();
@@ -148,24 +152,61 @@ public class SearchTicker {
 				return;
 			}
 
-			for (Node<Point> child : node.getSuccessors()) {
-				if (!visited.contains(child)) {
-					float cost = D.get(node) + d.apply(node, child);
-					boolean inPending = frontier.contains(child);
-
-					if (!inPending || cost < D.get(child)) {
-						pred.put(child, node);
-						D.put(child, cost);
-						child.setF(D.get(child) + h.apply(child, end));
+			if (algorithm == SearchAlgorithm.DEPTH_FIRST) {
+				Object[] arr = node.getSuccessors().toArray();
+				arr = findLowestCost(arr);
+				for (int j=0; j<arr.length; j++) {
+					Node<Point> s = (Node<Point>) arr[j];
+					if (!visited.contains(s)) {
+						boolean inPending = frontier.contains(s);
 
 						if (!inPending) {
-							lastFrontier.add(child);
-							frontier.add(child);
+							pred.put(s, node);
+							frontier.add(s);
+						}
+					}
+				}
+			} else {
+				for (Node<Point> child : node.getSuccessors()) {
+					if (!visited.contains(child)) {
+						float cost = D.get(node) + d.apply(node, child);
+						boolean inPending = frontier.contains(child);
+
+						if (!inPending || cost < D.get(child)) {
+							pred.put(child, node);
+							D.put(child, cost);
+							child.setF(D.get(child) + h.apply(child, end) - child.getExtraCost());
+
+							if (!inPending) {
+								lastFrontier.add(child);
+								frontier.add(child);
+							}
 						}
 					}
 				}
 			}
 		}
+	}
+
+	private Object[] findLowestCost(Object[] arrTemp) {
+		int n = arrTemp.length;
+
+		boolean swapped = true;
+
+		while (swapped) {
+			swapped = false;
+			for (int i = 1; i < n; i++) {
+				Node<Point> a = (Node<Point>) arrTemp[i];
+				Node<Point> b = (Node<Point>) arrTemp[i - 1];
+				if (b.getExtraCost() < a.getExtraCost()) {
+					arrTemp[i] = b;
+					arrTemp[i-1] = a;
+					swapped = true;
+				}
+			}
+		}
+
+		return arrTemp;
 	}
 
 	public void render() {

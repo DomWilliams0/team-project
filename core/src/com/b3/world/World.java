@@ -141,7 +141,7 @@ public class World implements Disposable {
 		Node<Point> src = worldGraph.getNode(new Point(40, 55));
 		Node<Point> trgt = worldGraph.getNode(new Point(55, 45));
 
-		searchTicker.reset(SearchAlgorithm.BREADTH_FIRST, src, trgt);
+		searchTicker.reset(SearchAlgorithm.A_STAR, src, trgt);
 
 		//		MOVED TO RENDER SO HAVE TIME FOR OPENING ANIMATIONS
 		//		testPathFollowing();
