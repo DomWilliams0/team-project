@@ -1,6 +1,7 @@
-package com.b3.searching.roboticsGraphHelpers;
+package com.b3.searching.optional;
 
-import com.b3.searching.roboticsGraphHelpers.collectFuncMaybe.Function2;
+import com.b3.searching.Node;
+import com.b3.searching.Point;
 
 public class SearchParameters<A> {
 	

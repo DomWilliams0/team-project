@@ -1,4 +1,4 @@
-package com.b3.searching.roboticsGraphHelpers.collectFuncMaybe;
+package com.b3.searching.optional;
 
 import java.util.Collection;
 

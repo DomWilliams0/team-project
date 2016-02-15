@@ -1,4 +1,4 @@
-package com.b3.searching.roboticsGraphHelpers;
+package com.b3.searching.optional;
 
 /**
  * Describes a search algorithm

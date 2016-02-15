@@ -1,6 +1,6 @@
-package com.b3.searching.roboticsGraphHelpers.collectFuncMaybe;
+package com.b3.searching.optional;
 
-import com.b3.searching.roboticsGraphHelpers.Node;
+import com.b3.searching.Node;
 
 import java.util.Collection;
 import java.util.Set;

@@ -2,16 +2,15 @@ package com.b3.world;
 
 import com.b3.event.EventMessage;
 import com.b3.event.EventType;
+import com.b3.searching.Node;
+import com.b3.searching.Point;
 import com.b3.searching.WorldGraph;
-import com.b3.searching.roboticsGraphHelpers.Graph;
-import com.b3.searching.roboticsGraphHelpers.Node;
-import com.b3.searching.roboticsGraphHelpers.Point;
+import com.b3.searching.optional.Maybe;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class WorldObserver implements Observer {
@@ -52,15 +51,14 @@ public class WorldObserver implements Observer {
 
         // Perform search
         WorldGraph wg = world.getWorldGraph();
-        Graph<Point> g = wg.getGraphNicksStyle();
-        Optional<List<Node<Point>>> optPath = g.findPathBFS(p1, p2);
+        Maybe<List<Node<Point>>> optPath = wg.findPathBFS(p1, p2);
 
-        if (!optPath.isPresent()) {
+        if (optPath.isNothing()) {
             System.out.println("Nooooo");
             return;
         }
 
-        List<Node<Point>> path = optPath.get();
+        List<Node<Point>> path = optPath.fromMaybe();
         List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors.toList());
 
         world.spawnAgentWithPath(points.get(0), points);

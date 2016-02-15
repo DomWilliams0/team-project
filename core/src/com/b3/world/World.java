@@ -10,11 +10,11 @@ import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
 import com.b3.event.EventType;
+import com.b3.searching.Buildings;
+import com.b3.searching.Node;
+import com.b3.searching.Point;
 import com.b3.searching.WorldGraph;
-import com.b3.searching.roboticsGraphHelpers.Graph;
-import com.b3.searching.roboticsGraphHelpers.Node;
-import com.b3.searching.roboticsGraphHelpers.Point;
-import com.b3.searching.utils.Buildings;
+import com.b3.searching.optional.Maybe;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.ashley.core.Engine;
@@ -102,8 +102,7 @@ public class World implements Disposable {
 
 		debugRenderer = new DebugRenderer(physicsWorld);
 
-		worldGraph = new WorldGraph();
-		worldGraph.generateGraph(100, 100);
+		worldGraph = new WorldGraph(100,100);
 
 		int[] arr = {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
 				4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
@@ -155,17 +154,16 @@ public class World implements Disposable {
 		System.out.println(p2);
 
 		// Perform search
-		Graph<Point> g = worldGraph.getGraphNicksStyle();
-		Optional<List<Node<Point>>> optPath = g.findPathFromASTAR(p1, p2);
+		Maybe<List<Node<Point>>> optPath = worldGraph.findPathFromASTAR(p1, p2);
 
-		if (!optPath.isPresent()) {
+		if (optPath.isNothing()) {
 			System.out.println("Nooooo");
 			return;
 		}
 
-		System.out.println(optPath.get());
+		System.out.println(optPath.fromMaybe());
 
-		List<Node<Point>> path = optPath.get();
+		List<Node<Point>> path = optPath.fromMaybe();
 		List<Vector2> points = path.stream().map(pointNode -> new Vector2(pointNode.getContent().getX(), pointNode.getContent().getY())).collect(Collectors
 				.toList());
 
@@ -320,7 +318,8 @@ public class World implements Disposable {
 		Vector3 threeSize = new Vector3(1, 2, 10);
 		Vector3 fourSize = new Vector3(2, 2, 10);
 
-		for (Buildings b : worldGraph.getBuildings()) {
+		for (int i = 0; i < worldGraph.getBuildings().size(); i++) {
+			Buildings b = (Buildings) worldGraph.getBuildings().get(i);
 
 			Vector2 v2 = new Vector2((float) b.getXValueofCoord() - (float) 0.5, (float) b.getYValueofCoord() - (float) 0.5);
 

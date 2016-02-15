@@ -10,6 +10,11 @@ import java.io.ObjectOutputStream;
  */
 public class Serializer {
 
+    /**
+     * Save object to file
+     * @param filename name to be saved under
+     * @param gg WorldGraph object to be saved
+     */
     public void serializeAddress(String filename, WorldGraph gg){
         try {
             FileOutputStream fout = new FileOutputStream(filename);
@@ -23,6 +28,11 @@ public class Serializer {
         }
     }
 
+    /**
+     * Load object from file
+     * @param filename name of file to be loaded
+     * @return WorldGraph successfully loaded. NULL if cannot load.
+     */
     public WorldGraph deserialzeAddress(String filename){
 
         WorldGraph address;
@@ -36,7 +46,7 @@ public class Serializer {
 
             return address;
 
-        }catch(Exception ex){
+        } catch(Exception ex){
             ex.printStackTrace();
             return null;
         }

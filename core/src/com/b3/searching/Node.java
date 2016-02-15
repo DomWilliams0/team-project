@@ -1,12 +1,13 @@
-package com.b3.searching.roboticsGraphHelpers;
+package com.b3.searching;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
  * Describes a node in a graph
  */
-public class Node<A> implements Comparable<Node<A>> {
+public class Node<A> implements Comparable<Node<A>>, Serializable{
 	private A content;
 	private float f; // estimated total cost
 	private Set<Node<A>> successors;
