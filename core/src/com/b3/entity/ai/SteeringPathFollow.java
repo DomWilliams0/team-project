@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.*;
 
+/**
+ * A steering behaviour that follows the given path, and arrives at the last node
+ */
 public class SteeringPathFollow extends Steering {
 	private static final float DEFAULT_ARRIVAL_THRESHOLD = 0.25f;
 

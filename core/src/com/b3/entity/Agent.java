@@ -18,6 +18,12 @@ public class Agent extends Entity {
 	private PhysicsComponent physics;
 	private AIComponent ai;
 
+	/**
+	 * Spawns an agent into the given world at the given tile
+	 *
+	 * @param world   The world to spawn in
+	 * @param tilePos The tile to spawn at
+	 */
 	public Agent(World world, Vector2 tilePos) {
 		// bounds check
 		if (!world.isInBounds(tilePos))
@@ -46,6 +52,10 @@ public class Agent extends Entity {
 		world.getEngine().addEntity(this);
 	}
 
+	/**
+	 * @return The entity's current behaviour
+	 * This is never null, but will be BehaviourNop when there is no current behaviour
+	 */
 	public Behaviour getBehaviour() {
 		return ai.behaviour;
 	}

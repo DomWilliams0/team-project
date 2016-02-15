@@ -23,6 +23,11 @@ abstract class Steering {
 		this.entity = entity;
 	}
 
+	/**
+	 * Called once per game update
+	 *
+	 * @param steeringOut The desired agent steering to apply
+	 */
 	public abstract void tick(Vector2 steeringOut);
 
 	public PhysicsComponent getEntity() {
@@ -53,6 +58,9 @@ abstract class SteeringWithTarget extends Steering {
 		this.target = target;
 	}
 
+	/**
+	 * @return The squared distance to the target's position
+	 */
 	public double getDistanceSqrd() {
 		return entity.getPosition().sub(target.getPosition()).len2();
 	}

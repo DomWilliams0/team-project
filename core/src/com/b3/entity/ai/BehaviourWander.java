@@ -4,6 +4,9 @@ import com.b3.entity.Agent;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * A behaviour that makes an agent wander aimlessly around
+ */
 public class BehaviourWander extends Behaviour {
 
 	private float angle;

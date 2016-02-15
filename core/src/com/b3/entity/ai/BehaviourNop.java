@@ -3,6 +3,9 @@ package com.b3.entity.ai;
 import com.b3.entity.Agent;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * A behaviour that does nothing
+ */
 public class BehaviourNop extends Behaviour {
 
 	public BehaviourNop(Agent agent) {

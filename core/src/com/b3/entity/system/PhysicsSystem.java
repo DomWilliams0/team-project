@@ -9,6 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
+/**
+ * Entity system to tick the physics world, and to apply
+ * a constant friction to all entities
+ */
 public class PhysicsSystem extends IteratingSystem {
 	private ComponentMapper<PhysicsComponent> physics;
 	private World world;

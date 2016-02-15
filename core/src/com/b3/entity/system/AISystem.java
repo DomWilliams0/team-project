@@ -7,6 +7,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Entity system in charge of ticking entity behaviours, and applying their
+ * desired steering to the physics component
+ */
 public class AISystem extends IteratingSystem {
 	private static Vector2 steeringMovement = new Vector2();
 

@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Entity system to render entities as simple coloured shapes
+ */
 public class RenderSystem extends IteratingSystem {
 	private ComponentMapper<PhysicsComponent> physics;
 	private ComponentMapper<RenderComponent> renders;

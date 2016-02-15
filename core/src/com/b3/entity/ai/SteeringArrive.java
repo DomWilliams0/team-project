@@ -3,6 +3,9 @@ package com.b3.entity.ai;
 import com.b3.entity.component.PhysicsComponent;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * A steering behaviour that seeks to the target, and slows down in an attempt to stop on the target
+ */
 public class SteeringArrive extends SteeringWithTarget {
 	private double arrivalThreshold;
 	private double deaccelerationDistance;
