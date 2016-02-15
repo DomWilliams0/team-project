@@ -1,4 +1,4 @@
-camera-restrict: true
+camera-restrict: false
 camera-zoom-speed: 0.5
 camera-move-speed: 0.5
 camera-distance-default: 20
