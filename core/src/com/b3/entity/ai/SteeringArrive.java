@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 public class SteeringArrive extends SteeringWithTarget {
 	private double arrivalThreshold;
 	private double deaccelerationDistance;
-	private double lastDistance;
 
 	private SteeringSeek seek;
 
@@ -15,7 +14,6 @@ public class SteeringArrive extends SteeringWithTarget {
 		super(owner, target);
 		this.arrivalThreshold = arrivalThreshold * arrivalThreshold;
 		this.deaccelerationDistance = deaccelerationDistance * deaccelerationDistance;
-		this.lastDistance = 0;
 		this.seek = new SteeringSeek(owner, target);
 	}
 
@@ -30,7 +28,6 @@ public class SteeringArrive extends SteeringWithTarget {
 		double distance = getDistanceSqrd();
 		if (distance <= arrivalThreshold) {
 			steeringOut.setZero();
-			lastDistance = distance;
 			return;
 		}
 
@@ -42,6 +39,5 @@ public class SteeringArrive extends SteeringWithTarget {
 			steeringOut.scl(scale);
 		}
 
-		lastDistance = distance;
 	}
 }
