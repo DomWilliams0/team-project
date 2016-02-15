@@ -52,6 +52,8 @@ public class MainGame extends ApplicationAdapter {
 
 	@Override
 	public void resize(int width, int height) {
+		sideBarStage.getViewport().update(width, height, true);
+
 		camera.viewportWidth = width;
 		camera.viewportHeight = height;
 		camera.update();
