@@ -17,6 +17,7 @@ import com.b3.searching.SearchTicker;
 import com.b3.searching.optional.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.b3.util.Settings;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -139,7 +140,7 @@ public class World implements Disposable {
 		Node<Point> src = worldGraph.getNode(new Point(40, 55));
 		Node<Point> trgt = worldGraph.getNode(new Point(55, 45));
 
-		searchTicker.reset(SearchAlgorithm.A_STAR, src, trgt);
+		searchTicker.reset(SearchAlgorithm.BREADTH_FIRST, src, trgt);
 
 		//		MOVED TO RENDER SO HAVE TIME FOR OPENING ANIMATIONS
 		//		testPathFollowing();
@@ -471,7 +472,8 @@ public class World implements Disposable {
 		}
 
 		//TODO fix building animation crappyness / or just delete it
-		worldGraph.render(worldCamera, searchTicker, counter);
+		if (Settings.SHOW_GRID)
+			worldGraph.render(worldCamera, searchTicker, counter);
 
 		// tick entities and physics
 		engine.update(Gdx.graphics.getRawDeltaTime());
@@ -500,34 +502,12 @@ public class World implements Disposable {
 
 	//if flatten then needs to be flattened; if !flatten then needs to be grown
 	public void flattenBuildings(boolean flatten) {
-
-		boolean needsUpdate = false;
-
-		if (buildings.size() > 0) {
-			if (buildings.get(0).getDimensions().z > 0) {
-				if (flatten)
-					needsUpdate = true;
-				else
-					needsUpdate = false;
-			}
-		}
-
-
-		float zSize;
-		if (flatten) {
-			zSize = 0;
-		} else {
-			zSize = 10;
-		}
-
-		if (needsUpdate) {
-			for (int i = 0; i < buildings.size(); i++) {
-				Building temp = buildings.get(i);
-				Vector3 v = temp.getDimensions();
-				Vector3 newV3 = new Vector3(v.x, v.y, zSize);
-				ModelInstance tempInstance = buildingCache.createBuilding(temp.getTilePosition(), newV3);
-				buildings.set(i, new Building(temp.getTilePosition(), newV3, tempInstance));
-			}
+		for (int i = 0; i < buildings.size(); i++) {
+			Building temp = buildings.get(i);
+			Vector3 v = temp.getDimensions();
+			Vector3 newV3 = new Vector3(v.x, v.y, flatten ? 0 : 10);
+			ModelInstance tempInstance = buildingCache.createBuilding(temp.getTilePosition(), newV3);
+			buildings.set(i, new Building(temp.getTilePosition(), newV3, tempInstance));
 		}
 	}
 

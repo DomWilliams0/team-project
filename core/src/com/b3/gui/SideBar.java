@@ -1,5 +1,6 @@
 package com.b3.gui;
 
+import com.b3.util.Settings;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -25,6 +26,7 @@ public class SideBar extends Table implements Disposable {
     private ButtonComponent triggerBtn;
     private boolean isOpen;
     private float preferredWidth;
+    private Settings settings;
 
     public SideBar(Stage stage) {
         this(stage, 230);
@@ -113,10 +115,11 @@ public class SideBar extends Table implements Disposable {
 
         // Show grid checkbox
         CheckBoxComponent showGridCheckBox = new CheckBoxComponent(skin, font, "Show grid");
+        showGridCheckBox.getCheckBox().setChecked(true);
         showGridCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("You checked: " + showGridCheckBox.getCheckBox().getText());
+                settings.toggleGrid();
             }
         });
 
@@ -126,12 +129,12 @@ public class SideBar extends Table implements Disposable {
                 .spaceBottom(10);
         settingsTab.row();
 
-        // Show labels checkbox
-        CheckBoxComponent showLabelsCheckBox = new CheckBoxComponent(skin, font, "Show labels");
+        // Flat buildings checkbox
+        CheckBoxComponent showLabelsCheckBox = new CheckBoxComponent(skin, font, "Flat buildings");
         showLabelsCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("You checked: " + showLabelsCheckBox.getCheckBox().getText());
+                settings.toggleFlatBuildings();
             }
         });
 
@@ -225,6 +228,10 @@ public class SideBar extends Table implements Disposable {
         add(tabbedPane).maxWidth(preferredWidth);
         background(skin.getDrawable("window_03"));
         this.stage.addActor(triggerBtn.getTextButton());
+    }
+
+    public void loadSettings(Settings settings) {
+        this.settings = settings;
     }
 
     /*public void setPreferredWidth(float preferredWidth) {
