@@ -488,8 +488,7 @@ public class World implements Disposable {
 				buildings.set(i, new Building(temp.getTilePosition(), newV3, tempInstance));
 			}
 		}
-		//if (counter2 == 10) { testPathFollowing(); counter2 = 11;}
-
+		
 		buildingBatch.begin(worldCamera);
 		buildings.stream()
 				.filter(building -> building.isVisible(worldCamera))
@@ -499,6 +498,39 @@ public class World implements Disposable {
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
 			debugRenderer.render(worldCamera);
+	}
+
+	//if flatten then needs to be flattened; if !flatten then needs to be grown
+	public void flattenBuildings(boolean flatten) {
+
+		boolean needsUpdate = false;
+
+		if (buildings.size() > 0) {
+			if (buildings.get(0).getDimensions().z > 0) {
+				if (flatten)
+					needsUpdate = true;
+				else
+					needsUpdate = false;
+			}
+		}
+
+
+		float zSize;
+		if (flatten) {
+			zSize = 0;
+		} else {
+			zSize = 10;
+		}
+
+		if (needsUpdate) {
+			for (int i = 0; i < buildings.size(); i++) {
+				Building temp = buildings.get(i);
+				Vector3 v = temp.getDimensions();
+				Vector3 newV3 = new Vector3(v.x, v.y, zSize);
+				ModelInstance tempInstance = buildingCache.createBuilding(temp.getTilePosition(), newV3);
+				buildings.set(i, new Building(temp.getTilePosition(), newV3, tempInstance));
+			}
+		}
 	}
 
 	@Override
