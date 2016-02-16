@@ -38,11 +38,10 @@ public class Building {
 	public Building(Vector2 tilePosition, Vector3 dimensions, BuildingModelCache buildingCache) {
 		this.tilePosition = tilePosition;
 		this.dimensions = dimensions;
-		Vector2 shiftedPos = new Vector2(tilePosition).add(0.5f, 0.5f);
-		this.modelInstance = buildingCache.createBuilding(shiftedPos, dimensions);
+		this.modelInstance = buildingCache.createBuilding(tilePosition, dimensions);
 		Vector3 flatDimensions = new Vector3(dimensions);
 		flatDimensions.z = 0;
-		this.modelInstanceFlat = buildingCache.createBuilding(shiftedPos, flatDimensions);
+		this.modelInstanceFlat = buildingCache.createBuilding(tilePosition, flatDimensions);
 
 		centre = new Vector3();
 		cullingDimensions = new Vector3();

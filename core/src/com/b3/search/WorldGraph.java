@@ -88,6 +88,7 @@ public class WorldGraph implements Serializable {
 	 */
 	public void initRenderer() {
 		shapeRenderer = new ShapeRenderer();
+		shapeRenderer.translate(0.5f, 0.5f, 0f);
 	}
 
 	/**
@@ -207,8 +208,8 @@ public class WorldGraph implements Serializable {
 	public void addBuilding(Building building) {
 		Vector2 tPos = building.getTilePosition();
 		Vector3 dPos = building.getDimensions();
-		int baseX = Math.round(tPos.x) + 1;
-		int baseY = Math.round(tPos.y) + 1;
+		int baseX = Math.round(tPos.x);
+		int baseY = Math.round(tPos.y);
 		int upToX = Math.round(dPos.x);
 		int upToY = Math.round(dPos.y);
 		for (int x = baseX; x < baseX + upToX; x++) {

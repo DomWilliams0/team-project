@@ -301,7 +301,6 @@ public class World implements Disposable {
 	 * @return The newly created building
 	 */
 	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
-		Vector2 shiftedPos = new Vector2(pos).add(0.5f, 0.5f);
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y,
 				dimensions.z));
 
@@ -315,7 +314,7 @@ public class World implements Disposable {
 			PolygonShape shape = new PolygonShape();
 			shape.setAsBox(
 					dimensions.x / 2, dimensions.y / 2,
-					new Vector2(shiftedPos.x + dimensions.x / 2, shiftedPos.y + dimensions.y / 2),
+					new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
 					0f
 			);
 			buildingDef.shape = shape;
