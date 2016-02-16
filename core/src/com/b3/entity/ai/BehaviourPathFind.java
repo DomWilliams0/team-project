@@ -6,6 +6,8 @@ import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class BehaviourPathFind extends Behaviour {
 
 	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph) {
 		super(agent, null);
-		ticker = new SearchTicker(5); // todo specify as a constant
+		ticker = new SearchTicker(Config.getInt(ConfigKey.STEPS_PER_TICK));
 		wasArrivedLastFrame = false;
 
 		Node startNode = worldGraph.getNode(new Point((int) startTile.x, (int) startTile.y));

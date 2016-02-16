@@ -9,3 +9,4 @@ debug-entity-kill-distance: 1.5
 debug-entity-diameter: 0.3
 debug-entity-count: 0
 debug-physics-rendering: false
+steps_per_tick: 5

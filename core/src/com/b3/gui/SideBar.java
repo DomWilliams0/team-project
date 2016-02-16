@@ -167,6 +167,22 @@ public class SideBar extends Table implements Disposable {
                 .maxWidth(preferredWidth);
         settingsTab.row();
 
+        // Speed slider
+        SliderComponent speedSlider = new SliderComponent(skin, 1f, 10f, 1f);
+        speedSlider.setValue(Config.getInt(ConfigKey.STEPS_PER_TICK));
+        speedSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Config.set(ConfigKey.STEPS_PER_TICK, (int)speedSlider.getValue());
+            }
+        });
+
+        settingsTab.add(speedSlider.getSlider())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(20);
+        settingsTab.row();
+
         // Start button
         ButtonComponent startButton = new ButtonComponent(skin, font, "Start");
         startButton.addListener(new ChangeListener() {

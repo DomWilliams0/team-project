@@ -6,6 +6,8 @@ import com.b3.search.util.SearchParameters;
 import com.b3.search.util.takeable.LinkedListT;
 import com.b3.search.util.takeable.StackT;
 import com.b3.search.util.takeable.Takeable;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 
 import java.util.*;
 
@@ -136,6 +138,9 @@ public class SearchTicker {
 		}
 
 		lastFrontier.clear();
+
+		// Get steps per tick
+		stepsPerTick = Config.getInt(ConfigKey.STEPS_PER_TICK);
 
 		for (int i = 0; i < stepsPerTick; i++) {
 			// done
