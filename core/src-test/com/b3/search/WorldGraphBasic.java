@@ -26,6 +26,7 @@ public class WorldGraphBasic {
 
 		// Create graph
 		WorldGraph g = new WorldGraph(30, 30);
+		g.getNodes().clear();
 
 		// Loop through file lines
 		br.lines().forEach((line) -> {

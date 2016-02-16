@@ -32,8 +32,7 @@ public class SearchTicker {
 	private SearchAlgorithm algorithm;
 	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
 
-	public SearchTicker(int stepsPerTick) {
-		this.stepsPerTick = stepsPerTick;
+	public SearchTicker() {
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
 	}
