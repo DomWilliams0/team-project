@@ -253,7 +253,11 @@ public class WorldGraph implements Serializable {
 					continue;
 
 				// todo proper cost colouring
-				shapeRenderer.setColor(neighbour.getValue() > 1 ? Color.RED : EDGE_COLOUR);
+				Float colouringRedValue = neighbour.getValue()-1;
+				Color col = new Color(((colouringRedValue+1)*25)/100,0,0,0);
+				if (colouringRedValue > 0)
+					System.out.println("COLOR : " +(colouringRedValue*25) + ",0,0,0");
+				shapeRenderer.setColor(col);
 				shapeRenderer.line(
 						node1.getPoint().x, node1.getPoint().y,
 						neighbour.getKey().getPoint().x, neighbour.getKey().getPoint().y
