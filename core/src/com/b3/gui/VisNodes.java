@@ -1,6 +1,7 @@
 package com.b3.gui;
 
 import com.b3.search.Node;
+import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.search.util.takeable.LinkedListT;
 import com.b3.search.util.takeable.PriorityQueueT;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -64,10 +66,6 @@ public class VisNodes extends Table {
         super(skin);
         this.stage = stage;
 
-        //set the background of the table in such a way to draw borders
-        //todo currently doesn't work, but have added spacing between the columns which may improve the situation
-//        setBackground(new NinePatchDrawable(getNinePatch()));
-
         //anchor the table to the top-left position
         left().top();
 
@@ -102,6 +100,20 @@ public class VisNodes extends Table {
         stage.addActor(fp);
 //        stage.addActor()
 
+    }
+
+    /**
+     * Render the table, using a given search ticker
+     * This method will handle null values appropriately to save this occurring outside the object
+     *
+     * @param ticker The search ticker whose values are to be rendered.
+     */
+    public void render(SearchTicker ticker) {
+        if(ticker==null || ticker.getVisited()==null || ticker.getFrontier()==null) {
+            render(new StackT<>(), new HashSet<>(), SearchAlgorithm.BREADTH_FIRST);
+        } else {
+            render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
+        }
     }
 
     /**
@@ -156,18 +168,7 @@ public class VisNodes extends Table {
                     vt.add(visitedSorted.get(i).toString());
                 }
             }
-
-            //draw the data collection scroll panes
-//            batch.begin();
-//            vp.draw(batch, 1);
-//            fp.draw(batch, 1);
-//            batch.end();
         }
-
-        //draw this table
-//        batch.begin();
-//        draw(batch, 1);
-//        batch.end();
     }
 
     /**
