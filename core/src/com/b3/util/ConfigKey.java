@@ -21,7 +21,8 @@ public enum ConfigKey {
 	SHOW_GRID("show_grid"),
 	SHOW_PATHS("show_paths"),
 	FLATTEN_BUILDINGS("flatten_buildings"),
-	STEPS_PER_TICK("steps_per_tick");
+	STEPS_PER_TICK("steps_per_tick"),
+	TIME_BETWEEN_TICKS("time_between_ticks");
 
 	private final String key;
 

@@ -168,12 +168,12 @@ public class SideBar extends Table implements Disposable {
         settingsTab.row();
 
         // Speed slider
-        SliderComponent speedSlider = new SliderComponent(skin, 1f, 10f, 1f);
-        speedSlider.setValue(Config.getInt(ConfigKey.STEPS_PER_TICK));
+        SliderComponent speedSlider = new SliderComponent(skin, 0.05f, 1f, 0.25f);
+        speedSlider.setValue(speedSlider.getSlider().getMaxValue() - Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS));
         speedSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Config.set(ConfigKey.STEPS_PER_TICK, (int)speedSlider.getValue());
+                Config.set(ConfigKey.TIME_BETWEEN_TICKS, speedSlider.getSlider().getMaxValue() - speedSlider.getValue());
             }
         });
 

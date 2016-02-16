@@ -7,6 +7,7 @@ import com.b3.search.util.takeable.StackT;
 import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.badlogic.gdx.Gdx;
 
 import java.util.*;
 import java.util.function.Function;
@@ -26,8 +27,8 @@ public class SearchTicker {
 	private Node start, end;
 
 	private int stepsPerTick;
-	private int frameDelay = 3; // todo: use time instead, for frame rate independence
-	private int frameCounter = 0;
+	private float timer;
+
 	private SearchAlgorithm algorithm;
 	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
 
@@ -39,14 +40,6 @@ public class SearchTicker {
 
 	public boolean isRenderProgress() {
 		return renderProgress;
-	}
-
-	public int getFrameDelay() {
-		return this.frameDelay;
-	}
-
-	public void setFrameDelay(int fd) {
-		this.frameDelay = fd;
 	}
 
 	public void reset(SearchAlgorithm algorithm, Node start, Node end) {
@@ -120,10 +113,12 @@ public class SearchTicker {
 		if (pathComplete)
 			return;
 
-		if (++frameCounter < frameDelay)
+		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
+		timer += Gdx.graphics.getRawDeltaTime();
+		if (timer < timeBetweenTicks)
 			return;
 
-		frameCounter = 0;
+		timer -= timeBetweenTicks;
 
 		// now complete
 		if (frontier.isEmpty()) {
