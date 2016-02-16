@@ -98,6 +98,8 @@ public class World implements Disposable {
 		worldGraph = new WorldGraph(this);
 		worldGraph.initRenderer();
 
+		loadBuildings(map);
+
 		// test buildings
 //		addBuilding(new Vector2(50, 50), new Vector3(2, 4, 6), BuildingType.HOUSE);
 //		worldGraph.addEdge(new Point(50,50), new Point(51,50), 10);
