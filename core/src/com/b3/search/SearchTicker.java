@@ -242,7 +242,7 @@ public class SearchTicker {
 		return retPath;
 	}
 
-	public Collection<Node> getFrontier() {
+	public Takeable<Node> getFrontier() {
 		return frontier;
 	}
 
@@ -276,6 +276,10 @@ public class SearchTicker {
 
 	public void setEnd(Node end) {
 		this.end = end;
+	}
+
+	public SearchAlgorithm getAlgorithm() {
+		return algorithm;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.b3;
 
 import com.b3.gui.SideBar;
+import com.b3.gui.SideBarNodes;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.world.World;
@@ -20,6 +21,7 @@ public class MainGame extends ApplicationAdapter {
 	private InputHandler inputHandler;
 	private Stage sideBarStage;
 	private SideBar sideBar;
+	private SideBarNodes sideBarNodes;
 
 	@Override
 	public void create() {
@@ -31,6 +33,10 @@ public class MainGame extends ApplicationAdapter {
 		sideBar = new SideBar(sideBarStage);
 		sideBar.setWorld(world);
 		sideBarStage.addActor(sideBar);
+
+		sideBarNodes = new SideBarNodes(sideBarStage);
+		sideBarNodes.setWorld(world);
+		sideBarStage.addActor(sideBarNodes);
 
 		// Setup input handlers
 		inputHandler = InputHandler.getInstance();
@@ -75,6 +81,9 @@ public class MainGame extends ApplicationAdapter {
 		// Side bar rendering
 		sideBar.act();
 		sideBar.render();
+
+		sideBarNodes.act();
+		sideBarNodes.render();
 
 		if (inputHandler.shouldExit())
 			Gdx.app.exit();

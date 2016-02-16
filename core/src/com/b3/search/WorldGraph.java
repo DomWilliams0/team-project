@@ -418,6 +418,10 @@ public class WorldGraph implements Serializable {
 		this.currentSearch = currentSearch;
 	}
 
+	public SearchTicker getCurrentSearch() {
+		return currentSearch;
+	}
+
 	public void clearCurrentSearch() {
 		currentSearch = null;
 	}
