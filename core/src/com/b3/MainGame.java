@@ -4,6 +4,7 @@ import com.b3.gui.SideBar;
 import com.b3.gui.SideBarNodes;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.b3.util.Utils;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -69,6 +70,10 @@ public class MainGame extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		// delta time
+		// TODO - Multiply it by the speed slider.
+		Utils.deltaTime = Gdx.graphics.getRawDeltaTime();
+
 		// clear screen
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);

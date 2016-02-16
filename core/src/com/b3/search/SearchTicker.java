@@ -7,7 +7,7 @@ import com.b3.search.util.takeable.StackT;
 import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.badlogic.gdx.Gdx;
+import com.b3.util.Utils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -113,7 +113,7 @@ public class SearchTicker {
 			return;
 
 		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
-		timer += Gdx.graphics.getRawDeltaTime();
+		timer += Utils.deltaTime;
 		if (timer < timeBetweenTicks)
 			return;
 

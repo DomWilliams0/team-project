@@ -19,6 +19,12 @@ public class Utils {
 
 	public static final Random RANDOM = new Random();
 
+	/**
+	 * The time elapsed since the last render.
+	 * This will be multiplied by the speed slider.
+	 */
+	public static float deltaTime = 0;
+
 	public static float randomRange(float min, float max) {
 		return RANDOM.nextFloat() * (max - min) + min;
 	}

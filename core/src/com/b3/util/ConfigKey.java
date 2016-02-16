@@ -16,7 +16,7 @@ public enum ConfigKey {
 	ENTITY_SPAWN_COUNT("entity-spawn-count"),
 
 	BUILDING_COLLISIONS("building-collisions"),
-	PHYSICS_RENDERING("debug-physics-rendering"),
+	PHYSICS_RENDERING("physics-rendering"),
 
 	SHOW_GRID("show-grid"),
 	SHOW_PATHS("show-paths"),

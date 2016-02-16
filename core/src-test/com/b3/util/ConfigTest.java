@@ -37,7 +37,6 @@ public class ConfigTest {
 	@Test
 	public void testReferenceConfigFound() {
 		try {
-			System.err.println("--- Expecting error message about definitely-doesn't-exist-ref.yml");
 			Config.loadConfig("definitely-doesn't-exist-ref.yml");
 		} catch (IllegalArgumentException e) {
 			return;
@@ -49,7 +48,9 @@ public class ConfigTest {
 	@Test
 	public void testUserConfigNotFound() {
 		try {
+			System.err.println("--- Expecting error message about definitely-doesn't-exist-user.yml");
 			Config.loadConfig(REFERENCE_CONFIG, "definitely-doesn't-exist-user.yml");
+			System.err.println("--- End of error message");
 		} catch (Exception e) {
 			fail("User config wasn't found but did throw an exception");
 		}

@@ -2,6 +2,7 @@ package com.b3.search;
 
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
+import com.b3.util.Utils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,12 +22,14 @@ public class SearchTickerTest {
 		if (graph == null)
 			throw new Exception("Can't start tests. Graph is null.");
 
+		// Trick the deltaTime.
+		Utils.deltaTime = 1;
+
 		// Setup the config.
 		Config.loadConfig("assets/reference.yml");
 
 		// Create the SearchTicker.
 		searchTicker = new SearchTicker();
-		searchTicker.setFrameDelay(0); // Works on first frame.
 	}
 
 	/**
