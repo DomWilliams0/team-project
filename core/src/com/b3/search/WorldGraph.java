@@ -214,13 +214,22 @@ public class WorldGraph implements Serializable {
 		int upToY = Math.round(dPos.y);
 		for (int x = baseX; x < baseX + upToX; x++) {
 			for (int y = baseY; y < baseY + upToY; y++) {
-				Node node1 = nodes.get(new Point(x, y));
-				for (Node node2 : node1.getNeighbours()) {
-					node2.removeNeighbours(node1);
-				}
-				node1.clearNeighbours();
+				Node node = nodes.get(new Point(x, y));
+				if (node != null)
+					node.clearNeighbours();
 			}
 		}
+	}
+
+	public boolean removeNode(Point point) {
+
+		Node node = getNode(point);
+		if (node == null)
+			return false;
+
+		node.clearNeighbours();
+		nodes.remove(point);
+		return true;
 	}
 
 	/**
@@ -253,8 +262,8 @@ public class WorldGraph implements Serializable {
 				if (neighbour.getKey().hashCode() < node1.hashCode())
 					continue;
 
-				Float colouringRedValue = neighbour.getValue()-1;
-				Color col = new Color(((colouringRedValue+1)*25)/100,0,0,0);
+				Float colouringRedValue = neighbour.getValue() - 1;
+				Color col = new Color(((colouringRedValue + 1) * 25) / 100, 0, 0, 0);
 				shapeRenderer.setColor(col);
 				shapeRenderer.line(
 						node1.getPoint().x, node1.getPoint().y,

@@ -80,6 +80,8 @@ public class Node implements Serializable {
 	}
 
 	public void clearNeighbours() {
+		for (Node neighbour : getNeighbours())
+			neighbour.removeNeighbours(this);
 		edges.clear();
 	}
 }

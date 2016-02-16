@@ -9,6 +9,7 @@ import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
+import com.b3.search.Point;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -98,7 +100,9 @@ public class World implements Disposable {
 		worldGraph = new WorldGraph(this);
 		worldGraph.initRenderer();
 
+		// load map tiles
 		loadBuildings(map);
+		processMapTileTypes(map);
 
 		// test buildings
 //		addBuilding(new Vector2(50, 50), new Vector3(2, 4, 6), BuildingType.HOUSE);
@@ -106,6 +110,39 @@ public class World implements Disposable {
 
 		// test search
 //		spawnAgentWithPathFinding(new Vector2(60, 45), new Vector2(49, 55), SearchAlgorithm.A_STAR);
+	}
+
+	private void processMapTileTypes(TiledMap map) {
+
+		for (MapLayer layer : map.getLayers()) {
+			if (!layer.isVisible() || !(layer instanceof TiledMapTileLayer))
+				continue;
+
+			TiledMapTileLayer tileLayer = (TiledMapTileLayer) layer;
+
+			boolean removeAll = layer.getName().equals("objects");
+
+			// remove nodes on invalid tiles
+			// todo assign costs to edges
+			for (int y = 0; y < tileLayer.getHeight(); y++) {
+				for (int x = 0; x < tileLayer.getWidth(); x++) {
+					TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
+					if (cell == null)
+						continue;
+
+					TileType type = TileType.getFromCell(cell);
+					if (!removeAll && type == TileType.UNKNOWN)
+						continue;
+
+					if (!type.shouldHaveNode())
+						worldGraph.removeNode(new Point(x, y));
+				}
+			}
+
+
+		}
+
+
 	}
 
 	/**
