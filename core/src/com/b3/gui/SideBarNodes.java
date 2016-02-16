@@ -122,7 +122,7 @@ public class SideBarNodes extends Table implements Disposable {
         triggerBtn.getTextButton().setY(Gdx.graphics.getHeight() / 2);
         //FOR TESTING
         SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
-        if(currentSearch.getFrontier() == null || currentSearch.getVisited() == null) {
+        if(currentSearch == null || currentSearch.getFrontier() == null || currentSearch.getVisited() == null) {
             //todo should probably handle this occurrence inside ui.render
             ui.render(new StackT<>(), new HashSet<>(), SearchAlgorithm.BREADTH_FIRST);
         } else {
