@@ -9,7 +9,6 @@ import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
-import com.b3.search.Point;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
@@ -100,11 +99,11 @@ public class World implements Disposable {
 		worldGraph.initRenderer();
 
 		// test buildings
-		addBuilding(new Vector2(50, 50), new Vector3(2, 4, 6), BuildingType.HOUSE);
-		worldGraph.addEdge(new Point(50,50), new Point(51,50), 10);
+//		addBuilding(new Vector2(50, 50), new Vector3(2, 4, 6), BuildingType.HOUSE);
+//		worldGraph.addEdge(new Point(50,50), new Point(51,50), 10);
 
 		// test search
-		spawnAgentWithPathFinding(new Vector2(60, 45), new Vector2(49, 55), SearchAlgorithm.A_STAR);
+//		spawnAgentWithPathFinding(new Vector2(60, 45), new Vector2(49, 55), SearchAlgorithm.A_STAR);
 	}
 
 	/**
