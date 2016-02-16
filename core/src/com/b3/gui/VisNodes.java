@@ -190,7 +190,7 @@ public class VisNodes extends Table {
         switch(alg) {
             case DEPTH_FIRST: temp = new StackT<>(); break;
             case BREADTH_FIRST: temp = new LinkedListT<>(); break;
-            case A_STAR: temp = new PriorityQueueT<>(); break;
+            case A_STAR: temp = new PriorityQueueT<>(null); break; // todo uh oh, I hope this stays deprecated
         }
 
         for(int i=0; i<front.size(); i++) {

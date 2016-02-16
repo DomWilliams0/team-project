@@ -95,7 +95,6 @@ public class World implements Disposable {
 
 		debugRenderer = new DebugRenderer(physicsWorld);
 
-
 		worldGraph = new WorldGraph(this);
 		worldGraph.initRenderer();
 
@@ -103,7 +102,7 @@ public class World implements Disposable {
 		addBuilding(new Vector2(50, 50), new Vector3(2, 4, 6), BuildingType.HOUSE);
 
 		// test search
-		spawnAgentWithPathFinding(new Vector2(60, 50), new Vector2(60, 25), SearchAlgorithm.BREADTH_FIRST);
+		spawnAgentWithPathFinding(new Vector2(60, 45), new Vector2(49, 55), SearchAlgorithm.A_STAR);
 	}
 
 	/**

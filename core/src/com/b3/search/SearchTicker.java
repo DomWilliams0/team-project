@@ -3,13 +3,13 @@ package com.b3.search;
 import com.b3.search.util.Function2;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.search.util.SearchParameters;
-import com.b3.search.util.takeable.LinkedListT;
 import com.b3.search.util.takeable.StackT;
 import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class SearchTicker {
 
@@ -17,10 +17,8 @@ public class SearchTicker {
 	private List<Node> lastFrontier = new ArrayList<>();
 
 	private Set<Node> visited = new HashSet<>();
-	private Map<Node, Node> pred = new HashMap<>();
-	private Map<Node, Float> D = new LinkedHashMap<>();
-	private Function2<Node, Node, Float> d;
-	private Function2<Node, Node, Float> h;
+	private Map<Node, Node> cameFrom = new HashMap<>();
+	private Map<Node, Float> costSoFar = new LinkedHashMap<>();
 
 	private List<Node> path = new ArrayList<>();
 	private boolean pathComplete;
@@ -31,6 +29,7 @@ public class SearchTicker {
 	private int frameDelay = 3; // todo: use time instead, for frame rate independence
 	private int frameCounter = 0;
 	private SearchAlgorithm algorithm;
+	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
 
 	public SearchTicker(int stepsPerTick) {
 		this.stepsPerTick = stepsPerTick;
@@ -54,30 +53,25 @@ public class SearchTicker {
 
 		this.algorithm = algorithm;
 
-		switch (algorithm) {
-			case DEPTH_FIRST:
-				frontier = new StackT<>();
-				d = h = SearchParameters.nothing();
-				break;
-			case BREADTH_FIRST:
-				frontier = new LinkedListT<>();
-				d = h = SearchParameters.nothing();
-				break;
-			case A_STAR:
-				throw new UnsupportedOperationException("We need to somehow store f without putting it inside Nodes");
-//				frontier = new PriorityQueueT<>();
-//				d = h = SearchParameters.euclideanDistance();
-//				break;
-		}
+		SearchParameters parameters = new SearchParameters(algorithm);
+		Function2<Node, Node, Float> heuristic = parameters.getHeuristic();
+		costSoFarFunction = node -> {
+			Float value = costSoFar.get(node);
+			return value == null ? Float.POSITIVE_INFINITY : value;
+		};
 
+		frontier = parameters.createFrontier(costSoFarFunction, heuristic, end);
 		frontier.add(start);
+
 		reset(false);
+
 		this.start = start;
 		this.end = end;
 
-		D.put(start, 0f);
+		costSoFar.put(start, 0f);
 		renderProgress = true;
 	}
+
 
 	public void reset(boolean fromResetBtn) {
 		setAllCompleted(fromResetBtn);
@@ -90,8 +84,8 @@ public class SearchTicker {
 		lastFrontier.clear();
 		visited.clear();
 		path.clear();
-		pred.clear();
-		D.clear();
+		cameFrom.clear();
+		costSoFar.clear();
 
 		renderProgress = false;
 	}
@@ -159,7 +153,7 @@ public class SearchTicker {
 
 			if (node.equals(end)) {
 				setAllCompleted(true);
-				path = constructPath(pred, start, end);
+				path = constructPath(cameFrom, start, end);
 				return;
 			}
 
@@ -170,58 +164,27 @@ public class SearchTicker {
 						boolean inPending = frontier.contains(s);
 
 						if (!inPending) {
-							pred.put(s, node);
+							cameFrom.put(s, node);
 							frontier.add(s);
 						}
 					}
 				}
 			} else {
-				for (Node child : node.getNeighbours()) {
-					if (!visited.contains(child)) {
-						float cost = D.get(node) + d.apply(node, child);
-						boolean inPending = frontier.contains(child);
-
-						if (!inPending || cost < D.get(child)) {
-							pred.put(child, node);
-							D.put(child, cost);
-							// todo: uh oh
-//							child.setF(D.get(child) + h.apply(child, end) - child.getExtraCost());
-
-							if (!inPending) {
-								lastFrontier.add(child);
+				node.getNeighbours()
+						.stream()
+						.filter(child -> !visited.contains(child))
+						.forEach(child -> {
+							float tentative_g = costSoFarFunction.apply(node) + node.getEdgeCost(child);
+							if (!frontier.contains(child))
 								frontier.add(child);
+							if (tentative_g < costSoFarFunction.apply(child)) {
+								cameFrom.put(child, node);
+								costSoFar.put(child, tentative_g);
 							}
-						}
-					}
-				}
+						});
 			}
 		}
 	}
-
-	public void render() {
-		if (!renderProgress)
-			return;
-
-		// visited nodes
-		/*for (Node visitedNode : visited)
-			actorLookup.get(visitedNode.getPoint()).setNodeColour(Color.LIGHT_GRAY);
-
-		// last frame's frontier
-		for (Node frontierNode : lastFrontier) {
-			actorLookup.get(frontierNode.getPoint()).setNodeColour(Color.FOREST);
-		}
-
-		// frontier
-		for (Node frontierNode : frontier)
-			actorLookup.get(frontierNode.getPoint()).setNodeColour(Color.LIME);
-
-		// start and end are always red
-		if (start != null)
-			actorLookup.get(start.getPoint()).setNodeColour(Color.RED);
-		if (end != null)
-			actorLookup.get(end.getPoint()).setNodeColour(Color.RED);*/
-	}
-
 
 	private List<Node> constructPath(Map<Node, Node> map, Node start, Node end) {
 
