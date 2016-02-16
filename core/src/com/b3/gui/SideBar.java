@@ -31,11 +31,6 @@ public class SideBar extends Table implements Disposable {
     }
 
     public SideBar(Stage stage, float preferredWidth) {
-        // Config stuff
-        Config.set(ConfigKey.SHOW_GRID, true);
-        Config.set(ConfigKey.SHOW_PATHS, true);
-        Config.set(ConfigKey.FLATTEN_BUILDINGS, false);
-
         this.stage = stage;
         this.isOpen = false;
         this.preferredWidth = preferredWidth;
@@ -168,7 +163,10 @@ public class SideBar extends Table implements Disposable {
         settingsTab.row();
 
         // Speed slider
-        SliderComponent speedSlider = new SliderComponent(skin, 0.05f, 1f, 0.25f);
+        SliderComponent speedSlider = new SliderComponent(skin,
+                Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
+                Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MAX),
+                Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_STEP));
         speedSlider.setValue(speedSlider.getSlider().getMaxValue() - Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS));
         speedSlider.addListener(new ChangeListener() {
             @Override

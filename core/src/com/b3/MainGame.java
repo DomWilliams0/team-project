@@ -26,7 +26,6 @@ public class MainGame extends ApplicationAdapter {
 	@Override
 	public void create() {
 		Config.loadConfig("core/assets/reference.yml", "core/assets/userconfig.yml");
-		Config.set(ConfigKey.TIME_BETWEEN_TICKS, 0.5f);
 
 		world = new World("core/assets/world/world.tmx");
 
