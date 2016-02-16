@@ -43,7 +43,7 @@ public class SideBarNodes extends Table implements Disposable {
      * @param stage The stage on which to act and draw.
      */
     public SideBarNodes(Stage stage) {
-        this(stage, 230);
+        this(stage, 370);
     }
 
     /**
@@ -62,6 +62,7 @@ public class SideBarNodes extends Table implements Disposable {
         //set the size to be full-height and preferred width.
         setSize(preferredWidth, Gdx.graphics.getHeight());
 
+        top();
         initComponents();
     }
 
@@ -139,7 +140,7 @@ public class SideBarNodes extends Table implements Disposable {
         });
 
         //put the nodes ui onto this
-        add(ui).maxWidth(preferredWidth);
+        add(ui).maxWidth(preferredWidth).top();
         //set the background
         background(skin.getDrawable("window_03"));
         //add the button to the stage.

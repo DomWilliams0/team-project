@@ -30,7 +30,7 @@ import java.util.Set;
 public class VisNodes extends Table {
 
 
-    private int frameDelay = 30; // todo: use time instead, for frame rate independence
+    private int frameDelay = 30; // todo: use time instead, for frame rate independence - should get from search ticker
     private int frameCounter = 0;
     private Stage stage;
     private ScrollPane fp, vp;
@@ -70,11 +70,11 @@ public class VisNodes extends Table {
         left().top();
 
         ScrollPane.ScrollPaneStyle style = new ScrollPane.ScrollPaneStyle();
-        style.background = getBackground(); //todo this might need to be null
+        style.background = getBackground(); //todo this might need to be null -- maybe not
         style.hScroll = skin.getDrawable("scroll_back_hor");
-        style.hScrollKnob = skin.getDrawable("knob_06");
+        style.hScrollKnob = skin.getDrawable("knob_05");
         style.vScroll = skin.getDrawable("scroll_back_ver");
-        style.vScrollKnob = skin.getDrawable("knob_06");
+        style.vScrollKnob = skin.getDrawable("knob_05");
 
         //frontier table, encapsulated in a scrollpane
         ft = new Table(getSkin());
@@ -98,7 +98,6 @@ public class VisNodes extends Table {
 
         stage.addActor(vp);
         stage.addActor(fp);
-//        stage.addActor()
 
     }
 
@@ -142,6 +141,7 @@ public class VisNodes extends Table {
             ArrayList<Node> frontier = new ArrayList<>(front);
 
             //make the arraylist be ordered based on take-order of the collection
+            //todo fix colToList since this is awkward atm
             //todo doesn't currently do so for A*
             switch(alg) {
                 case DEPTH_FIRST: Collections.reverse(frontier);
@@ -158,7 +158,8 @@ public class VisNodes extends Table {
 
 
             for (int i = 0; i < Math.max(frontier.size(), visitedSorted.size()); i++) {
-
+                //todo should we somehow stop rendering the pane on touchdown
+                //todo or find a way to allow scrolling even through rendering :/
                 vt.row();
                 ft.row();
                 if(frontier.size() > i) {
@@ -223,12 +224,10 @@ public class VisNodes extends Table {
         //get what type the frontier is using
         String frontierDesc = "";
         switch(alg) {
-            case DEPTH_FIRST: frontierDesc = "DFS: Using LIFO (stack)"; break;
-            case BREADTH_FIRST: frontierDesc = "BFS: Using FIFO (queue)"; break;
-            case A_STAR: frontierDesc = "A*: Using Priority Queue"; break;
+            case DEPTH_FIRST: frontierDesc = "DFS: LIFO (stack)"; break;
+            case BREADTH_FIRST: frontierDesc = "BFS: FIFO (queue)"; break;
+            case A_STAR: frontierDesc = "A*: Priority Queue"; break;
         }
-
-
 
         //we need to render the data collections
         if(rendermore) {
@@ -236,6 +235,7 @@ public class VisNodes extends Table {
             add("Frontier");
             add("   ");
             add("Visited nodes");
+            row();
             row();
 
             //row 2 - description of data collections
