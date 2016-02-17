@@ -1,6 +1,8 @@
 package com.b3.world;
 
 import com.b3.InputHandler;
+import com.b3.entity.Agent;
+import com.b3.entity.component.PhysicsComponent;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -18,6 +20,8 @@ public class WorldCamera extends PerspectiveCamera {
 	private Vector3 lastPosition;
 	private Vector2 inputDelta;
 
+	private PhysicsComponent followedAgent;
+
 	// todo redo camera restriction
 
 	public WorldCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
@@ -26,6 +30,7 @@ public class WorldCamera extends PerspectiveCamera {
 		lastPosition = null;
 		borders = new ArrayList<>(4);
 		inputDelta = new Vector2();
+		followedAgent = null;
 	}
 
 	/**
@@ -90,8 +95,12 @@ public class WorldCamera extends PerspectiveCamera {
 	 * @param inputHandler The input handler
 	 */
 	public void move(InputHandler inputHandler) {
-		inputHandler.pollMovement(inputDelta, Config.getFloat(ConfigKey.CAMERA_MOVE_SPEED));
-		translateSafe(inputDelta.x, inputDelta.y, 0f);
+		if (followedAgent != null) {
+			trackEntity();
+		} else {
+			inputHandler.pollMovement(inputDelta, Config.getFloat(ConfigKey.CAMERA_MOVE_SPEED));
+			translateSafe(inputDelta.x, inputDelta.y, 0f);
+		}
 
 		int zoom = inputHandler.pollZoom();
 		if (zoom != 0)
@@ -100,6 +109,7 @@ public class WorldCamera extends PerspectiveCamera {
 
 	/**
 	 * Zooms by the given amount, given that the new zoom value is within the zoom bounds
+	 *
 	 * @param delta The amount to zoom in/out; negative zooms out, positive zooms in
 	 */
 	public void zoom(float delta) {
@@ -108,5 +118,14 @@ public class WorldCamera extends PerspectiveCamera {
 		if (newZ >= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MINIMUM)
 				&& newZ <= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM))
 			translateSafe(0f, 0f, delta);
+	}
+
+	private void trackEntity() {
+		position.set(followedAgent.getPosition(), position.z);
+		update();
+	}
+
+	public void setFollowedAgent(Agent agent) {
+		followedAgent = agent.getPhysicsComponent();
 	}
 }

@@ -256,7 +256,8 @@ public class World implements Disposable {
 		for (int i = 0; i < debugCount; i++)
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 
-		spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.A_STAR);
+		Agent agent = spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.A_STAR);
+//		worldCamera.setFollowedAgent(agent);
 	}
 
 	/**
