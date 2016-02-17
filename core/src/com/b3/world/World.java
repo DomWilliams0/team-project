@@ -66,6 +66,7 @@ public class World implements Disposable {
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
 	private float counterAnimation = 10;
+	private Agent agent;
 
 	public World() {
 	}
@@ -261,8 +262,7 @@ public class World implements Disposable {
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 
 //		Agent agent = spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.A_STAR);
-		spawnAgentWithMultiplePathFinding(new Vector2(20, 25), SearchAlgorithm.A_STAR, true,
-				new Vector2(20, 30), new Vector2(30, 30), new Vector2(1, 1));
+		agent = spawnAgentWithMultiplePathFinding(new Vector2(20, 25), SearchAlgorithm.A_STAR, true, new Vector2(20, 30), new Vector2(30, 30), new Vector2(1, 1));
 	}
 
 	/**
@@ -457,11 +457,15 @@ public class World implements Disposable {
 		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
 
-		if (counterAnimation > 1) counterAnimation = (float) (counterAnimation - 0.25);
-
-		// render underlying graph
-		if (Config.getBoolean(ConfigKey.SHOW_GRID))
-			worldGraph.render(worldCamera, counterAnimation);
+		if (counterAnimation > 1) {
+			counterAnimation = (float) (counterAnimation - 0.25);
+			agent.setSize((float) (counterAnimation * 0.1));
+			if (Config.getBoolean(ConfigKey.SHOW_GRID))
+				worldGraph.render(worldCamera, counterAnimation);
+		} else {
+			if (Config.getBoolean(ConfigKey.SHOW_GRID))
+				worldGraph.render(worldCamera, 1);
+		}
 
 		// tick entities and physics
 		engine.update(Utils.DELTA_TIME);

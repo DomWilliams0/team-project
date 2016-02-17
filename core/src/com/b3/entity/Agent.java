@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 
 public class Agent extends Entity {
 
+	private RenderComponent renderComp;
 	private World world;
 	private PhysicsComponent physics;
 	private AIComponent ai;
@@ -36,7 +37,8 @@ public class Agent extends Entity {
 		float radius = diameter / 2f;
 
 		// render
-		add(new RenderComponent(Color.BLUE, radius));
+		renderComp = new RenderComponent(Color.BLUE, radius);
+		add(renderComp);
 
 		// physics
 		BodyDef bodyDef = new BodyDef();
@@ -51,6 +53,11 @@ public class Agent extends Entity {
 		add(ai);
 
 		world.getEngine().addEntity(this);
+	}
+
+	public void setSize (float radius) {
+		renderComp = new RenderComponent(Color.BLUE, radius);
+		add(renderComp);
 	}
 
 	/**
