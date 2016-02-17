@@ -31,6 +31,7 @@ public class SearchTicker {
 
 	private SearchAlgorithm algorithm;
 	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
+	private Function2<Node, Node, Float> edgeCostFunction;
 
 	public SearchTicker() {
 		setAllCompleted(true);
@@ -47,10 +48,17 @@ public class SearchTicker {
 
 		SearchParameters parameters = new SearchParameters(algorithm);
 		Function2<Node, Node, Float> heuristic = parameters.getHeuristic();
-		costSoFarFunction = node -> {
-			Float value = costSoFar.get(node);
-			return value == null ? Float.POSITIVE_INFINITY : value;
-		};
+		if (algorithm == SearchAlgorithm.A_STAR) {
+
+			edgeCostFunction = Node::getEdgeCost;
+			costSoFarFunction = node -> {
+				Float value = costSoFar.get(node);
+				return value == null ? Float.POSITIVE_INFINITY : value;
+			};
+		} else {
+			edgeCostFunction = (n1, n2) -> 0f;
+			costSoFarFunction = node -> 0f;
+		}
 
 		frontier = parameters.createFrontier(costSoFarFunction, heuristic, end);
 		frontier.add(start);
@@ -168,10 +176,10 @@ public class SearchTicker {
 						.stream()
 						.filter(child -> !visited.contains(child))
 						.forEach(child -> {
-							float tentative_g = costSoFarFunction.apply(node) + node.getEdgeCost(child);
+							float tentative_g = costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
 							if (!frontier.contains(child))
 								frontier.add(child);
-							if (tentative_g < costSoFarFunction.apply(child)) {
+							if (tentative_g <= costSoFarFunction.apply(child)) {
 								cameFrom.put(child, node);
 								costSoFar.put(child, tentative_g);
 							}
