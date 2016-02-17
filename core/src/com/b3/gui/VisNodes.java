@@ -115,10 +115,12 @@ public class VisNodes extends Table {
         } else {
             render =  render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
         }
+        if (ticker != null) {
         if(render==2) {
             ticker.pause();
         } else if(render == 1 && ticker.isPaused()) {
             ticker.resume();
+        }
         }
     }
 

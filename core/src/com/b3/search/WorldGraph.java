@@ -472,8 +472,10 @@ public class WorldGraph implements Serializable {
 	}
 
 	public void clearCurrentSearch() {
-		currentSearch = null;
-		currentSearchAgent = null;
+		// todo just for prototype
+		currentSearch.reset(true);
+//		currentSearch = null;
+//		currentSearchAgent = null;
 	}
 
 	public boolean hasSearchInProgress() {

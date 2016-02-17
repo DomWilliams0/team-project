@@ -29,7 +29,7 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 	@Override
 	public void tick(Vector2 steeringOutput) {
 		pathFind.tick(steeringOutput);
-		if (pathFind.hasArrivedForTheFirstTime() && !goals.isEmpty()) {
+		if (pathFind.hasArrived() && !goals.isEmpty()) {
 			Search nextSearch = goals.poll();
 			pathFind.reset(agent.getPhysicsComponent().getPosition(), nextSearch.goal, nextSearch.algorithm, graph);
 		}
