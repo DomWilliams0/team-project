@@ -24,7 +24,9 @@ public class WorldGraph implements Serializable {
 	private static final Color FRONTIER_COLOUR = Color.LIME;
 	private static final Color VISITED_COLOUR = Color.LIGHT_GRAY;
 	private static final Color SEARCH_EDGE_COLOUR = Color.YELLOW;
-	private static final float NODE_RADIUS = 0.12f;
+	private static final float NODE_RADIUS = 0.10f;
+	private static final Color BORDER_COLOUR = Color.BLACK;
+	private static final float BORDER_THICKNESS = 1.3f; // relative to node radius
 	private static final int NODE_EDGES = 4;
 
 	private Map<Point, Node> nodes;
@@ -320,14 +322,20 @@ public class WorldGraph implements Serializable {
 		// render nodes
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-		Color tempCol = null;
+		Color tempCol;
 		if (counter < 1)
 			tempCol = NODE_COLOUR;
 		else
 			tempCol = new Color(counter / 10, counter / 10, counter / 10, counter / 10);
 
+		// border
+		shapeRenderer.setColor(BORDER_COLOUR);
+		nodes.keySet()
+				.stream()
+				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS, NODE_EDGES));
 		shapeRenderer.setColor(tempCol);
 
+		// node body
 		nodes.keySet()
 				.stream()
 				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter, NODE_EDGES));
