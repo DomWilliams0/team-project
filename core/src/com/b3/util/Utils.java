@@ -1,6 +1,8 @@
 package com.b3.util;
 
 import com.b3.gui.NodeComparator;
+import com.b3.search.Point;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
 
@@ -32,6 +34,10 @@ public class Utils {
 
 	public static float randomRange(float min, float max) {
 		return RANDOM.nextFloat() * (max - min) + min;
+	}
+
+	public static Point vector2ToPoint(Vector2 vector2) {
+		return new Point(Math.round(vector2.x), Math.round(vector2.y));
 	}
 
 }

@@ -4,6 +4,7 @@ import com.b3.entity.component.PhysicsComponent;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A steering behaviour that follows the given path, and arrives at the last node
@@ -29,7 +30,7 @@ public class SteeringPathFollow extends Steering {
 
 		this.arrived = false;
 		this.nodeArrivalThreshold = nodeArrivalThreshold * nodeArrivalThreshold;
-		this.path = new ArrayDeque<>(path);
+		this.path = new ArrayDeque<>(path.stream().map((p) -> p.add(0.5f, 0.5f)).collect(Collectors.toList()));
 		this.originalPath = Collections.unmodifiableList(path);
 		this.steeringTarget = new TileSteeringTarget(Vector2.Zero);
 		this.arriveSteering = new SteeringArrive(entity, steeringTarget);

@@ -2,6 +2,7 @@ package com.b3.search;
 
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.b3.util.Utils;
 import com.b3.world.Building;
 import com.b3.world.World;
 import com.badlogic.gdx.graphics.Camera;
@@ -21,7 +22,7 @@ public class WorldGraph implements Serializable {
 	private static final Color NODE_COLOUR = Color.BLACK;
 	private static final Color FRONTIER_COLOUR = Color.LIME;
 	private static final Color VISITED_COLOUR = Color.LIGHT_GRAY;
-	private static final Color SEARCH_EDGE_COLOUR = Color.RED;
+	private static final Color SEARCH_EDGE_COLOUR = Color.YELLOW;
 	private static final float NODE_RADIUS = 0.12f;
 	private static final int NODE_EDGES = 4;
 
@@ -212,9 +213,15 @@ public class WorldGraph implements Serializable {
 		int baseY = Math.round(tPos.y);
 		int upToX = Math.round(dPos.x);
 		int upToY = Math.round(dPos.y);
+
+		Point entryPoint = building.getEntryPoint() == null ? null : Utils.vector2ToPoint(building.getEntryPoint());
+
 		for (int x = baseX; x < baseX + upToX; x++) {
 			for (int y = baseY; y < baseY + upToY; y++) {
-				Node node = nodes.get(new Point(x, y));
+				Point point = new Point(x, y);
+				// Entry point check.
+				if (point.equals(entryPoint)) continue;
+				Node node = nodes.get(point);
 				if (node != null)
 					node.clearNeighbours();
 			}
@@ -237,7 +244,6 @@ public class WorldGraph implements Serializable {
 	 * @return True if the node existed and has been removed, otherwise false
 	 */
 	public boolean removeNode(Point point) {
-
 		Node node = getNode(point);
 		if (node == null)
 			return false;
