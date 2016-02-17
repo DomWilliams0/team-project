@@ -4,6 +4,7 @@ import com.b3.entity.Agent;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.entity.ai.BehaviourPathFollow;
+import com.b3.entity.ai.BehaviourType;
 import com.b3.entity.component.AIComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -283,7 +284,7 @@ public class SideBar extends Table implements Disposable {
         eventsTab.row();
 
         // Y coordinates
-        SelectBoxComponent yCoordSelectBox = new SelectBoxComponent(skin, font, new Array(xsStr));
+        SelectBoxComponent yCoordSelectBox = new SelectBoxComponent(skin, font, new Array(ysStr));
 
         yCoordSelectBox.addListener(new ChangeListener() {
             @Override
@@ -314,11 +315,13 @@ public class SideBar extends Table implements Disposable {
                     System.out.println("nooooooooo");
                 }
                 else {
-                    ImmutableArray<Entity> agents = world.getEngine().getEntitiesFor(Family.all(AIComponent.class).get());
-                    Agent agent = (Agent)agents.get(0);
+                    Agent currentSearchAgent = worldGraph.getCurrentSearchAgent();
+                    Behaviour behaviour = currentSearchAgent.getBehaviour();
 
-                    BehaviourMultiPathFind behaviour = (BehaviourMultiPathFind)agent.getBehaviour();
-                    behaviour.addNextGoal(new Vector2(x, y));
+                    if (behaviour.getType() == BehaviourType.FOLLOW_PATH) {
+                        BehaviourMultiPathFind multiPathFind = (BehaviourMultiPathFind)behaviour;
+                        multiPathFind.addNextGoal(new Vector2(x, y));
+                    }
                 }
             }
         });
