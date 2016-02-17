@@ -45,9 +45,6 @@ public class WorldObserver implements Observer {
 		Vector2 trgt = targetBuilding.getTilePosition();
 		Point p2 = new Point((int) trgt.x - 1, (int) trgt.y);
 
-		System.out.println(p1);
-		System.out.println(p2);
-
 		// Perform search
 		// todo start search
 //		WorldGraph wg = world.getWorldGraph();

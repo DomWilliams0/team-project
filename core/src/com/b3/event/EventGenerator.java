@@ -57,6 +57,11 @@ public class EventGenerator extends Observable implements Runnable {
         notifyObservers(evtMessage);
     }
 
+    public void triggerEvent(EventMessage eventMessage) {
+        setChanged();
+        notifyObservers(eventMessage);
+    }
+
     public int getMinTime() {
         return minTime;
     }
