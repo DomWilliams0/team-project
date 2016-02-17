@@ -4,6 +4,7 @@ import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -163,6 +164,13 @@ public class SideBar extends Table implements Disposable {
         settingsTab.row();
 
         // Search speed slider
+        LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.WHITE);
+        settingsTab.add(searchSpeedLabel.getLabel())
+                .align(Align.left)
+                .maxWidth(preferredWidth)
+                .spaceTop(20);
+        settingsTab.row();
+
         SliderComponent searchSpeedSlider = new SliderComponent(skin,
                 Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
                 Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MAX),
@@ -178,10 +186,17 @@ public class SideBar extends Table implements Disposable {
         settingsTab.add(searchSpeedSlider.getSlider())
                 .align(Align.center)
                 .maxWidth(preferredWidth)
-                .spaceTop(20);
+                .spaceTop(5);
         settingsTab.row();
 
         // Game speed slider
+        LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.WHITE);
+        settingsTab.add(gameSpeedLabel.getLabel())
+                .align(Align.left)
+                .maxWidth(preferredWidth)
+                .spaceTop(20);
+        settingsTab.row();
+
         SliderComponent gameSpeedSlider = new SliderComponent(skin, 0f, 4f, 0.1f);
         gameSpeedSlider.setValue(Config.getFloat(ConfigKey.GAME_SPEED));
         gameSpeedSlider.addListener(new ChangeListener() {
@@ -194,7 +209,7 @@ public class SideBar extends Table implements Disposable {
         settingsTab.add(gameSpeedSlider.getSlider())
                 .align(Align.center)
                 .maxWidth(preferredWidth)
-                .spaceTop(20);
+                .spaceTop(5);
         settingsTab.row();
 
         // Start button
