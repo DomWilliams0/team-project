@@ -2,6 +2,7 @@ package com.b3.world;
 
 import com.b3.DebugRenderer;
 import com.b3.entity.Agent;
+import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
 import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.entity.ai.BehaviourPathFind;
 import com.b3.entity.ai.BehaviourPathFollow;
@@ -262,7 +263,11 @@ public class World implements Disposable {
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 
 //		Agent agent = spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.A_STAR);
-		agent = spawnAgentWithMultiplePathFinding(new Vector2(20, 25), SearchAlgorithm.A_STAR, true, new Vector2(20, 20));
+//		agent = spawnAgentWithMultiplePathFinding(new Vector2(20, 25), SearchAlgorithm.A_STAR, true, new Vector2(20, 20));
+		agent = spawnAgent(new Vector2(20, 20));
+		BehaviourMultiContinuousPathFind behaviour = new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
+		agent.setBehaviour(behaviour);
+		worldGraph.setCurrentSearch(agent, behaviour.getTicker());
 	}
 
 	/**
