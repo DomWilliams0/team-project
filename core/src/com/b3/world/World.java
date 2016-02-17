@@ -2,6 +2,7 @@ package com.b3.world;
 
 import com.b3.DebugRenderer;
 import com.b3.entity.Agent;
+import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.entity.ai.BehaviourPathFind;
 import com.b3.entity.ai.BehaviourPathFollow;
 import com.b3.entity.component.PhysicsComponent;
@@ -66,7 +67,8 @@ public class World implements Disposable {
 	private WorldCamera worldCamera;
 	private float counterAnimation = 10;
 
-	public World() {}
+	public World() {
+	}
 
 	public World(String fileName) {
 		TiledMap map = new TmxMapLoader().load(fileName);
@@ -142,13 +144,14 @@ public class World implements Disposable {
 						worldGraph.removeNode(node);
 					}
 					// apply cost to edges if the tile types are the same, or this node's cost is more than its neighbour's
-					else node.getEdges().keySet()
-							.parallelStream()
-							.filter(n -> {
-								TileType t = TileType.getFromCell(tileLayer.getCell(n.getPoint().x, n.getPoint().y));
-								return type.getCost() >= t.getCost() || t == type;
-							})
-							.forEach(n -> node.setEdgeCost(n, type.getCost()));
+					else
+						node.getEdges().keySet()
+								.parallelStream()
+								.filter(n -> {
+									TileType t = TileType.getFromCell(tileLayer.getCell(n.getPoint().x, n.getPoint().y));
+									return type.getCost() >= t.getCost() || t == type;
+								})
+								.forEach(n -> node.setEdgeCost(n, type.getCost()));
 				}
 			}
 
@@ -257,8 +260,9 @@ public class World implements Disposable {
 		for (int i = 0; i < debugCount; i++)
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 
-		Agent agent = spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.BREADTH_FIRST);
-//		worldCamera.setFollowedAgent(agent);
+//		Agent agent = spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.A_STAR);
+		spawnAgentWithMultiplePathFinding(new Vector2(20, 25), SearchAlgorithm.A_STAR, true,
+				new Vector2(20, 30), new Vector2(30, 30), new Vector2(1, 1));
 	}
 
 	/**
@@ -335,12 +339,47 @@ public class World implements Disposable {
 	}
 
 
-	private Agent spawnAgentWithPathFinding(Vector2 tilePos, Vector2 endNode, SearchAlgorithm algorithm) {
+	/**
+	 * Spawns an agent at the given tile position, who will path find to the given goal tiles in sequence, using
+	 * the given algorithm
+	 *
+	 * @param tilePos   The spawn position, and the start tile for path finding
+	 * @param algorithm The algorithm to use
+	 * @param visualise If this search should be visualised. There can only be one visualised search at a time
+	 * @param endTiles  A list of tile position, which will be travelled to in turn
+	 * @return The new agent
+	 */
+	private Agent spawnAgentWithMultiplePathFinding(Vector2 tilePos, SearchAlgorithm algorithm, boolean visualise, Vector2... endTiles) {
+		if (endTiles.length == 0)
+			throw new IllegalArgumentException("List of goals given must not be empty");
+
+		Agent agent = spawnAgent(tilePos);
+		BehaviourMultiPathFind behaviour = new BehaviourMultiPathFind(agent, tilePos, endTiles[0], algorithm, worldGraph);
+
+		for (int i = 1, endTilesLength = endTiles.length; i < endTilesLength; i++)
+			behaviour.addNextGoal(endTiles[i]);
+
+		agent.setBehaviour(behaviour);
+		if (visualise)
+			worldGraph.setCurrentSearch(behaviour.getTicker());
+		return agent;
+	}
+
+	/**
+	 * Spawns an agent at the given tile position, who will path find to the given goal tile with the given algorithm
+	 *
+	 * @param tilePos   The spawn position, and the start tile for path finding
+	 * @param endNode   The node to path find to
+	 * @param algorithm The algorithm to use
+	 * @param visualise If this search should be visualised. There can only be one visualised search at a time
+	 * @return The new agent
+	 */
+	private Agent spawnAgentWithPathFinding(Vector2 tilePos, Vector2 endNode, SearchAlgorithm algorithm, boolean visualise) {
 		Agent agent = spawnAgent(tilePos);
 		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, worldGraph);
 		agent.setBehaviour(behaviour);
-		// todo only set on click
-		worldGraph.setCurrentSearch(behaviour.getTicker());
+		if (visualise)
+			worldGraph.setCurrentSearch(behaviour.getTicker());
 		return agent;
 	}
 

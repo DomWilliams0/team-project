@@ -15,22 +15,32 @@ import java.util.stream.Collectors;
 /**
  * A behaviour that makes an agent find a path, then follow it
  */
-public class BehaviourPathFind extends Behaviour {
+public class BehaviourPathFind extends Behaviour implements BehaviourWithPath {
 
 	private SearchTicker ticker;
-	private boolean wasArrivedLastFrame, hasArrivedThisFrame;
+	protected boolean wasArrivedLastFrame, hasArrivedThisFrame;
 
 	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph) {
 		super(agent, null);
 		ticker = new SearchTicker();
 		wasArrivedLastFrame = false;
 
-		Node startNode = worldGraph.getNode(new Point((int) startTile.x, (int) startTile.y));
-		Node endNode = worldGraph.getNode(new Point((int) endTile.x, (int) endTile.y));
-		if (startNode == null || endNode == null)
-			throw new IllegalArgumentException("Invalid start/end node: " + startTile + " or " + endTile + " is invalid");
+		Node startNode = getNodeFromTile(worldGraph, startTile);
+		Node endNode = getNodeFromTile(worldGraph, endTile);
+		validateNotNull(startNode, startTile, endNode, endTile);
 
 		ticker.reset(algorithm, startNode, endNode);
+	}
+
+	private Node getNodeFromTile(WorldGraph worldGraph, Vector2 tile) {
+		return worldGraph.getNode(new Point((int) tile.x, (int) tile.y));
+	}
+
+	private void validateNotNull(Node start, Vector2 startTile, Node end, Vector2 endTile) {
+		if (start == null)
+			throw new IllegalArgumentException("Invalid start node: " + startTile);
+		if (end == null)
+			throw new IllegalArgumentException("Invalid end node: " + endTile);
 	}
 
 
@@ -66,11 +76,30 @@ public class BehaviourPathFind extends Behaviour {
 		steering = new SteeringPathFollow(agent.getPhysicsComponent(), path);
 	}
 
+	@Override
 	public boolean hasArrivedForTheFirstTime() {
 		return hasArrivedThisFrame && !wasArrivedLastFrame;
 	}
 
 	public SearchTicker getTicker() {
 		return ticker;
+	}
+
+	/**
+	 * Resets this behaviour with the given parameters
+	 *
+	 * @param startTile  The tile to start path finding from
+	 * @param goalTile   The tile to path find to
+	 * @param algorithm  The algorithm to use
+	 * @param worldGraph The world graph
+	 */
+	protected void reset(Vector2 startTile, Vector2 goalTile, SearchAlgorithm algorithm, WorldGraph worldGraph) {
+		wasArrivedLastFrame = hasArrivedThisFrame = false;
+		Node startNode = getNodeFromTile(worldGraph, startTile);
+		Node endNode = getNodeFromTile(worldGraph, goalTile);
+		validateNotNull(startNode, startTile, endNode, goalTile);
+
+		ticker.reset(algorithm, startNode, endNode);
+		steering = null;
 	}
 }

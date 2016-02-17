@@ -1,6 +1,7 @@
 package com.b3.entity.system;
 
-import com.b3.entity.ai.BehaviourPathFind;
+import com.b3.entity.ai.BehaviourType;
+import com.b3.entity.ai.BehaviourWithPath;
 import com.b3.entity.component.AIComponent;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.search.WorldGraph;
@@ -37,9 +38,9 @@ public class AISystem extends IteratingSystem {
 		phys.getBody().applyForceToCenter(steeringMovement, true);
 
 
-		if (worldGraph.hasSearchInProgress() && ai.behaviour instanceof BehaviourPathFind) {
-			BehaviourPathFind pathFollow = (BehaviourPathFind) ai.behaviour;
-			if (pathFollow.hasArrivedForTheFirstTime())
+		if (worldGraph.hasSearchInProgress() && ai.behaviour.getType() == BehaviourType.FOLLOW_PATH) {
+			BehaviourWithPath behaviour = (BehaviourWithPath) ai.behaviour;
+			if (behaviour.hasArrivedForTheFirstTime())
 				worldGraph.clearCurrentSearch();
 		}
 	}
