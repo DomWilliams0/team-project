@@ -15,6 +15,7 @@ steps-per-tick: 5
 show-grid: true
 show-paths: true
 flatten-buildings: false
+game-speed: 1
 
 time-between-ticks-min: 0.05
 time-between-ticks: 0.5

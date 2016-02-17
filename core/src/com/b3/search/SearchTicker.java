@@ -113,7 +113,7 @@ public class SearchTicker {
 			return;
 
 		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
-		timer += Utils.deltaTime;
+		timer += Utils.TRUE_DELTA_TIME;
 		if (timer < timeBetweenTicks)
 			return;
 

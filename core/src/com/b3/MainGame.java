@@ -71,8 +71,9 @@ public class MainGame extends ApplicationAdapter {
 	@Override
 	public void render() {
 		// delta time
-		// TODO - Multiply it by the speed slider.
-		Utils.deltaTime = Gdx.graphics.getRawDeltaTime();
+		float rawDeltaTime = Gdx.graphics.getRawDeltaTime();
+		Utils.TRUE_DELTA_TIME = rawDeltaTime;
+		Utils.DELTA_TIME = rawDeltaTime * Config.getFloat(ConfigKey.GAME_SPEED);
 
 		// clear screen
 		Gdx.gl.glClearColor(0, 0, 0, 1);

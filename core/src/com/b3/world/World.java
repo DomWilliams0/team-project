@@ -106,13 +106,6 @@ public class World implements Disposable {
 		// load map tiles
 		loadBuildings(map);
 		processMapTileTypes(map);
-
-		// test buildings
-//		addBuilding(new Vector2(50, 50), new Vector3(2, 4, 6), BuildingType.HOUSE);
-//		worldGraph.addEdge(new Point(50,50), new Point(51,50), 10);
-
-		// test search
-//		spawnAgentWithPathFinding(new Vector2(60, 45), new Vector2(49, 55), SearchAlgorithm.A_STAR);
 	}
 
 	private void processMapTileTypes(TiledMap map) {
@@ -262,6 +255,8 @@ public class World implements Disposable {
 		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
 		for (int i = 0; i < debugCount; i++)
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
+
+		spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.A_STAR);
 	}
 
 	/**
@@ -423,7 +418,7 @@ public class World implements Disposable {
 			worldGraph.render(worldCamera);
 
 		// tick entities and physics
-		engine.update(Gdx.graphics.getRawDeltaTime());
+		engine.update(Utils.DELTA_TIME);
 
 		buildingBatch.begin(worldCamera);
 		buildings.stream()

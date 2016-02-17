@@ -22,8 +22,8 @@ public class SearchTickerTest {
 		if (graph == null)
 			throw new Exception("Can't start tests. Graph is null.");
 
-		// Trick the deltaTime.
-		Utils.deltaTime = 1;
+		// Trick the delta time.
+		Utils.DELTA_TIME = Utils.TRUE_DELTA_TIME = 1;
 
 		// Setup the config.
 		Config.loadConfig("assets/reference.yml");

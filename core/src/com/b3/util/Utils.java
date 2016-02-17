@@ -23,7 +23,12 @@ public class Utils {
 	 * The time elapsed since the last render.
 	 * This will be multiplied by the speed slider.
 	 */
-	public static float deltaTime = 0;
+	public static float DELTA_TIME = 0;
+
+	/**
+	 * The time elapsed since the last render, untouched by game speed.
+	 */
+	public static float TRUE_DELTA_TIME = 0;
 
 	public static float randomRange(float min, float max) {
 		return RANDOM.nextFloat() * (max - min) + min;

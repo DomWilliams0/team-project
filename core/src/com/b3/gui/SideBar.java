@@ -162,20 +162,36 @@ public class SideBar extends Table implements Disposable {
                 .maxWidth(preferredWidth);
         settingsTab.row();
 
-        // Speed slider
-        SliderComponent speedSlider = new SliderComponent(skin,
+        // Search speed slider
+        SliderComponent searchSpeedSlider = new SliderComponent(skin,
                 Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
                 Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MAX),
                 Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_STEP));
-        speedSlider.setValue(speedSlider.getSlider().getMaxValue() - Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS));
-        speedSlider.addListener(new ChangeListener() {
+        searchSpeedSlider.setValue(searchSpeedSlider.getSlider().getMaxValue() - Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS));
+        searchSpeedSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Config.set(ConfigKey.TIME_BETWEEN_TICKS, speedSlider.getSlider().getMaxValue() - speedSlider.getValue());
+                Config.set(ConfigKey.TIME_BETWEEN_TICKS, searchSpeedSlider.getSlider().getMaxValue() - searchSpeedSlider.getValue());
             }
         });
 
-        settingsTab.add(speedSlider.getSlider())
+        settingsTab.add(searchSpeedSlider.getSlider())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(20);
+        settingsTab.row();
+
+        // Game speed slider
+        SliderComponent gameSpeedSlider = new SliderComponent(skin, 0f, 4f, 0.1f);
+        gameSpeedSlider.setValue(Config.getFloat(ConfigKey.GAME_SPEED));
+        gameSpeedSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Config.set(ConfigKey.GAME_SPEED, gameSpeedSlider.getValue());
+            }
+        });
+
+        settingsTab.add(gameSpeedSlider.getSlider())
                 .align(Align.center)
                 .maxWidth(preferredWidth)
                 .spaceTop(20);
@@ -236,8 +252,7 @@ public class SideBar extends Table implements Disposable {
                     _triggerBtn.setX(preferredWidth - 20);
 
                     isOpen = true;
-                }
-                else {
+                } else {
                     setX(-preferredWidth);
                     _triggerBtn.setText(">");
                     _triggerBtn.setX(-20);
