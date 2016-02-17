@@ -11,33 +11,33 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class EventGenerator extends Observable implements Runnable {
 
-    private int timeForNextEvent;
-    private int minTime;
-    private int maxTime;
-    private World world;
+    protected int timeForNextEvent;
+    protected int minTime;
+    protected int maxTime;
+    protected World world;
 
     /**
      * Initialises an EventGenerator instance
      * @param world The world to work on
      */
-    public EventGenerator(World world) {
+    public EventGenerator(World world, int minTime, int maxTime) {
         this.world = world;
-        this.minTime = 3;
-        this.maxTime = 10;
+        this.minTime = minTime;
+        this.maxTime = maxTime;
         generateTimeForNextEvent();
     }
 
     /**
      * Gets the time to wait for the next event
      */
-    private void generateTimeForNextEvent() {
+    protected void generateTimeForNextEvent() {
         timeForNextEvent = ThreadLocalRandom.current().nextInt(minTime, maxTime + 1);
     }
 
     /**
      * Triggers a random event in the world
      */
-    private void triggerRandomEvent() {
+    protected void triggerRandomEvent() {
         List<EventType> events = Collections.unmodifiableList(Arrays.asList(EventType.values()));
         int numEvents = events.size();
         Random rn = new Random();

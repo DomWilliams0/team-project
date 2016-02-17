@@ -27,7 +27,10 @@ public enum ConfigKey {
 	TIME_BETWEEN_TICKS("time-between-ticks"),
 	TIME_BETWEEN_TICKS_MIN("time-between-ticks-min"),
 	TIME_BETWEEN_TICKS_MAX("time-between-ticks-max"),
-	TIME_BETWEEN_TICKS_STEP("time-between-ticks-step");
+	TIME_BETWEEN_TICKS_STEP("time-between-ticks-step"),
+
+	EVENT_GENERATION_MIN_TIME("event-generation-min-time"),
+	EVENT_GENERATION_MAX_TIME("event-generation-max-time");
 
 	private final String key;
 

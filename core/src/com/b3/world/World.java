@@ -264,8 +264,11 @@ public class World implements Disposable {
 	 */
 	public void initEventGenerator() {
 		// Uncomment for event generator (not working atm)
+		int minTime = Config.getInt(ConfigKey.EVENT_GENERATION_MIN_TIME);
+		int maxTime = Config.getInt(ConfigKey.EVENT_GENERATION_MAX_TIME);
+
 		worldObserver = new WorldObserver(this);
-		eventGenerator = new EventGenerator(this);
+		eventGenerator = new EventGenerator(this, minTime, maxTime);
 		eventGenerator.addObserver(worldObserver);
 		new Thread(eventGenerator).start();
 	}

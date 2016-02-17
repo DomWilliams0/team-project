@@ -22,7 +22,7 @@ public class WorldObserverTest {
         when(world.getQueryService()).thenCallRealMethod();
 
         worldObserver = new DummyWorldObserver(world);
-        eventGenerator = new EventGenerator(world);
+        eventGenerator = new EventGenerator(world, 3, 10);
     }
 
     @Test
