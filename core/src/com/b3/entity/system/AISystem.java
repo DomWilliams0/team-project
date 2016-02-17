@@ -1,7 +1,7 @@
 package com.b3.entity.system;
 
 import com.b3.entity.ai.BehaviourType;
-import com.b3.entity.ai.BehaviourWithPath;
+import com.b3.entity.ai.BehaviourWithPathFind;
 import com.b3.entity.component.AIComponent;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.search.WorldGraph;
@@ -39,7 +39,7 @@ public class AISystem extends IteratingSystem {
 
 
 		if (worldGraph.hasSearchInProgress() && ai.behaviour.getType() == BehaviourType.FOLLOW_PATH) {
-			BehaviourWithPath behaviour = (BehaviourWithPath) ai.behaviour;
+			BehaviourWithPathFind behaviour = (BehaviourWithPathFind) ai.behaviour;
 			if (behaviour.hasArrivedForTheFirstTime())
 				worldGraph.clearCurrentSearch();
 		}

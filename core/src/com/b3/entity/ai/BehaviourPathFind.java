@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * A behaviour that makes an agent find a path, then follow it
  */
-public class BehaviourPathFind extends Behaviour implements BehaviourWithPath {
+public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFind {
 
 	private SearchTicker ticker;
 	protected boolean wasArrivedLastFrame, hasArrivedThisFrame;

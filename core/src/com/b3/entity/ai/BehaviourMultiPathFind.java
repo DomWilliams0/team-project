@@ -11,7 +11,7 @@ import java.util.ArrayDeque;
 /**
  * A behaviour that maintains a queue of goals, which will be travelled to sequentially
  */
-public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPath {
+public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPathFind {
 
 	private WorldGraph graph;
 	private ArrayDeque<Search> goals;
