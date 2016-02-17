@@ -1,5 +1,7 @@
 package com.b3.search;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Point {
 	public final int x;
 	public final int y;
@@ -43,5 +45,9 @@ public class Point {
 
 	public int getY() {
 		return y;
+	}
+
+	public Vector2 toVector2() {
+		return new Vector2(x, y);
 	}
 }
