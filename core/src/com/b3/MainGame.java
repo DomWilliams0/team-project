@@ -4,6 +4,7 @@ import com.b3.gui.SideBar;
 import com.b3.gui.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
+import com.b3.input.WorldSelectionHandler;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -65,7 +66,7 @@ public class MainGame extends ApplicationAdapter {
 		inputHandler.addProcessor(sideBarStage);
 
 		// world clicking
-//		inputHandler.addProcessor(new WorldSelectionHandler(world));
+		inputHandler.addProcessor(new WorldSelectionHandler(world));
 	}
 
 	private void setupSidebar() {
