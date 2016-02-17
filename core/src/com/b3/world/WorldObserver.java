@@ -36,7 +36,7 @@ public class WorldObserver implements Observer {
 
 		// Get target and source buildings
 		Building targetBuilding = (Building) evt.getMessage();
-		targetBuilding.setEvent(eventType);
+		targetBuilding.setEvent(eventType, true);
 		Building sourceBuilding = world.getQueryService().getRandomBuildingByType(getBuildingTypeFromEvent(eventType));
 
 		Vector2 src = sourceBuilding.getTilePosition();

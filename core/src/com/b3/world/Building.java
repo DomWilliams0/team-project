@@ -131,9 +131,11 @@ public class Building {
 	 *
 	 * @param event The event happening
 	 */
-	public void setEvent(EventType event) {
+	public void setEvent(EventType event, boolean render) {
 		this.event = event;
-		renderEvent();
+
+		if (render)
+			renderEvent();
 	}
 
 	@Override

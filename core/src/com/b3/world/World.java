@@ -64,6 +64,8 @@ public class World implements Disposable {
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
 
+	public World() {}
+
 	public World(String fileName) {
 		TiledMap map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
@@ -362,6 +364,11 @@ public class World implements Disposable {
 		worldGraph.addBuilding(building);
 
 		return building;
+	}
+
+	public void addBuilding(Building building) {
+		buildings.add(building);
+		worldGraph.addBuilding(building);
 	}
 
 	// todo remove buildings too

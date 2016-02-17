@@ -43,6 +43,10 @@ public class EventGenerator extends Observable implements Runnable {
         Random rn = new Random();
 
         EventType eventType = events.get(rn.nextInt(numEvents));
+        triggerEvent(eventType);
+    }
+
+    public void triggerEvent(EventType eventType) {
         EventMessage evtMessage = new EventMessage(eventType);
         WorldEvent evt = new WorldEvent(world, eventType);
 
@@ -51,6 +55,22 @@ public class EventGenerator extends Observable implements Runnable {
 
         setChanged();
         notifyObservers(evtMessage);
+    }
+
+    public int getMinTime() {
+        return minTime;
+    }
+
+    public void setMinTime(int minTime) {
+        this.minTime = minTime;
+    }
+
+    public int getMaxTime() {
+        return maxTime;
+    }
+
+    public void setMaxTime(int maxTime) {
+        this.maxTime = maxTime;
     }
 
     @Override
