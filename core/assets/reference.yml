@@ -11,7 +11,7 @@ entity-diameter: 0.3
 entity-spawn-count: 0
 physics-rendering: false
 
-steps-per-tick: 5
+steps-per-tick: 1
 show-grid: true
 show-paths: true
 flatten-buildings: false

@@ -28,6 +28,7 @@ public class SearchTicker {
 
 	private int stepsPerTick;
 	private float timer;
+	private boolean paused;
 
 	private SearchAlgorithm algorithm;
 	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
@@ -36,6 +37,7 @@ public class SearchTicker {
 	public SearchTicker() {
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
+		paused = false;
 	}
 
 	public boolean isRenderProgress() {
@@ -132,11 +134,14 @@ public class SearchTicker {
 			pathComplete = true;
 			return;
 		}
+		System.out.println(paused);
+		//we have been told to pause
+		if(paused) return;
 
 		lastFrontier.clear();
 
 		// Get steps per tick
-		stepsPerTick = Config.getInt(ConfigKey.STEPS_PER_TICK);
+		setStepsPerTick();
 
 		for (int i = 0; i < stepsPerTick; i++) {
 			// done
@@ -226,6 +231,22 @@ public class SearchTicker {
 
 	public boolean isPathComplete() {
 		return pathComplete;
+	}
+
+	public void setStepsPerTick() {
+		stepsPerTick = Config.getInt(ConfigKey.STEPS_PER_TICK);
+	}
+
+	public void pause() {
+		paused = true;
+	}
+
+	public void resume() {
+		paused = false;
+	}
+
+	public boolean isPaused() {
+		return paused;
 	}
 
 	public int getStepsPerTick() {

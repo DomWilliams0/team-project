@@ -183,6 +183,7 @@ public class SideBarNodes extends Table implements Disposable {
         triggerBtn.getTextButton().setY(Gdx.graphics.getHeight() / 2);
         SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
         ui.render(currentSearch);
+
         stage.draw();
     }
 

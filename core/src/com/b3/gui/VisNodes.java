@@ -7,6 +7,9 @@ import com.b3.search.util.takeable.LinkedListT;
 import com.b3.search.util.takeable.PriorityQueueT;
 import com.b3.search.util.takeable.StackT;
 import com.b3.search.util.takeable.Takeable;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
+import com.b3.util.Utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -16,10 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A table which will display the frontier and visited nodes
@@ -35,6 +35,7 @@ public class VisNodes extends Table {
     private Stage stage;
     private ScrollPane fp, vp;
     private Table ft, vt;
+    private float timer;
 
     /**
      * Provides a description of how the search algorithms work,
@@ -108,10 +109,16 @@ public class VisNodes extends Table {
      * @param ticker The search ticker whose values are to be rendered.
      */
     public void render(SearchTicker ticker) {
+        int render;
         if(ticker==null || ticker.getVisited()==null || ticker.getFrontier()==null) {
-            render(new StackT<>(), new HashSet<>(), SearchAlgorithm.BREADTH_FIRST);
+            render =  render(new StackT<>(), new HashSet<>(), SearchAlgorithm.BREADTH_FIRST);
         } else {
-            render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
+            render =  render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
+        }
+        if(render==2) {
+            ticker.pause();
+        } else if(render == 1 && ticker.isPaused()) {
+            ticker.resume();
         }
     }
 
@@ -122,12 +129,23 @@ public class VisNodes extends Table {
      * @param front the frontier to display
      * @param visited the visited set to display
      * @param alg the algorithm currently being used by the search
+     *
+     * @return the state of the render  - 0: Not yet time to render
+     *                                  - 1: Rendered as normal
+     *                                  - 2: The scrollpane(s) are being dragged.
      */
-    public void render(Takeable<Node> front, Set<Node> visited, SearchAlgorithm alg) {
+    public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg) {
         //stop it rendering every frame
-        if (++frameCounter < frameDelay)
-            return;
-        frameCounter = 0;
+        float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
+        timer += Utils.TRUE_DELTA_TIME;
+        if (timer < timeBetweenTicks)
+            return 0;
+
+        timer -= timeBetweenTicks;
+
+        if(vp.isDragging() || vp.isFlinging() || fp.isDragging() || fp.isFlinging()) {
+            return 2;
+        }
 
         //check whether we need to render a data collection
         boolean rendermore = !front.isEmpty() || !visited.isEmpty();
@@ -156,20 +174,22 @@ public class VisNodes extends Table {
             });
 
 
-
+            //if(!vp.isDragging() && !fp.isDragging()) {
             for (int i = 0; i < Math.max(frontier.size(), visitedSorted.size()); i++) {
                 //todo should we somehow stop rendering the pane on touchdown
                 //todo or find a way to allow scrolling even through rendering :/
                 vt.row();
                 ft.row();
-                if(frontier.size() > i) {
+                if (frontier.size() > i) {
                     ft.add(frontier.get(i).toString());
                 }
-                if(visitedSorted.size() > i) {
+                if (visitedSorted.size() > i) {
                     vt.add(visitedSorted.get(i).toString());
                 }
             }
+           // }
         }
+        return 1;
     }
 
     /**
@@ -183,7 +203,7 @@ public class VisNodes extends Table {
      * @return
      */
     @Deprecated
-    private ArrayList<Node> colToList(Takeable<Node> front, SearchAlgorithm alg) {
+    private ArrayList<Node> colToList(Collection<Node> front, SearchAlgorithm alg) {
         ArrayList<Node> list = new ArrayList<>();
         //System.out.println(front);
         Takeable<Node> temp = null;
@@ -192,14 +212,14 @@ public class VisNodes extends Table {
         switch(alg) {
             case DEPTH_FIRST: temp = new StackT<>(); break;
             case BREADTH_FIRST: temp = new LinkedListT<>(); break;
-            case A_STAR: temp = new PriorityQueueT<>(null); break; // todo uh oh, I hope this stays deprecated
+            case A_STAR: temp = new PriorityQueueT<>(null); break; // todo uh oh, I hope this stays deprecated -- it'll only be used when it's all working, atm the method doesn't work in the slightest
         }
 
-        for(int i=0; i<front.size(); i++) {
-            Node n = front.take();
-            list.add(i,n);
-            temp.add(n);
-        }
+//        for(int i=0; i<front.size(); i++) {
+//            Node n = front.();
+//            list.add(i,n);
+//            temp.add(n);
+//        }
         //System.out.println(front + "," + temp);
         front = temp;
         //System.out.println(front + "," + temp);
