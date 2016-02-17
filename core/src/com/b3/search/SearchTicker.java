@@ -134,7 +134,6 @@ public class SearchTicker {
 			pathComplete = true;
 			return;
 		}
-		System.out.println(paused);
 		//we have been told to pause
 		if(paused) return;
 
