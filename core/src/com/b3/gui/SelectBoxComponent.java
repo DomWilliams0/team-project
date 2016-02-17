@@ -48,6 +48,10 @@ public class SelectBoxComponent {
         selectBox.setItems(items);
     }
 
+    public Object getSelected() {
+        return selectBox.getSelected();
+    }
+
     public void setSelected(Object selected) {
         selectBox.setSelected(selected);
     }

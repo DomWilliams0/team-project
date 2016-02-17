@@ -1,8 +1,20 @@
 package com.b3.gui;
 
+import com.b3.entity.Agent;
+import com.b3.entity.ai.Behaviour;
+import com.b3.entity.ai.BehaviourMultiPathFind;
+import com.b3.entity.ai.BehaviourPathFollow;
+import com.b3.entity.component.AIComponent;
+import com.b3.search.Node;
+import com.b3.search.Point;
+import com.b3.search.WorldGraph;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.b3.util.Utils;
 import com.b3.world.World;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -10,6 +22,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -19,6 +32,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class SideBar extends Table implements Disposable {
 
     private Stage stage;
@@ -27,12 +44,13 @@ public class SideBar extends Table implements Disposable {
     private boolean isOpen;
     private float preferredWidth;
 
-    public SideBar(Stage stage) {
-        this(stage, 230);
+    public SideBar(Stage stage, World world) {
+        this(stage, world, 230);
     }
 
-    public SideBar(Stage stage, float preferredWidth) {
+    public SideBar(Stage stage, World world, float preferredWidth) {
         this.stage = stage;
+        this.world = world;
         this.isOpen = false;
         this.preferredWidth = preferredWidth;
 
@@ -238,6 +256,76 @@ public class SideBar extends Table implements Disposable {
         eventsTab.pad(20);
 
         tabbedPane.addTab("Events", eventsTab);
+
+        // Get x and y coordinates
+        WorldGraph worldGraph = world.getWorldGraph();
+        List<Integer> xs = Utils.range(0, worldGraph.getMaxXValue());
+        List<Integer> ys = Utils.range(0, worldGraph.getMaxYValue());
+
+        Object[] xsStr = xs.stream().map(Object::toString).collect(Collectors.toList()).toArray();
+        Object[] ysStr = ys.stream().map(Object::toString).collect(Collectors.toList()).toArray();
+
+        // X coordinates
+        SelectBoxComponent xCoordSelectBox = new SelectBoxComponent(skin, font, new Array(xsStr));
+
+        xCoordSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("hello");
+            }
+        });
+
+        eventsTab.add(xCoordSelectBox.getSelectBox())
+                .maxWidth(preferredWidth)
+                .spaceBottom(30);
+        eventsTab.row();
+
+        // Y coordinates
+        SelectBoxComponent yCoordSelectBox = new SelectBoxComponent(skin, font, new Array(xsStr));
+
+        yCoordSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("hello");
+            }
+        });
+
+        eventsTab.add(yCoordSelectBox.getSelectBox())
+                .maxWidth(preferredWidth)
+                .spaceBottom(30);
+        eventsTab.row();
+
+        // Queue goal button
+        ButtonComponent queueGoalButton = new ButtonComponent(skin, font, "Add to queue");
+        queueGoalButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                String xStr = (String)xCoordSelectBox.getSelected();
+                int x = Integer.parseInt(xStr);
+
+                String yStr = (String)yCoordSelectBox.getSelected();
+                int y = Integer.parseInt(yStr);
+
+                Node node = worldGraph.getNode(new Point(x, y));
+
+                if (node == null) {
+                    System.out.println("nooooooooo");
+                }
+                else {
+                    ImmutableArray<Entity> agents = world.getEngine().getEntitiesFor(Family.all(AIComponent.class).get());
+                    Agent agent = (Agent)agents.get(0);
+
+                    BehaviourMultiPathFind behaviour = (BehaviourMultiPathFind)agent.getBehaviour();
+                    behaviour.addNextGoal(new Vector2(x, y));
+                }
+            }
+        });
+
+        eventsTab.add(queueGoalButton.getTextButton())
+                .align(Align.center)
+                .maxWidth(preferredWidth);
+        eventsTab.row();
+
 
         // =================
         // === STATS TAB ===
