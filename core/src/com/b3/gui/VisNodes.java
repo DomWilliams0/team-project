@@ -117,9 +117,9 @@ public class VisNodes extends Table {
         }
         if (ticker != null) {
         if(render==2) {
-            ticker.pause();
+            ticker.pause(0);
         } else if(render == 1 && ticker.isPaused()) {
-            ticker.resume();
+            ticker.resume(0);
         }
         }
     }
@@ -145,7 +145,7 @@ public class VisNodes extends Table {
 
         timer -= timeBetweenTicks;
 
-        if(vp.isDragging() || vp.isFlinging() || fp.isDragging() || fp.isFlinging()) {
+        if(vp.isDragging() || vp.isFlinging() || vp.isPanning() || fp.isDragging() || fp.isFlinging() || fp.isPanning()) {
             return 2;
         }
 
@@ -159,12 +159,10 @@ public class VisNodes extends Table {
         if(rendermore) {
             //get the frontier, as an arraylist
             ArrayList<Node> frontier = new ArrayList<>(front);
-
             //make the arraylist be ordered based on take-order of the collection
-            //todo fix colToList since this is awkward atm
-            //todo doesn't currently do so for A*
+            //todo doesn't currently do correctly for A* - get(0) is still highest priority, however.
             switch(alg) {
-                case DEPTH_FIRST: Collections.reverse(frontier);
+                case DEPTH_FIRST: Collections.reverse(frontier);break;
             }
 
             ArrayList<Node> visitedSorted = new ArrayList<>(visited);
@@ -178,8 +176,6 @@ public class VisNodes extends Table {
 
             //if(!vp.isDragging() && !fp.isDragging()) {
             for (int i = 0; i < Math.max(frontier.size(), visitedSorted.size()); i++) {
-                //todo should we somehow stop rendering the pane on touchdown
-                //todo or find a way to allow scrolling even through rendering :/
                 vt.row();
                 ft.row();
                 if (frontier.size() > i) {
@@ -258,6 +254,9 @@ public class VisNodes extends Table {
             add("   ");
             add("Visited nodes");
             row();
+
+            //spacing
+            add("");
             row();
 
             //row 2 - description of data collections
@@ -287,6 +286,9 @@ public class VisNodes extends Table {
             row();
         } else {
             add("No search in progress...");
+            row();
+
+            add("");
             row();
         }
 

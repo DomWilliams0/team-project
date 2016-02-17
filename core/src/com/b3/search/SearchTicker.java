@@ -28,7 +28,7 @@ public class SearchTicker {
 
 	private int stepsPerTick;
 	private float timer;
-	private boolean paused;
+	private boolean[] paused; //array to identify who has told it to pause so conflicts don't occur
 
 	private SearchAlgorithm algorithm;
 	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
@@ -37,7 +37,8 @@ public class SearchTicker {
 	public SearchTicker() {
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
-		paused = false;
+		paused = new boolean[5];
+		for(int i=0;i<paused.length;i++) paused[i]=false;
 	}
 
 	public boolean isRenderProgress() {
@@ -134,13 +135,13 @@ public class SearchTicker {
 			pathComplete = true;
 			return;
 		}
-		//we have been told to pause
-		if(paused) return;
+		//check if we're supposed to be paused
+		if (isPaused()) return;
 
 		lastFrontier.clear();
 
 		// Get steps per tick
-		setStepsPerTick();
+		stepsPerTick = Config.getInt(ConfigKey.STEPS_PER_TICK);
 
 		for (int i = 0; i < stepsPerTick; i++) {
 			// done
@@ -232,20 +233,25 @@ public class SearchTicker {
 		return pathComplete;
 	}
 
-	public void setStepsPerTick() {
-		stepsPerTick = Config.getInt(ConfigKey.STEPS_PER_TICK);
+	/**
+	 * Tell the ticker to pause
+	 * @param index your identifier, to know when you tell it to resume
+     */
+	public void pause(int index) {
+		paused[index] = true;
 	}
 
-	public void pause() {
-		paused = true;
-	}
-
-	public void resume() {
-		paused = false;
+	/**
+	 * Tell the ticker to resume
+	 * @param index your identifier, to know if everyone has told it to resume.
+     */
+	public void resume(int index) {
+		paused[index] = false;
 	}
 
 	public boolean isPaused() {
-		return paused;
+		for(boolean pause : paused) if(pause) return true;
+		return false;
 	}
 
 	public int getStepsPerTick() {

@@ -106,8 +106,10 @@ public class SideBarNodes extends Table implements Disposable {
         Label.LabelStyle style = new Label.LabelStyle(font, Color.WHITE);
         skin.add("default", style);
 
+
         //create the data table which will display the nodes
         ui = new VisNodes(stage, skin);
+        //ui.setBackground(skin.getDrawable("knob_06"));
 
         // ======================
         // === TRIGGER BUTTON ===

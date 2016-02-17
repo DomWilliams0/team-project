@@ -3,19 +3,15 @@ package com.b3.gui;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
-import com.b3.entity.ai.BehaviourPathFollow;
 import com.b3.entity.ai.BehaviourType;
-import com.b3.entity.component.AIComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
+import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
 import com.b3.world.World;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -35,7 +31,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
-import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -234,7 +229,7 @@ public class SideBar extends Table implements Disposable {
         settingsTab.row();
 
         // Start button
-        ButtonComponent startButton = new ButtonComponent(skin, font, "Start");
+        ButtonComponent startButton = new ButtonComponent(skin, font, "Start Event");
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -246,6 +241,31 @@ public class SideBar extends Table implements Disposable {
                 .align(Align.center)
                 .maxWidth(preferredWidth)
                 .spaceTop(20);
+        settingsTab.row();
+
+        //Play and Pause button
+        //todo there are graphics available in the skin for play and pause
+        ButtonComponent playPause = new ButtonComponent(skin, font, "Pause");
+        playPause.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                TextButton btnplaypause = playPause.getTextButton();
+                String text = btnplaypause.getText().toString();
+                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                if(text.equals("Pause") && !ticker.isPaused()) {
+                    ticker.pause(1);
+                    btnplaypause.setText("Play");
+                } else if(text.equals("Play")){
+                    ticker.resume(1);
+                    btnplaypause.setText("Pause");
+                }
+            }
+        });
+
+        settingsTab.add(playPause.getTextButton())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(5);
         settingsTab.row();
 
         tabbedPane.addTab("Settings", settingsTab);
