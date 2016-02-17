@@ -361,7 +361,7 @@ public class World implements Disposable {
 
 		agent.setBehaviour(behaviour);
 		if (visualise)
-			worldGraph.setCurrentSearch(behaviour.getTicker());
+			worldGraph.setCurrentSearch(agent, behaviour.getTicker());
 		return agent;
 	}
 
@@ -379,7 +379,7 @@ public class World implements Disposable {
 		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, worldGraph);
 		agent.setBehaviour(behaviour);
 		if (visualise)
-			worldGraph.setCurrentSearch(behaviour.getTicker());
+			worldGraph.setCurrentSearch(agent, behaviour.getTicker());
 		return agent;
 	}
 

@@ -1,5 +1,6 @@
 package com.b3.search;
 
+import com.b3.entity.Agent;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -33,6 +34,7 @@ public class WorldGraph implements Serializable {
 	private ShapeRenderer shapeRenderer;
 
 	private SearchTicker currentSearch;
+	private Agent currentSearchAgent;
 
 	/**
 	 * Constructs a new world graph with the following x and y dimensions.
@@ -48,6 +50,7 @@ public class WorldGraph implements Serializable {
 		this.world = null;
 		this.shapeRenderer = null; // must be initialised with initRenderer()
 		this.currentSearch = null;
+		this.currentSearchAgent = null;
 
 		generateEmptyGraph(width, height);
 	}
@@ -220,7 +223,8 @@ public class WorldGraph implements Serializable {
 			for (int y = baseY; y < baseY + upToY; y++) {
 				Point point = new Point(x, y);
 				// Entry point check.
-				if (point.equals(entryPoint)) continue;
+				if (point.equals(entryPoint))
+					continue;
 				Node node = nodes.get(point);
 				if (node != null)
 					node.clearNeighbours();
@@ -230,6 +234,7 @@ public class WorldGraph implements Serializable {
 
 	/**
 	 * Removes the given node from the graph, snipping all connected edges
+	 *
 	 * @param node The node to remove
 	 */
 	public void removeNode(Node node) {
@@ -239,9 +244,10 @@ public class WorldGraph implements Serializable {
 
 	/**
 	 * Removes the node at the given point, if it exists
-	 * @see {@link WorldGraph#removeNode(Node)}
+	 *
 	 * @param point The position of the node to remove
 	 * @return True if the node existed and has been removed, otherwise false
+	 * @see {@link WorldGraph#removeNode(Node)}
 	 */
 	public boolean removeNode(Point point) {
 		Node node = getNode(point);
@@ -315,13 +321,16 @@ public class WorldGraph implements Serializable {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
 		Color tempCol = null;
-		if (counter < 1) tempCol = NODE_COLOUR; else tempCol = new Color(counter/10, counter/10, counter/10, counter/10);
+		if (counter < 1)
+			tempCol = NODE_COLOUR;
+		else
+			tempCol = new Color(counter / 10, counter / 10, counter / 10, counter / 10);
 
 		shapeRenderer.setColor(tempCol);
 
 		nodes.keySet()
 				.stream()
-				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS*counter, NODE_EDGES));
+				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter, NODE_EDGES));
 
 		// render the current search
 		if (showPaths && currentSearch != null && !currentSearch.isPathComplete()) {
@@ -449,16 +458,22 @@ public class WorldGraph implements Serializable {
 		nodes.clear();
 	}
 
-	public void setCurrentSearch(SearchTicker currentSearch) {
+	public void setCurrentSearch(Agent agent, SearchTicker currentSearch) {
 		this.currentSearch = currentSearch;
+		this.currentSearchAgent = agent;
 	}
 
 	public SearchTicker getCurrentSearch() {
 		return currentSearch;
 	}
 
+	public Agent getCurrentSearchAgent() {
+		return currentSearchAgent;
+	}
+
 	public void clearCurrentSearch() {
 		currentSearch = null;
+		currentSearchAgent = null;
 	}
 
 	public boolean hasSearchInProgress() {
