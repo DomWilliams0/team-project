@@ -1,6 +1,6 @@
-package com.b3;
+package com.b3.input;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.HashSet;
@@ -8,26 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class InputHandler {
-
-	enum Key {
-		UP(Input.Keys.UP),
-		DOWN(Input.Keys.DOWN),
-		LEFT(Input.Keys.LEFT),
-		RIGHT(Input.Keys.RIGHT),
-		ZOOM_IN(Input.Keys.PLUS),
-		ZOOM_OUT(Input.Keys.MINUS),
-		EXIT(Input.Keys.ESCAPE);
-
-
-		private int binding;
-
-		Key(int key) {
-
-			this.binding = key;
-		}
-	}
-
+public class KeyboardController extends InputAdapter {
 	private static final Set<Integer> CONTROL_KEYS;
 
 	static {
@@ -40,58 +21,39 @@ public class InputHandler {
 	private Map<Integer, Boolean> keys;
 	private int zoomDelta;
 	private boolean exit;
-	private InputMultiplexer inputMultiplexer;
-	private static InputHandler instance;
 
-	private InputHandler() {
+	public KeyboardController() {
 		zoomDelta = 0;
 		exit = false;
 		keys = new TreeMap<>(); // for faster iterating
-
-		inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(new InputAdapter() {
-			@Override
-			public boolean keyDown(int keycode) {
-				if (CONTROL_KEYS.contains(keycode)) {
-					if (keycode == Key.EXIT.binding)
-						exit = true;
-
-					keys.put(keycode, true);
-
-				}
-				return false;
-			}
-
-			@Override
-			public boolean keyUp(int keycode) {
-				if (CONTROL_KEYS.contains(keycode))
-					keys.put(keycode, false);
-				return false;
-			}
-
-			@Override
-			public boolean scrolled(int amount) {
-				zoomDelta = amount;
-				return false;
-			}
-		});
 	}
 
-	public static InputHandler getInstance() {
-		if (instance == null) {
-			return new InputHandler();
+
+	@Override
+	public boolean keyDown(int keycode) {
+		if (CONTROL_KEYS.contains(keycode)) {
+			if (keycode == Key.EXIT.binding)
+				exit = true;
+
+			keys.put(keycode, true);
+			return true;
+
 		}
-		return instance;
+		return false;
 	}
 
-	public void addProcessor(InputProcessor inputProcessor) {
-		inputMultiplexer.addProcessor(inputProcessor);
+	@Override
+	public boolean keyUp(int keycode) {
+		if (CONTROL_KEYS.contains(keycode))
+			keys.put(keycode, false);
+		return false;
 	}
 
-	public void initInputProcessor() {
-		Gdx.input.setInputProcessor(inputMultiplexer);
+	@Override
+	public boolean scrolled(int amount) {
+		zoomDelta = amount;
+		return false;
 	}
-
 	/**
 	 * Polls the movement keys for 2D delta movement
 	 *
@@ -135,6 +97,5 @@ public class InputHandler {
 		exit = false;
 		return ret;
 	}
-
 
 }

@@ -1,8 +1,8 @@
 package com.b3.world;
 
-import com.b3.InputHandler;
 import com.b3.entity.Agent;
 import com.b3.entity.component.PhysicsComponent;
+import com.b3.input.KeyboardController;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -90,19 +90,17 @@ public class WorldCamera extends PerspectiveCamera {
 	}
 
 	/**
-	 * Polls the given InputHandler, and moves/zooms appropriately
-	 *
-	 * @param inputHandler The input handler
+	 * Polls the given keyboard controller, and moves/zooms appropriately
 	 */
-	public void move(InputHandler inputHandler) {
+	public void move(KeyboardController keyboardController) {
 		if (followedAgent != null) {
 			trackEntity();
 		} else {
-			inputHandler.pollMovement(inputDelta, Config.getFloat(ConfigKey.CAMERA_MOVE_SPEED));
+			keyboardController.pollMovement(inputDelta, Config.getFloat(ConfigKey.CAMERA_MOVE_SPEED));
 			translateSafe(inputDelta.x, inputDelta.y, 0f);
 		}
 
-		int zoom = inputHandler.pollZoom();
+		int zoom = keyboardController.pollZoom();
 		if (zoom != 0)
 			zoom(zoom * Config.getFloat(ConfigKey.CAMERA_ZOOM_SPEED)); // that's a lot of zooms
 	}

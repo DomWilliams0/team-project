@@ -2,6 +2,8 @@ package com.b3;
 
 import com.b3.gui.SideBar;
 import com.b3.gui.SideBarNodes;
+import com.b3.input.InputHandler;
+import com.b3.input.KeyboardController;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -19,31 +21,26 @@ public class MainGame extends ApplicationAdapter {
 
 	private World world;
 	private WorldCamera camera;
-	private InputHandler inputHandler;
 	private Stage sideBarStage;
 	private SideBar sideBar;
 	private SideBarNodes sideBarNodes;
+	private KeyboardController keyboardController;
 
 	@Override
 	public void create() {
+		// load config
 		Config.loadConfig("core/assets/reference.yml", "core/assets/userconfig.yml");
 
+		// create world
 		world = new World("core/assets/world/world.tmx");
 
-		// Setup sidebar
-		sideBarStage = new Stage(new ScreenViewport());
-		sideBar = new SideBar(sideBarStage, world);
-		sideBarStage.addActor(sideBar);
+		// init gui
+		setupSidebar();
 
-		sideBarNodes = new SideBarNodes(sideBarStage);
-		sideBarNodes.setWorld(world);
-		sideBarStage.addActor(sideBarNodes);
+		// register input handlers
+		initInputHandlers();
 
-		// Setup input handlers
-		inputHandler = InputHandler.getInstance();
-		inputHandler.addProcessor(sideBarStage);
-		inputHandler.initInputProcessor();
-
+		// init camera
 		Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
 		camera = new WorldCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat(ConfigKey.CAMERA_DISTANCE_DEFAULT));
@@ -55,6 +52,30 @@ public class MainGame extends ApplicationAdapter {
 		camera.setWorld(world);
 		world.initEngine(camera);
 		//world.initEventGenerator();
+	}
+
+	private void initInputHandlers() {
+		InputHandler inputHandler = InputHandler.getInstance();
+
+		// keyboard control has top priority
+		keyboardController = new KeyboardController();
+		inputHandler.addProcessor(keyboardController);
+
+		// world clicking
+		inputHandler.addProcessor(sideBarStage);
+
+		// world clicking
+//		inputHandler.addProcessor(new WorldSelectionHandler(world));
+	}
+
+	private void setupSidebar() {
+		sideBarStage = new Stage(new ScreenViewport());
+		sideBar = new SideBar(sideBarStage, world);
+		sideBarStage.addActor(sideBar);
+
+		sideBarNodes = new SideBarNodes(sideBarStage);
+		sideBarNodes.setWorld(world);
+		sideBarStage.addActor(sideBarNodes);
 	}
 
 	@Override
@@ -79,22 +100,21 @@ public class MainGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		// camera movement
-		camera.move(inputHandler);
+		camera.move(keyboardController);
 		camera.update();
 
 		// world rendering
 		world.render();
 
-		// Side bar rendering
+		// sidebar rendering
 		sideBar.act();
 		sideBar.render();
 
 		sideBarNodes.act();
 		sideBarNodes.render();
 
-		if (inputHandler.shouldExit())
+		if (keyboardController.shouldExit())
 			Gdx.app.exit();
-
 	}
 
 

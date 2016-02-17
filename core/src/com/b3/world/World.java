@@ -517,4 +517,8 @@ public class World implements Disposable {
 	public com.badlogic.gdx.physics.box2d.World getPhysicsWorld() {
 		return physicsWorld;
 	}
+
+	public WorldCamera getWorldCamera() {
+		return worldCamera;
+	}
 }
