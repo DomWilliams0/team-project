@@ -267,7 +267,7 @@ public class WorldGraph implements Serializable {
 		}
 	}
 
-	public void render(Camera camera) {
+	public void render(Camera camera, float counter) {
 		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
@@ -313,11 +313,15 @@ public class WorldGraph implements Serializable {
 
 		// render nodes
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-		shapeRenderer.setColor(NODE_COLOUR);
+
+		Color tempCol = null;
+		if (counter < 1) tempCol = NODE_COLOUR; else tempCol = new Color(counter/10, counter/10, counter/10, counter/10);
+
+		shapeRenderer.setColor(tempCol);
 
 		nodes.keySet()
 				.stream()
-				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS, NODE_EDGES));
+				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS*counter, NODE_EDGES));
 
 		// render the current search
 		if (showPaths && currentSearch != null && !currentSearch.isPathComplete()) {

@@ -64,6 +64,7 @@ public class World implements Disposable {
 
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
+	private float counterAnimation = 10;
 
 	public World() {}
 
@@ -256,7 +257,7 @@ public class World implements Disposable {
 		for (int i = 0; i < debugCount; i++)
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 
-		Agent agent = spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.A_STAR);
+		Agent agent = spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.BREADTH_FIRST);
 //		worldCamera.setFollowedAgent(agent);
 	}
 
@@ -417,9 +418,11 @@ public class World implements Disposable {
 		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
 
+		if (counterAnimation > 1) counterAnimation = (float) (counterAnimation - 0.25);
+
 		// render underlying graph
 		if (Config.getBoolean(ConfigKey.SHOW_GRID))
-			worldGraph.render(worldCamera);
+			worldGraph.render(worldCamera, counterAnimation);
 
 		// tick entities and physics
 		engine.update(Utils.DELTA_TIME);
