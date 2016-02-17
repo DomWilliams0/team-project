@@ -18,7 +18,7 @@ public enum TileType {
 			86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 120, 121, 122, 123,
 			124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135),
 
-	ROAD(0, 713, 714, 715, 716, 717, 718, 750, 751, 752, 753, 754, 755, 787,
+	ROAD(10, 713, 714, 715, 716, 717, 718, 750, 751, 752, 753, 754, 755, 787,
 			788,
 			789, 790, 791, 792, 793, 794, 795, 796, 797, 861, 862, 863, 864, 865,
 			866, 830, 831, 832, 833, 834, 898, 899, 900, 901, 902, 903, 867, 868,
@@ -44,27 +44,44 @@ public enum TileType {
 			}
 	}
 
-	private final Integer cost;
+	private final float cost;
 	private int[] ids;
 
-	TileType(int cost, int... ids) {
-		this.cost = cost <= 0 ? null : cost;
+	TileType(float cost, int... ids) {
+		this.cost = cost;
 		this.ids = ids;
 	}
 
+	/**
+	 * @param id The tile ID to lookup
+	 * @return The TileType corresponding to this ID, or UNKNOWN if not found
+	 */
 	public static TileType getByID(int id) {
 		return TILES.getOrDefault(id, UNKNOWN);
 	}
 
+	/**
+	 * @param cell The cell to lookup. Can be null
+	 * @return The TileType corresponding to this cell, or UNKNOWN if not found
+	 * @see {@link TileType#getByID(int)}
+	 */
 	public static TileType getFromCell(TiledMapTileLayer.Cell cell) {
+		if (cell == null)
+			return UNKNOWN;
 		return getByID(cell.getTile().getId());
 	}
 
-	public Integer getCost() {
+	/**
+	 * @return The cost of this TileType
+	 */
+	public float getCost() {
 		return cost;
 	}
 
+	/**
+	 * @return True if this TileType has a positive, non-zero cost, otherwise false
+	 */
 	public boolean shouldHaveNode() {
-		return cost != null;
+		return cost > 0f;
 	}
 }

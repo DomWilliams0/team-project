@@ -221,14 +221,28 @@ public class WorldGraph implements Serializable {
 		}
 	}
 
+	/**
+	 * Removes the given node from the graph, snipping all connected edges
+	 * @param node The node to remove
+	 */
+	public void removeNode(Node node) {
+		node.clearNeighbours();
+		nodes.remove(node.getPoint());
+	}
+
+	/**
+	 * Removes the node at the given point, if it exists
+	 * @see {@link WorldGraph#removeNode(Node)}
+	 * @param point The position of the node to remove
+	 * @return True if the node existed and has been removed, otherwise false
+	 */
 	public boolean removeNode(Point point) {
 
 		Node node = getNode(point);
 		if (node == null)
 			return false;
 
-		node.clearNeighbours();
-		nodes.remove(point);
+		removeNode(node);
 		return true;
 	}
 

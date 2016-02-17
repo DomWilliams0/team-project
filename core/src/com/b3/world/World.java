@@ -9,6 +9,7 @@ import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
+import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
@@ -122,6 +123,7 @@ public class World implements Disposable {
 
 			TiledMapTileLayer tileLayer = (TiledMapTileLayer) layer;
 
+			// remove node even if unknown tile type is found
 			boolean removeAll = layer.getName().equals("objects");
 
 			// remove nodes on invalid tiles
@@ -136,8 +138,23 @@ public class World implements Disposable {
 					if (!removeAll && type == TileType.UNKNOWN)
 						continue;
 
-					if (!type.shouldHaveNode())
-						worldGraph.removeNode(new Point(x, y));
+
+					Node node = worldGraph.getNode(new Point(x, y));
+					if (node == null)
+						continue;
+
+					// cost of 0
+					if (!type.shouldHaveNode()) {
+						worldGraph.removeNode(node);
+					}
+					// apply cost to edges if the tile types are the same, or this node's cost is more than its neighbour's
+					else node.getEdges().keySet()
+							.parallelStream()
+							.filter(n -> {
+								TileType t = TileType.getFromCell(tileLayer.getCell(n.getPoint().x, n.getPoint().y));
+								return type.getCost() >= t.getCost() || t == type;
+							})
+							.forEach(n -> node.setEdgeCost(n, type.getCost()));
 				}
 			}
 

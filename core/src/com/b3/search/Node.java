@@ -48,6 +48,24 @@ public class Node implements Serializable {
 		return cost;
 	}
 
+	/**
+	 * Sets the cost of the edge between this and the given neighbour,
+	 * if it exists
+	 *
+	 * @param neighbour The neighbour who shares this edge
+	 * @param cost      The new cost
+	 * @return True if the neighbour is a valid neighbour and the
+	 * operation was successful, otherwise false
+	 */
+	public boolean setEdgeCost(Node neighbour, float cost) {
+		if (!edges.containsKey(neighbour))
+			return false;
+
+		edges.put(neighbour, cost);
+		neighbour.edges.put(this, cost);
+		return true;
+	}
+
 	public void addNeighbour(Node key, float cost) {
 		edges.put(key, cost);
 	}
