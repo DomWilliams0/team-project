@@ -195,7 +195,7 @@ public class SearchTicker {
 			}
 
 			// Send to search snapshot
-			snapshotTracker.addSnapshot(new Tuple<>(frontier, visited));
+			//snapshotTracker.addSnapshot(new Tuple<>(frontier, visited));
 		}
 	}
 
