@@ -54,6 +54,8 @@ public class World implements Disposable {
 	private List<Building> buildings;
 	private BuildingModelCache buildingCache;
 
+	private ModelManager modelManager;
+
 	private Engine engine;
 
 	private com.badlogic.gdx.physics.box2d.World physicsWorld;
@@ -90,6 +92,9 @@ public class World implements Disposable {
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+
+		// model manager
+		modelManager = new ModelManager(environment);
 
 		// entities
 		engine = new Engine();
@@ -284,6 +289,10 @@ public class World implements Disposable {
 		new Thread(eventGenerator).start();
 	}
 
+	public ModelManager getModelManager() {
+		return modelManager;
+	}
+
 	public Engine getEngine() {
 		return engine;
 	}
@@ -464,7 +473,6 @@ public class World implements Disposable {
 
 		if (counterAnimation > 1) {
 			counterAnimation = (float) (counterAnimation - 0.25);
-			agent.setSize((float) (counterAnimation * 0.1));
 			if (Config.getBoolean(ConfigKey.SHOW_GRID))
 				worldGraph.render(worldCamera, counterAnimation);
 		} else {
@@ -480,6 +488,9 @@ public class World implements Disposable {
 				.filter(building -> building.isVisible(worldCamera))
 				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
 		buildingBatch.end();
+
+		// render models
+		modelManager.render(worldCamera);
 
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))

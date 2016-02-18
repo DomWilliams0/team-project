@@ -1,7 +1,7 @@
 package com.b3.entity.system;
 
+import com.b3.entity.component.ModelComponent;
 import com.b3.entity.component.PhysicsComponent;
-import com.b3.entity.component.RenderComponent;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -13,17 +13,18 @@ import com.badlogic.gdx.math.Vector2;
  * Entity system to render entities as simple coloured shapes
  */
 public class RenderSystem extends IteratingSystem {
+
 	private ComponentMapper<PhysicsComponent> physics;
-	private ComponentMapper<RenderComponent> renders;
+	private ComponentMapper<ModelComponent> models;
 
 	private ShapeRenderer shapeRenderer;
 	private PerspectiveCamera camera;
 
 	public RenderSystem(PerspectiveCamera camera) {
-		super(Family.all(RenderComponent.class, PhysicsComponent.class).get());
+		super(Family.all(ModelComponent.class, PhysicsComponent.class).get());
 		this.camera = camera;
-		this.renders = ComponentMapper.getFor(RenderComponent.class);
 		this.physics = ComponentMapper.getFor(PhysicsComponent.class);
+		this.models = ComponentMapper.getFor(ModelComponent.class);
 		this.shapeRenderer = new ShapeRenderer();
 	}
 
@@ -39,11 +40,10 @@ public class RenderSystem extends IteratingSystem {
 	}
 
 	public void processEntity(Entity entity, float deltaTime) {
-		RenderComponent render = renders.get(entity);
+		ModelComponent model = models.get(entity);
 		PhysicsComponent phys = physics.get(entity);
 		Vector2 pos = phys.getPosition();
 
-		shapeRenderer.setColor(render.colour);
-		shapeRenderer.circle(pos.x, pos.y, render.radius, 20);
+		model.render(pos.x, pos.y, pos.angle());
 	}
 }
