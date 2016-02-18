@@ -7,6 +7,7 @@ import com.b3.search.util.takeable.StackT;
 import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.b3.util.Tuple;
 import com.b3.util.Utils;
 
 import java.util.*;
@@ -33,6 +34,8 @@ public class SearchTicker {
 	private SearchAlgorithm algorithm;
 	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
 	private Function2<Node, Node, Float> edgeCostFunction;
+
+	private SearchSnapshotTracker snapshotTracker;
 
 	public SearchTicker() {
 		setAllCompleted(true);
@@ -190,6 +193,9 @@ public class SearchTicker {
 							}
 						});
 			}
+
+			// Send to search snapshot
+			snapshotTracker.addSnapshot(new Tuple<>(frontier, visited));
 		}
 	}
 

@@ -104,7 +104,6 @@ public class SideBarNodes extends Table implements Disposable {
                 Gdx.files.internal("core/assets/gui/default.png"), false);
         skin.add("default", font, BitmapFont.class);
         Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
-
         skin.add("default", style);
 
 
@@ -143,7 +142,7 @@ public class SideBarNodes extends Table implements Disposable {
         });
 
         //put the nodes ui onto this
-        add(ui).maxWidth(preferredWidth).top();
+        add(ui).maxWidth(preferredWidth).top().pad(50);
         //set the background
         background(skin.getDrawable("window_02"));
         //add the button to the stage.
