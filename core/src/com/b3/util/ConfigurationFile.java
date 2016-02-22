@@ -6,13 +6,10 @@ import org.cfg4j.source.ConfigurationSource;
 import org.cfg4j.source.compose.MergeConfigurationSource;
 import org.cfg4j.source.context.filesprovider.ConfigFilesProvider;
 import org.cfg4j.source.files.FilesConfigurationSource;
-import org.cfg4j.source.reload.ReloadStrategy;
-import org.cfg4j.source.reload.strategy.ImmediateReloadStrategy;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Collections;
 
 public class ConfigurationFile {
 	private ConfigurationProvider provider;
@@ -42,24 +39,24 @@ public class ConfigurationFile {
 			System.err.println("Could not read user config '" + userPath + "', but continuing anyway");
 
 
-		final File finalUserFile = userFile;
-		ConfigFilesProvider fileProvider = () -> {
-			ArrayList<Path> configs = new ArrayList<>(2);
-			configs.add(Paths.get(refFile.getAbsolutePath()));
+		ConfigFilesProvider refConfigProvider = () -> Collections.singletonList(Paths.get(refFile.getAbsolutePath()));
+		ConfigurationSource source;
 
-			if (finalUserFile != null && finalUserFile.exists() && finalUserFile.canRead())
-				configs.add(Paths.get(finalUserFile.getAbsolutePath()));
-
-			return configs;
-		};
-		ConfigurationSource source = new MergeConfigurationSource(new FilesConfigurationSource(fileProvider));
-		ReloadStrategy reloadStrategy = new ImmediateReloadStrategy();
+		// merge reference with user config
+		if (userFile != null && userFile.exists()) {
+			final File finalUserFile = userFile;
+			ConfigFilesProvider userConfigProvider = () -> Collections.singletonList(Paths.get(finalUserFile.getAbsolutePath()));
+			source = new MergeConfigurationSource(
+					new FilesConfigurationSource(refConfigProvider),
+					new FilesConfigurationSource(userConfigProvider)
+			);
+		} else {
+			source = new FilesConfigurationSource(refConfigProvider);
+		}
 
 		provider = new ConfigurationProviderBuilder()
 				.withConfigurationSource(source)
-				.withReloadStrategy(reloadStrategy)
 				.build();
-
 	}
 
 	/**
