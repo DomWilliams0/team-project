@@ -30,7 +30,11 @@ public enum ConfigKey {
 	TIME_BETWEEN_TICKS_STEP("time-between-ticks-step"),
 
 	EVENT_GENERATION_MIN_TIME("event-generation-min-time"),
-	EVENT_GENERATION_MAX_TIME("event-generation-max-time");
+	EVENT_GENERATION_MAX_TIME("event-generation-max-time"),
+
+	TEXTURE_ATLAS("texture-atlas"),
+	FONT_FILE("font-file"),
+	FONT_IMAGE_FILE("font-image-file");
 
 	private final String key;
 

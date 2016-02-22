@@ -69,10 +69,13 @@ public class SideBar extends Table implements Disposable {
     private void initComponents() {
         setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         Skin skin = new Skin(atlas);
-        BitmapFont font = new BitmapFont(Gdx.files.internal("core/assets/gui/default.fnt"),
-                Gdx.files.internal("core/assets/gui/default.png"), false);
+        BitmapFont font = new BitmapFont(
+                Gdx.files.internal(Config.getString(ConfigKey.FONT_FILE)),
+                Gdx.files.internal(Config.getString(ConfigKey.FONT_IMAGE_FILE)),
+                false
+        );
 
         // ===================
         // === TABBED PANE ===

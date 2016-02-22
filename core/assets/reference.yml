@@ -24,3 +24,7 @@ time-between-ticks-step: 0.25
 
 event-generation-min-time: 3
 event-generation-max-time: 10
+
+texture-atlas: core/assets/gui/ui-blue.atlas
+font-file: core/assets/gui/default.fnt
+font-image-file: core/assets/gui/default.png
