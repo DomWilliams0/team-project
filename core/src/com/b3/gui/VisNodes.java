@@ -32,6 +32,7 @@ public class VisNodes extends Table {
     private ScrollPane fp, vp;
     private Table ft, vt;
     private float timer;
+    private boolean stepthrough;
 
     /**
      * Provides a description of how the search algorithms work,
@@ -53,6 +54,22 @@ public class VisNodes extends Table {
             "as visited (using a hash set),\n" +
             "to ensure we do not expand it again.";
 
+    private String newVisited = "<...>";
+    private String newFrontier = "<...>";
+    private String highestNode = "<...>";
+
+    private final String step1 = "I have just expanded the node:\n" +
+            "%s, which is now\n" +
+            "added to the visited set.\n";
+    private final String step2 = "I have added the following\n" +
+            "nodes to the frontier:\n" +
+            "%s\n";
+    private final String step3 = "My next node to expand is:\n" +
+            "%s";
+
+    private StringBuilder stepString;
+    private Formatter formatter;
+
     /**
      * Create a new data visualisation table
      *
@@ -61,6 +78,10 @@ public class VisNodes extends Table {
      */
     public VisNodes(Stage stage, Skin skin) {
         super(skin);
+
+        stepthrough = false;
+        stepString = new StringBuilder();
+        formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
 
         //anchor the table to the top-left position
         left().top();
@@ -97,6 +118,10 @@ public class VisNodes extends Table {
 
     }
 
+    public void setStepthrough(boolean stepthrough) {
+        this.stepthrough = stepthrough;
+    }
+
     /**
      * Render the table, using a given search ticker
      * This method will handle null values appropriately to save this occurring outside the object
@@ -108,20 +133,25 @@ public class VisNodes extends Table {
         if(ticker==null || ticker.getVisited()==null || ticker.getFrontier()==null) {
             render =  render(new StackT<>(), new HashSet<>(), SearchAlgorithm.BREADTH_FIRST);
         } else {
-            render =  render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
+            if(!stepthrough || ticker.isUpdated()) {
+                ticker.setUpdated(false);
+                render = render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
+            } else
+                render = 0;
+            newVisited = ticker.getMostRecentlyExpanded()==null?"<NOTHING>":ticker.getMostRecentlyExpanded().toString();
+            newFrontier = ticker.getLastFrontier()==null?"<NOTHING>":ticker.getLastFrontier().toString();
         }
         if (ticker != null) {
-        if(render==2) {
-            ticker.pause(0);
-        } else if(render == 1 && ticker.isPaused()) {
-            ticker.resume(0);
-        }
+            if(render==2) {
+                ticker.pause(0);
+            } else if(render == 1) {
+                ticker.resume(0);
+            }
         }
     }
 
     /**
-     * Render the table, currently using frame counter
-     * Therefore will only render every 30th call
+     * Render the table, preventing re-render based on time defined in config file.
      *
      * @param front the frontier to display
      * @param visited the visited set to display
@@ -132,16 +162,24 @@ public class VisNodes extends Table {
      *                                  - 2: The scrollpane(s) are being dragged.
      */
     public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg) {
-        //stop it rendering every frame
-        float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
-        timer += Utils.TRUE_DELTA_TIME;
-        if (timer < timeBetweenTicks)
-            return 0;
-
-        timer -= timeBetweenTicks;
-
+        //check if a scrollpane is being used
         if(vp.isDragging() || vp.isFlinging() || vp.isPanning() || fp.isDragging() || fp.isFlinging() || fp.isPanning()) {
             return 2;
+        }
+
+        //stop it rendering every frame unless we're stepping through
+        if(!stepthrough) {
+            float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
+            timer += Utils.TRUE_DELTA_TIME;
+            if (timer < timeBetweenTicks)
+                return 0;
+
+            if(timer > 2*timeBetweenTicks)
+                //it has been a long time since last render so reset it instead of decrementing it
+                timer = 0;
+            else
+                // it hasn't been too long since last render so decrement it
+                timer -= timeBetweenTicks;
         }
 
         //check whether we need to render a data collection
@@ -155,10 +193,11 @@ public class VisNodes extends Table {
             //get the frontier, as an arraylist
             ArrayList<Node> frontier = new ArrayList<>(front);
             //make the arraylist be ordered based on take-order of the collection
-            //todo doesn't currently do correctly for A* - get(0) is still highest priority, however.
+            //todo doesn't currently do correctly for A*.
             switch(alg) {
                 case DEPTH_FIRST: Collections.reverse(frontier);break;
             }
+            highestNode = frontier.get(0).toString();
 
             ArrayList<Node> visitedSorted = new ArrayList<>(visited);
             Collections.sort(visitedSorted, (p1, p2) -> {
@@ -168,8 +207,6 @@ public class VisNodes extends Table {
                 return p1.getPoint().getX() - p2.getPoint().getX();
             });
 
-
-            //if(!vp.isDragging() && !fp.isDragging()) {
             for (int i = 0; i < Math.max(frontier.size(), visitedSorted.size()); i++) {
                 vt.row();
                 ft.row();
@@ -180,8 +217,8 @@ public class VisNodes extends Table {
                     vt.add(visitedSorted.get(i).toString());
                 }
             }
-           // }
         }
+        setupDescription();
         return 1;
     }
 
@@ -251,8 +288,8 @@ public class VisNodes extends Table {
             row();
 
             //spacing
-            add("");
-            row();
+//            add("");
+//            row();
 
             //row 2 - description of data collections
             add(frontierDesc);
@@ -279,6 +316,7 @@ public class VisNodes extends Table {
             add("--Lowest Priority--");
             add("");
             row();
+
         } else {
             add("No search in progress...");
             row();
@@ -287,8 +325,18 @@ public class VisNodes extends Table {
             row();
         }
 
-        //final row - describe the algorithm in words
-        add(description).colspan(3);
+    }
+
+    private void setupDescription() {
+        if(stepthrough) {
+            stepString = new StringBuilder();
+            formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
+            formatter.format(step1+"\n"+step2+"\n"+step3, newVisited, newFrontier, highestNode);
+            add(stepString).colspan(3);
+        } else {
+            //final row - describe the algorithm in words
+            add(description).colspan(3);
+        }
     }
 
     /**

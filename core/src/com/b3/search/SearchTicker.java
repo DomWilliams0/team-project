@@ -17,6 +17,7 @@ public class SearchTicker {
 
 	private Takeable<Node> frontier;
 	private List<Node> lastFrontier = new ArrayList<>();
+	private Node mostRecentlyExpanded;
 
 	private Set<Node> visited = new HashSet<>();
 	private Map<Node, Node> cameFrom = new HashMap<>();
@@ -29,7 +30,12 @@ public class SearchTicker {
 
 	private int stepsPerTick;
 	private float timer;
-	private boolean[] paused; //array to identify who has told it to pause so conflicts don't occur
+	//array to identify who has told it to pause so conflicts don't occur
+	//0: scrollpane
+	//1: play/pause button
+	//4: stepthrough active
+	private boolean[] paused;
+	private boolean updated;
 
 	private SearchAlgorithm algorithm;
 	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
@@ -40,6 +46,7 @@ public class SearchTicker {
 	public SearchTicker() {
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
+		//setup pause status and ensure it is unpaused.
 		paused = new boolean[5];
 		for(int i=0;i<paused.length;i++) paused[i]=false;
 	}
@@ -121,25 +128,58 @@ public class SearchTicker {
 
 	}
 
+	/**
+	 * tick one step in the current search
+	 * abides by current pause status, and will only tick after a specified time since last tick.
+	 */
 	public void tick() {
-		// already complete
-		if (pathComplete)
-			return;
 
 		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
 		timer += Utils.TRUE_DELTA_TIME;
 		if (timer < timeBetweenTicks)
 			return;
 
-		timer -= timeBetweenTicks;
+		if(timer > 2*timeBetweenTicks)
+			//it has been a long time since last tick so reset it instead of decrementing it
+			timer = 0;
+		else
+			// it hasn't been too long since last tick so decrement it
+			timer -= timeBetweenTicks;
+
+		//check if we're supposed to be paused
+		if (isPaused()) return;
+
+		tickFinal();
+	}
+
+	/**
+	 * tick one step in the current search
+	 * with option to override time settings and pause status
+	 * @param override Whether to force a tick to occur regardless of time or pause status
+     */
+	public void tick(boolean override) {
+		if(override)
+			//override current status
+			tickFinal();
+		else
+			// tick, but check pause status and timer.
+			tick();
+	}
+
+	/**
+	 * Performs a tick where the only checks are whether it is complete
+	 * This being called will progress the search one step regardless of status of timer or pause.
+	 */
+	private void tickFinal() {
+		// already complete
+		if (pathComplete)
+			return;
 
 		// now complete
 		if (frontier.isEmpty()) {
 			pathComplete = true;
 			return;
 		}
-		//check if we're supposed to be paused
-		if (isPaused()) return;
 
 		lastFrontier.clear();
 
@@ -154,10 +194,12 @@ public class SearchTicker {
 			}
 
 			Node node = frontier.take();
-
 			// already visited
 			if (visited.contains(node))
 				continue;
+
+			//record us expanding this node
+			mostRecentlyExpanded = node;
 
 			visited.add(node);
 
@@ -176,6 +218,7 @@ public class SearchTicker {
 						if (!inPending) {
 							cameFrom.put(s, node);
 							frontier.add(s);
+							lastFrontier.add(s);
 						}
 					}
 				}
@@ -185,8 +228,10 @@ public class SearchTicker {
 						.filter(child -> !visited.contains(child))
 						.forEach(child -> {
 							float tentative_g = costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
-							if (!frontier.contains(child))
+							if (!frontier.contains(child)) {
 								frontier.add(child);
+								lastFrontier.add(child);
+							}
 							if (tentative_g <= costSoFarFunction.apply(child)) {
 								cameFrom.put(child, node);
 								costSoFar.put(child, tentative_g);
@@ -197,6 +242,7 @@ public class SearchTicker {
 			// Send to search snapshot
 			//snapshotTracker.addSnapshot(new Tuple<>(frontier, visited));
 		}
+		setUpdated(true);
 	}
 
 	private List<Node> constructPath(Map<Node, Node> map, Node start, Node end) {
@@ -260,6 +306,15 @@ public class SearchTicker {
 		return false;
 	}
 
+	/**
+	 * query an individual index of paused as to whether it is paused.
+	 * @param index the index to query
+	 * @return wither paused[index] is true
+     */
+	public boolean isPaused(int index) {
+		return paused[index];
+	}
+
 	public int getStepsPerTick() {
 		return stepsPerTick;
 	}
@@ -282,6 +337,22 @@ public class SearchTicker {
 
 	public SearchAlgorithm getAlgorithm() {
 		return algorithm;
+	}
+
+	public Node getMostRecentlyExpanded() {
+		return mostRecentlyExpanded;
+	}
+
+	public List<Node> getLastFrontier() {
+		return lastFrontier;
+	}
+
+	public void setUpdated(boolean updated) {
+		this.updated = updated;
+	}
+
+	public boolean isUpdated() {
+		return updated;
 	}
 
 }

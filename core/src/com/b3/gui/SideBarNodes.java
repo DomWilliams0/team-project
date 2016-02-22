@@ -42,8 +42,8 @@ public class SideBarNodes extends Table implements Disposable {
      *
      * @param stage The stage on which to act and draw.
      */
-    public SideBarNodes(Stage stage) {
-        this(stage, 370);
+    public SideBarNodes(Stage stage, World world) {
+        this(stage, world, 370);
     }
 
     /**
@@ -52,10 +52,11 @@ public class SideBarNodes extends Table implements Disposable {
      * @param stage The stage on which to act and draw
      * @param preferredWidth The preferred width of the gui table
      */
-    public SideBarNodes(Stage stage, float preferredWidth) {
+    public SideBarNodes(Stage stage, World world, float preferredWidth) {
         this.stage = stage;
         this.isOpen = false;
         this.preferredWidth = preferredWidth;
+        this.world = world;
 
         //set the position to be off-screen to the right
         setPosition(Gdx.graphics.getWidth(), 0);
@@ -184,9 +185,14 @@ public class SideBarNodes extends Table implements Disposable {
         setHeight(Gdx.graphics.getHeight());
         triggerBtn.getTextButton().setY(Gdx.graphics.getHeight() / 2);
         SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
+        ui.setStepthrough(currentSearch.isPaused(4));
         ui.render(currentSearch);
 
         stage.draw();
+    }
+
+    public void setStepthrough(boolean stepthrough) {
+        ui.setStepthrough(stepthrough);
     }
 
     /**

@@ -252,12 +252,17 @@ public class SideBar extends Table implements Disposable {
                 TextButton btnplaypause = playPause.getTextButton();
                 String text = btnplaypause.getText().toString();
                 SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                if(text.equals("Pause") && !ticker.isPaused()) {
-                    ticker.pause(1);
-                    btnplaypause.setText("Play");
+                if(text.equals("Pause")) {
+                    ticker.pause(4); //todo return to 1 since 4 is for stepthrough
+                    ticker.setUpdated(true);
+                    btnplaypause.setText("Next"); //todo make "Play" (see next todo)
                 } else if(text.equals("Play")){
                     ticker.resume(1);
                     btnplaypause.setText("Pause");
+                } else if(text.equals("Next")) {
+                    //TODO THIS BUTTON STATE IS FOR TESTING PURPOSES - REMOVE LATER
+                    ticker.tick(true);
+
                 }
             }
         });

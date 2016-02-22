@@ -74,8 +74,8 @@ public class MainGame extends ApplicationAdapter {
 		sideBar = new SideBar(sideBarStage, world);
 		sideBarStage.addActor(sideBar);
 
-		sideBarNodes = new SideBarNodes(sideBarStage);
-		sideBarNodes.setWorld(world);
+		sideBarNodes = new SideBarNodes(sideBarStage, world);
+		sideBarNodes.setStepthrough(true);
 		sideBarStage.addActor(sideBarNodes);
 	}
 
