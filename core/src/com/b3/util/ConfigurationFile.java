@@ -34,8 +34,12 @@ public class ConfigurationFile {
 
 		if (!refFile.exists())
 			throw new IllegalArgumentException("Could not find reference config: " + referencePath);
+		if (!refFile.canRead())
+			throw new IllegalArgumentException("Could not read reference config: " + referencePath);
 		if (userFile != null && !userFile.exists())
 			System.err.println("Could not find user config '" + userPath + "', but continuing anyway");
+		if (userFile != null && userFile.exists() && !userFile.canRead())
+			System.err.println("Could not read user config '" + userPath + "', but continuing anyway");
 
 
 		final File finalUserFile = userFile;
@@ -43,7 +47,7 @@ public class ConfigurationFile {
 			ArrayList<Path> configs = new ArrayList<>(2);
 			configs.add(Paths.get(refFile.getAbsolutePath()));
 
-			if (finalUserFile != null)
+			if (finalUserFile != null && finalUserFile.exists() && finalUserFile.canRead())
 				configs.add(Paths.get(finalUserFile.getAbsolutePath()));
 
 			return configs;
