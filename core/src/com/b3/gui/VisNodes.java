@@ -29,10 +29,6 @@ import java.util.*;
  */
 public class VisNodes extends Table {
 
-
-    private int frameDelay = 30; // todo: use time instead, for frame rate independence - should get from search ticker
-    private int frameCounter = 0;
-    private Stage stage;
     private ScrollPane fp, vp;
     private Table ft, vt;
     private float timer;
@@ -65,13 +61,12 @@ public class VisNodes extends Table {
      */
     public VisNodes(Stage stage, Skin skin) {
         super(skin);
-        this.stage = stage;
 
         //anchor the table to the top-left position
         left().top();
 
         ScrollPane.ScrollPaneStyle style = new ScrollPane.ScrollPaneStyle();
-        style.background = getBackground(); //todo this might need to be null -- maybe not
+        style.background = getBackground();
         style.hScroll = skin.getDrawable("scroll_back_hor");
         style.hScrollKnob = skin.getDrawable("knob_05");
         style.vScroll = skin.getDrawable("scroll_back_ver");
