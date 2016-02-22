@@ -36,7 +36,7 @@ public class Agent extends Entity {
 		float radius = diameter / 2f;
 
 		// render
-		add(new ModelComponent(new ModelController("person", world.getModelManager(), true)));
+		add(new ModelComponent(new ModelController("agent", world.getModelManager(), true)));
 
 		// physics
 		BodyDef bodyDef = new BodyDef();

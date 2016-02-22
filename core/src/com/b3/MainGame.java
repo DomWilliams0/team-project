@@ -2,18 +2,17 @@ package com.b3;
 
 import com.b3.gui.SideBar;
 import com.b3.gui.SideBarNodes;
+import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
 import com.b3.input.WorldSelectionHandler;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Utils;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -27,6 +26,7 @@ public class MainGame extends Game {
 	public Stage mainMenuStage;
 	public SideBar sideBar;
 	public SideBarNodes sideBarNodes;
+	public HelpBox helpBox;
 	public KeyboardController keyboardController;
 
 	@Override
@@ -45,6 +45,9 @@ public class MainGame extends Game {
 
 		// register input handlers
 		initInputHandlers();
+
+		// render the models properly
+		DefaultShader.defaultCullFace = 0;
 
 		// init camera
 		Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
@@ -81,12 +84,16 @@ public class MainGame extends Game {
 
 	private void setupSidebar() {
 		sideBarStage = new Stage(new ScreenViewport());
+
 		sideBar = new SideBar(sideBarStage, world);
 		sideBarStage.addActor(sideBar);
 
 		sideBarNodes = new SideBarNodes(sideBarStage, world);
 		sideBarNodes.setStepthrough(true);
 		sideBarStage.addActor(sideBarNodes);
+
+		helpBox = new HelpBox(sideBarStage, world);
+		sideBarStage.addActor(helpBox);
 	}
 
 	private void setupMainMenu() {

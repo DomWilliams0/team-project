@@ -37,11 +37,9 @@ public class VisualisationScreen implements Screen {
         game.world.render();
 
         // sidebar rendering
-        game.sideBar.act();
-        game.sideBar.render();
-
-        game.sideBarNodes.act();
+        game.sideBarStage.act(Gdx.graphics.getDeltaTime());
         game.sideBarNodes.render();
+        game.sideBarStage.draw();
 
         if (game.keyboardController.shouldExit())
             Gdx.app.exit();
@@ -50,7 +48,9 @@ public class VisualisationScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         game.sideBarStage.getViewport().update(width, height, true);
+        game.sideBar.resize(width, height);
         game.sideBarNodes.resize(width, height);
+        game.helpBox.resize(width, height);
 
         game.camera.viewportWidth = width;
         game.camera.viewportHeight = height;

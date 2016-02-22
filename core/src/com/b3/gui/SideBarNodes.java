@@ -156,6 +156,9 @@ public class SideBarNodes extends Table implements Disposable {
      * @param height Window height
      */
     public void resize(int width, int height) {
+        setHeight(height);
+        triggerBtn.getComponent().setY(height / 2);
+
         TextButton _triggerBtn = triggerBtn.getComponent();
         if (isOpen) {
             setX(width- preferredWidth);
@@ -168,24 +171,13 @@ public class SideBarNodes extends Table implements Disposable {
     }
 
     /**
-     * Tell the stage held by this object to act.
-     */
-    public void act() {
-        stage.act(Gdx.graphics.getDeltaTime());
-    }
-
-    /**
      * Render this menu and the underlying nodes table.
      * Will update the current progress of the search from the world provided in {@link SideBarNodes#setWorld(World)}
      */
     public void render() {
-        setHeight(Gdx.graphics.getHeight());
-        triggerBtn.getComponent().setY(Gdx.graphics.getHeight() / 2);
         SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
         ui.setStepthrough(currentSearch.isPaused(4));
         ui.render(currentSearch);
-
-        stage.draw();
     }
 
     public void setStepthrough(boolean stepthrough) {

@@ -423,15 +423,16 @@ public class SideBar extends Table implements Disposable {
         this.world = world;
     }
 
-    public void act() {
-        stage.act(Gdx.graphics.getDeltaTime());
-    }
-
-    public void render() {
-        setHeight(Gdx.graphics.getHeight());
-        triggerBtn.getComponent().setY(Gdx.graphics.getHeight() / 2);
-
-        stage.draw();
+    /**
+     * Resize this menu
+     * Should be called whenever the window is resized.
+     *
+     * @param width Window width
+     * @param height Window height
+     */
+    public void resize(int width, int height) {
+        setHeight(height);
+        triggerBtn.getComponent().setY(height / 2);
     }
 
     @Override

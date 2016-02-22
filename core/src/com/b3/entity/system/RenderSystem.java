@@ -19,6 +19,7 @@ public class RenderSystem extends IteratingSystem {
 
 	private ShapeRenderer shapeRenderer;
 	private PerspectiveCamera camera;
+	private Vector2 previousPosition;
 
 	public RenderSystem(PerspectiveCamera camera) {
 		super(Family.all(ModelComponent.class, PhysicsComponent.class).get());
@@ -26,6 +27,7 @@ public class RenderSystem extends IteratingSystem {
 		this.physics = ComponentMapper.getFor(PhysicsComponent.class);
 		this.models = ComponentMapper.getFor(ModelComponent.class);
 		this.shapeRenderer = new ShapeRenderer();
+		this.previousPosition = new Vector2();
 	}
 
 	@Override
@@ -44,6 +46,14 @@ public class RenderSystem extends IteratingSystem {
 		PhysicsComponent phys = physics.get(entity);
 		Vector2 pos = phys.getPosition();
 
-		model.render(pos.x, pos.y, pos.angle());
+		model.render(pos.x, pos.y, (float) angle(previousPosition, pos));
+		previousPosition = new Vector2(pos);
 	}
+
+	private double angle(Vector2 v1, Vector2 v2) {
+		double xdiff = v1.x -v2.x,
+				ydiff = v2.y - v1.y;
+		return Math.toDegrees(Math.atan2(ydiff, xdiff));
+	}
+
 }
