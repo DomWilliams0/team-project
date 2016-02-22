@@ -46,6 +46,10 @@ public class EventGenerator extends Observable implements Runnable {
         triggerEvent(eventType);
     }
 
+    /**
+     * Triggers a specific event
+     * @param eventType The event type (FIRE, ROBBERY, DELIVERY)
+     */
     public void triggerEvent(EventType eventType) {
         EventMessage evtMessage = new EventMessage(eventType);
         WorldEvent evt = new WorldEvent(world, eventType);
@@ -57,6 +61,10 @@ public class EventGenerator extends Observable implements Runnable {
         notifyObservers(evtMessage);
     }
 
+    /**
+     * Triggers an event
+     * @param eventMessage The event message to pass to the observer
+     */
     public void triggerEvent(EventMessage eventMessage) {
         setChanged();
         notifyObservers(eventMessage);

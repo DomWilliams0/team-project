@@ -4,6 +4,7 @@ import com.b3.entity.Agent;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.entity.ai.BehaviourType;
+import com.b3.gui.components.*;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -130,7 +131,7 @@ public class SideBar extends Table implements Disposable {
 
         // Show grid checkbox
         CheckBoxComponent showGridCheckBox = new CheckBoxComponent(skin, font, "Show grid");
-        showGridCheckBox.getCheckBox().setChecked(Config.getBoolean(ConfigKey.SHOW_GRID));
+        showGridCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.SHOW_GRID));
         showGridCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -139,7 +140,7 @@ public class SideBar extends Table implements Disposable {
             }
         });
 
-        settingsTab.add(showGridCheckBox.getCheckBox())
+        settingsTab.add(showGridCheckBox.getComponent())
                 .align(Align.left)
                 .maxWidth(preferredWidth)
                 .spaceBottom(10);
@@ -148,7 +149,7 @@ public class SideBar extends Table implements Disposable {
         // Flat buildings checkbox
         // todo the name needs changing?
         CheckBoxComponent showLabelsCheckBox = new CheckBoxComponent(skin, font, "Flat buildings");
-        showLabelsCheckBox.getCheckBox().setChecked(Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS));
+        showLabelsCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS));
         showLabelsCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -158,7 +159,7 @@ public class SideBar extends Table implements Disposable {
             }
         });
 
-        settingsTab.add(showLabelsCheckBox.getCheckBox())
+        settingsTab.add(showLabelsCheckBox.getComponent())
                 .align(Align.left)
                 .maxWidth(preferredWidth)
                 .spaceBottom(10);
@@ -166,7 +167,7 @@ public class SideBar extends Table implements Disposable {
 
         // Show paths checkbox
         CheckBoxComponent showPathsCheckbox = new CheckBoxComponent(skin, font, "Show paths");
-        showPathsCheckbox.getCheckBox().setChecked(Config.getBoolean(ConfigKey.SHOW_PATHS));
+        showPathsCheckbox.getComponent().setChecked(Config.getBoolean(ConfigKey.SHOW_PATHS));
         showPathsCheckbox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -174,7 +175,7 @@ public class SideBar extends Table implements Disposable {
             }
         });
 
-        settingsTab.add(showPathsCheckbox.getCheckBox())
+        settingsTab.add(showPathsCheckbox.getComponent())
                 .align(Align.left)
                 .maxWidth(preferredWidth);
         settingsTab.row();
@@ -237,7 +238,7 @@ public class SideBar extends Table implements Disposable {
             }
         });
 
-        settingsTab.add(startButton.getTextButton())
+        settingsTab.add(startButton.getComponent())
                 .align(Align.center)
                 .maxWidth(preferredWidth)
                 .spaceTop(20);
@@ -249,7 +250,7 @@ public class SideBar extends Table implements Disposable {
         playPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                TextButton btnplaypause = playPause.getTextButton();
+                TextButton btnplaypause = playPause.getComponent();
                 String text = btnplaypause.getText().toString();
                 SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
                 if(text.equals("Pause")) {
@@ -267,7 +268,7 @@ public class SideBar extends Table implements Disposable {
             }
         });
 
-        settingsTab.add(playPause.getTextButton())
+        settingsTab.add(playPause.getComponent())
                 .align(Align.center)
                 .maxWidth(preferredWidth)
                 .spaceTop(5);
@@ -351,7 +352,7 @@ public class SideBar extends Table implements Disposable {
             }
         });
 
-        eventsTab.add(queueGoalButton.getTextButton())
+        eventsTab.add(queueGoalButton.getComponent())
                 .align(Align.center)
                 .maxWidth(preferredWidth);
         eventsTab.row();
@@ -372,11 +373,11 @@ public class SideBar extends Table implements Disposable {
         // ======================
 
         triggerBtn = new ButtonComponent(skin, font, ">");
-        triggerBtn.getTextButton().setPosition(-20, Gdx.graphics.getHeight() / 2);
+        triggerBtn.getComponent().setPosition(-20, Gdx.graphics.getHeight() / 2);
         triggerBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                TextButton _triggerBtn = triggerBtn.getTextButton();
+                TextButton _triggerBtn = triggerBtn.getComponent();
 
                 if (!isOpen) {
                     setX(0);
@@ -398,7 +399,7 @@ public class SideBar extends Table implements Disposable {
 
         add(tabbedPane).maxWidth(preferredWidth);
         background(skin.getDrawable("window_03"));
-        this.stage.addActor(triggerBtn.getTextButton());
+        this.stage.addActor(triggerBtn.getComponent());
     }
 
     /*public void setPreferredWidth(float preferredWidth) {
@@ -407,7 +408,7 @@ public class SideBar extends Table implements Disposable {
         setSize(preferredWidth, Gdx.graphics.getHeight());
 
         if (isOpen) {
-            triggerBtn.getTextButton().setX(preferredWidth - 20);
+            triggerBtn.getComponent().setX(preferredWidth - 20);
         }
 
         for (Actor component : getChildren()) {
@@ -425,7 +426,7 @@ public class SideBar extends Table implements Disposable {
 
     public void render() {
         setHeight(Gdx.graphics.getHeight());
-        triggerBtn.getTextButton().setY(Gdx.graphics.getHeight() / 2);
+        triggerBtn.getComponent().setY(Gdx.graphics.getHeight() / 2);
 
         stage.draw();
     }

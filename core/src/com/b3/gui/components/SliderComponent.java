@@ -1,4 +1,4 @@
-package com.b3.gui;
+package com.b3.gui.components;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;

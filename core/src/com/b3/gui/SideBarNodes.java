@@ -1,8 +1,7 @@
 package com.b3.gui;
 
+import com.b3.gui.components.ButtonComponent;
 import com.b3.search.SearchTicker;
-import com.b3.search.util.SearchAlgorithm;
-import com.b3.search.util.takeable.StackT;
 import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -20,8 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
-
-import java.util.HashSet;
 
 /**
  * Provides a table to display the frontier and visited nodes
@@ -117,11 +114,11 @@ public class SideBarNodes extends Table implements Disposable {
         // ======================
 
         triggerBtn = new ButtonComponent(skin, font, "<");
-        triggerBtn.getTextButton().setPosition(Gdx.graphics.getWidth() - triggerBtn.getTextButton().getWidth() + 20, Gdx.graphics.getHeight() / 2);
+        triggerBtn.getComponent().setPosition(Gdx.graphics.getWidth() - triggerBtn.getComponent().getWidth() + 20, Gdx.graphics.getHeight() / 2);
         triggerBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                TextButton _triggerBtn = triggerBtn.getTextButton();
+                TextButton _triggerBtn = triggerBtn.getComponent();
 
                 if (!isOpen) {
                     setX(Gdx.graphics.getWidth()- preferredWidth);
@@ -147,7 +144,7 @@ public class SideBarNodes extends Table implements Disposable {
         //set the background
         background(skin.getDrawable("window_02"));
         //add the button to the stage.
-        this.stage.addActor(triggerBtn.getTextButton());
+        this.stage.addActor(triggerBtn.getComponent());
 
     }
 
@@ -159,7 +156,7 @@ public class SideBarNodes extends Table implements Disposable {
      * @param height Window height
      */
     public void resize(int width, int height) {
-        TextButton _triggerBtn = triggerBtn.getTextButton();
+        TextButton _triggerBtn = triggerBtn.getComponent();
         if (isOpen) {
             setX(width- preferredWidth);
             setY(0);
@@ -183,7 +180,7 @@ public class SideBarNodes extends Table implements Disposable {
      */
     public void render() {
         setHeight(Gdx.graphics.getHeight());
-        triggerBtn.getTextButton().setY(Gdx.graphics.getHeight() / 2);
+        triggerBtn.getComponent().setY(Gdx.graphics.getHeight() / 2);
         SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
         ui.setStepthrough(currentSearch.isPaused(4));
         ui.render(currentSearch);

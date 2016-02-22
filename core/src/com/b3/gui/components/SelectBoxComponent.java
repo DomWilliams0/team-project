@@ -1,4 +1,4 @@
-package com.b3.gui;
+package com.b3.gui.components;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
