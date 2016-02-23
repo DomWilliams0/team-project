@@ -21,6 +21,7 @@ public class WorldCamera extends PerspectiveCamera {
 	private Vector2 inputDelta;
 
 	private PhysicsComponent followedAgent;
+	private float zoomAmount;
 
 	// todo redo camera restriction
 
@@ -116,6 +117,14 @@ public class WorldCamera extends PerspectiveCamera {
 		if (newZ >= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MINIMUM)
 				&& newZ <= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM))
 			translateSafe(0f, 0f, delta);
+
+		zoomAmount = newZ;
+	}
+
+	public float getCurrentZoom() {
+		if (zoomAmount > 30) {
+			return zoomAmount - 30;
+		} else return 1;
 	}
 
 	private void trackEntity() {

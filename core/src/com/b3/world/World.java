@@ -467,6 +467,8 @@ public class World implements Disposable {
 		});
 		deadEntities.clear();
 
+		float zoomScalar = worldCamera.getCurrentZoom();
+
 		// render tiled world
 		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
@@ -474,10 +476,10 @@ public class World implements Disposable {
 		if (counterAnimation > 1) {
 			counterAnimation = (float) (counterAnimation - 0.25);
 			if (Config.getBoolean(ConfigKey.SHOW_GRID))
-				worldGraph.render(worldCamera, counterAnimation);
+				worldGraph.render(worldCamera, counterAnimation, zoomScalar);
 		} else {
 			if (Config.getBoolean(ConfigKey.SHOW_GRID))
-				worldGraph.render(worldCamera, 1);
+				worldGraph.render(worldCamera, 1, zoomScalar);
 		}
 
 		// tick entities and physics
