@@ -97,7 +97,7 @@ public class World implements Disposable {
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
 		// model manager
-		modelManager = new ModelManager(environment);
+		modelManager = new ModelManager(environment, map);
 
 		// entities
 		engine = new Engine();

@@ -3,7 +3,7 @@ camera-zoom-speed: 0.5
 camera-move-speed: 0.5
 camera-distance-default: 10
 camera-distance-min: 5
-camera-distance-max: 20
+camera-distance-max: 45
 
 building-collisions: true
 entity-kill-distance: 1.5

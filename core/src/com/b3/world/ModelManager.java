@@ -1,10 +1,12 @@
 package com.b3.world;
 
+import com.b3.util.Utils;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.*;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
@@ -36,20 +38,34 @@ public class ModelManager {
 	private AssetManager assetManager = new AssetManager();
 	private ModelBatch modelBatch = new ModelBatch();
 
-	public ModelManager(Environment environment) {
+	public ModelManager(Environment environment, TiledMap map) {
 		this.environment = environment;
 
-		// --- Place all the static models. ---
-		// lights
-		new ModelController("light", this, true).setPosition(37, 39, 0).setRotation(270);
-		new ModelController("light", this, true).setPosition(35, 39, 0).setRotation(180);
-		new ModelController("light", this, true).setPosition(35, 37, 0).setRotation(90);
-		new ModelController("light", this, true).setPosition(37, 37, 0).setRotation(0);
-		// TODO - Lighting.
+		MapLayer modelLayer = map.getLayers().get("models");
+		if (modelLayer == null)
+			return;
+
+		for (MapObject object : modelLayer.getObjects()) {
+			MapProperties props = object.getProperties();
+			String modelName = props.get("model", String.class);
+
+			ModelController model = new ModelController(
+					modelName, this, true);
+
+			Float x = props.get("x", Float.class) + 0.5f * Utils.TILESET_RESOLUTION;
+			Float y = props.get("y", Float.class) + 0.5f * Utils.TILESET_RESOLUTION;
+			model.setPosition(
+					x / Utils.TILESET_RESOLUTION,
+					y / Utils.TILESET_RESOLUTION,
+					0f
+			);
+			model.setRotation(Float.parseFloat(props.get("rotation", String.class)));
+		}
 	}
 
 	/**
 	 * Renders all the {@link ModelInstance ModelInstances}.
+	 *
 	 * @param worldCamera The {@link WorldCamera} to render them for.
 	 */
 	public void render(WorldCamera worldCamera) {
@@ -62,6 +78,7 @@ public class ModelManager {
 	/**
 	 * The path convention that {@link Model Models} follow.
 	 * For easier loading, so we don't have to pass around paths.
+	 *
 	 * @param modelName The name of the {@link Model} to get the file
 	 *                  path of.
 	 * @return The path for the given {@link Model} name.
@@ -74,6 +91,7 @@ public class ModelManager {
 	 * Loads and passes back any {@link ModelInstance ModelInstances}
 	 * to any {@link ModelController ModelControllers} that requested
 	 * them.
+	 *
 	 * @see #requestModel(String, Consumer)
 	 */
 	public void tryLoadAssets() {
@@ -114,6 +132,7 @@ public class ModelManager {
 	 * {@link Model} name.
 	 * The {@link ModelInstance} will be given back at some point by
 	 * the {@code passBack} {@link Consumer}.
+	 *
 	 * @param modelName The name of the {@link Model} to get.
 	 * @param passBack  The {@link Consumer} that will be given the
 	 *                  {@link ModelInstance}.
