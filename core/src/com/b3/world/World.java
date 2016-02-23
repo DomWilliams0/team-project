@@ -68,8 +68,11 @@ public class World implements Disposable {
 
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
-	private float counterAnimation = 10;
 	private Agent agent;
+
+	private float counterAnimation = 10;
+	private int counterScaler = 0;
+	private double pos = 1;
 
 	public World() {
 	}
@@ -261,6 +264,8 @@ public class World implements Disposable {
 		engine.addSystem(new AISystem(worldGraph));
 
 		worldCamera = camera;
+
+		worldCamera.setCurrrentZoom(Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) / 2);
 
 		// debug: test entities
 		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
@@ -467,7 +472,7 @@ public class World implements Disposable {
 		});
 		deadEntities.clear();
 
-		float zoomScalar = worldCamera.getCurrentZoom();
+		float zoomScalar = getZoomScalar();
 
 		// render tiled world
 		worldCamera.positionMapRenderer(renderer);
@@ -497,6 +502,31 @@ public class World implements Disposable {
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
 			debugRenderer.render(worldCamera);
+	}
+
+	private float getZoomScalar() {
+		if (Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) != 45)
+			System.err.println("Set max zoom in userconfig to 45, zoom only works with this so far...");
+
+		//TODO make it work for different max zooms
+		//TODO refactor this stuff
+		float zoomScalar = worldCamera.getCurrentZoom();
+
+		if (zoomScalar < 14 && zoomScalar > 1.5) {
+			counterScaler++;
+		} else {
+			counterScaler = 0;
+			if (zoomScalar >= 14)
+				pos = -0.25;
+			if (zoomScalar <= 1.5)
+				pos = 0.25;
+		}
+
+		if (counterScaler > 5) {
+			//too long in-between animations
+			worldCamera.setCurrrentZoom((float) (worldCamera.getActualZoom()+ pos));
+		}
+		return zoomScalar;
 	}
 
 	public void flattenBuildings(boolean flatten) {

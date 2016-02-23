@@ -346,7 +346,7 @@ public class WorldGraph implements Serializable {
 		shapeRenderer.end();
 
 		//if scaled back so much that nodes collapse in on each other, then show white lines on top
-		if (zoomScalar > 1) {
+		if (zoomScalar > 2) {
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
@@ -362,15 +362,19 @@ public class WorldGraph implements Serializable {
 						float tempColRGBVal = (float) ((zoomScalar - 8) * 7.5);
 						tempColRGBVal = tempColRGBVal / 100;
 						shapeRenderer.setColor(tempColRGBVal, tempColRGBVal, tempColRGBVal, tempColRGBVal);
+						if (zoomScalar > 8)
+							shapeRenderer.line(
+									node1.getPoint().x, node1.getPoint().y,
+									neighbour.getKey().getPoint().x, neighbour.getKey().getPoint().y
+							);
 					} else {
 						Color col = new Color(((colouringRedValue + 1) * 25) / 100, 0, 0, 0);
 						shapeRenderer.setColor(col);
+						shapeRenderer.line(
+								node1.getPoint().x, node1.getPoint().y,
+								neighbour.getKey().getPoint().x, neighbour.getKey().getPoint().y
+						);
 					}
-
-					shapeRenderer.line(
-							node1.getPoint().x, node1.getPoint().y,
-							neighbour.getKey().getPoint().x, neighbour.getKey().getPoint().y
-					);
 				}
 			}
 
@@ -408,6 +412,17 @@ public class WorldGraph implements Serializable {
 				if (zoomScalarInside < 1)
 					zoomScalarInside = 1;
 
+				// draw visited nodes
+				shapeRenderer.setColor(Color.BLACK);
+				for (Node visitedNode : visited) {
+					shapeRenderer.circle(
+							visitedNode.getPoint().getX(),
+							visitedNode.getPoint().getY(),
+							(float) ((NODE_RADIUS * zoomScalarInside) + 0.1),
+							NODE_EDGES
+					);
+				}
+
 
 				// draw visited nodes
 				shapeRenderer.setColor(VISITED_COLOUR);
@@ -415,7 +430,7 @@ public class WorldGraph implements Serializable {
 					shapeRenderer.circle(
 							visitedNode.getPoint().getX(),
 							visitedNode.getPoint().getY(),
-							NODE_RADIUS * zoomScalarInside,
+							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
 							NODE_EDGES
 					);
 				}
@@ -426,12 +441,23 @@ public class WorldGraph implements Serializable {
 //                }
 
 				// draw frontier
+				shapeRenderer.setColor(Color.BLACK);
+				for (Node frontierNode : frontier) {
+					shapeRenderer.circle(
+							frontierNode.getPoint().getX(),
+							frontierNode.getPoint().getY(),
+							(float) ((NODE_RADIUS * zoomScalarInside) + 0.1),
+							NODE_EDGES
+					);
+				}
+
+				// draw frontier
 				shapeRenderer.setColor(FRONTIER_COLOUR);
 				for (Node frontierNode : frontier) {
 					shapeRenderer.circle(
 							frontierNode.getPoint().getX(),
 							frontierNode.getPoint().getY(),
-							NODE_RADIUS * zoomScalarInside,
+							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
 							NODE_EDGES
 					);
 				}

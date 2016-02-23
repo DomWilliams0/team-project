@@ -121,6 +121,21 @@ public class WorldCamera extends PerspectiveCamera {
 		zoomAmount = newZ;
 	}
 
+	public void setCurrrentZoom (float zoom) {
+		float newZ = zoom;
+		float delta = newZ - position.z;
+
+		if (newZ >= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MINIMUM)
+				&& newZ <= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM))
+			translateSafe(0f, 0f, delta);
+
+		zoomAmount = newZ;
+	}
+
+	public float getActualZoom() {
+		return zoomAmount;
+	}
+
 	public float getCurrentZoom() {
 		if (zoomAmount > 30) {
 			return zoomAmount - 30;
