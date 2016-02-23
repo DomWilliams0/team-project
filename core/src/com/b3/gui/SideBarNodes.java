@@ -12,10 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
@@ -33,6 +30,7 @@ public class SideBarNodes extends Table implements Disposable {
     private World world;
     private boolean isOpen;
     private float preferredWidth;
+    private ButtonComponent next;
 
     /**
      * Create a new gui element with a default preferred size
@@ -138,9 +136,24 @@ public class SideBarNodes extends Table implements Disposable {
 
             }
         });
+        next = new ButtonComponent(skin, font, "Next step");
+        next.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                ticker.tick(true);
+            }
+        });
+        next.getComponent().setVisible(false);
+
 
         //put the nodes ui onto this
         add(ui).maxWidth(preferredWidth).top().pad(50);
+
+        row();
+        add(next.getComponent());
+
+
         //set the background
         background(skin.getDrawable("window_02"));
         //add the button to the stage.
@@ -176,12 +189,13 @@ public class SideBarNodes extends Table implements Disposable {
      */
     public void render() {
         SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
-        ui.setStepthrough(currentSearch.isPaused(4));
+        setStepthrough(currentSearch.isPaused(1));
         ui.render(currentSearch);
     }
 
     public void setStepthrough(boolean stepthrough) {
         ui.setStepthrough(stepthrough);
+        next.getComponent().setVisible(stepthrough);
     }
 
     /**
