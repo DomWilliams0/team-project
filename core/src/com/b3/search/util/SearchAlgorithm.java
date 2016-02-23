@@ -6,5 +6,6 @@ package com.b3.search.util;
 public enum SearchAlgorithm {
 	DEPTH_FIRST,
 	BREADTH_FIRST,
+	DIJKSTRA,
 	A_STAR
 }

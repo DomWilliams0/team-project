@@ -7,7 +7,6 @@ import com.b3.search.util.takeable.PriorityQueueT;
 import com.b3.search.util.takeable.StackT;
 import com.b3.search.util.takeable.Takeable;
 
-import java.util.Comparator;
 import java.util.function.Function;
 
 public class SearchParameters {
@@ -70,11 +69,10 @@ public class SearchParameters {
 				return new StackT<>();
 			case BREADTH_FIRST:
 				return new LinkedListT<>();
+			case DIJKSTRA:
+				return new PriorityQueueT<>(getGScore::apply);
 			case A_STAR:
-				return new PriorityQueueT<>((Comparator<Node>) (n1, n2) ->
-						Float.compare(
-								getGScore.apply(n1) + heuristic.apply(n1, end),
-								getGScore.apply(n2) + heuristic.apply(n2, end)));
+				return new PriorityQueueT<>((n) -> getGScore.apply(n) + heuristic.apply(n, end));
 			default:
 				throw new IllegalArgumentException("Invalid search algorithm: " + algorithm);
 		}

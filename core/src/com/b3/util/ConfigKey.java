@@ -21,7 +21,6 @@ public enum ConfigKey {
 	SHOW_GRID("show-grid"),
 	SHOW_PATHS("show-paths"),
 	FLATTEN_BUILDINGS("flatten-buildings"),
-	STEPS_PER_TICK("steps-per-tick"),
 	GAME_SPEED("game-speed"),
 
 	TIME_BETWEEN_TICKS("time-between-ticks"),

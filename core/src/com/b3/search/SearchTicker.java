@@ -7,7 +7,6 @@ import com.b3.search.util.takeable.StackT;
 import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Tuple;
 import com.b3.util.Utils;
 
 import java.util.*;
@@ -21,14 +20,12 @@ public class SearchTicker {
 
 	private Set<Node> visited = new HashSet<>();
 	private Map<Node, Node> cameFrom = new HashMap<>();
-	private Map<Node, Float> costSoFar = new LinkedHashMap<>();
 
 	private List<Node> path = new ArrayList<>();
 	private boolean pathComplete;
 	private boolean renderProgress;
 	private Node start, end;
 
-	private int stepsPerTick;
 	private float timer;
 	//array to identify who has told it to pause so conflicts don't occur
 	//0: scrollpane
@@ -61,16 +58,22 @@ public class SearchTicker {
 
 		SearchParameters parameters = new SearchParameters(algorithm);
 		Function2<Node, Node, Float> heuristic = parameters.getHeuristic();
-		if (algorithm == SearchAlgorithm.A_STAR) {
+		if (algorithm == SearchAlgorithm.A_STAR || algorithm == SearchAlgorithm.DIJKSTRA) {
 
 			edgeCostFunction = Node::getEdgeCost;
-			costSoFarFunction = node -> {
-				Float value = costSoFar.get(node);
-				return value == null ? Float.POSITIVE_INFINITY : value;
+			costSoFarFunction = (node) -> {
+				if (!cameFrom.containsKey(node)) return Float.POSITIVE_INFINITY;
+				float cost = 0;
+				while (node != start) {
+					Node n2 = cameFrom.get(node);
+					cost += n2.getEdgeCost(node);
+					node = n2;
+				}
+				return cost;
 			};
 		} else {
 			edgeCostFunction = (n1, n2) -> 0f;
-			costSoFarFunction = node -> 0f;
+			costSoFarFunction = (node) -> 0f;
 		}
 
 		frontier = parameters.createFrontier(costSoFarFunction, heuristic, end);
@@ -80,8 +83,6 @@ public class SearchTicker {
 
 		this.start = start;
 		this.end = end;
-
-		costSoFar.put(start, 0f);
 		renderProgress = true;
 	}
 
@@ -98,7 +99,6 @@ public class SearchTicker {
 		visited.clear();
 		path.clear();
 		cameFrom.clear();
-		costSoFar.clear();
 
 		renderProgress = false;
 	}
@@ -175,28 +175,17 @@ public class SearchTicker {
 		if (pathComplete)
 			return;
 
-		// now complete
+		// done
 		if (frontier.isEmpty()) {
-			pathComplete = true;
+			setAllCompleted(true);
 			return;
 		}
 
 		lastFrontier.clear();
 
-		// Get steps per tick
-		stepsPerTick = Config.getInt(ConfigKey.STEPS_PER_TICK);
-
-		for (int i = 0; i < stepsPerTick; i++) {
-			// done
-			if (frontier.isEmpty()) {
-				setAllCompleted(true);
-				return;
-			}
-
-			Node node = frontier.take();
-			// already visited
-			if (visited.contains(node))
-				continue;
+		Node node = frontier.take();
+		// already visited
+		if (!visited.contains(node)) {
 
 			//record us expanding this node
 			mostRecentlyExpanded = node;
@@ -225,16 +214,14 @@ public class SearchTicker {
 			} else {
 				node.getNeighbours()
 						.stream()
-						.filter(child -> !visited.contains(child))
 						.forEach(child -> {
 							float tentative_g = costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
-							if (!frontier.contains(child)) {
-								frontier.add(child);
-								lastFrontier.add(child);
-							}
 							if (tentative_g <= costSoFarFunction.apply(child)) {
 								cameFrom.put(child, node);
-								costSoFar.put(child, tentative_g);
+								if (!frontier.contains(child)) {
+									frontier.add(child);
+									lastFrontier.add(child);
+								}
 							}
 						});
 			}
@@ -313,10 +300,6 @@ public class SearchTicker {
      */
 	public boolean isPaused(int index) {
 		return paused[index];
-	}
-
-	public int getStepsPerTick() {
-		return stepsPerTick;
 	}
 
 	public Node getStart() {
