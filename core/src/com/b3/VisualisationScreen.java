@@ -31,7 +31,7 @@ public class VisualisationScreen implements Screen {
 
     public VisualisationScreen(MainGame game) {
         // init database
-        Database.init();
+        //Database.init();
 
         // create world
         world = new World("core/assets/world/world.tmx");
