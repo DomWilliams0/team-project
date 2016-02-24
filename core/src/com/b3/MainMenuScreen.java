@@ -18,13 +18,17 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
 
-    final private MainGame game;
+    private final MainGame game;
     private OrthographicCamera camera;
+    private Stage mainMenuStage;
 
     public MainMenuScreen(MainGame game) {
         this.game = game;
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        this.mainMenuStage = new Stage(new ScreenViewport());
+
+        game.inputHandler.addProcessor(mainMenuStage);
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         Skin skin = new Skin(atlas);
@@ -58,7 +62,7 @@ public class MainMenuScreen implements Screen {
         table.row().padTop(30);
         table.add(compareModeBtn.getComponent());
 
-        game.mainMenuStage.addActor(table);
+        mainMenuStage.addActor(table);
     }
 
     @Override
@@ -70,8 +74,8 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
-        game.mainMenuStage.act();
-        game.mainMenuStage.draw();
+        mainMenuStage.act();
+        mainMenuStage.draw();
 
         /*if (Gdx.input.isTouched()) {
             game.setScreen(new VisualisationScreen(game));

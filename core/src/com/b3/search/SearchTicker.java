@@ -41,6 +41,13 @@ public class SearchTicker {
 	private SearchSnapshotTracker snapshotTracker;
 
 	public SearchTicker() {
+		/*try {
+			snapshotTracker = new SearchSnapshotTracker(this);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}*/
+
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
 		//setup pause status and ensure it is unpaused.

@@ -52,6 +52,7 @@ project(":core") {
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile group: "org.cfg4j", name: "cfg4j-core", version: "4.1.4"
+        compile 'org.xerial:sqlite-jdbc:3.8.11.2'
         testCompile 'junit:junit:4.12'
         testCompile "org.mockito:mockito-core:1.+"
     }
