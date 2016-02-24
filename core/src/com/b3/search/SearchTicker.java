@@ -198,19 +198,19 @@ public class SearchTicker {
 				return;
 			}
 
-			if (algorithm == SearchAlgorithm.DEPTH_FIRST) {
-				Set<Node> arr = node.getNeighbours();
-				for (Node s : arr) {
-					if (!visited.contains(s)) {
-						boolean inPending = frontier.contains(s);
+			if (algorithm == SearchAlgorithm.DEPTH_FIRST || algorithm == SearchAlgorithm.BREADTH_FIRST) {
+				node.getNeighbours()
+						.stream()
+						.filter(s -> !visited.contains(s))
+						.forEach(s -> {
+							boolean inPending = frontier.contains(s);
 
-						if (!inPending) {
-							cameFrom.put(s, node);
-							frontier.add(s);
-							lastFrontier.add(s);
-						}
-					}
-				}
+							if (!inPending) {
+								cameFrom.put(s, node);
+								frontier.add(s);
+								lastFrontier.add(s);
+							}
+						});
 			} else {
 				node.getNeighbours()
 						.stream()
