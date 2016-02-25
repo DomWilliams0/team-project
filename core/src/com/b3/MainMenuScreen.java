@@ -18,12 +18,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
 
-    private final MainGame game;
     private OrthographicCamera camera;
     private Stage mainMenuStage;
 
     public MainMenuScreen(MainGame game) {
-        this.game = game;
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.mainMenuStage = new Stage(new ScreenViewport());
@@ -38,31 +36,37 @@ public class MainMenuScreen implements Screen {
                 false
         );
 
+        // Learning mode button
+        // --------------------
         ButtonComponent learningModeBtn = new ButtonComponent(skin, font, "Learning mode");
         learningModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new VisualisationScreen(game));
+                game.setScreen(new LearningModeScreen(game));
+                dispose();
             }
         });
 
+        // Compare mode button
+        // -------------------
         ButtonComponent compareModeBtn = new ButtonComponent(skin, font, "Compare mode");
         compareModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new VisualisationScreen(game));
+                game.setScreen(new CompareModeScreen(game));
+                dispose();
             }
         });
 
-        Table table = new Table();
-        table.setWidth(Gdx.graphics.getWidth());
-        table.setHeight(Gdx.graphics.getHeight());
+        Table wrapper = new Table();
+        wrapper.setWidth(Gdx.graphics.getWidth());
+        wrapper.setHeight(Gdx.graphics.getHeight());
 
-        table.add(learningModeBtn.getComponent());
-        table.row().padTop(30);
-        table.add(compareModeBtn.getComponent());
+        wrapper.add(learningModeBtn.getComponent());
+        wrapper.row().padTop(30);
+        wrapper.add(compareModeBtn.getComponent());
 
-        mainMenuStage.addActor(table);
+        mainMenuStage.addActor(wrapper);
     }
 
     @Override
@@ -78,7 +82,7 @@ public class MainMenuScreen implements Screen {
         mainMenuStage.draw();
 
         /*if (Gdx.input.isTouched()) {
-            game.setScreen(new VisualisationScreen(game));
+            game.setScreen(new LearningModeScreen(game));
             dispose();
         }*/
     }

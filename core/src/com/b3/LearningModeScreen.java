@@ -19,7 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class VisualisationScreen implements Screen {
+public class LearningModeScreen implements Screen {
 
     private World world;
     private WorldCamera camera;
@@ -29,7 +29,7 @@ public class VisualisationScreen implements Screen {
     private HelpBox helpBox;
     private KeyboardController keyboardController;
 
-    public VisualisationScreen(MainGame game) {
+    public LearningModeScreen(MainGame game) {
         // init database
         //Database.init();
 
@@ -60,9 +60,6 @@ public class VisualisationScreen implements Screen {
         // keyboard control has top priority
         keyboardController = new KeyboardController();
         inputHandler.addProcessor(keyboardController);
-
-        // main menu screen clicking
-        //inputHandler.addProcessor(mainMenuStage);
 
         // world clicking
         inputHandler.addProcessor(sideBarStage);
