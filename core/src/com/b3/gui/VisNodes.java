@@ -131,15 +131,15 @@ public class VisNodes extends Table {
     public void render(SearchTicker ticker) {
         int render;
         if(ticker==null || ticker.getVisited()==null || ticker.getFrontier()==null) {
-            render =  render(new StackT<>(), new HashSet<>(), SearchAlgorithm.BREADTH_FIRST);
+            render =  render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST);
         } else {
+            newVisited = ticker.getMostRecentlyExpanded()==null?"<NOTHING>":ticker.getMostRecentlyExpanded().toString();
+            newFrontier = ticker.getLastFrontier()==null?"<NOTHING>":ticker.getLastFrontier().toString();
             if(!stepthrough || ticker.isUpdated()) {
                 ticker.setUpdated(false);
                 render = render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
             } else
                 render = 0;
-            newVisited = ticker.getMostRecentlyExpanded()==null?"<NOTHING>":ticker.getMostRecentlyExpanded().toString();
-            newFrontier = ticker.getLastFrontier()==null?"<NOTHING>":ticker.getLastFrontier().toString();
         }
         if (ticker != null) {
             if(render==2) {
@@ -193,10 +193,13 @@ public class VisNodes extends Table {
             //get the frontier, as an arraylist
             ArrayList<Node> frontier = new ArrayList<>(front);
             //make the arraylist be ordered based on take-order of the collection
-            //todo doesn't currently do correctly for A*.
+            //todo doesn't currently do correctly for A*, but highest priority is correct.
+            //todo perhaps change what is shown for A*. Could do with describing distance, and the nodes move a lot more with A* so is less useful
+            //(it is also difficult to retrieve elements from pq in take order.
             switch(alg) {
                 case DEPTH_FIRST: Collections.reverse(frontier);break;
             }
+//            frontier = colToList(front,alg);
             highestNode = frontier.get(0).toString();
 
             ArrayList<Node> visitedSorted = new ArrayList<>(visited);
@@ -236,13 +239,17 @@ public class VisNodes extends Table {
     private ArrayList<Node> colToList(Collection<Node> front, SearchAlgorithm alg) {
         ArrayList<Node> list = new ArrayList<>();
         //System.out.println(front);
-        Takeable<Node> temp = null;
+        PriorityQueueT<Node> temp;
         //System.out.println(temp);
 
-        switch(alg) {
-            case DEPTH_FIRST: temp = new StackT<>(); break;
-            case BREADTH_FIRST: temp = new LinkedListT<>(); break;
-            case A_STAR: temp = new PriorityQueueT<>(null); break; // todo uh oh, I hope this stays deprecated -- it'll only be used when it's all working, atm the method doesn't work in the slightest
+//        switch(alg) {
+//            case DEPTH_FIRST: temp = new StackT<>(); break;
+//            case BREADTH_FIRST: temp = new LinkedListT<>(); break;
+//            case A_STAR: temp = new PriorityQueueT<>(null); break; // todo uh oh, I hope this stays deprecated -- it'll only be used when it's all working, atm the method doesn't work in the slightest
+//        }
+        temp = new PriorityQueueT<>((PriorityQueueT<Node>) front);
+        for(int i=0;i<temp.size();i++) {
+            list.add(temp.take());
         }
 
 //        for(int i=0; i<front.size(); i++) {
