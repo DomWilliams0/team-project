@@ -38,22 +38,22 @@ public class MainMenuScreen implements Screen {
 
         // Learning mode button
         // --------------------
-        ButtonComponent learningModeBtn = new ButtonComponent(skin, font, "Learning mode");
-        learningModeBtn.addListener(new ChangeListener() {
+        ButtonComponent compareModeBtn = new ButtonComponent(skin, font, "Compare mode");
+        compareModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new LearningModeScreen(game));
+                game.setScreen(new CompareMode(game));
                 dispose();
             }
         });
 
         // Compare mode button
         // -------------------
-        ButtonComponent compareModeBtn = new ButtonComponent(skin, font, "Compare mode");
-        compareModeBtn.addListener(new ChangeListener() {
+        ButtonComponent learningModeBtn = new ButtonComponent(skin, font, "Learning mode");
+        learningModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new CompareModeScreen(game));
+                game.setScreen(new LearningMode(game));
                 dispose();
             }
         });
@@ -82,7 +82,7 @@ public class MainMenuScreen implements Screen {
         mainMenuStage.draw();
 
         /*if (Gdx.input.isTouched()) {
-            game.setScreen(new LearningModeScreen(game));
+            game.setScreen(new CompareMode(game));
             dispose();
         }*/
     }

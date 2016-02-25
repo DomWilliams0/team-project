@@ -19,7 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class LearningModeScreen implements Screen {
+public class CompareMode implements Screen {
 
     private World world;
     private WorldCamera camera;
@@ -29,7 +29,7 @@ public class LearningModeScreen implements Screen {
     private HelpBox helpBox;
     private KeyboardController keyboardController;
 
-    public LearningModeScreen(MainGame game) {
+    public CompareMode(MainGame game) {
         // init database
         //Database.init();
 

@@ -274,7 +274,7 @@ public class World implements Disposable {
 		for (int i = 0; i < debugCount; i++)
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 
-		agent = spawnAgent(new Vector2(20, 20));
+		agent = spawnAgent(new Vector2(5, 5));
 		behaviour = new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
 		agent.setBehaviour(behaviour);
 
