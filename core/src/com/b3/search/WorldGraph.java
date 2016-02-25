@@ -290,7 +290,7 @@ public class WorldGraph implements Serializable {
 
 				Float colouringRedValue = neighbour.getValue() - 1;
 
-				if (colouringRedValue == 0) {
+				if (colouringRedValue <= 1) {
 					shapeRenderer.setColor(Color.BLACK);
 				} else {
 					Color col = new Color(((colouringRedValue + 1) * 25) / 100, 0, 0, 0);
