@@ -3,10 +3,8 @@ package com.b3.gui;
 import com.b3.search.Node;
 import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
-import com.b3.search.util.takeable.LinkedListT;
 import com.b3.search.util.takeable.PriorityQueueT;
 import com.b3.search.util.takeable.StackT;
-import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -58,13 +56,13 @@ public class VisNodes extends Table {
     private String newFrontier = "<...>";
     private String highestNode = "<...>";
 
-    private final String step1 = "I have just expanded the node:\n" +
+    private final String expandedNode = "I have just expanded the node:\n" +
             "%s, which is now\n" +
             "added to the visited set.\n";
-    private final String step2 = "I have added the following\n" +
+    private final String addedToFrontier = "I have added the following\n" +
             "nodes to the frontier:\n" +
             "%s\n";
-    private final String step3 = "My next node to expand is:\n" +
+    private final String nextNode = "My next node to expand is:\n" +
             "%s";
 
     private StringBuilder stepString;
@@ -338,7 +336,10 @@ public class VisNodes extends Table {
         if(stepthrough) {
             stepString = new StringBuilder();
             formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
-            formatter.format(step1+"\n"+step2+"\n"+step3, newVisited, newFrontier, highestNode);
+            formatter.format(expandedNode + "\n" +
+                            addedToFrontier + "\n" +
+                            nextNode,
+                    newVisited, newFrontier, highestNode);
             add(stepString).colspan(3);
         } else {
             //final row - describe the algorithm in words

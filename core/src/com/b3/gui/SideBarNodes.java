@@ -189,7 +189,11 @@ public class SideBarNodes extends Table implements Disposable {
      */
     public void render() {
         SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
-        setStepthrough(currentSearch.isPaused(1));
+        if(currentSearch!=null) {
+            setStepthrough(currentSearch.isPaused(1));
+        } else {
+            setStepthrough(false);
+        }
         ui.render(currentSearch);
     }
 

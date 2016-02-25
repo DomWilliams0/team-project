@@ -249,6 +249,7 @@ public class SideBar extends Table implements Disposable {
 
         //Play and Pause button
         //todo there are graphics available in the skin for play and pause
+        //String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
         ButtonComponent playPause = new ButtonComponent(skin, font, "Pause");
         playPause.addListener(new ChangeListener() {
             @Override
