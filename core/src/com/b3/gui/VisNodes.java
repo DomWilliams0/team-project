@@ -247,10 +247,10 @@ public class VisNodes extends Table {
 //            case BREADTH_FIRST: temp = new LinkedListT<>(); break;
 //            case A_STAR: temp = new PriorityQueueT<>(null); break; // todo uh oh, I hope this stays deprecated -- it'll only be used when it's all working, atm the method doesn't work in the slightest
 //        }
-        temp = new PriorityQueueT<>((PriorityQueueT<Node>) front);
-        for(int i=0;i<temp.size();i++) {
-            list.add(temp.take());
-        }
+//        temp = new PriorityQueueT<>((PriorityQueueT<Node>) front);
+//        for(int i=0;i<temp.size();i++) {
+//            list.add(temp.take());
+//        }
 
 //        for(int i=0; i<front.size(); i++) {
 //            Node n = front.();
@@ -258,7 +258,7 @@ public class VisNodes extends Table {
 //            temp.add(n);
 //        }
         //System.out.println(front + "," + temp);
-        front = temp;
+//        front = temp;
         //System.out.println(front + "," + temp);
         return list;
     }
