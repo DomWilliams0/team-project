@@ -89,9 +89,9 @@ public class VisNodes extends Table {
         ScrollPane.ScrollPaneStyle style = new ScrollPane.ScrollPaneStyle();
         style.background = getBackground();
         style.hScroll = skin.getDrawable("scroll_back_hor");
-        style.hScrollKnob = skin.getDrawable("knob_05");
+        style.hScrollKnob = skin.getDrawable("knob_02");
         style.vScroll = skin.getDrawable("scroll_back_ver");
-        style.vScrollKnob = skin.getDrawable("knob_05");
+        style.vScrollKnob = skin.getDrawable("knob_02");
 
         //frontier table, encapsulated in a scrollpane
         ft = new Table(getSkin());

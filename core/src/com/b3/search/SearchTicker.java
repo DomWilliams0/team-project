@@ -199,9 +199,9 @@ public class SearchTicker {
 
 			visited.add(node);
 
+			path = constructPath(cameFrom, start, node);
 			if (node.equals(end)) {
 				setAllCompleted(true);
-				path = constructPath(cameFrom, start, end);
 				return;
 			}
 

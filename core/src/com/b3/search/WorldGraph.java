@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import java.io.*;
 import java.util.*;
@@ -22,6 +23,8 @@ public class WorldGraph implements Serializable {
 	private static final Color EDGE_COLOUR = Color.BLACK;
 	private static final Color NODE_COLOUR = Color.BLACK;
 	private static final Color FRONTIER_COLOUR = Color.LIME;
+	private static final Color NEW_FRONTIER_COLOUR = Color.CYAN;
+	private static final Color JUST_EXPANDED_COLOUR = Color.PINK;
 	private static final Color VISITED_COLOUR = Color.LIGHT_GRAY;
 	private static final Color SEARCH_EDGE_COLOUR = Color.YELLOW;
 	private static final float NODE_RADIUS = 0.10f;
@@ -304,7 +307,7 @@ public class WorldGraph implements Serializable {
 		}
 
 		// render the path
-		if (showPaths && currentSearch != null && currentSearch.isPathComplete()) {
+		if (showPaths && currentSearch != null) {// && currentSearch.isPathComplete()) {
 			shapeRenderer.setColor(SEARCH_EDGE_COLOUR);
 
 			List<Node> path = currentSearch.getPath();
@@ -379,7 +382,7 @@ public class WorldGraph implements Serializable {
 			}
 
 			// render the path
-			if (showPaths && currentSearch != null && currentSearch.isPathComplete()) {
+			if (showPaths && currentSearch != null) {// && currentSearch.isPathComplete()) {
 				shapeRenderer.setColor(SEARCH_EDGE_COLOUR);
 
 				List<Node> path = currentSearch.getPath();
@@ -405,6 +408,8 @@ public class WorldGraph implements Serializable {
 			if (currentSearch.isRenderProgress()) {
 				Set<Node> visited = currentSearch.getVisited();
 				Collection<Node> frontier = currentSearch.getFrontier();
+				Collection<Node> lastFront = currentSearch.getLastFrontier();
+				Node justExpanded = currentSearch.getMostRecentlyExpanded();
 				// todo last frontier
 
 
@@ -435,11 +440,6 @@ public class WorldGraph implements Serializable {
 					);
 				}
 
-				// last frame's frontier
-//				for (Node frontierNode : lastFrontier) {
-//					actorLookup.get(frontierNode.getPoint()).setNodeColour(Color.FOREST);
-//                }
-
 				// draw frontier
 				shapeRenderer.setColor(Color.BLACK);
 				for (Node frontierNode : frontier) {
@@ -461,6 +461,35 @@ public class WorldGraph implements Serializable {
 							NODE_EDGES
 					);
 				}
+
+				// draw last frontier
+				shapeRenderer.setColor(NEW_FRONTIER_COLOUR);
+				for (Node newFront : lastFront) {
+					shapeRenderer.circle(
+							newFront.getPoint().getX(),
+							newFront.getPoint().getY(),
+							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
+							NODE_EDGES
+					);
+				}
+
+				//draw just expanded
+				if(justExpanded != null) {
+					shapeRenderer.setColor(JUST_EXPANDED_COLOUR);
+					shapeRenderer.circle(
+							justExpanded.getPoint().getX(),
+							justExpanded.getPoint().getY(),
+							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
+							NODE_EDGES
+					);
+				}
+
+				// last frame's frontier
+//				for (Node frontierNode : lastFrontier) {
+//					actorLookup.get(frontierNode.getPoint()).setNodeColour(Color.FOREST);
+//                }
+
+
 			}
 
 
