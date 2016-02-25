@@ -68,11 +68,13 @@ public class World implements Disposable {
 
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
-	private Agent agent;
 
 	private float counterAnimation = 10;
 	private int counterScaler = 0;
 	private double pos = 1;
+
+	private Agent agent;
+	private BehaviourMultiContinuousPathFind behaviour;
 
 	public World() {
 	}
@@ -272,11 +274,10 @@ public class World implements Disposable {
 		for (int i = 0; i < debugCount; i++)
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 
-//		Agent agent = spawnAgentWithPathFinding(new Vector2(0, 5), new Vector2(40, 40), SearchAlgorithm.A_STAR);
-//		agent = spawnAgentWithMultiplePathFinding(new Vector2(20, 25), SearchAlgorithm.A_STAR, true, new Vector2(20, 20));
 		agent = spawnAgent(new Vector2(20, 20));
-		BehaviourMultiContinuousPathFind behaviour = new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
+		behaviour = new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
 		agent.setBehaviour(behaviour);
+
 		worldGraph.setCurrentSearch(agent, behaviour.getTicker());
 	}
 

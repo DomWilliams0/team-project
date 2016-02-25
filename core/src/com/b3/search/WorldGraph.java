@@ -517,8 +517,8 @@ public class WorldGraph implements Serializable {
 			Point start = currentSearch.getStart().getPoint();
 			Point end = currentSearch.getEnd().getPoint();
 			shapeRenderer.setColor(Color.BLUE);
-			shapeRenderer.circle(start.x, start.y, NODE_RADIUS, NODE_EDGES);
-			shapeRenderer.circle(end.x, end.y, NODE_RADIUS, NODE_EDGES);
+			shapeRenderer.circle(start.x, start.y, (float) (NODE_RADIUS + 0.25), NODE_EDGES);
+			shapeRenderer.circle(end.x, end.y, (float) (NODE_RADIUS + 0.25), NODE_EDGES);
 		}
 
 		// start and end are always red
