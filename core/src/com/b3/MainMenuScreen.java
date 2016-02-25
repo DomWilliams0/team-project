@@ -100,5 +100,7 @@ public class MainMenuScreen implements Screen {
     public void hide() {}
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+        mainMenuStage.dispose();
+    }
 }
