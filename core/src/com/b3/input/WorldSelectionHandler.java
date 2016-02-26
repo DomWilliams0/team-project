@@ -46,6 +46,8 @@ public class WorldSelectionHandler extends InputAdapter {
 
 		System.out.println("You clicked node: " + node.getPoint());
 
+		world.setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
+
 		// no search
 		if (!worldGraph.hasSearchInProgress())
 			return false;

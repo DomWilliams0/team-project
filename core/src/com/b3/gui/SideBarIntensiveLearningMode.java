@@ -218,7 +218,6 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
     }
 
     public void render() {
-        System.out.println(world.getWorldGraph().getCurrentSearch().getMostRecentlyExpanded());
     }
 
     @Override

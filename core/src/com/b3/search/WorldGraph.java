@@ -8,14 +8,10 @@ import com.b3.world.Building;
 import com.b3.world.World;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.StringBuilder;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import java.io.*;
 import java.util.*;
@@ -532,15 +528,15 @@ public class WorldGraph implements Serializable {
 
 		shapeRenderer.end();
 
-		SpriteBatch spriteBatch = new SpriteBatch();
-		spriteBatch.setProjectionMatrix(camera.combined);
-		Texture yourTexture = new Texture("core/assets/world/popups/currentnode250x250.JPG.png");
-		Sprite sprite = new Sprite(yourTexture);
-		//sprite.setColor(1, 0, 0, 0.2f);
-
-		spriteBatch.begin();
-		spriteBatch.draw(sprite,10,10,1,1);
-		spriteBatch.end();
+//		SpriteBatch spriteBatch = new SpriteBatch();
+//		spriteBatch.setProjectionMatrix(camera.combined);
+//		Texture yourTexture = new Texture("core/assets/world/popups/currentnode250x250.JPG.png");
+//		Sprite sprite = new Sprite(yourTexture);
+//		//sprite.setColor(1, 0, 0, 0.2f);
+//
+//		spriteBatch.begin();
+//		spriteBatch.draw(sprite,10,10,1,1);
+//		spriteBatch.end();
 
 	}
 
