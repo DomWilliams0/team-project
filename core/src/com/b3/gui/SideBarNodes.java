@@ -95,7 +95,7 @@ public class SideBarNodes extends Table implements Disposable {
         //setup the skin
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
         Skin skin = new Skin(atlas);
-//        skin.addRegions(new TextureAtlas(Gdx.files.internal("core/assets/gui/uiscrollskin.atlas")));
+//       skin.addRegions(new TextureAtlas(Gdx.files.internal("core/assets/gui/uiscrollskin.atlas")));
         BitmapFont font = new BitmapFont(Gdx.files.internal("core/assets/gui/default.fnt"),
                 Gdx.files.internal("core/assets/gui/default.png"), false);
         skin.add("default", font, BitmapFont.class);

@@ -1,7 +1,6 @@
 package com.b3;
 
-import com.b3.db.Database;
-import com.b3.gui.SideBar;
+import com.b3.gui.SideBarIntensiveLearningMode;
 import com.b3.gui.SideBarNodes;
 import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
@@ -24,7 +23,7 @@ public class LearningMode implements Screen {
     private World world;
     private WorldCamera camera;
     private Stage sideBarStage;
-    private SideBar sideBar;
+    private SideBarIntensiveLearningMode sideBar;
     private SideBarNodes sideBarNodes;
     private HelpBox helpBox;
     private KeyboardController keyboardController;
@@ -54,6 +53,9 @@ public class LearningMode implements Screen {
         camera.setWorld(world);
         world.initEngine(camera);
         //world.initEventGenerator();
+
+        world.getWorldGraph().getCurrentSearch().pause(1);
+        world.getWorldGraph().getCurrentSearch().setUpdated(true);
     }
 
     private void initInputHandlers(InputHandler inputHandler) {
@@ -71,7 +73,7 @@ public class LearningMode implements Screen {
     private void setupSidebar() {
         sideBarStage = new Stage(new ScreenViewport());
 
-        sideBar = new SideBar(sideBarStage, world);
+        sideBar = new SideBarIntensiveLearningMode(sideBarStage, world);
         sideBarStage.addActor(sideBar);
 
         sideBarNodes = new SideBarNodes(sideBarStage, world);
@@ -79,6 +81,7 @@ public class LearningMode implements Screen {
         sideBarStage.addActor(sideBarNodes);
 
         helpBox = new HelpBox(sideBarStage, world);
+
         sideBarStage.addActor(helpBox);
     }
 
@@ -106,6 +109,7 @@ public class LearningMode implements Screen {
         // sidebar rendering
         sideBarStage.act(Gdx.graphics.getDeltaTime());
         sideBarNodes.render();
+        sideBar.render();
         sideBarStage.draw();
 
         if (keyboardController.shouldExit())

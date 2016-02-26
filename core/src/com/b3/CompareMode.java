@@ -53,7 +53,7 @@ public class CompareMode implements Screen {
 
         camera.setWorld(world);
         world.initEngine(camera);
-        //world.initEventGenerator();
+//        world.initEventGenerator();
     }
 
     private void initInputHandlers(InputHandler inputHandler) {
