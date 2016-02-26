@@ -1,6 +1,7 @@
 package com.b3.search;
 
 import com.b3.entity.Agent;
+import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -43,6 +44,9 @@ public class WorldGraph implements Serializable {
 	//current wanted next destination (right click)
 	private int wantedNextDestinationX;
 	private int wantedNextDestinationY;
+
+	//search algorithm wanted for learning mode only (Leave as null if compare mode)
+	private SearchAlgorithm learningModeNext = null;
 
 	/**
 	 * Constructs a new world graph with the following x and y dimensions.
@@ -628,5 +632,13 @@ public class WorldGraph implements Serializable {
 
 	public Point getNextDestination() {
 		return new Point(wantedNextDestinationX, wantedNextDestinationY);
+	}
+
+	public SearchAlgorithm getLearningModeNext() {
+		return learningModeNext;
+	}
+
+	public void setLearningModeNext(SearchAlgorithm learningModeNext) {
+		this.learningModeNext = learningModeNext;
 	}
 }

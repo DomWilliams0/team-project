@@ -25,6 +25,9 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	public void tick(Vector2 steeringOutput) {
 		pathFind.tick(steeringOutput);
 		if (pathFind.hasArrivedForTheFirstTime()) {
+			if (graph.getLearningModeNext() != null)
+				algorithm = graph.getLearningModeNext();
+			System.out.println("Next tick is using this algorithm " + algorithm);
 			Node currentPos = pathFind.getNodeFromTile(graph, agent.getPhysicsComponent().getPosition());
 			if (currentPos.equals(new Node(graph.getNextDestination())))
 				pathFind.reset(agent.getPhysicsComponent().getPosition(), generateRandomTile(), algorithm, graph);

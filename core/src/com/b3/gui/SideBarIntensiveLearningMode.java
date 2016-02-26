@@ -9,6 +9,7 @@ import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
+import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -151,6 +152,38 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                 }
             }
         });
+
+        // ========================
+        // === WHAT SEARCH ALGO ===
+        // ========================
+
+        String[] searches = {"A Star", "Breath First Search", "Depth First Search"};
+        SelectBoxComponent searchSelectBox = new SelectBoxComponent(skin, font, new Array(searches));
+        searchSelectBox.setSelected("A Star");
+
+        searchSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (searchSelectBox.getSelected().equals("A Star")) {
+                    System.out.println("Set to A*");
+                    world.getWorldGraph().setLearningModeNext(SearchAlgorithm.A_STAR);
+                }
+                if (searchSelectBox.getSelected().equals("Breath First Search")) {
+                    System.out.println("Set to BFS");
+                    world.getWorldGraph().setLearningModeNext(SearchAlgorithm.BREADTH_FIRST);
+                }
+                if (searchSelectBox.getSelected().equals("Depth First Search")) {
+                    System.out.println("Set to DFS");
+                    world.getWorldGraph().setLearningModeNext(SearchAlgorithm.DEPTH_FIRST);
+                }
+
+            }
+        });
+
+        settingsTab.add(searchSelectBox.getSelectBox())
+                .maxWidth(preferredWidth)
+                .spaceBottom(30);
+        settingsTab.row();
 
         settingsTab.add(playPause.getComponent())
                 .align(Align.center)

@@ -2,10 +2,7 @@ package com.b3.world;
 
 import com.b3.DebugRenderer;
 import com.b3.entity.Agent;
-import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
-import com.b3.entity.ai.BehaviourMultiPathFind;
-import com.b3.entity.ai.BehaviourPathFind;
-import com.b3.entity.ai.BehaviourPathFollow;
+import com.b3.entity.ai.*;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
@@ -314,11 +311,12 @@ public class World implements Disposable {
 		agent = spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
 
 		//IF IS COMPAREMODE (compareMode = true) DO ALL THREE BEHAVIOURS
-		//
 		behaviour = new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
 		agent.setBehaviour(behaviour);
 
+		worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
 		worldGraph.setCurrentSearch(agent, behaviour.getTicker());
+
 		//OTHERWISE DO JUST ONE DEPENDING ON THE SHIZZLE
 	}
 
