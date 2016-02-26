@@ -23,6 +23,10 @@ public class WorldCamera extends PerspectiveCamera {
 	private PhysicsComponent followedAgent;
 	private float zoomAmount;
 
+	private float posX;
+	private float posY;
+	private float posZ;
+
 	// todo redo camera restriction
 
 	public WorldCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
@@ -32,6 +36,8 @@ public class WorldCamera extends PerspectiveCamera {
 		borders = new ArrayList<>(4);
 		inputDelta = new Vector2();
 		followedAgent = null;
+
+		posX = 0; posY = 0; posZ = 0;
 	}
 
 	/**
@@ -57,6 +63,9 @@ public class WorldCamera extends PerspectiveCamera {
 	@Override
 	public void translate(float x, float y, float z) {
 		lastPosition = new Vector3(position);
+		posX = posX + x;
+		posY = posY + y;
+		posZ = posZ + z;
 		super.translate(x, y, z);
 	}
 
@@ -149,5 +158,17 @@ public class WorldCamera extends PerspectiveCamera {
 
 	public void setFollowedAgent(Agent agent) {
 		followedAgent = agent.getPhysicsComponent();
+	}
+
+	public float getPosX() {
+		return posX;
+	}
+
+	public float getPosY() {
+		return posY;
+	}
+
+	public float getPosZ() {
+		return posZ;
 	}
 }

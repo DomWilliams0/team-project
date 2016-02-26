@@ -118,20 +118,35 @@ public class SideBarNodes extends Table implements Disposable {
             public void changed(ChangeEvent event, Actor actor) {
                 TextButton _triggerBtn = triggerBtn.getComponent();
 
+
                 if (!isOpen) {
                     setX(Gdx.graphics.getWidth()- preferredWidth);
                     setY(0);
                     _triggerBtn.setText(">");
                     _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
-
                     isOpen = true;
+
+                    if (!world.getCompareMode()) {
+                        float posX = world.getWorldCamera().getPosX();
+                        if (posX < 10) {
+                            world.getWorldCamera().translateSafe(10 - posX, 0, 0);
+                        }
+                    }
                 }
                 else {
                     setX(Gdx.graphics.getWidth());
                     _triggerBtn.setText("<");
                     _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
-
                     isOpen = false;
+
+                    if (!world.getCompareMode()) {
+                        float posX = world.getWorldCamera().getPosX();
+                        if (posX >= 10) {
+                            System.out.println(posX);
+                            world.getWorldCamera().translateSafe(-posX, 0, 0);
+                        }
+                    }
+
                 }
 
             }

@@ -676,4 +676,8 @@ public class World implements Disposable {
 	public void setNextDestination(int x, int y) {
 		worldGraph.setNextDestination(x, y);
 	}
+
+	public Boolean getCompareMode() {
+		return compareMode;
+	}
 }

@@ -1,18 +1,10 @@
 package com.b3.gui;
 
-import com.b3.entity.Agent;
-import com.b3.entity.ai.Behaviour;
-import com.b3.entity.ai.BehaviourMultiPathFind;
-import com.b3.entity.ai.BehaviourType;
 import com.b3.gui.components.*;
-import com.b3.search.Node;
-import com.b3.search.Point;
 import com.b3.search.SearchTicker;
-import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Utils;
 import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -21,10 +13,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -34,9 +24,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class SideBarIntensiveLearningMode extends Table implements Disposable {
 
     private Stage stage;
@@ -44,7 +31,6 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
     private ButtonComponent triggerBtn;
     private boolean isOpen;
     private float preferredWidth;
-    private ButtonComponent next;
 
     public SideBarIntensiveLearningMode(Stage stage, World world) {
         this(stage, world, 400);
@@ -275,12 +261,24 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                     _triggerBtn.setX(preferredWidth - 20);
 
                     isOpen = true;
+
+                    float posX = world.getWorldCamera().getPosX();
+                    if (posX > -10) {
+                        System.out.println(posX);
+                        world.getWorldCamera().translateSafe(-(10+posX), 0, 0);
+                    }
+
                 } else {
                     setX(-preferredWidth);
                     _triggerBtn.setText(">");
                     _triggerBtn.setX(-20);
 
                     isOpen = false;
+
+                    float posX = world.getWorldCamera().getPosX();
+                    if (posX < 0) {
+                        world.getWorldCamera().translateSafe(-posX, 0, 0);
+                    }
                 }
 
             }
