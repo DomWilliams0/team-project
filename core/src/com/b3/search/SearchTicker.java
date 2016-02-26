@@ -345,4 +345,13 @@ public class SearchTicker {
 		return updated;
 	}
 
+	public float getG (Node node, Node child) {
+		float g = costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
+		return g;
+	}
+
+	public float getG (Node node) {
+		float g = costSoFarFunction.apply(node);
+		return g;
+	}
 }

@@ -29,10 +29,13 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 				algorithm = graph.getLearningModeNext();
 			System.out.println("Next tick is using this algorithm " + algorithm);
 			Node currentPos = pathFind.getNodeFromTile(graph, agent.getPhysicsComponent().getPosition());
-			if (currentPos.equals(new Node(graph.getNextDestination())))
+
+			if (currentPos.equals(new Node(graph.getNextDestination())) || graph.getNextDestination().getY() == 0 && graph.getNextDestination().getX() == 0 || graph.getNextDestination().getX() == -5)
 				pathFind.reset(agent.getPhysicsComponent().getPosition(), generateRandomTile(), algorithm, graph);
 			else
 				pathFind.reset(agent.getPhysicsComponent().getPosition(), new Vector2(graph.getNextDestination().getX(),graph.getNextDestination().getY()), algorithm, graph);
+
+			graph.setNextDestination(-5,-5);
 		}
 	}
 

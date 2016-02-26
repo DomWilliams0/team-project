@@ -42,8 +42,8 @@ public class WorldGraph implements Serializable {
 	private Agent currentSearchAgent;
 
 	//current wanted next destination (right click)
-	private int wantedNextDestinationX;
-	private int wantedNextDestinationY;
+	private int wantedNextDestinationX = -5;
+	private int wantedNextDestinationY = -5;
 
 	//search algorithm wanted for learning mode only (Leave as null if compare mode)
 	private SearchAlgorithm learningModeNext = null;

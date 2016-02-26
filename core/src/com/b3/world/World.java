@@ -548,12 +548,10 @@ public class World implements Disposable {
 	}
 
 	private void renderInfographics() {
-
 		if (timeOutInfographic > 750) {
 			setCurrentClick(-5,-5);
 			timeOutInfographic = -1;
 		} else {
-
 			spriteBatch.setProjectionMatrix(worldCamera.combined);
 			spriteBatch.begin();
 			float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
@@ -571,7 +569,10 @@ public class World implements Disposable {
 					//if recently expanded
 					if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
 						if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-							//TODO Put "Nodes surround these (in pink) have been added to a stack/queue to be looked at later
+							//TODO Put some info around the screen somewhere (use cost function below somewhere)
+
+							System.out.println(worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded()));
+
 							spriteBatch.draw(currentNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
 									(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 						} else
