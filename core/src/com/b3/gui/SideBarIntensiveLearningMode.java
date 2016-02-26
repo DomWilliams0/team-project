@@ -180,8 +180,60 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
             }
         });
 
+        // Search speed slider
+        LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.WHITE);
+        settingsTab.add(searchSpeedLabel.getLabel())
+                .align(Align.left)
+                .maxWidth(preferredWidth)
+                .spaceTop(20);
+        settingsTab.row();
+
+        SliderComponent searchSpeedSlider = new SliderComponent(skin,
+                Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
+                Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MAX),
+                Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_STEP));
+        searchSpeedSlider.setValue(searchSpeedSlider.getSlider().getMaxValue() - Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS));
+        searchSpeedSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Config.set(ConfigKey.TIME_BETWEEN_TICKS, searchSpeedSlider.getSlider().getMaxValue() - searchSpeedSlider.getValue());
+            }
+        });
+
+        settingsTab.add(searchSpeedSlider.getSlider())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(5);
+        settingsTab.row();
+
+        // Game speed slider
+        LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.WHITE);
+        settingsTab.add(gameSpeedLabel.getLabel())
+                .align(Align.left)
+                .maxWidth(preferredWidth)
+                .spaceTop(20);
+        settingsTab.row();
+
+        SliderComponent gameSpeedSlider = new SliderComponent(skin, 0f, 4f, 0.1f);
+        gameSpeedSlider.setValue(Config.getFloat(ConfigKey.GAME_SPEED));
+        gameSpeedSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Config.set(ConfigKey.GAME_SPEED, gameSpeedSlider.getValue());
+            }
+        });
+
+        settingsTab.add(gameSpeedSlider.getSlider())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(5);
+        settingsTab.row();
+
+
+
         settingsTab.add(searchSelectBox.getSelectBox())
                 .maxWidth(preferredWidth)
+                .spaceTop(100)
                 .spaceBottom(30);
         settingsTab.row();
 

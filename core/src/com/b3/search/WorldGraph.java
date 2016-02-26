@@ -288,6 +288,8 @@ public class WorldGraph implements Serializable {
 	public void render(Camera camera, float counter, float zoomScalar) {
 		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
 
+		if (zoomScalar<1) zoomScalar = 1;
+
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		// render lines
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -343,15 +345,17 @@ public class WorldGraph implements Serializable {
 
 		// border
 		shapeRenderer.setColor(BORDER_COLOUR);
+		final float finalZoomScalar = zoomScalar;
 		nodes.keySet()
 				.stream()
-				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * zoomScalar, NODE_EDGES));
+				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * finalZoomScalar, NODE_EDGES));
 		shapeRenderer.setColor(tempCol);
 
 		// node body
+		final float finalZoomScalar1 = zoomScalar;
 		nodes.keySet()
 				.stream()
-				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * zoomScalar, NODE_EDGES));
+				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES));
 
 		shapeRenderer.end();
 
@@ -617,8 +621,6 @@ public class WorldGraph implements Serializable {
 	public void clearCurrentSearch() {
 		// todo just for prototype
 		currentSearch.reset(true);
-//		currentSearch = null;
-//		currentSearchAgent = null;
 	}
 
 	public boolean hasSearchInProgress() {
