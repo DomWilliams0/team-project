@@ -34,11 +34,13 @@ public class AISystem extends IteratingSystem {
 		PhysicsComponent phys = physicsComponents.get(entity);
 		AIComponent ai = aiComponents.get(entity);
 
-		ai.behaviour.tick(steeringMovement);
+		ai.behaviour.tick(steeringMovement.setZero());
 		phys.getBody().applyForceToCenter(steeringMovement, true);
 
 
-		if (worldGraph.hasSearchInProgress() && ai.behaviour.getType() == BehaviourType.FOLLOW_PATH) {
+		if (worldGraph.hasSearchInProgress() &&
+				worldGraph.getCurrentSearchAgent() == entity &&
+				ai.behaviour.getType() == BehaviourType.FOLLOW_PATH) {
 			BehaviourWithPathFind behaviour = (BehaviourWithPathFind) ai.behaviour;
 			if (behaviour.hasArrivedForTheFirstTime())
 				worldGraph.clearCurrentSearch();
