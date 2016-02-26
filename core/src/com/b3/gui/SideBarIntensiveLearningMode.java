@@ -46,7 +46,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
     private ButtonComponent next;
 
     public SideBarIntensiveLearningMode(Stage stage, World world) {
-        this(stage, world, 230);
+        this(stage, world, 400);
     }
 
     public SideBarIntensiveLearningMode(Stage stage, World world, float preferredWidth) {
@@ -121,20 +121,15 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         settingsTab.row();
 
 
-/*        // Start button
-        ButtonComponent startButton = new ButtonComponent(skin, font, "Start Event");
-        startButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Started the event system");
-            }
-        });
+        // ======================
+        // === LABELS AND STU ===
+        // ======================
 
-        settingsTab.add(startButton.getComponent())
-                .align(Align.center)
-                .maxWidth(preferredWidth)
-                .spaceTop(20);
-        settingsTab.row(); */
+        LabelComponent labelOne = new LabelComponent(skin, "Left click the nodes to see more information", Color.BLACK);
+        labelOne.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
+
+        LabelComponent labelTwo = new LabelComponent(skin, "Right click a node to set the next destination", Color.BLACK);
+        labelTwo.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
         //Play and Pause button
         //todo there are graphics available in the skin for play and pause
@@ -163,8 +158,19 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                 .spaceTop(5);
         settingsTab.row();
 
-        tabbedPane.addTab("Settings", settingsTab);
+        settingsTab.add(labelOne.getComponent())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(5);
+        settingsTab.row();
 
+        settingsTab.add(labelTwo.getComponent())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(5);
+        settingsTab.row();
+
+        tabbedPane.addTab("Settings", settingsTab);
 
         // ======================
         // === TRIGGER BUTTON ===

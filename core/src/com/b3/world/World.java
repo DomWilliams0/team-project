@@ -92,6 +92,7 @@ public class World implements Disposable {
 	//current node user has clicked on
 	private int currentNodeClickX;
 	private int currentNodeClickY;
+	private int timeOutInfographic = 0;
 
 	public World() {
 	}
@@ -537,7 +538,11 @@ public class World implements Disposable {
 		// render models
 		modelManager.render(worldCamera);
 
-		if (!compareMode) renderInfographics();
+		if (!compareMode) {
+			if (timeOutInfographic != -1)
+				timeOutInfographic++;
+			renderInfographics();
+		}
 
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
@@ -545,49 +550,56 @@ public class World implements Disposable {
 	}
 
 	private void renderInfographics() {
-		spriteBatch.setProjectionMatrix(worldCamera.combined);
-		spriteBatch.begin();
-		float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
 
-		//if start node
-		if (worldGraph.getCurrentSearch().getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-			spriteBatch.draw(startNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-					(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-		} else
-		//if end node
-		if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-			spriteBatch.draw(endNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-					(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-		} else
-		//if recently expanded
-		if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
-		if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-			//TODO Put "Nodes surround these (in pink) have been added to a stack/queue to be looked at later
-			spriteBatch.draw(currentNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-					(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-		} else
-		//if JUST added to stack / queue
-		if (worldGraph.getCurrentSearch().getLastFrontier() != null)
-			if (worldGraph.getCurrentSearch().getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-				//TODO Put some info around the screen somewhere and put costs somewhere (use cost variable below)
-				Node expanded = worldGraph.getCurrentSearch().getMostRecentlyExpanded();
-				float cost = expanded.getEdgeCost(new Node(new Point(currentNodeClickX, currentNodeClickY)));
-				spriteBatch.draw(lastFrontierSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-						(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-			}
-		else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-				//TODO Put some info around the screen somewhere
-				spriteBatch.draw(olderFrontierSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+		if (timeOutInfographic > 750) {
+			setCurrentClick(-5,-5);
+			timeOutInfographic = -1;
+		} else {
+
+			spriteBatch.setProjectionMatrix(worldCamera.combined);
+			spriteBatch.begin();
+			float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
+
+			//if start node
+			if (worldGraph.getCurrentSearch().getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
+				spriteBatch.draw(startNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
 						(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 			} else
-		//if already expanded
-		if (worldGraph.getCurrentSearch().getVisited() != null)
-			if (worldGraph.getCurrentSearch().getVisited().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-				//TODO Put some info around the screen somewhere
-				spriteBatch.draw(fullyExploredSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-						(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-			}
-		spriteBatch.end();
+				//if end node
+				if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
+					spriteBatch.draw(endNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+							(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+				} else
+					//if recently expanded
+					if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
+						if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
+							//TODO Put "Nodes surround these (in pink) have been added to a stack/queue to be looked at later
+							spriteBatch.draw(currentNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+									(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+						} else
+							//if JUST added to stack / queue
+							if (worldGraph.getCurrentSearch().getLastFrontier() != null)
+								if (worldGraph.getCurrentSearch().getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
+									//TODO Put some info around the screen somewhere and put costs somewhere (use cost variable below)
+									Node expanded = worldGraph.getCurrentSearch().getMostRecentlyExpanded();
+									float cost = expanded.getEdgeCost(new Node(new Point(currentNodeClickX, currentNodeClickY)));
+									spriteBatch.draw(lastFrontierSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+											(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+								} else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
+									//TODO Put some info around the screen somewhere
+									spriteBatch.draw(olderFrontierSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+											(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+								} else
+									//if already expanded
+									if (worldGraph.getCurrentSearch().getVisited() != null)
+										if (worldGraph.getCurrentSearch().getVisited().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
+											//TODO Put some info around the screen somewhere
+											spriteBatch.draw(fullyExploredSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+													(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+										}
+			spriteBatch.end();
+			timeOutInfographic++;
+		}
 
 	}
 
@@ -659,6 +671,7 @@ public class World implements Disposable {
 	public void setCurrentClick(int x, int y) {
 		this.currentNodeClickX = x;
 		this.currentNodeClickY = y;
+		timeOutInfographic = 0;
 	}
 
 	public void setNextDestination(int x, int y) {

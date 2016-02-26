@@ -3,6 +3,7 @@ package com.b3.gui.components;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class LabelComponent {
 
@@ -31,4 +32,10 @@ public class LabelComponent {
         label.setText(str);
     }
 
+    /**
+     * @return The inner button representation
+     */
+    public Label getComponent() {
+        return label;
+    }
 }
