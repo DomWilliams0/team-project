@@ -25,10 +25,6 @@ public class WorldSelectionHandler extends InputAdapter {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-		// just left click
-		if (button != Input.Buttons.LEFT)
-			return false;
-
 		// selecting an entity
 		// todo
 
@@ -46,7 +42,11 @@ public class WorldSelectionHandler extends InputAdapter {
 
 		System.out.println("You clicked node: " + node.getPoint());
 
-		world.setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
+		if (button == Input.Buttons.LEFT)
+			world.setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
+		else
+			world.setNextDestination(node.getPoint().getX(), node.getPoint().getY());
+
 
 		// no search
 		if (!worldGraph.hasSearchInProgress())

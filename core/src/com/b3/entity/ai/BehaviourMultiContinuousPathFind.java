@@ -1,6 +1,7 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
+import com.b3.search.Node;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
@@ -23,9 +24,13 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	@Override
 	public void tick(Vector2 steeringOutput) {
 		pathFind.tick(steeringOutput);
-		if (pathFind.hasArrivedForTheFirstTime())
-			pathFind.reset(agent.getPhysicsComponent().getPosition(),
-					generateRandomTile(), algorithm, graph);
+		if (pathFind.hasArrivedForTheFirstTime()) {
+			Node currentPos = pathFind.getNodeFromTile(graph, agent.getPhysicsComponent().getPosition());
+			if (currentPos == new Node(graph.getNextDestination()))
+				pathFind.reset(agent.getPhysicsComponent().getPosition(), generateRandomTile(), algorithm, graph);
+			else
+				pathFind.reset(agent.getPhysicsComponent().getPosition(), new Vector2(graph.getNextDestination().getX(),graph.getNextDestination().getY()), algorithm, graph);
+		}
 	}
 
 	private Vector2 generateRandomTile() {

@@ -32,7 +32,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		ticker.reset(algorithm, startNode, endNode);
 	}
 
-	private Node getNodeFromTile(WorldGraph worldGraph, Vector2 tile) {
+	public Node getNodeFromTile(WorldGraph worldGraph, Vector2 tile) {
 		return worldGraph.getNode(new Point((int) tile.x, (int) tile.y));
 	}
 

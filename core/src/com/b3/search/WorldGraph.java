@@ -40,6 +40,10 @@ public class WorldGraph implements Serializable {
 	private SearchTicker currentSearch;
 	private Agent currentSearchAgent;
 
+	//current wanted next destination (right click)
+	private int wantedNextDestinationX;
+	private int wantedNextDestinationY;
+
 	/**
 	 * Constructs a new world graph with the following x and y dimensions.
 	 * Graph has all successors, no missing edges nor non-default edge costs
@@ -615,5 +619,14 @@ public class WorldGraph implements Serializable {
 
 	public boolean hasSearchInProgress() {
 		return currentSearch != null;
+	}
+
+	public void setNextDestination(int x, int y) {
+		wantedNextDestinationX = x;
+		wantedNextDestinationY = y;
+	}
+
+	public Point getNextDestination() {
+		return new Point(wantedNextDestinationX, wantedNextDestinationY);
 	}
 }

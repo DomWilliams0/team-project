@@ -661,4 +661,7 @@ public class World implements Disposable {
 		this.currentNodeClickY = y;
 	}
 
+	public void setNextDestination(int x, int y) {
+		worldGraph.setNextDestination(x, y);
+	}
 }

@@ -2,7 +2,11 @@ package com.b3.entity.ai;
 
 
 import com.b3.entity.Agent;
+import com.b3.search.Node;
+import com.b3.search.Point;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.ArrayList;
 
 /**
  * A base for behaviours that contain an Agent and a corresponding Steering behaviour
@@ -21,4 +25,5 @@ public abstract class Behaviour {
 	public void tick(Vector2 steeringOutput) {
 		steering.tick(steeringOutput);
 	}
+
 }
