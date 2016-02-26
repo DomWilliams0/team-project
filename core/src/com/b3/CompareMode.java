@@ -34,7 +34,7 @@ public class CompareMode implements Screen {
         //Database.init();
 
         // create world
-        world = new World("core/assets/world/world.tmx");
+        world = new World("core/assets/world/world.tmx", true);
 
         // init gui
         setupSidebar();

@@ -34,7 +34,7 @@ public class LearningMode implements Screen {
         //Database.init();
 
         // create world
-        world = new World("core/assets/world/world_smaller_test.tmx");
+        world = new World("core/assets/world/world_smaller_test.tmx", false);
 
         // init gui
         setupSidebar();

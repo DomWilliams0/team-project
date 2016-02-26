@@ -76,10 +76,13 @@ public class World implements Disposable {
 	private Agent agent;
 	private BehaviourMultiContinuousPathFind behaviour;
 
+	private Boolean compareMode;
+
 	public World() {
 	}
 
-	public World(String fileName) {
+	public World(String fileName, Boolean compareMode) {
+		this.compareMode = compareMode;
 		TiledMap map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
 				(int) map.getProperties().get("width"),
@@ -274,11 +277,15 @@ public class World implements Disposable {
 		for (int i = 0; i < debugCount; i++)
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 
-		agent = spawnAgent(new Vector2(5, 5));
+		agent = spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
+
+		//IF IS COMPAREMODE (compareMode = true) DO ALL THREE BEHAVIOURS
+		//
 		behaviour = new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
 		agent.setBehaviour(behaviour);
 
 		worldGraph.setCurrentSearch(agent, behaviour.getTicker());
+		//OTHERWISE DO JUST ONE DEPENDING ON THE SHIZZLE
 	}
 
 	/**
