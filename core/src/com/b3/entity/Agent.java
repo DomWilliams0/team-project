@@ -1,7 +1,7 @@
 package com.b3.entity;
 
 import com.b3.entity.ai.Behaviour;
-import com.b3.entity.ai.BehaviourWander;
+import com.b3.entity.ai.BehaviourNop;
 import com.b3.entity.component.AIComponent;
 import com.b3.entity.component.ModelComponent;
 import com.b3.entity.component.PhysicsComponent;
@@ -47,7 +47,7 @@ public class Agent extends Entity {
 		add(physics);
 
 		// ai
-		ai = new AIComponent(new BehaviourWander(this));
+		ai = new AIComponent(new BehaviourNop(this));
 		add(ai);
 
 		world.getEngine().addEntity(this);
