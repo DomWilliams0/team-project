@@ -8,6 +8,7 @@ import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
+import com.b3.gui.RenderTester;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -78,18 +79,12 @@ public class World implements Disposable {
 	private BehaviourMultiContinuousPathFind behaviour;
 
 	private Boolean compareMode;
-	private SpriteBatch spriteBatch;
-	private Sprite currentNodeSprite;
-	private Sprite startNodeSprite;
-	private Sprite endNodeSprite;
-	private Sprite lastFrontierSprite;
-	private Sprite olderFrontierSprite;
-	private Sprite fullyExploredSprite;
-
 	//current node user has clicked on
 	private int currentNodeClickX;
 	private int currentNodeClickY;
 	private int timeOutInfographic = 0;
+
+	private RenderTester rt;
 
 	public World() {
 	}
@@ -137,21 +132,6 @@ public class World implements Disposable {
 		// load map tiles
 		loadBuildings(map);
 		processMapTileTypes(map);
-	}
-
-	private void loadTextures() {
-		Texture tempTexture = new Texture("core/assets/world/popups/currentnode250x250.JPG.png");
-		currentNodeSprite = new Sprite(tempTexture);
-		tempTexture = new Texture("core/assets/world/popups/startnode250x250.JPG.png");
-		startNodeSprite = new Sprite(tempTexture);
-		tempTexture = new Texture("core/assets/world/popups/endnode250x250.JPG.png");
-		endNodeSprite= new Sprite(tempTexture);
-		tempTexture = new Texture("core/assets/world/popups/lastF250x250.JPG.png");
-		lastFrontierSprite= new Sprite(tempTexture);
-		tempTexture = new Texture("core/assets/world/popups/oldF250x250.JPG.png");
-		olderFrontierSprite= new Sprite(tempTexture);
-		tempTexture = new Texture("core/assets/world/popups/fullyExplored250x250.JPG.png");
-		fullyExploredSprite= new Sprite(tempTexture);
 	}
 
 	private void processMapTileTypes(TiledMap map) {
@@ -300,8 +280,7 @@ public class World implements Disposable {
 
 		worldCamera.setCurrrentZoom(Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) / 2);
 
-		spriteBatch = new SpriteBatch();
-		loadTextures();
+		rt = new RenderTester(this);
 
 		// debug: test entities
 		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
@@ -317,7 +296,6 @@ public class World implements Disposable {
 		worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
 		worldGraph.setCurrentSearch(agent, behaviour.getTicker());
 
-		//OTHERWISE DO JUST ONE DEPENDING ON THE SHIZZLE
 	}
 
 	/**
@@ -536,71 +514,14 @@ public class World implements Disposable {
 		// render models
 		modelManager.render(worldCamera);
 
-		if (!compareMode) {
-			if (timeOutInfographic != -1)
-				timeOutInfographic++;
-			renderInfographics();
-		}
+		if (!compareMode) rt.render(currentNodeClickX, currentNodeClickY);
+
 
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
 			debugRenderer.render(worldCamera);
 	}
 
-	private void renderInfographics() {
-		if (timeOutInfographic > 750) {
-			setCurrentClick(-5,-5);
-			timeOutInfographic = -1;
-		} else {
-			spriteBatch.setProjectionMatrix(worldCamera.combined);
-			spriteBatch.begin();
-			float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
-
-			//if start node
-			if (worldGraph.getCurrentSearch().getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-				spriteBatch.draw(startNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-						(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-			} else
-				//if end node
-				if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-					spriteBatch.draw(endNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-							(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-				} else
-					//if recently expanded
-					if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
-						if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-							//TODO Put some info around the screen somewhere (use cost function below somewhere)
-
-							System.out.println(worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded()));
-
-							spriteBatch.draw(currentNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-									(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-						} else
-							//if JUST added to stack / queue
-							if (worldGraph.getCurrentSearch().getLastFrontier() != null)
-								if (worldGraph.getCurrentSearch().getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-									//TODO Put some info around the screen somewhere and put costs somewhere (use cost variable below)
-									Node expanded = worldGraph.getCurrentSearch().getMostRecentlyExpanded();
-									float cost = expanded.getEdgeCost(new Node(new Point(currentNodeClickX, currentNodeClickY)));
-									spriteBatch.draw(lastFrontierSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-											(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-								} else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-									//TODO Put some info around the screen somewhere
-									spriteBatch.draw(olderFrontierSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-											(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-								} else
-									//if already expanded
-									if (worldGraph.getCurrentSearch().getVisited() != null)
-										if (worldGraph.getCurrentSearch().getVisited().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-											//TODO Put some info around the screen somewhere
-											spriteBatch.draw(fullyExploredSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-													(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-										}
-			spriteBatch.end();
-			timeOutInfographic++;
-		}
-
-	}
 
 	private float getZoomScalar() {
 		if (Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) != 45)

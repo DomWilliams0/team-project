@@ -47,7 +47,7 @@ public class LearningMode implements Screen {
         camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat(ConfigKey.CAMERA_DISTANCE_DEFAULT));
         camera.near = 1f;
         camera.far = 300f;
-        camera.lookAt(cameraPos.x, cameraPos.y, 0);
+        camera.lookAt(cameraPos.x, cameraPos.y, 10);
         camera.update();
 
         camera.setWorld(world);

@@ -27,7 +27,7 @@ public class PhysicsComponent implements Component {
 		circleShape.dispose();
 
 		maxSpeed = 5f;
-		maxAcceleration = 20; // todo what does this even do? probably not necessary
+		maxAcceleration = 20;
 	}
 
 

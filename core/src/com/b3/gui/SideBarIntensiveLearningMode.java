@@ -89,7 +89,6 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
 
 
         // Flat buildings checkbox
-        // todo the name needs changing?
         CheckBoxComponent showLabelsCheckBox = new CheckBoxComponent(skin, font, "Flat buildings");
         showLabelsCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS));
         showLabelsCheckBox.addListener(new ChangeListener() {
@@ -119,7 +118,6 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         labelTwo.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
         //Play and Pause button
-        //todo there are graphics available in the skin for play and pause
         //String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
         ButtonComponent playPause = new ButtonComponent(skin, font, "Pause");
         playPause.addListener(new ChangeListener() {

@@ -150,7 +150,6 @@ public class SideBar extends Table implements Disposable {
         settingsTab.row();
 
         // Flat buildings checkbox
-        // todo the name needs changing?
         CheckBoxComponent showLabelsCheckBox = new CheckBoxComponent(skin, font, "Flat buildings");
         showLabelsCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS));
         showLabelsCheckBox.addListener(new ChangeListener() {
@@ -248,7 +247,6 @@ public class SideBar extends Table implements Disposable {
         settingsTab.row();
 
         //Play and Pause button
-        //todo there are graphics available in the skin for play and pause
         //String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
         ButtonComponent playPause = new ButtonComponent(skin, font, "Pause");
         playPause.addListener(new ChangeListener() {

@@ -61,7 +61,7 @@ public class HelpBox extends Table {
 		// === HELP TEXT ===
 		// =================
 
-		// TODO - Implement.
+		// TODO - Implement - is this even needed anymore
 
 		// ==============
 		// === LEGEND ===

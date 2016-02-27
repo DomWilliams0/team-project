@@ -171,4 +171,5 @@ public class WorldCamera extends PerspectiveCamera {
 	public float getPosZ() {
 		return posZ;
 	}
+
 }
