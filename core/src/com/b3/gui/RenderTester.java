@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.sun.org.apache.xpath.internal.operations.String;
 
 public class RenderTester {
 
@@ -31,7 +32,9 @@ public class RenderTester {
     private World world;
     private Sprite emptyCanvas;
     private SpriteBatch spriteBatch;
-    private BitmapFont font;
+
+    private BitmapFont fontButton;
+    private BitmapFont fontAStar;
 
     private Sprite[] currentNodeSprite;
     private Sprite[] startNodeSprite;
@@ -39,6 +42,7 @@ public class RenderTester {
     private Sprite[] endNodeSprite;
     private Sprite[] lastFrontierSprite;
     private Sprite[] olderFrontierSprite;
+    private Sprite[] numbers;
 
     private Stage stage;
     private int pageNo;
@@ -65,7 +69,11 @@ public class RenderTester {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 15;
         parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!'()>?:";
-        font = generator.generateFont(parameter);
+
+        fontButton = generator.generateFont(parameter);
+        parameter.size = 30;
+        fontAStar = generator.generateFont(parameter);
+
         generator.dispose();
 
         pageNo = 0;
@@ -82,7 +90,7 @@ public class RenderTester {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         Skin skin = new Skin(atlas);
 
-        ButtonComponent playPause = new ButtonComponent(skin, font, "Show More");
+        ButtonComponent playPause = new ButtonComponent(skin, fontButton, "Show More");
         playPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -114,9 +122,12 @@ public class RenderTester {
         tempTexture = new Texture("core/assets/world/popups/startnode250x250.JPG_2.png");
         startNodeSprite[1] = new Sprite(tempTexture);
 
-        endNodeSprite = new Sprite[1];
+        //Load end node sprites (2 pages)
+        endNodeSprite = new Sprite[2];
         tempTexture = new Texture("core/assets/world/popups/endnode250x250.JPG.png");
         endNodeSprite[0] = new Sprite(tempTexture);
+        tempTexture = new Texture("core/assets/world/popups/endnode250x250.JPG_2.png");
+        endNodeSprite[1] = new Sprite(tempTexture);
 
         lastFrontierSprite = new Sprite[1];
         tempTexture = new Texture("core/assets/world/popups/lastF250x250.JPG.png");
@@ -129,8 +140,14 @@ public class RenderTester {
         fullyExploredSprite = new Sprite[1];
         tempTexture = new Texture("core/assets/world/popups/fullyExplored250x250.JPG.png");
         fullyExploredSprite[0] = new Sprite(tempTexture);
-    }
 
+        numbers = new Sprite[10];
+        //Load Numbers
+        for (int i = 0; i < 9; i++) {
+            tempTexture = new Texture("core/assets/world/popups/Numbers/"+i+".png");
+            numbers[i] = new Sprite(tempTexture);
+        }
+    }
 
     public void render(int currentNodeClickX, int currentNodeClickY) {
         stage.draw();
@@ -147,23 +164,24 @@ public class RenderTester {
         spriteBatch.begin();
 
         //----ALL RENDERS GO HERE---
-        //if start node
+        //DONE MULTI-PAGES if start node
         if (worldGraph.getCurrentSearch().getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
             if (pageNo >= startNodeSprite.length) pageNo = 0; //reset to first page
             spriteBatch.draw(startNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
         } else
-            //if end node
+            //DONE MULTI_PAGES if end node
             if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
                 if (pageNo >= endNodeSprite.length) pageNo = 0; //reset to first page if neccessary
-                spriteBatch.draw(endNodeSprite[0], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+                spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                         (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
             } else
-                //if recently expanded
+                //DONE MULTi-PAGES, needs cost breakdown though if recently expanded
                 if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
                     if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
                         //TODO Put some info around the screen somewhere (use cost function below somewhere)
                         if (pageNo == 3) pageNo = 0; //reset to first page if neccessary
-                        System.out.println(worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded()));
+                        float gxFunction = worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded());
+
                         int convertedPageNo = pageNo;
                         if (convertedPageNo == 2)
                             switch (world.getWorldGraph().getCurrentSearch().getAlgorithm()) {
@@ -174,8 +192,15 @@ public class RenderTester {
                                 case DEPTH_FIRST: convertedPageNo = 2;
                                     break;
                             }
-                        spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-                                (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+                        spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+
+                        //calculate text offset to compensate for zoom
+                        float tempXScaler = 0;
+                        if (scalingZoom < 4.5)
+                            tempXScaler = (float) ((4.5/20) - (scalingZoom / 20));
+                        //draw current g(x) function onto the screen.
+                        drawNumberOnScreen((int) gxFunction, currentNodeClickX, (float) (currentNodeClickY+0.175) - tempXScaler , scalingZoom);
+
                     } else
                         //if JUST added to stack / queue
                         if (worldGraph.getCurrentSearch().getLastFrontier() != null)
@@ -201,16 +226,12 @@ public class RenderTester {
                                                 (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
                                     }
         //----ALL RENDERS GO HERE---
+
         spriteBatch.end();
 
 //        //FONTS
 //        font.getData().setScale((float) 0.5);
 //        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-//
-//        float zoomScaler = 22 - worldCamera.getActualZoom();
-//
-//        spriteBatch.setProjectionMatrix(textCamera.combined);
-//        spriteBatch.begin();
 //
 //        //----ALL FONTS GO HERE---
 //        if (worldGraph.getCurrentSearch().getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
@@ -219,5 +240,18 @@ public class RenderTester {
 //        //----ALL FONTS GO HERE---
 //
 //        spriteBatch.end();
+    }
+
+    private void drawNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
+        //if single digits
+        if (number < 10) {
+            spriteBatch.draw(numbers[number], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+        } else {
+        //if not
+            int firstNo = number / 10;
+            int secondNo = number % 10;
+            spriteBatch.draw(numbers[firstNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+            spriteBatch.draw(numbers[secondNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.75), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+        }
     }
 }
