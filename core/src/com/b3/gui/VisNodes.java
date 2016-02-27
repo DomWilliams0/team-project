@@ -62,7 +62,7 @@ public class VisNodes extends Table {
     private final String addedToFrontier = "I have added the following\n" +
             "nodes to the frontier:\n" +
             "%s\n";
-    private final String nextNode = "My next node to expand is:\n" +
+    private final String nextNode = "My next node to expand is\n (it is at the top of the \ndata structure):\n" +
             "%s";
 
     private StringBuilder stepString;
