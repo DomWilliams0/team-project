@@ -7,15 +7,15 @@ import com.b3.search.Point;
 import com.b3.search.WorldGraph;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
 public class WorldSelectionHandler extends InputAdapter {
+
 	private static final Vector3 tempRayCast = new Vector3();
-
-
 	private World world;
 
 	public WorldSelectionHandler(World world) {
@@ -27,6 +27,11 @@ public class WorldSelectionHandler extends InputAdapter {
 
 		// selecting an entity
 		// todo
+
+		//if near bottom of screen hitting the intensive learning mode button so ignore
+		if (screenX < 100 && screenY > Gdx.graphics.getHeight()-100) {
+			return false;
+		}
 
 		// selecting a tile
 		WorldCamera worldCamera = world.getWorldCamera();

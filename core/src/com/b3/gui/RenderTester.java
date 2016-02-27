@@ -1,9 +1,13 @@
 package com.b3.gui;
 
 
+import com.b3.gui.components.ButtonComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
+import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
@@ -11,9 +15,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class RenderTester {
 
@@ -31,6 +44,8 @@ public class RenderTester {
     private Sprite endNodeSprite;
     private Sprite lastFrontierSprite;
     private Sprite olderFrontierSprite;
+
+    private Stage stage;
 
     public RenderTester (World world) {
         this.world = world;
@@ -58,6 +73,33 @@ public class RenderTester {
         generator.dispose();
 
         loadTextures();
+
+        setupButton();
+    }
+
+    private void setupButton() {
+        stage = new Stage(new ScreenViewport());
+        world.getInputHandler().addProcessor(stage);
+
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
+        Skin skin = new Skin(atlas);
+
+        ButtonComponent playPause = new ButtonComponent(skin, font, "Show More");
+        playPause.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("CLICKED");
+                TextButton btnplaypause = playPause.getComponent();
+                String text = btnplaypause.getText().toString();
+                if(text.equals("Show More")) {
+                    btnplaypause.setText("Show Less");
+                } else if(text.equals("Show Less")){
+                    btnplaypause.setText("Show More");
+                }
+            }
+        });
+
+        stage.addActor(playPause.getComponent());
     }
 
     private void loadTextures() {
@@ -77,6 +119,13 @@ public class RenderTester {
 
 
     public void render(int currentNodeClickX, int currentNodeClickY) {
+        stage.draw();
+        stage.act();
+        stage.getViewport().update((int) worldCamera.viewportWidth,(int) worldCamera.viewportHeight, true);
+
+//      stage.getViewport().setScreenSize(1000,1000); Doesn't work
+//      stage.getViewport().update(5000,5000); Scales everything, need to just scale button
+
         float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
 
         //SPRITES
@@ -144,61 +193,4 @@ public class RenderTester {
 //
 //        spriteBatch.end();
     }
-
-    /*
-    private void renderInfographics() {
-		if (timeOutInfographic > 750) {
-			setCurrentClick(-5,-5);
-			timeOutInfographic = -1;
-		} else {
-			spriteBatch.setProjectionMatrix(worldCamera.combined);
-			spriteBatch.begin();
-			float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
-
-			//if start node
-			if (worldGraph.getCurrentSearch().getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-				spriteBatch.draw(startNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-						(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-			} else
-				//if end node
-				if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-					spriteBatch.draw(endNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-							(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-				} else
-					//if recently expanded
-					if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
-						if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-							//TODO Put some info around the screen somewhere (use cost function below somewhere)
-
-							System.out.println(worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded()));
-
-							spriteBatch.draw(currentNodeSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-									(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-						} else
-							//if JUST added to stack / queue
-							if (worldGraph.getCurrentSearch().getLastFrontier() != null)
-								if (worldGraph.getCurrentSearch().getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-									//TODO Put some info around the screen somewhere and put costs somewhere (use cost variable below)
-									Node expanded = worldGraph.getCurrentSearch().getMostRecentlyExpanded();
-									float cost = expanded.getEdgeCost(new Node(new Point(currentNodeClickX, currentNodeClickY)));
-									spriteBatch.draw(lastFrontierSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-											(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-								} else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-									//TODO Put some info around the screen somewhere
-									spriteBatch.draw(olderFrontierSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-											(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-								} else
-									//if already expanded
-									if (worldGraph.getCurrentSearch().getVisited() != null)
-										if (worldGraph.getCurrentSearch().getVisited().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-											//TODO Put some info around the screen somewhere
-											spriteBatch.draw(fullyExploredSprite, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-													(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-										}
-			spriteBatch.end();
-			timeOutInfographic++;
-		}
-
-	}
-     */
 }

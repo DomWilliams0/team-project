@@ -9,6 +9,7 @@ import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
 import com.b3.gui.RenderTester;
+import com.b3.input.InputHandler;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -19,10 +20,6 @@ import com.b3.util.Utils;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.CpuSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -45,6 +42,7 @@ import java.util.*;
 public class World implements Disposable {
 
 	private static short ENTITY_CULL_TAG = 10101;
+	private InputHandler inputHandler;
 
 	private Vector2 tileSize, pixelSize;
 
@@ -85,11 +83,13 @@ public class World implements Disposable {
 	private int timeOutInfographic = 0;
 
 	private RenderTester rt;
+	private int maxHeight;
 
 	public World() {
 	}
 
-	public World(String fileName, Boolean compareMode) {
+	public World(String fileName, Boolean compareMode, InputHandler inputHandler) {
+		this.inputHandler = inputHandler;
 		this.compareMode = compareMode;
 		TiledMap map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
@@ -600,5 +600,9 @@ public class World implements Disposable {
 
 	public Boolean getCompareMode() {
 		return compareMode;
+	}
+
+	public InputHandler getInputHandler() {
+		return inputHandler;
 	}
 }
