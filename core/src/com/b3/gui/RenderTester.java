@@ -137,9 +137,12 @@ public class RenderTester {
         tempTexture = new Texture("core/assets/world/popups/oldF250x250.JPG.png");
         olderFrontierSprite[0] = new Sprite(tempTexture);
 
-        fullyExploredSprite = new Sprite[1];
+        //fully explored (grey colours; two pages)
+        fullyExploredSprite = new Sprite[2];
         tempTexture = new Texture("core/assets/world/popups/fullyExplored250x250.JPG.png");
         fullyExploredSprite[0] = new Sprite(tempTexture);
+        tempTexture = new Texture("core/assets/world/popups/fullyExplored250x250.JPG_2.png");
+        fullyExploredSprite[1] = new Sprite(tempTexture);
 
         numbers = new Sprite[10];
         //Load Numbers
@@ -199,7 +202,8 @@ public class RenderTester {
                         if (scalingZoom < 4.5)
                             tempXScaler = (float) ((4.5/20) - (scalingZoom / 20));
                         //draw current g(x) function onto the screen.
-                        drawNumberOnScreen((int) gxFunction, currentNodeClickX, (float) (currentNodeClickY+0.175) - tempXScaler , scalingZoom);
+                        if (pageNo == 2)
+                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, (float) (currentNodeClickY+0.5) - tempXScaler , scalingZoom);
 
                     } else
                         //if JUST added to stack / queue
@@ -212,17 +216,18 @@ public class RenderTester {
                                 spriteBatch.draw(lastFrontierSprite[0], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                                         (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
                             } else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
+                                //if the old frontier
                                 if (pageNo >= olderFrontierSprite.length) pageNo = 0; //reset to first page if neccessary
                                 //TODO Put some info around the screen somewhere
                                 spriteBatch.draw(olderFrontierSprite[0], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                                         (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
                             } else
-                                //if already expanded
+                                //MULTI PAGE DONE if already expanded
                                 if (worldGraph.getCurrentSearch().getVisited() != null)
                                     if (worldGraph.getCurrentSearch().getVisited().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
                                         if (pageNo >= fullyExploredSprite.length) pageNo = 0; //reset to first page if neccessary
                                         //TODO Put some info around the screen somewhere
-                                        spriteBatch.draw(fullyExploredSprite[0], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+                                        spriteBatch.draw(fullyExploredSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                                                 (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
                                     }
         //----ALL RENDERS GO HERE---
