@@ -46,6 +46,8 @@ public class RenderTester {
 
     private Stage stage;
     private int pageNo;
+    private Sprite plus;
+    private Sprite equals;
 
     public RenderTester(World world) {
         this.world = world;
@@ -129,13 +131,27 @@ public class RenderTester {
         tempTexture = new Texture("core/assets/world/popups/endnode250x250.JPG_2.png");
         endNodeSprite[1] = new Sprite(tempTexture);
 
-        lastFrontierSprite = new Sprite[1];
+        //Aqua nodes - just added to frontire
+        lastFrontierSprite = new Sprite[4];
         tempTexture = new Texture("core/assets/world/popups/lastF250x250.JPG.png");
         lastFrontierSprite[0] = new Sprite(tempTexture);
+        tempTexture = new Texture("core/assets/world/popups/lastF250x250.JPG-DFS.png");
+        lastFrontierSprite[1] = new Sprite(tempTexture);
+        tempTexture = new Texture("core/assets/world/popups/lastF250x250.JPG-BFS.png");
+        lastFrontierSprite[2] = new Sprite(tempTexture);
+        tempTexture = new Texture("core/assets/world/popups/lastF250x250.JPG-ASTAR.png");
+        lastFrontierSprite[3] = new Sprite(tempTexture);
 
-        olderFrontierSprite = new Sprite[1];
+        //green nodes - in frontire but not expanded yet
+        olderFrontierSprite = new Sprite[4];
         tempTexture = new Texture("core/assets/world/popups/oldF250x250.JPG.png");
         olderFrontierSprite[0] = new Sprite(tempTexture);
+        tempTexture = new Texture("core/assets/world/popups/oldF250x250.JPG-DFS.png");
+        olderFrontierSprite[1] = new Sprite(tempTexture);
+        tempTexture = new Texture("core/assets/world/popups/oldF250x250.JPG-BFS.png");
+        olderFrontierSprite[2] = new Sprite(tempTexture);
+        tempTexture = new Texture("core/assets/world/popups/oldF250x250.JPG-ASTAR.png");
+        olderFrontierSprite[3] = new Sprite(tempTexture);
 
         //fully explored (grey colours; two pages)
         fullyExploredSprite = new Sprite[2];
@@ -150,15 +166,19 @@ public class RenderTester {
             tempTexture = new Texture("core/assets/world/popups/Numbers/"+i+".png");
             numbers[i] = new Sprite(tempTexture);
         }
+
+        tempTexture = new Texture("core/assets/world/popups/Numbers/plus.png");
+        plus = new Sprite(tempTexture);
+
+        tempTexture = new Texture("core/assets/world/popups/Numbers/equals.png");
+        equals = new Sprite(tempTexture);
+
     }
 
     public void render(int currentNodeClickX, int currentNodeClickY) {
         stage.draw();
         stage.act();
         stage.getViewport().update((int) worldCamera.viewportWidth, (int) worldCamera.viewportHeight, true);
-
-//      stage.getViewport().setScreenSize(1000,1000); Doesn't work
-//      stage.getViewport().update(5000,5000); Scales everything, need to just scale button
 
         float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
 
@@ -197,30 +217,67 @@ public class RenderTester {
                             }
                         spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 
-                        //calculate text offset to compensate for zoom
-                        float tempXScaler = 0;
-                        if (scalingZoom < 4.5)
-                            tempXScaler = (float) ((4.5/20) - (scalingZoom / 20));
                         //draw current g(x) function onto the screen.
                         if (pageNo == 2)
-                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, (float) (currentNodeClickY+0.5) - tempXScaler , scalingZoom);
+                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 22) , scalingZoom);
 
                     } else
                         //if JUST added to stack / queue
                         if (worldGraph.getCurrentSearch().getLastFrontier() != null)
                             if (worldGraph.getCurrentSearch().getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-                                if (pageNo >= lastFrontierSprite.length) pageNo = 0; //reset to first page if neccessary
-                                //TODO Put some info around the screen somewhere and put costs somewhere (use cost variable below)
-                                Node expanded = worldGraph.getCurrentSearch().getMostRecentlyExpanded();
-                                float cost = expanded.getEdgeCost(new Node(new Point(currentNodeClickX, currentNodeClickY)));
-                                spriteBatch.draw(lastFrontierSprite[0], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+                                if (pageNo == 2) pageNo = 0; //reset to first page if neccessary
+
+                                int convertedPageNo = pageNo;
+                                if (convertedPageNo == 1)
+                                    switch (world.getWorldGraph().getCurrentSearch().getAlgorithm()) {
+                                        case A_STAR: convertedPageNo = 3;
+                                            break;
+                                        case BREADTH_FIRST: convertedPageNo = 2;
+                                            break;
+                                        case DEPTH_FIRST: convertedPageNo = 1;
+                                            break;
+                                    }
+
+                                spriteBatch.draw(lastFrontierSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                                         (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+
+                                float gxFunction = worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded());
+                                float cost = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getEdgeCost(new Node(new Point(currentNodeClickX, currentNodeClickY)));
+                                float total = cost + gxFunction;
+
+                                if (pageNo == 1)
+                                    drawEquationOnScreen((int)total, (int)gxFunction, (int)cost, currentNodeClickX, currentNodeClickY + (scalingZoom/50), scalingZoom);
+
                             } else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
                                 //if the old frontier
-                                if (pageNo >= olderFrontierSprite.length) pageNo = 0; //reset to first page if neccessary
-                                //TODO Put some info around the screen somewhere
-                                spriteBatch.draw(olderFrontierSprite[0], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+                                if (pageNo == 2) pageNo = 0; //reset to first page if neccessary
+
+                                int convertedPageNo = pageNo;
+                                if (convertedPageNo == 1)
+                                    switch (world.getWorldGraph().getCurrentSearch().getAlgorithm()) {
+                                        case A_STAR: convertedPageNo = 3;
+                                            break;
+                                        case BREADTH_FIRST: convertedPageNo = 2;
+                                            break;
+                                        case DEPTH_FIRST: convertedPageNo = 1;
+                                            break;
+                                    }
+
+                                spriteBatch.draw(olderFrontierSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                                         (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+
+                                float gxFunction = -1;
+
+                                Object[] arrFront = worldGraph.getCurrentSearch().getFrontier().toArray();
+                                for (int i = 0; i < arrFront.length; i++) {
+                                    Node node = (Node) arrFront[i];
+                                    if (node.equals(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
+                                        gxFunction = worldGraph.getCurrentSearch().getG(node);
+                                    }
+                                }
+
+                                if (pageNo == 1)
+                                    drawNumberOnScreen((int) gxFunction, currentNodeClickX, (float) currentNodeClickY + (scalingZoom / 11), scalingZoom);
                             } else
                                 //MULTI PAGE DONE if already expanded
                                 if (worldGraph.getCurrentSearch().getVisited() != null)
@@ -233,18 +290,14 @@ public class RenderTester {
         //----ALL RENDERS GO HERE---
 
         spriteBatch.end();
+    }
 
-//        //FONTS
-//        font.getData().setScale((float) 0.5);
-//        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-//
-//        //----ALL FONTS GO HERE---
-//        if (worldGraph.getCurrentSearch().getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-//            font.draw(spriteBatch,"Hello, my name is Nishanth and this is A* search", (float) (currentNodeClickX-19) - (worldCamera.getPosX() * (12)) + (zoomScaler) / 10,  (currentNodeClickY+60) - (worldCamera.getPosY() * 12), 55, Align.center, true);
-//        }
-//        //----ALL FONTS GO HERE---
-//
-//        spriteBatch.end();
+    private void drawEquationOnScreen(int total, int firstNo, int secondNo, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
+        drawNumberOnScreen(total, currentNodeClickX-(scalingZoom/10), currentNodeClickY, scalingZoom);
+        spriteBatch.draw(equals, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+        drawNumberOnScreen(firstNo, currentNodeClickX+(scalingZoom/10), currentNodeClickY, scalingZoom);
+        spriteBatch.draw(plus, (float) ((currentNodeClickX - scalingZoom / 3.5) + 0.5) , (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+        drawNumberOnScreen(secondNo, currentNodeClickX+3*(scalingZoom/10), currentNodeClickY, scalingZoom);
     }
 
     private void drawNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
@@ -255,8 +308,11 @@ public class RenderTester {
         //if not
             int firstNo = number / 10;
             int secondNo = number % 10;
-            spriteBatch.draw(numbers[firstNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-            spriteBatch.draw(numbers[secondNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.75), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+            float x1 = (float) ((currentNodeClickX - scalingZoom / 2) + 0.5);
+            float x2 = (float) ((currentNodeClickX - scalingZoom / 2) + 0.5) + (scalingZoom / 20);
+
+            spriteBatch.draw(numbers[firstNo], x1, (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+            spriteBatch.draw(numbers[secondNo], x2, (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
         }
     }
 }
