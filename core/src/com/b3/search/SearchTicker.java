@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 public class SearchTicker {
 
+	private final WorldGraph worldGraph;
 	private Takeable<Node> frontier;
 	private List<Node> lastFrontier = new ArrayList<>();
 	private Node mostRecentlyExpanded;
@@ -40,13 +41,15 @@ public class SearchTicker {
 
 	private SearchSnapshotTracker snapshotTracker;
 
-	public SearchTicker() {
+	public SearchTicker(WorldGraph worldGraph) {
 		/*try {
 			snapshotTracker = new SearchSnapshotTracker(this);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}*/
+
+		this.worldGraph = worldGraph;
 
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
@@ -143,8 +146,11 @@ public class SearchTicker {
 
 		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
 		timer += Utils.TRUE_DELTA_TIME;
+
 		if (timer < timeBetweenTicks)
 			return;
+
+		worldGraph.setColFlicker();
 
 		if(timer > 2*timeBetweenTicks)
 			//it has been a long time since last tick so reset it instead of decrementing it

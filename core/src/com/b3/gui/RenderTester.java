@@ -302,6 +302,11 @@ public class RenderTester {
 
     private void drawNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
         //if single digits
+        if (number > 100) {
+            System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers");
+            number = 99;
+        }
+
         if (number < 10) {
             spriteBatch.draw(numbers[number], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
         } else {

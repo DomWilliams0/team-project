@@ -22,7 +22,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 
 	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph) {
 		super(agent, null);
-		ticker = new SearchTicker();
+		ticker = new SearchTicker(worldGraph);
 		wasArrivedLastFrame = false;
 
 		Node startNode = getNodeFromTile(worldGraph, startTile);

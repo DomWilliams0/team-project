@@ -27,6 +27,7 @@ public class WorldGraph implements Serializable {
 	private static final Color JUST_EXPANDED_COLOUR = Color.PINK;
 	private static final Color VISITED_COLOUR = Color.LIGHT_GRAY;
 	private static final Color SEARCH_EDGE_COLOUR = Color.YELLOW;
+
 	private static final float NODE_RADIUS = 0.10f;
 	private static final Color BORDER_COLOUR = Color.BLACK;
 	private static final float BORDER_THICKNESS = 1.3f; // relative to node radius
@@ -48,6 +49,8 @@ public class WorldGraph implements Serializable {
 	//search algorithm wanted for learning mode only (Leave as null if compare mode)
 	private SearchAlgorithm learningModeNext = null;
 
+	private Color colPath;
+
 	/**
 	 * Constructs a new world graph with the following x and y dimensions.
 	 * Graph has all successors, no missing edges nor non-default edge costs
@@ -63,6 +66,8 @@ public class WorldGraph implements Serializable {
 		this.shapeRenderer = null; // must be initialised with initRenderer()
 		this.currentSearch = null;
 		this.currentSearchAgent = null;
+
+		colPath = SEARCH_EDGE_COLOUR;
 
 		generateEmptyGraph(width, height);
 	}
@@ -315,9 +320,13 @@ public class WorldGraph implements Serializable {
 			}
 		}
 
-		// render the path
+//		// render the path
 		if (showPaths && currentSearch != null) {// && currentSearch.isPathComplete()) {
-			shapeRenderer.setColor(SEARCH_EDGE_COLOUR);
+			colPath.add((float)-0.01,(float)-0.01,(float)0.1,0);
+			colPath.a = 1;
+
+			shapeRenderer.setColor(colPath);
+			//shapeRenderer.setColor(new Color(255,208,0,0));
 
 			List<Node> path = currentSearch.getPath();
 			for (int i = 0, pathSize = path.size(); i < pathSize - 1; i++) {
@@ -329,7 +338,6 @@ public class WorldGraph implements Serializable {
 						pathNodeB.getPoint().x, pathNodeB.getPoint().y
 				);
 			}
-
 		}
 
 		shapeRenderer.end();
@@ -406,7 +414,6 @@ public class WorldGraph implements Serializable {
 							pathNodeB.getPoint().x, pathNodeB.getPoint().y
 					);
 				}
-
 			}
 
 			shapeRenderer.end();
@@ -494,13 +501,6 @@ public class WorldGraph implements Serializable {
 							NODE_EDGES
 					);
 				}
-
-				// last frame's frontier
-//				for (Node frontierNode : lastFrontier) {
-//					actorLookup.get(frontierNode.getPoint()).setNodeColour(Color.FOREST);
-//                }
-
-
 			}
 
 
@@ -532,23 +532,7 @@ public class WorldGraph implements Serializable {
 			shapeRenderer.circle(end.x, end.y, (float) (NODE_RADIUS + 0.25), NODE_EDGES);
 		}
 
-		// start and end are always red
-//		if (start != null)
-//			actorLookup.get(start.getPoint()).setNodeColour(Color.RED);
-//        if (end != null)
-//            actorLookup.get(end.getPoint()).setNodeColour(Color.RED);
-
 		shapeRenderer.end();
-
-//		SpriteBatch spriteBatch = new SpriteBatch();
-//		spriteBatch.setProjectionMatrix(camera.combined);
-//		Texture yourTexture = new Texture("core/assets/world/popups/currentnode250x250.JPG.png");
-//		Sprite sprite = new Sprite(yourTexture);
-//		//sprite.setColor(1, 0, 0, 0.2f);
-//
-//		spriteBatch.begin();
-//		spriteBatch.draw(sprite,10,10,1,1);
-//		spriteBatch.end();
 
 	}
 
@@ -642,5 +626,11 @@ public class WorldGraph implements Serializable {
 
 	public void setLearningModeNext(SearchAlgorithm learningModeNext) {
 		this.learningModeNext = learningModeNext;
+	}
+
+	public void setColFlicker() {
+		colPath.r = 255;
+		colPath.g = 255;
+		colPath.b = 0;
 	}
 }

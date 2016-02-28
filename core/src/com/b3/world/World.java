@@ -516,7 +516,6 @@ public class World implements Disposable {
 
 		if (!compareMode) rt.render(currentNodeClickX, currentNodeClickY);
 
-
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
 			debugRenderer.render(worldCamera);

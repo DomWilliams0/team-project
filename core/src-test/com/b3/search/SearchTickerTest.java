@@ -29,7 +29,7 @@ public class SearchTickerTest {
 		Config.loadConfig("assets/reference.yml");
 
 		// Create the SearchTicker.
-		searchTicker = new SearchTicker();
+		//searchTicker = new SearchTicker();
 	}
 
 	/**
