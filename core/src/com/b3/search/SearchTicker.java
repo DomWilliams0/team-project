@@ -8,6 +8,7 @@ import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
+import org.omg.CORBA.TIMEOUT;
 
 import java.util.*;
 import java.util.function.Function;
@@ -144,7 +145,12 @@ public class SearchTicker {
 	 */
 	public void tick() {
 
-		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
+		Float timeBetweenTicks;
+		if (isPaused())
+			timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MAX);
+		else
+			timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
+
 		timer += Utils.TRUE_DELTA_TIME;
 
 		if (timer < timeBetweenTicks)
@@ -160,7 +166,7 @@ public class SearchTicker {
 			timer -= timeBetweenTicks;
 
 		//check if we're supposed to be paused
-		if (isPaused()) return;
+		if (isPaused()) {return;}
 
 		tickFinal();
 	}

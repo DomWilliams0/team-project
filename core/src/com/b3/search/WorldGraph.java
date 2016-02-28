@@ -322,7 +322,7 @@ public class WorldGraph implements Serializable {
 
 //		// render the path
 		if (showPaths && currentSearch != null) {// && currentSearch.isPathComplete()) {
-			colPath.add((float)-0.01,(float)-0.01,(float)0.1,0);
+			colPath.add((float)0.05,(float)0.05,(float)-0.05,0);
 			colPath.a = 1;
 
 			shapeRenderer.setColor(colPath);
@@ -629,8 +629,8 @@ public class WorldGraph implements Serializable {
 	}
 
 	public void setColFlicker() {
-		colPath.r = 255;
-		colPath.g = 255;
-		colPath.b = 0;
+		colPath.r = 0;
+		colPath.g = 0;
+		colPath.b = 255;
 	}
 }
