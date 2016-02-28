@@ -9,9 +9,6 @@ import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -37,6 +34,7 @@ public class VisNodes extends Table {
      * giving instructions of how the nodes are managed.
      *
      * todo should this be short / concise, or long / descriptive?
+     * todo
      */
     private final String description = "How it works:\n" +
             "Starting at the start node, its \n" +
@@ -52,9 +50,13 @@ public class VisNodes extends Table {
             "as visited (using a hash set),\n" +
             "to ensure we do not expand it again.";
 
-    private String newVisited = "<...>";
-    private String newFrontier = "<...>";
-    private String highestNode = "<...>";
+    private Node newVisited;
+    private List<Node> newFrontier;
+    private Node highestNode;
+
+    private String newVisitedStr = "<NOTHING>";
+    private String newFrontierStr = "<NOTHING>";
+    private String highestNodeStr = "<NOTHING>";
 
     private final String expandedNode = "I have just expanded the node:\n" +
             "%s, which is now\n" +
@@ -131,8 +133,8 @@ public class VisNodes extends Table {
         if(ticker==null || ticker.getVisited()==null || ticker.getFrontier()==null) {
             render =  render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST);
         } else {
-            newVisited = ticker.getMostRecentlyExpanded()==null?"<NOTHING>":ticker.getMostRecentlyExpanded().toString();
-            newFrontier = ticker.getLastFrontier()==null?"<NOTHING>":ticker.getLastFrontier().toString();
+            newVisited = ticker.getMostRecentlyExpanded();
+            newFrontier = ticker.getLastFrontier();
             if(!stepthrough || ticker.isUpdated()) {
                 ticker.setUpdated(false);
                 render = render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
@@ -188,18 +190,13 @@ public class VisNodes extends Table {
 
         //if we need to render a data collection
         if(rendermore) {
-            //get the frontier, as an arraylist
-            ArrayList<Node> frontier = new ArrayList<>(front);
             //make the arraylist be ordered based on take-order of the collection
-            //todo doesn't currently do correctly for A*, but highest priority is correct.
-            //todo perhaps change what is shown for A*. Could do with describing distance, and the nodes move a lot more with A* so is less useful
-            //(it is also difficult to retrieve elements from pq in take order.
-            switch(alg) {
-                case DEPTH_FIRST: Collections.reverse(frontier);break;
-            }
-//            frontier = colToList(front,alg);
-            highestNode = frontier.get(0).toString();
+            //todo perhaps change what is shown for A*. Could do with describing distance (unless it is shown in tooltips??), and the nodes move more with A* so is less useful
 
+            ArrayList<Node> frontier = sortFront(front,alg);
+            highestNode = frontier.get(0);
+
+            //get the visited set and sort it numerically by x then y
             ArrayList<Node> visitedSorted = new ArrayList<>(visited);
             Collections.sort(visitedSorted, (p1, p2) -> {
                 if (p1.getPoint().getX() == p2.getPoint().getX()) {
@@ -208,9 +205,15 @@ public class VisNodes extends Table {
                 return p1.getPoint().getX() - p2.getPoint().getX();
             });
 
+            //populate the list tables
+            //todo allow individual cell colourings
             for (int i = 0; i < Math.max(frontier.size(), visitedSorted.size()); i++) {
                 vt.row();
                 ft.row();
+                // ========================
+                // EDIT IF YOU WANT TO
+                // CHANGE TO ADAPTED STRING
+                // ========================
                 if (frontier.size() > i) {
                     ft.add(frontier.get(i).toString());
                 }
@@ -226,38 +229,25 @@ public class VisNodes extends Table {
     /**
      * Converts a data collection to a list,
      * which is of the same order as when taking from the collection
-     *
-     * todo currently doesn't work because it <b>removes</b> the elements from the collection
-     *
-     * @param front
-     * @param alg
-     * @return
+     * @param front The frontier to sort
+     * @param alg The algorithm with which to adapt the frontier
+     * @return The frontier, in the current intended order of node expansion
      */
-    @Deprecated
-    private ArrayList<Node> colToList(Collection<Node> front, SearchAlgorithm alg) {
-        ArrayList<Node> list = new ArrayList<>();
-        //System.out.println(front);
-        PriorityQueueT<Node> temp;
-        //System.out.println(temp);
-
-//        switch(alg) {
-//            case DEPTH_FIRST: temp = new StackT<>(); break;
-//            case BREADTH_FIRST: temp = new LinkedListT<>(); break;
-//            case A_STAR: temp = new PriorityQueueT<>(null); break; // todo uh oh, I hope this stays deprecated -- it'll only be used when it's all working, atm the method doesn't work in the slightest
-//        }
-//        temp = new PriorityQueueT<>((PriorityQueueT<Node>) front);
-//        for(int i=0;i<temp.size();i++) {
-//            list.add(temp.take());
-//        }
-
-//        for(int i=0; i<front.size(); i++) {
-//            Node n = front.();
-//            list.add(i,n);
-//            temp.add(n);
-//        }
-        //System.out.println(front + "," + temp);
-//        front = temp;
-        //System.out.println(front + "," + temp);
+    private ArrayList<Node> sortFront(Collection<Node> front, SearchAlgorithm alg) {
+        ArrayList<Node> list = new ArrayList<>(front);
+        //check the algorithm
+        //BFS is already sorted correctly.
+        switch(alg) {
+            //DFS requires a reverse due to stack
+            case DEPTH_FIRST: Collections.reverse(list); break;
+            //A* will utilise a temporary pq which will take all its items in order and add to list.
+            case A_STAR: PriorityQueueT<Node> temp = new PriorityQueueT((PriorityQueueT)front);
+                list = new ArrayList();
+                for(int i=0;i<front.size();i++) {
+                    list.add(temp.take());
+                }
+                break;
+        }
         return list;
     }
 
@@ -332,14 +322,20 @@ public class VisNodes extends Table {
 
     }
 
+    /**
+     * Setup the description at the bottom of the sidebar.
+     * Will either display the "what I've just done" prompts,
+     * or a generic description.
+     */
     private void setupDescription() {
         if(stepthrough) {
+            convertNodeReps();
             stepString = new StringBuilder();
             formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
             formatter.format(expandedNode + "\n" +
                             addedToFrontier + "\n" +
                             nextNode,
-                    newVisited, newFrontier, highestNode);
+                    newVisitedStr, newFrontierStr, highestNodeStr);
             add(stepString).colspan(3);
         } else {
             //final row - describe the algorithm in words
@@ -348,22 +344,32 @@ public class VisNodes extends Table {
     }
 
     /**
-     * Get ninepatch from given file
-     *
-     * Source: http://www.mets-blog.com/libgdx-table-background/
-     * Image source: http://www.mets-blog.com/wp-content/uploads/2015/11/ng.9.png
-     * @return
+     * Convert the nodes we have stored for later use
+     * into the representations we wish to display them
+     * Preferably uses the Node.toAdaptedString() method
+     * as long as this method returns something desirable.
      */
-    private NinePatch getNinePatch() {
-        String fname = "core/assets/ng.9.png";
-        // Get the image
-        final Texture t = new Texture(Gdx.files.internal(fname));
+    private void convertNodeReps() {
+        newVisitedStr = newVisited==null?"<NOTHING>":newVisited.toString();
+        newFrontierStr = newFrontier==null?"<NOTHING>":newFrontier.toString();
+        highestNodeStr = highestNode==null?"<NOTHING>":highestNode.toString();
 
-        // create a new texture region, otherwise black pixels will show up too, we are simply cropping the image
-        // last 4 numbers respresent the length of how much each corner can draw,
-        // for example if your image is 50px and you set the numbers 50, your whole image will be drawn in each corner
-        // so what number should be good?, well a little less than half would be nice
-        return new NinePatch( new TextureRegion(t, 1, 1 , t.getWidth() - 2, t.getHeight() - 2), 20, 20, 20, 20);
-
+        // =====================
+        // TO USE ADAPTED STRING
+        // =====================
+        /*
+        newVisitedStr = newVisited==null?"<NOTHING>":newVisited.toAdaptedString();
+        newFrontierStr = "[ ";
+        if(newFrontier!=null && newFrontier.size()>0) {
+            for (int i = 0; i < newFrontier.size(); i++) {
+                newFrontierStr += newFrontier.get(i).toAdaptedString();
+                if(i<newFrontier.size()-1) newFrontierStr += ", ";
+            }
+        } else {
+            newFrontierStr += "NOTHING";
+        }
+        newFrontierStr += " ]";
+        highestNodeStr = highestNode==null?"<NOTHING>":highestNode.toAdaptedString();
+        */
     }
 }

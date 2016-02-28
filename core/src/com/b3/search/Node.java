@@ -28,6 +28,14 @@ public class Node implements Serializable {
 		return "(" + point.getX() + "," + point.getY() + ")";
 	}
 
+	/**
+	 * Give an alternative string representation of the node
+	 * todo currently in an undesirable form, but this framework is now in place for future reference
+	 * @return an alternative string representation of the node
+     */
+	public String toAdaptedString() {
+		return ((char)(getPoint().getX()+65)) + Integer.toString(getPoint().getY());
+	}
 
 	public Point getPoint() {
 		return point;
