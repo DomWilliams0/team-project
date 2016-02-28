@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class WorldGraph implements Serializable {
 
 	private static final Color EDGE_COLOUR = Color.BLACK;
-	private static final Color NODE_COLOUR = Color.BLACK;
+	private static final Color NODE_COLOUR = Color.DARK_GRAY;
 	private static final Color FRONTIER_COLOUR = Color.LIME;
 	private static final Color NEW_FRONTIER_COLOUR = Color.CYAN;
 	private static final Color JUST_EXPANDED_COLOUR = Color.PINK;
@@ -346,10 +346,13 @@ public class WorldGraph implements Serializable {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
 		Color tempCol;
-		if (counter < 1)
-			tempCol = NODE_COLOUR;
+//		if (counter < 1)
+		if (zoomScalar > 2)
+			tempCol = Color.BLACK;
 		else
-			tempCol = new Color(counter / 10, counter / 10, counter / 10, counter / 10);
+			tempCol = NODE_COLOUR;
+//		else
+//			tempCol = new Color(counter / 10, counter / 10, counter / 10, counter / 10);
 
 		// border
 		shapeRenderer.setColor(BORDER_COLOUR);

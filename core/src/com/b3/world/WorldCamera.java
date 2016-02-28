@@ -27,17 +27,28 @@ public class WorldCamera extends PerspectiveCamera {
 	private float posY;
 	private float posZ;
 
+	private float FOV;
+
 	// todo redo camera restriction
 
 	public WorldCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
 		super(fieldOfViewY, viewportWidth, viewportHeight);
 
+		FOV = fieldOfViewY;
 		lastPosition = null;
 		borders = new ArrayList<>(4);
 		inputDelta = new Vector2();
 		followedAgent = null;
 
 		posX = 0; posY = 0; posZ = 0;
+	}
+
+	public void setFieldOfViewY (float fov) {
+
+		this.FOV = fov;
+
+		PerspectiveCamera a = this;
+		a.fieldOfView = fov;
 	}
 
 	/**
@@ -172,4 +183,7 @@ public class WorldCamera extends PerspectiveCamera {
 		return posZ;
 	}
 
+	public float getFOV() {
+		return FOV;
+	}
 }

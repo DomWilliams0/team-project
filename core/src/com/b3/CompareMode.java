@@ -15,7 +15,9 @@ import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -44,11 +46,12 @@ public class CompareMode implements Screen {
 
         // init camera
         Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
-        camera = new WorldCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat(ConfigKey.CAMERA_DISTANCE_DEFAULT));
+        camera = new WorldCamera(1, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM));
         camera.near = 1f;
         camera.far = 300f;
         camera.lookAt(cameraPos.x, cameraPos.y, 0);
+        camera.rotate((float) 29.75, 1, 0, 0);
         camera.update();
 
         camera.setWorld(world);

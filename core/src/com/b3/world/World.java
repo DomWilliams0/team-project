@@ -69,7 +69,7 @@ public class World implements Disposable {
 	private Set<Entity> deadEntities;
 	private WorldCamera worldCamera;
 
-	private float counterAnimation = 10;
+	private float counterAnimation = -1;
 	private int counterScaler = 0;
 	private double pos = 1;
 
@@ -474,6 +474,8 @@ public class World implements Disposable {
 	 * Rendering physics/collisions (if configured)
 	 */
 	public void render() {
+
+
 		// remove dead entities
 		deadEntities.forEach(e -> {
 
@@ -487,11 +489,27 @@ public class World implements Disposable {
 		});
 		deadEntities.clear();
 
-		float zoomScalar = getZoomScalar();
-
 		// render tiled world
 		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
+
+		float zoomScalar = getZoomScalar();
+
+		if (compareMode) {
+			if (worldCamera.getFOV() < 67) {
+				Vector2 cameraPos = new Vector2(getTileSize().scl(0.5f));
+				worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);
+				worldCamera.lookAt(cameraPos.x + (67 - worldCamera.getFOV()), cameraPos.y + (67 - worldCamera.getFOV()), 0);
+				counterAnimation = 10;
+			}
+		} else {
+			if (worldCamera.getFOV() < 40) {
+				Vector2 cameraPos = new Vector2(getTileSize().scl(0.5f));
+				worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);
+				worldCamera.lookAt(cameraPos.x + (40 - worldCamera.getFOV()), cameraPos.y + (40 - worldCamera.getFOV()), 0);
+				counterAnimation = 10;
+			}
+		}
 
 		if (counterAnimation > 1) {
 			counterAnimation = (float) (counterAnimation - 0.25);

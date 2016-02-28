@@ -216,6 +216,9 @@ public class RenderTester {
             //DONE MULTI_PAGES if end node
             if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
                 if (pageNo >= endNodeSprite.length) pageNo = 0; //reset to first page if neccessary
+
+                drawHeuristic();
+
                 spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                         (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
             } else
@@ -311,6 +314,10 @@ public class RenderTester {
         //----ALL RENDERS GO HERE---
 
         spriteBatch.end();
+    }
+
+    private void drawHeuristic() {
+
     }
 
     private void drawEquationOnScreen(int total, int firstNo, int secondNo, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
