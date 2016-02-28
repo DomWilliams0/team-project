@@ -18,6 +18,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
 
+    private Table wrapper;
+    private ButtonComponent learningModeBtn;
+    private ButtonComponent compareModeBtn;
+
     private OrthographicCamera camera;
     private Stage mainMenuStage;
 
@@ -38,7 +42,7 @@ public class MainMenuScreen implements Screen {
 
         // Learning mode button
         // --------------------
-        ButtonComponent compareModeBtn = new ButtonComponent(skin, font, "Compare mode");
+        compareModeBtn = new ButtonComponent(skin, font, "Compare mode");
         compareModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -49,7 +53,7 @@ public class MainMenuScreen implements Screen {
 
         // Compare mode button
         // -------------------
-        ButtonComponent learningModeBtn = new ButtonComponent(skin, font, "Learning mode");
+        learningModeBtn = new ButtonComponent(skin, font, "Learning mode");
         learningModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -58,7 +62,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        Table wrapper = new Table();
+        wrapper = new Table();
         wrapper.setWidth(Gdx.graphics.getWidth());
         wrapper.setHeight(Gdx.graphics.getHeight());
 
@@ -85,15 +89,14 @@ public class MainMenuScreen implements Screen {
         camera.update();
         mainMenuStage.act();
         mainMenuStage.draw();
-
-        /*if (Gdx.input.isTouched()) {
-            game.setScreen(new CompareMode(game));
-            dispose();
-        }*/
+        
     }
 
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+        wrapper.setWidth(width);
+        wrapper.setHeight(height);
+    }
 
     @Override
     public void pause() {}
