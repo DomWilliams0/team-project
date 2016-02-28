@@ -43,7 +43,7 @@ public class LearningMode implements Screen {
 
         // init camera
         Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
-        camera = new WorldCamera(50, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new WorldCamera(40, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat(ConfigKey.CAMERA_DISTANCE_DEFAULT));
         camera.near = 1f;
         camera.far = 300f;
