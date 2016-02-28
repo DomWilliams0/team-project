@@ -1,13 +1,22 @@
 package com.b3;
 
-
 import com.b3.input.InputHandler;
 import com.b3.util.Config;
 import com.badlogic.gdx.Game;
 
+/**
+ * Loads the current configuration file and sets up the input handler for the program (onClicks, onMouseOver etc.)
+ */
+
 public class MainGame extends Game {
+
 	public InputHandler inputHandler;
 
+	/**
+	 * On first launch of program
+	 * Load config
+	 * Set up input handler (mouse clicks, keyboard presses etc.)
+	 */
 	@Override
 	public void create() {
 		// load config

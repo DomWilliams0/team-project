@@ -240,10 +240,10 @@ public class RenderTester {
 
                         //draw current g(x) function onto the screen.
                         if (pageNo == 2)
-                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 22) , scalingZoom);
+                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 17) , scalingZoom);
 
                     } else
-                        //if JUST added to stack / queue
+                        //DONE MULTI PAGE if JUST added to stack / queue
                         if (worldGraph.getCurrentSearch().getLastFrontier() != null)
                             if (worldGraph.getCurrentSearch().getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
                                 if (pageNo == 2) pageNo = 0; //reset to first page if neccessary
@@ -270,7 +270,7 @@ public class RenderTester {
                                     drawEquationOnScreen((int)total, (int)gxFunction, (int)cost, currentNodeClickX, currentNodeClickY + (scalingZoom/50), scalingZoom);
 
                             } else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-                                //if the old frontier
+                                //DONE MULTIPAGE if the old frontier
                                 if (pageNo == 2) pageNo = 0; //reset to first page if neccessary
 
                                 int convertedPageNo = pageNo;

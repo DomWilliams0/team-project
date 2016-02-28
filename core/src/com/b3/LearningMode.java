@@ -18,6 +18,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * A small scale world with step by step views and pop-ups to allow for uneducated 2nd year CS university students to learn about algorithms they should've learnt in year 1.
+ * Sets up small world, camera, input handler and launches the world paused (forcing / implying step-by-step)
+ */
+
 public class LearningMode implements Screen {
 
     private World world;
@@ -28,6 +33,10 @@ public class LearningMode implements Screen {
     private HelpBox helpBox;
     private KeyboardController keyboardController;
 
+    /**
+     * Constructs the world, sets up the camera, loads to worldmap and launches the world paused.
+     * @param game used to set up the world, contains directories to config files
+     */
     public LearningMode(MainGame game) {
         // init database
         //Database.init();
@@ -58,6 +67,10 @@ public class LearningMode implements Screen {
         world.getWorldGraph().getCurrentSearch().setUpdated(true);
     }
 
+    /**
+     * Initialise the keyboard and mouse listeners that listen for input and decide what to do.
+     * @param inputHandler
+     */
     private void initInputHandlers(InputHandler inputHandler) {
         // keyboard control has top priority
         keyboardController = new KeyboardController();
@@ -70,6 +83,9 @@ public class LearningMode implements Screen {
         inputHandler.addProcessor(new WorldSelectionHandler(world));
     }
 
+    /**
+     * Sets up the sidebars (one with options on the left; one with nodes and step-by-step buttons on right; and help box on top)
+     */
     private void setupSidebar() {
         sideBarStage = new Stage(new ScreenViewport());
 
@@ -88,6 +104,10 @@ public class LearningMode implements Screen {
     @Override
     public void show() {}
 
+    /**
+     * Renders the world, the three sidebars and updates the world's position and zoom depending on input from the user via the input listeners.
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         // delta time
@@ -116,6 +136,13 @@ public class LearningMode implements Screen {
             Gdx.app.exit();
     }
 
+    /**
+     * Updates the position of the sidebars and world and scale when the window has been resized
+     * Prevents stretching of elements
+     * Allows app window to be multi-sized and also work for multiple resolutions
+     * @param width the current width of the window
+     * @param height the current height of the window
+     */
     @Override
     public void resize(int width, int height) {
         sideBarStage.getViewport().update(width, height, true);

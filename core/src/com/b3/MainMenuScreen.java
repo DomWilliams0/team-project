@@ -16,6 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * Shows the main menu, allowing the user to choose learning mode or comparison mode.
+ */
 public class MainMenuScreen implements Screen {
 
     private Table wrapper;
@@ -25,6 +28,10 @@ public class MainMenuScreen implements Screen {
     private OrthographicCamera camera;
     private Stage mainMenuStage;
 
+    /**
+     * Constructs the (static / final) main menu camera and the two buttons, and sets up events for each respective button.
+     * @param game used to set up the world, contains directories to config files
+     */
     public MainMenuScreen(MainGame game) {
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -76,6 +83,10 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show() {}
 
+    /**
+     * Render the buttons on the screen, and update the viewpoint with the new (if any) change to the width and height of the window (allows scaling and positioning of buttons properly)
+     * @param delta not used
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
@@ -89,9 +100,15 @@ public class MainMenuScreen implements Screen {
         camera.update();
         mainMenuStage.act();
         mainMenuStage.draw();
-        
+
     }
 
+    /**
+     * Called whenever the window is resized
+     * Keeps the two buttons centred by updating the table to fill the screen (and so the center of the table = the center of the screeN-
+     * @param width the current width of the window
+     * @param height the current height of the window
+     */
     @Override
     public void resize(int width, int height) {
         wrapper.setWidth(width);
@@ -107,6 +124,9 @@ public class MainMenuScreen implements Screen {
     @Override
     public void hide() {}
 
+    /**
+     * Cleans up stages when window is closed to allow for clean exit from program
+     */
     @Override
     public void dispose() {
         mainMenuStage.dispose();
