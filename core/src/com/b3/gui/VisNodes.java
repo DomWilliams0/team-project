@@ -1,6 +1,7 @@
 package com.b3.gui;
 
 import com.b3.search.Node;
+import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.search.util.takeable.PriorityQueueT;
@@ -9,10 +10,17 @@ import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.*;
 
@@ -28,6 +36,10 @@ public class VisNodes extends Table {
     private Table ft, vt;
     private float timer;
     private boolean stepthrough;
+    private HashMap<Node, Table> cellmap;
+    private HashMap<Node, Color> colours;
+    private Node clickedNode;
+    private boolean clickedNodeUpdated = false;
 
     /**
      * Provides a description of how the search algorithms work,
@@ -82,6 +94,8 @@ public class VisNodes extends Table {
         stepthrough = false;
         stepString = new StringBuilder();
         formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
+        cellmap = new HashMap<>();
+        colours = new HashMap<>();
 
         //anchor the table to the top-left position
         left().top();
@@ -152,6 +166,8 @@ public class VisNodes extends Table {
 
     /**
      * Render the table, preventing re-render based on time defined in config file.
+     * If stepthrough mode is active, calling this will force a render regardless;
+     * the calling function should ensure the search has been updated prior to calling this.
      *
      * @param front the frontier to display
      * @param visited the visited set to display
@@ -206,7 +222,6 @@ public class VisNodes extends Table {
             });
 
             //populate the list tables
-            //todo allow individual cell colourings
             for (int i = 0; i < Math.max(frontier.size(), visitedSorted.size()); i++) {
                 vt.row();
                 ft.row();
@@ -215,15 +230,84 @@ public class VisNodes extends Table {
                 // CHANGE TO ADAPTED STRING
                 // ========================
                 if (frontier.size() > i) {
-                    ft.add(frontier.get(i).toString());
+                    addToTable(ft, frontier.get(i));
+//                    ft.add(frontier.get(i).toString());
                 }
                 if (visitedSorted.size() > i) {
-                    vt.add(visitedSorted.get(i).toString());
+                    addToTable(vt, visitedSorted.get(i));
+//                    vt.add(visitedSorted.get(i).toString());
                 }
             }
         }
         setupDescription();
         return 1;
+    }
+
+    private void addToTable(Table t, Node n) {
+        Table row = new Table(this.getSkin());
+        row.add(n.toString());
+        row.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                clickedNode = n;
+                clickedNodeUpdated = true;
+                return true;
+            }
+        });
+        t.add(row);
+        cellmap.put(n,row);
+        applyColour(n);
+    }
+
+    /**
+     * Set a background colour for a cell in the scrollpanes based on the node.
+     *
+     * @param n The node to highlight
+     * @param c The colour to set
+     * @param singleHighlight whether this is to be the only highlighted node
+     * @return whether the cell was coloured
+     */
+    public boolean setCellColour(Node n, Color c, boolean singleHighlight) {
+        if(singleHighlight) colours.clear();
+        colours.put(n,c);
+        return applyColourAll();
+    }
+
+    /**
+     * Update the colour of all nodes known to this object.
+     * @return Whether all nodes were correctly highlighted
+     */
+    private boolean applyColourAll() {
+        boolean all = true;
+        for(Node n : cellmap.keySet()) {
+            all = applyColour(n) && all;
+        }
+        return all;
+    }
+
+    /**
+     * Apply the colour known to the hash map to the given node
+     *
+     * Adapted from code at http://stackoverflow.com/questions/24250791/make-scene2d-ui-table-with-alternate-row-colours
+     * @param n The node whose colour to apply
+     * @return Whether the node was successfully highlighted
+     */
+    private boolean applyColour(Node n) {
+        Color c = colours.get(n);
+        if (c == null) c = Color.WHITE;
+        Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
+        pm.setColor(c);
+        pm.fill();
+
+        Table t = cellmap.get(n);
+        if(t==null) {
+            pm.dispose();
+            return false;
+        } else {
+            t.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm))));
+            pm.dispose();
+        }
+        return true;
     }
 
     /**
@@ -265,6 +349,8 @@ public class VisNodes extends Table {
         clear();
         ft.clear();
         vt.clear();
+
+        cellmap.clear();
 
         //get what type the frontier is using
         String frontierDesc = "";
@@ -371,5 +457,14 @@ public class VisNodes extends Table {
         newFrontierStr += " ]";
         highestNodeStr = highestNode==null?"<NOTHING>":highestNode.toAdaptedString();
         */
+    }
+
+    public boolean isClickedUpdated() {
+        return clickedNodeUpdated;
+    }
+
+    public Point getClickedNode() {
+        clickedNodeUpdated = false;
+        return clickedNode.getPoint();
     }
 }

@@ -81,6 +81,7 @@ public class World implements Disposable {
 	private int currentNodeClickX;
 	private int currentNodeClickY;
 	private int timeOutInfographic = 0;
+	private boolean newClick = false;
 
 	private RenderTester rt;
 	private int maxHeight;
@@ -610,6 +611,16 @@ public class World implements Disposable {
 		this.currentNodeClickX = x;
 		this.currentNodeClickY = y;
 		timeOutInfographic = 0;
+		newClick = true;
+	}
+
+	public boolean hasNewClick() {
+		return newClick;
+	}
+
+	public Point getCurrentClick() {
+		newClick = false;
+		return new Point(currentNodeClickX,currentNodeClickY);
 	}
 
 	public void setNextDestination(int x, int y) {

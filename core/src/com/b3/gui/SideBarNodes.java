@@ -1,6 +1,8 @@
 package com.b3.gui;
 
 import com.b3.gui.components.ButtonComponent;
+import com.b3.search.Node;
+import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
@@ -210,11 +212,43 @@ public class SideBarNodes extends Table implements Disposable {
             setStepthrough(false);
         }
         ui.render(currentSearch);
+        //ui.setCellColour(new Node(new Point(11,11)), Color.GREEN, true);
+    }
+
+    /**
+     * Highlight a node in the sidebar by a given point
+     * with a given colour
+     * @param p The point whose node to highlight
+     * @param c The colour to highlight it in
+     * @param singleHighlight whether this is to be the only highlighted node
+     * @return Whether the highlight was successful
+     */
+    public boolean highlightNode(Point p, Color c, boolean singleHighlight) {
+        return highlightNode(new Node(p), c, singleHighlight);
+    }
+    /**
+     * Highlight a given node in the sidebar
+     * with a given colour
+     * @param n The Node to highlight in the sidebar
+     * @param c The colour to highlight it in
+     * @param singleHighlight whether this is to be the only highlighted node
+     * @return Whether the highlight was successful
+     */
+    public boolean highlightNode(Node n, Color c, boolean singleHighlight) {
+        return ui.setCellColour(n, c, singleHighlight);
     }
 
     public void setStepthrough(boolean stepthrough) {
         ui.setStepthrough(stepthrough);
         next.getComponent().setVisible(stepthrough);
+    }
+
+    public boolean hasNewClick() {
+        return ui.isClickedUpdated();
+    }
+
+    public Point getNewClick() {
+        return ui.getClickedNode();
     }
 
     /**
