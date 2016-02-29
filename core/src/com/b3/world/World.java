@@ -35,6 +35,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
@@ -476,8 +478,6 @@ public class World implements Disposable {
 	 * Rendering physics/collisions (if configured)
 	 */
 	public void render() {
-
-
 		// remove dead entities
 		deadEntities.forEach(e -> {
 
@@ -633,5 +633,9 @@ public class World implements Disposable {
 
 	public InputHandler getInputHandler() {
 		return inputHandler;
+	}
+
+	public RenderTester getrt() {
+		return rt;
 	}
 }

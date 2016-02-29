@@ -1,7 +1,7 @@
 package com.b3.gui;
 
-
 import com.b3.gui.components.ButtonComponent;
+import com.b3.gui.components.Component;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -20,6 +20,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -27,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.reverse;
-import static java.util.Collections.reverseOrder;
-import static java.util.Collections.sort;
 
 public class RenderTester {
 
@@ -54,8 +54,25 @@ public class RenderTester {
     private int pageNo;
     private Sprite plus;
     private Sprite equals;
+    private boolean popupShowing;
 
     public RenderTester(World world) {
+
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
+        Skin skin = new Skin(atlas);
+        BitmapFont font = new BitmapFont(
+                Gdx.files.internal(Config.getString(ConfigKey.FONT_FILE)),
+                Gdx.files.internal(Config.getString(ConfigKey.FONT_IMAGE_FILE)),
+                false
+        );
+
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        skin.add("default", font, BitmapFont.class);
+        textButtonStyle.font = skin.getFont("default");
+        textButtonStyle.up = skin.getDrawable("button_04");
+        textButtonStyle.down = skin.getDrawable("button_03");
+        skin.add("default", textButtonStyle);
+
         this.world = world;
         this.worldGraph = world.getWorldGraph();
         this.worldCamera = world.getWorldCamera();
@@ -207,6 +224,8 @@ public class RenderTester {
     }
 
     public void render(int currentNodeClickX, int currentNodeClickY) {
+        popupShowing = false;
+
         stage.draw();
         stage.act();
         stage.getViewport().update((int) worldCamera.viewportWidth, (int) worldCamera.viewportHeight, true);
@@ -222,6 +241,7 @@ public class RenderTester {
         if (worldGraph.getCurrentSearch().getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
             if (pageNo >= startNodeSprite.length) pageNo = 0; //reset to first page
             spriteBatch.draw(startNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+            popupShowing = true;
         } else
             //DONE MULTI_PAGES if end node
             if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
@@ -231,6 +251,7 @@ public class RenderTester {
 
                 spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                         (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+                popupShowing = true;
             } else
                 //DONE MULTi-PAGES, needs cost breakdown though if recently expanded
                 if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
@@ -269,7 +290,7 @@ public class RenderTester {
                                 }
                             }
                         }
-
+                        popupShowing = true;
                     } else
                         //DONE MULTI PAGE if JUST added to stack / queue
                         if (worldGraph.getCurrentSearch().getLastFrontier() != null)
@@ -297,6 +318,7 @@ public class RenderTester {
                                 if (pageNo == 1)
                                     drawEquationOnScreen((int)total, (int)gxFunction, (int)cost, currentNodeClickX, currentNodeClickY + (scalingZoom/50), scalingZoom);
 
+                                popupShowing = true;
                             } else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
                                 //DONE MULTIPAGE if the old frontier
                                 if (pageNo >= 2) pageNo = 0; //reset to first page if neccessary
@@ -327,6 +349,8 @@ public class RenderTester {
 
                                 if (pageNo == 1)
                                     drawNumberOnScreen((int) gxFunction, currentNodeClickX, (float) currentNodeClickY + (scalingZoom / 11), scalingZoom);
+
+                                popupShowing = true;
                             } else
                                 //MULTI PAGE DONE if already expanded
                                 if (worldGraph.getCurrentSearch().getVisited() != null)
@@ -335,6 +359,8 @@ public class RenderTester {
                                         //TODO Put some info around the screen somewhere
                                         spriteBatch.draw(fullyExploredSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                                                 (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+
+                                        popupShowing = true;
                                     }
         //----ALL RENDERS GO HERE---
 
@@ -420,7 +446,7 @@ public class RenderTester {
         if (number < 10) {
             spriteBatch.draw(numbers[number], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
         } else {
-        //if not
+            //if not
             int firstNo = number / 10;
             int secondNo = number % 10;
             float x1 = (float) ((currentNodeClickX - scalingZoom / 2) + 0.5);
@@ -429,5 +455,10 @@ public class RenderTester {
             spriteBatch.draw(numbers[firstNo], x1, (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
             spriteBatch.draw(numbers[secondNo], x2, (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
         }
+    }
+
+
+    public boolean getPopupShowing() {
+        return popupShowing;
     }
 }
