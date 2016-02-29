@@ -567,7 +567,6 @@ public class World implements Disposable {
 	}
 
 	public void flattenBuildings(boolean flatten) {
-
 		for (Building building : buildings) {
 			building.setFlattened(flatten);
 		}
