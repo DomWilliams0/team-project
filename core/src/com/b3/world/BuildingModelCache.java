@@ -31,6 +31,7 @@ public class BuildingModelCache implements Disposable {
 	private Texture nightSide;
 	private Texture topSide;
 	private Texture brick;
+	private Texture nightSideFlipped;
 
 	public BuildingModelCache(World world) {
 		this.world = world;
@@ -40,7 +41,8 @@ public class BuildingModelCache implements Disposable {
 	}
 
 	private void loadTextures() {
-		nightSide = new Texture("core/assets/world/popups/night_side_copy.jpg");
+		nightSide = new Texture("core/assets/world/popups/night_side_scaled_new.jpg");
+		nightSideFlipped = new Texture("core/assets/world/popups/night_side_scaled_new_frontback.jpg");
 		topSide = new Texture("core/assets/world/popups/roof.jpg");
 		brick = new Texture("core/assets/world/popups/brick.jpg");
 	}
@@ -66,9 +68,9 @@ public class BuildingModelCache implements Disposable {
 					.rect(-2f,-2f,-2f, -2f,2f,-2f,  2f,2f,-2, 2f,-2f,-2f, 0,0,-1);
 			modelBuilder.part("back", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(topSide))) //ACTUAL TOP
 					.rect(-2f,2f,2f, -2f,-2f,2f,  2f,-2f,2f, 2f,2f,2f, 0,0,1);
-			modelBuilder.part("bottom", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) //ACTUAL FRONT
+			modelBuilder.part("bottom", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSideFlipped))) //ACTUAL FRONT
 					.rect(-2f,-2f,2f, -2f,-2f,-changer,  2f,-2f,-changer, 2f,-2f,2f, 0,-1,0);
-			modelBuilder.part("top", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) //ACTUAL BACK
+			modelBuilder.part("top", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSideFlipped))) //ACTUAL BACK
 					.rect(-2f,2f,-changer, -2f,2f,2f,  2f,2f,2f, 2f,2f,-changer, 0,1,0);
 			modelBuilder.part("left", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) //LEFT
 					.rect(-2f,-2f,2f, -2f,2f,2f,  -2f,2f,-changer, -2f,-2f,-changer, -1,0,0);
