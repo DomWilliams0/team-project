@@ -5,6 +5,7 @@ import com.b3.gui.components.Component;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
+import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.world.World;
@@ -92,26 +93,7 @@ public class RenderTester {
 
         loadTextures();
 
-//        setupButton();
     }
-
-//    private void setupButton() {
-//        stage = new Stage(new ScreenViewport());
-//        world.getInputHandler().addProcessor(stage);
-//
-//        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
-//        Skin skin = new Skin(atlas);
-//
-//        ButtonComponent playPause = new ButtonComponent(skin, fontButton, "Show More");
-//        playPause.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                pageNo = pageNo + 1;
-//            }
-//        });
-//
-//        stage.addActor(playPause.getComponent());
-//    }
 
     private void loadTextures() {
         //Load current node sprites (2 pages + 1 (dfs, bfs or A*)) + costs A*
@@ -213,10 +195,6 @@ public class RenderTester {
     public void render(int currentNodeClickX, int currentNodeClickY) {
         popupShowing = false;
 
-//        stage.draw();
-//        stage.act();
-//        stage.getViewport().update((int) worldCamera.viewportWidth, (int) worldCamera.viewportHeight, true);
-
         float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
 
         //SPRITES
@@ -262,7 +240,7 @@ public class RenderTester {
                             spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 
                         //draw current g(x) function onto the screen.
-                        if (pageNo == 2) {
+                        if (pageNo == 2 && world.getWorldGraph().getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR) {
                             drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 17), scalingZoom);
                         }
                         if (pageNo == 3) {
@@ -334,7 +312,7 @@ public class RenderTester {
                                     }
                                 }
 
-                                if (pageNo == 1)
+                                if (pageNo == 1 && world.getWorldGraph().getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR)
                                     drawNumberOnScreen((int) gxFunction, currentNodeClickX, (float) currentNodeClickY + (scalingZoom / 11), scalingZoom);
 
                                 popupShowing = true;
