@@ -58,20 +58,7 @@ public class RenderTester {
 
     public RenderTester(World world) {
 
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
-        Skin skin = new Skin(atlas);
-        BitmapFont font = new BitmapFont(
-                Gdx.files.internal(Config.getString(ConfigKey.FONT_FILE)),
-                Gdx.files.internal(Config.getString(ConfigKey.FONT_IMAGE_FILE)),
-                false
-        );
-
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        skin.add("default", font, BitmapFont.class);
-        textButtonStyle.font = skin.getFont("default");
-        textButtonStyle.up = skin.getDrawable("button_04");
-        textButtonStyle.down = skin.getDrawable("button_03");
-        skin.add("default", textButtonStyle);
+        popupShowing = false;
 
         this.world = world;
         this.worldGraph = world.getWorldGraph();
@@ -105,26 +92,26 @@ public class RenderTester {
 
         loadTextures();
 
-        setupButton();
+//        setupButton();
     }
 
-    private void setupButton() {
-        stage = new Stage(new ScreenViewport());
-        world.getInputHandler().addProcessor(stage);
-
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
-        Skin skin = new Skin(atlas);
-
-        ButtonComponent playPause = new ButtonComponent(skin, fontButton, "Show More");
-        playPause.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                pageNo = pageNo + 1;
-            }
-        });
-
-        stage.addActor(playPause.getComponent());
-    }
+//    private void setupButton() {
+//        stage = new Stage(new ScreenViewport());
+//        world.getInputHandler().addProcessor(stage);
+//
+//        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
+//        Skin skin = new Skin(atlas);
+//
+//        ButtonComponent playPause = new ButtonComponent(skin, fontButton, "Show More");
+//        playPause.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                pageNo = pageNo + 1;
+//            }
+//        });
+//
+//        stage.addActor(playPause.getComponent());
+//    }
 
     private void loadTextures() {
         //Load current node sprites (2 pages + 1 (dfs, bfs or A*)) + costs A*
@@ -457,8 +444,15 @@ public class RenderTester {
         }
     }
 
-
     public boolean getPopupShowing() {
         return popupShowing;
+    }
+
+    public void flipPageRight() {
+        pageNo++;
+    }
+
+    public void resetPage() {
+        pageNo = 0;
     }
 }

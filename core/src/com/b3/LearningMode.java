@@ -5,9 +5,7 @@ import com.b3.gui.SideBarNodes;
 import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
-import com.b3.input.PopUpSelectionHander;
 import com.b3.input.WorldSelectionHandler;
-import com.b3.search.Point;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -15,7 +13,6 @@ import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -86,8 +83,6 @@ public class LearningMode implements Screen {
         // world clicking
         inputHandler.addProcessor(new WorldSelectionHandler(world));
 
-        //Pop-ups clicking
-        inputHandler.addProcessor(new PopUpSelectionHander(world.getrt()));
     }
 
     /**

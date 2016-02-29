@@ -17,14 +17,15 @@ public class WorldSelectionHandler extends InputAdapter {
 
 	private static final Vector3 tempRayCast = new Vector3();
 	private World world;
+	private Point currentSelection;
 
 	public WorldSelectionHandler(World world) {
 		this.world = world;
+		this.currentSelection = new Point(1,1);
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
 		// selecting an entity
 		// todo
 
@@ -41,6 +42,20 @@ public class WorldSelectionHandler extends InputAdapter {
 		// convert to node
 		WorldGraph worldGraph = world.getWorldGraph();
 		Node node = worldGraph.getNode(new Point((int) tempRayCast.x, (int) tempRayCast.y));
+
+		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
+			//old node so change page number
+			if (world.getrt().getPopupShowing())
+				//if popup showing
+				world.getrt().flipPageRight();
+		} else {
+			//new node so reset page number
+			if (world.getrt().getPopupShowing())
+				//if popup showing
+				world.getrt().resetPage();
+		}
+
+		currentSelection = new Point((int) tempRayCast.x, (int) tempRayCast.y);
 
 		if (node == null)
 			return false;

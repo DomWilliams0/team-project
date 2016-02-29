@@ -114,6 +114,9 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         LabelComponent labelOne = new LabelComponent(skin, "Left click the nodes to see more information", Color.BLACK);
         labelOne.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
+        LabelComponent labelOneUnderneath = new LabelComponent(skin, "Click again on the same node to see more info", Color.BLACK);
+        labelOneUnderneath.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
+
         LabelComponent labelTwo = new LabelComponent(skin, "Right click a node to set the next destination", Color.BLACK);
         labelTwo.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
@@ -204,7 +207,6 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         settingsTab.row();
 
 
-
         settingsTab.add(searchSelectBox.getSelectBox())
                 .maxWidth(preferredWidth)
                 .spaceTop(100)
@@ -218,6 +220,12 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         settingsTab.row();
 
         settingsTab.add(labelOne.getComponent())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(5);
+        settingsTab.row();
+
+        settingsTab.add(labelOneUnderneath.getComponent())
                 .align(Align.center)
                 .maxWidth(preferredWidth)
                 .spaceTop(5);
