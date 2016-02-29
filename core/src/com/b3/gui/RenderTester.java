@@ -383,10 +383,12 @@ public class RenderTester {
 
     private void drawStaticNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
         //if single digits
-        if (number > 100) {
+        if (number > 100 || number < 0) {
             number = 99;
             System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers; using this instead: " + number);
         }
+
+        System.out.println("Keep this here, bug somewhere and I don't know where so this is the number it's trying to print just in case it does crash: go onto intensive learning mode and click on pop-ups / show more and try to get numbers to show and try and break it " + number);
 
         if (number < 10) {
             spriteBatch.draw(numbers[number], (float) (currentNodeClickX - scalingZoom / 2 + 0.5 ), (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
@@ -404,10 +406,12 @@ public class RenderTester {
 
     private void drawNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
         //if single digits
-        if (number > 100) {
+        if (number > 100 || number < 0) {
             number = 99;
             System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers; using this instead: " + number);
         }
+
+        System.out.println("Keep this here, bug somewhere and I don't know where so this is the number it's trying to print just in case it does crash: " + number);
 
         if (number < 10) {
             spriteBatch.draw(numbers[number], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
