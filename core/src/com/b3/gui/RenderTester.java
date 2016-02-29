@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.reverse;
+import static java.util.Collections.reverseOrder;
 import static java.util.Collections.sort;
 
 public class RenderTester {
@@ -260,6 +261,7 @@ public class RenderTester {
                             spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
                             List<Node> currentPath = worldGraph.getCurrentSearch().getPath();
                             ArrayList<Integer> arrCostsCurrentSerach = getCostsAllNodes(currentPath);
+
                             for (int i = 0; i < currentPath.size(); i++) {
                                 if (arrCostsCurrentSerach.size() > 0) {
                                     drawCostOnScreen(arrCostsCurrentSerach.get(0), currentPath.get(i).getPoint(), currentPath.get(i+1).getPoint(), scalingZoom);
@@ -348,9 +350,11 @@ public class RenderTester {
             Node pointTwo = path.get(i-1);
 
             float costBetweenOneTwo = pointOne.getEdgeCost(pointTwo);
-
             arrTempCosts.add((int) costBetweenOneTwo);
         }
+
+        reverse(arrTempCosts);
+
         return arrTempCosts;
     }
 
