@@ -213,9 +213,9 @@ public class RenderTester {
     public void render(int currentNodeClickX, int currentNodeClickY) {
         popupShowing = false;
 
-        stage.draw();
-        stage.act();
-        stage.getViewport().update((int) worldCamera.viewportWidth, (int) worldCamera.viewportHeight, true);
+//        stage.draw();
+//        stage.act();
+//        stage.getViewport().update((int) worldCamera.viewportWidth, (int) worldCamera.viewportHeight, true);
 
         float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
 
