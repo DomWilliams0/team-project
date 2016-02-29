@@ -102,7 +102,7 @@ public class World implements Disposable {
 		// buildings and lighting
 		buildingBatch = new ModelBatch();
 		buildings = new ArrayList<>();
-		buildingCache = new BuildingModelCache();
+		buildingCache = new BuildingModelCache(this);
 
 		// todo shadows
 		environment = new Environment();
@@ -200,7 +200,7 @@ public class World implements Disposable {
 			MapProperties props = object.getProperties();
 			Float width = (Float) props.get("width") / Utils.TILESET_RESOLUTION;
 			Float length = (Float) props.get("height") / Utils.TILESET_RESOLUTION;
-			Float height = Float.parseFloat((String) props.get("building-height"));
+			Float height = Float.parseFloat((String) props.get("building-height")) * 2;
 			Float x = (Float) props.get("x") / Utils.TILESET_RESOLUTION;
 			Float y = (Float) props.get("y") / Utils.TILESET_RESOLUTION;
 
@@ -450,6 +450,7 @@ public class World implements Disposable {
 			);
 			buildingDef.shape = shape;
 			buildingBody.createFixture(buildingDef);
+
 			shape.dispose(); // todo reuse shape and fixture for all buildings
 		}
 

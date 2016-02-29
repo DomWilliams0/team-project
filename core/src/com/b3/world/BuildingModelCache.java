@@ -1,12 +1,17 @@
 package com.b3.world;
 
 import com.b3.util.Utils;
+import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -19,12 +24,25 @@ import java.util.Map;
  * Maintains a set of building Models for reuse
  */
 public class BuildingModelCache implements Disposable {
+	private final World world;
 	private Map<Vector3, Model> models;
 	private ModelBuilder builder;
 
-	public BuildingModelCache() {
+	private Texture nightSide;
+	private Texture topSide;
+	private Texture brick;
+
+	public BuildingModelCache(World world) {
+		this.world = world;
 		models = new HashMap<>();
 		builder = new ModelBuilder();
+		loadTextures();
+	}
+
+	private void loadTextures() {
+		nightSide = new Texture("core/assets/world/popups/night_side_copy.jpg");
+		topSide = new Texture("core/assets/world/popups/roof.jpg");
+		brick = new Texture("core/assets/world/popups/brick.jpg");
 	}
 
 	/**
@@ -38,14 +56,41 @@ public class BuildingModelCache implements Disposable {
 	public ModelInstance createBuilding(Vector2 pos, Vector3 dimensions) {
 		Model model = models.get(dimensions);
 		if (model == null) {
-			model = builder.createBox(dimensions.x, dimensions.y, dimensions.z,
-					new Material(ColorAttribute.createDiffuse(makeBuildingColour())),
-					VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
+			int attr = VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates;
+			ModelBuilder modelBuilder = new ModelBuilder();
 
+			System.out.println(dimensions.z);
+
+			float changer = 1;
+
+			System.out.println("("+pos.x + "," + pos.y + ") has dimension: " + dimensions.z);
+
+			changer = (float) (0.5 * dimensions.z);
+
+			modelBuilder.begin();
+			modelBuilder.part("front", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(brick)))
+					.rect(-2f,-2f,-2f, -2f,2f,-2f,  2f,2f,-2, 2f,-2f,-2f, 0,0,-1);
+			modelBuilder.part("back", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(topSide))) //ACTUAL TOP
+					.rect(-2f,2f,2f, -2f,-2f,2f,  2f,-2f,2f, 2f,2f,2f, 0,0,1);
+			modelBuilder.part("bottom", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) //ACTUAL FRONT
+					.rect(-2f,-2f,2f, -2f,-2f,-changer,  2f,-2f,-changer, 2f,-2f,2f, 0,-1,0);
+			modelBuilder.part("top", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) //ACTUAL BACK
+					.rect(-2f,2f,-changer, -2f,2f,2f,  2f,2f,2f, 2f,2f,-changer, 0,1,0);
+			modelBuilder.part("left", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) //LEFT
+					.rect(-2f,-2f,2f, -2f,2f,2f,  -2f,2f,-changer, -2f,-2f,-changer, -1,0,0);
+			modelBuilder.part("right", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) //RIGHT
+					.rect(2f,-2f,-changer, 2f,2f,-changer,  2f,2f,2f, 2f,-2f,2f, 1,0,0);
+			model = modelBuilder.end();
+
+//			model = builder.createBox(dimensions.x, dimensions.y, dimensions.z,
+//					new Material(), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 			models.put(dimensions, model);
 		}
 
-		return new ModelInstance(model, pos.x + dimensions.x / 2, pos.y + dimensions.y / 2, dimensions.z / 2);
+		ModelInstance tempInstance = new ModelInstance(model, pos.x + dimensions.x / 2, pos.y + dimensions.y / 2, dimensions.z / 2);
+
+
+		return tempInstance;
 	}
 
 	/**

@@ -331,8 +331,8 @@ public class RenderTester {
     private void drawNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
         //if single digits
         if (number > 100) {
-            System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers");
             number = 99;
+            System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers; using this instead: " + number);
         }
 
         if (number < 10) {
