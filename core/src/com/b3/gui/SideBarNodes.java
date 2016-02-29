@@ -238,6 +238,27 @@ public class SideBarNodes extends Table implements Disposable {
         return ui.setCellColour(n, c, singleHighlight);
     }
 
+    /**
+     * Highlight a node in the sidebar by a given point
+     * with a colour to match the colour on the graph
+     * @param p The point whose node to highlight
+     * @param singleHighlight whether this is to be the only highlighted node
+     * @return Whether the highlight was successful
+     */
+    public boolean highlightNode(Point p, boolean singleHighlight) {
+        return highlightNode(new Node(p), singleHighlight);
+    }
+    /**
+     * Highlight a given node in the sidebar
+     * with a colour to match the colour on the graph
+     * @param n The Node to highlight in the sidebar
+     * @param singleHighlight whether this is to be the only highlighted node
+     * @return Whether the highlight was successful
+     */
+    public boolean highlightNode(Node n, boolean singleHighlight) {
+        return ui.setCellColour(n, singleHighlight);
+    }
+
     public void setStepthrough(boolean stepthrough) {
         ui.setStepthrough(stepthrough);
         next.getComponent().setVisible(stepthrough);

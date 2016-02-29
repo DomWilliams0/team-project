@@ -22,10 +22,10 @@ public class WorldGraph implements Serializable {
 
 	private static final Color EDGE_COLOUR = Color.BLACK;
 	private static final Color NODE_COLOUR = Color.DARK_GRAY;
-	private static final Color FRONTIER_COLOUR = Color.LIME;
-	private static final Color NEW_FRONTIER_COLOUR = Color.CYAN;
-	private static final Color JUST_EXPANDED_COLOUR = Color.PINK;
-	private static final Color VISITED_COLOUR = Color.LIGHT_GRAY;
+	public static final Color FRONTIER_COLOUR = Color.LIME;
+	public static final Color NEW_FRONTIER_COLOUR = Color.CYAN;
+	public static final Color JUST_EXPANDED_COLOUR = Color.PINK;
+	public static final Color VISITED_COLOUR = Color.LIGHT_GRAY;
 	private static final Color SEARCH_EDGE_COLOUR = Color.YELLOW;
 
 	private static final float NODE_RADIUS = 0.10f;
