@@ -249,6 +249,7 @@ public class VisNodes extends Table {
         row.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                //todo try to make this not respond when dragging ie does not highlight unless specifically a click
                 clickedNode = n;
                 clickedNodeUpdated = true;
                 return true;
