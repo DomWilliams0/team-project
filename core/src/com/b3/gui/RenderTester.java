@@ -235,7 +235,7 @@ public class RenderTester {
                 if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
                     if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
                         //TODO Put some info around the screen somewhere (use cost function below somewhere)
-                        if (pageNo == 4) pageNo = 0; //reset to first page if neccessary
+                        if (pageNo >= 4) pageNo = 0; //reset to first page if neccessary
                         float gxFunction = worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded());
 
                         int convertedPageNo = pageNo;
@@ -272,7 +272,7 @@ public class RenderTester {
                         //DONE MULTI PAGE if JUST added to stack / queue
                         if (worldGraph.getCurrentSearch().getLastFrontier() != null)
                             if (worldGraph.getCurrentSearch().getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-                                if (pageNo == 2) pageNo = 0; //reset to first page if neccessary
+                                if (pageNo >= 2) pageNo = 0; //reset to first page if neccessary
 
                                 int convertedPageNo = pageNo;
                                 if (convertedPageNo == 1)
@@ -297,7 +297,7 @@ public class RenderTester {
 
                             } else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
                                 //DONE MULTIPAGE if the old frontier
-                                if (pageNo == 2) pageNo = 0; //reset to first page if neccessary
+                                if (pageNo >= 2) pageNo = 0; //reset to first page if neccessary
 
                                 int convertedPageNo = pageNo;
                                 if (convertedPageNo == 1)
