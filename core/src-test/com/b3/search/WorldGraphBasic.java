@@ -1,17 +1,49 @@
 package com.b3.search;
 
+import com.b3.world.World;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoaderBasic;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class WorldGraphBasic {
 
-	public static WorldGraph getBasicGraph() throws FileNotFoundException {
-		return getGraph("graph");
+	private static Field worldGraphField;
+	private static Method processMapTileTypesMethod;
+
+	static {
+		try {
+			worldGraphField = World.class.getDeclaredField("worldGraph");
+			worldGraphField.setAccessible(true);
+			processMapTileTypesMethod = World.class.getDeclaredMethod("processMapTileTypes", TiledMap.class);
+			processMapTileTypesMethod.setAccessible(true);
+		} catch (NoSuchFieldException | NoSuchMethodException ex) {
+			ex.printStackTrace();
+		}
 	}
 
-	private static WorldGraph getGraph(String graphName) throws FileNotFoundException {
-		return fromFile("src-test/resources/" + graphName + ".txt");
+	public static WorldGraph getRealWorld(String mapName) throws Exception {
+		World world = new World();
+		TiledMap map = new TmxMapLoaderBasic().load("src-test/resources/test-worlds/" + mapName + ".tmx");
+		WorldGraph graph = new WorldGraph(
+				(int) map.getProperties().get("width"),
+				(int) map.getProperties().get("height")
+		);
+		worldGraphField.set(world, graph);
+		processMapTileTypesMethod.invoke(world, map);
+		return graph;
+	}
+
+	public static WorldGraph getBasicGraph() throws FileNotFoundException {
+		return getTextGraph("graph");
+	}
+
+	private static WorldGraph getTextGraph(String graphName) throws FileNotFoundException {
+		return fromFile("src-test/resources/test-worlds/" + graphName + ".txt");
 	}
 
 	/**

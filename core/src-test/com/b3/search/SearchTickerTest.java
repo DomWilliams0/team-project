@@ -30,6 +30,13 @@ public class SearchTickerTest {
 		Config.loadConfig("assets/reference.yml");
 	}
 
+	private void setGraph(WorldGraph graph) throws Exception {
+		if (graph == null)
+			throw new Exception("Can't start tests. Graph is null.");
+		this.graph = graph;
+		this.searchTicker = new SearchTicker(graph);
+	}
+
 	/**
 	 * Tests the {@link SearchTicker SearchTicker's} path
 	 * generation.
@@ -37,11 +44,8 @@ public class SearchTickerTest {
 	 */
 	@Test
 	public void testTick() throws Exception {
-		graph = WorldGraphBasic.getBasicGraph();
-		if (graph == null)
-			throw new Exception("Can't start tests. Graph is null.");
-		searchTicker = new SearchTicker(graph);
-
+		/* Basic Graph */
+		setGraph(WorldGraphBasic.getBasicGraph());
 		Point[] path = new Point[] {new Point(0,0), new Point(0,1)};
 		testTick(0, 0, 0, 1, path, BFS, DIJ, AS);
 
@@ -49,6 +53,15 @@ public class SearchTickerTest {
 		testTick(0, 0, 0, 3, path, BFS, DIJ, AS);
 
 		testTick(0, 0, 5, 0, null, DFS, BFS, DIJ, AS);
+
+		/* aStar1 */
+		setGraph(WorldGraphBasic.getRealWorld("aStar1"));
+		path = new Point[] {new Point(0,11), new Point(0,10), new Point(0,9), new Point(0,8), new Point(0,7),
+				new Point(0,6), new Point(0,5), new Point(0,4), new Point(0,3), new Point(0,2), new Point(1,2),
+				new Point(2,2), new Point(3,2), new Point(4,2), new Point(5,2), new Point(6,2), new Point(7,2),
+				new Point(8,2), new Point(8,1), new Point(8,0), new Point(7,0), new Point(6,0), new Point(5,0),
+				new Point(4,0), new Point(3,0), new Point(2,0), new Point(1,0), new Point(0,0)};
+		testTick(0, 11, 0, 0, path, DIJ, AS);
 	}
 
 	/**
