@@ -199,7 +199,7 @@ public class WorldGraph implements Serializable {
 	 * @param p The content of the node to search
 	 * @return True is the node exists, false otherwise
 	 */
-	protected boolean hasNode(Point p) {
+	public boolean hasNode(Point p) {
 		return nodes.containsKey(p);
 	}
 

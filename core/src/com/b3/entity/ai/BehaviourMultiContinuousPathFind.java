@@ -2,6 +2,7 @@ package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
 import com.b3.search.Node;
+import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
@@ -40,10 +41,12 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	}
 
 	private Vector2 generateRandomTile() {
-		return new Vector2(
-				Utils.RANDOM.nextInt(graph.getMaxXValue()),
-				Utils.RANDOM.nextInt(graph.getMaxYValue())
-		);
+		int x, y;
+		do {
+			x = Utils.RANDOM.nextInt(graph.getMaxXValue());
+			y = Utils.RANDOM.nextInt(graph.getMaxYValue());
+		} while (!graph.hasNode(new Point(x, y)));
+		return new Vector2(x, y);
 	}
 
 	@Override
