@@ -59,13 +59,7 @@ public class BuildingModelCache implements Disposable {
 			int attr = VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates;
 			ModelBuilder modelBuilder = new ModelBuilder();
 
-			System.out.println(dimensions.z);
-
-			float changer = 1;
-
-			System.out.println("("+pos.x + "," + pos.y + ") has dimension: " + dimensions.z);
-
-			changer = (float) (0.5 * dimensions.z);
+			float changer = (float) (0.5 * dimensions.z);
 
 			modelBuilder.begin();
 			modelBuilder.part("front", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(brick)))

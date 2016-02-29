@@ -23,6 +23,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Collections.reverse;
+import static java.util.Collections.sort;
+
 public class RenderTester {
 
     private WorldCamera textCamera;
@@ -103,8 +109,8 @@ public class RenderTester {
     }
 
     private void loadTextures() {
-        //Load current node sprites (2 pages + 1 (dfs, bfs or A*))
-        currentNodeSprite = new Sprite[5];
+        //Load current node sprites (2 pages + 1 (dfs, bfs or A*)) + costs A*
+        currentNodeSprite = new Sprite[6];
         Texture tempTexture = new Texture("core/assets/world/popups/currentnode250x250.JPG.png");
         tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         currentNodeSprite[0] = new Sprite(tempTexture);
@@ -120,6 +126,9 @@ public class RenderTester {
         tempTexture = new Texture("core/assets/world/popups/currentnode250x250.JPG_3-A_STAR.png");
         tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         currentNodeSprite[4] = new Sprite(tempTexture);
+        tempTexture = new Texture("core/assets/world/popups/currentnode250x250.JPG_3-A_STAR2.png");
+        tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        currentNodeSprite[5] = new Sprite(tempTexture);
 
         //Load start node sprites (2 pages)
         startNodeSprite = new Sprite[2];
@@ -226,7 +235,7 @@ public class RenderTester {
                 if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
                     if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
                         //TODO Put some info around the screen somewhere (use cost function below somewhere)
-                        if (pageNo == 3) pageNo = 0; //reset to first page if neccessary
+                        if (pageNo == 4) pageNo = 0; //reset to first page if neccessary
                         float gxFunction = worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded());
 
                         int convertedPageNo = pageNo;
@@ -239,11 +248,25 @@ public class RenderTester {
                                 case DEPTH_FIRST: convertedPageNo = 2;
                                     break;
                             }
-                        spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+
+                        if (pageNo != 3)
+                            spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 
                         //draw current g(x) function onto the screen.
-                        if (pageNo == 2)
-                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 17) , scalingZoom);
+                        if (pageNo == 2) {
+                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 17), scalingZoom);
+                        }
+                        if (pageNo == 3) {
+                            spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+                            List<Node> currentPath = worldGraph.getCurrentSearch().getPath();
+                            ArrayList<Integer> arrCostsCurrentSerach = getCostsAllNodes(currentPath);
+                            for (int i = 0; i < currentPath.size(); i++) {
+                                if (arrCostsCurrentSerach.size() > 0) {
+                                    drawCostOnScreen(arrCostsCurrentSerach.get(0), currentPath.get(i).getPoint(), currentPath.get(i+1).getPoint(), scalingZoom);
+                                    arrCostsCurrentSerach.remove(0);
+                                }
+                            }
+                        }
 
                     } else
                         //DONE MULTI PAGE if JUST added to stack / queue
@@ -316,6 +339,21 @@ public class RenderTester {
         spriteBatch.end();
     }
 
+    private ArrayList<Integer> getCostsAllNodes(List<Node> path) {
+        ArrayList<Integer> arrTempCosts = new ArrayList<Integer>();
+        if (path.isEmpty()) return arrTempCosts;
+
+        for (int i = path.size()-1; i > 0; i--) {
+            Node pointOne = path.get(i);
+            Node pointTwo = path.get(i-1);
+
+            float costBetweenOneTwo = pointOne.getEdgeCost(pointTwo);
+
+            arrTempCosts.add((int) costBetweenOneTwo);
+        }
+        return arrTempCosts;
+    }
+
     private void drawHeuristic() {
 
     }
@@ -326,6 +364,42 @@ public class RenderTester {
         drawNumberOnScreen(firstNo, currentNodeClickX+(scalingZoom/10), currentNodeClickY, scalingZoom);
         spriteBatch.draw(plus, (float) ((currentNodeClickX - scalingZoom / 3.5) + 0.5) , (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
         drawNumberOnScreen(secondNo, currentNodeClickX+3*(scalingZoom/10), currentNodeClickY, scalingZoom);
+    }
+
+    private void drawCostOnScreen(int cost, Point one, Point two, float scalingZoom) {
+        //change in x
+        if (one.getY() == two.getY()) {
+            float x = (float) (one.getX() + two.getX()) / 2;
+            float y = one.getY();
+            drawStaticNumberOnScreen(cost, x, y, scalingZoom);
+        } else
+        //change in y
+        if (one.getX() == two.getX()) {
+            float x = one.getX();
+            float y = (float) (one.getY() + two.getY()) / 2;
+            drawStaticNumberOnScreen(cost, x, y, scalingZoom);
+        }
+    }
+
+    private void drawStaticNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
+        //if single digits
+        if (number > 100) {
+            number = 99;
+            System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers; using this instead: " + number);
+        }
+
+        if (number < 10) {
+            spriteBatch.draw(numbers[number], (float) (currentNodeClickX - scalingZoom / 2 + 0.5 ), (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
+        } else {
+            //if not
+            int firstNo = number / 10;
+            int secondNo = number % 10;
+            float x1 = (float) (currentNodeClickX - scalingZoom / 2 + 0.5);
+            float x2 = x1 + (scalingZoom / 20);
+
+            spriteBatch.draw(numbers[firstNo], x1, (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
+            spriteBatch.draw(numbers[secondNo], x2, (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
+        }
     }
 
     private void drawNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
