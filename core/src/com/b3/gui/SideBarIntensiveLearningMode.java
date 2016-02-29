@@ -141,26 +141,17 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         // === WHAT SEARCH ALGO ===
         // ========================
 
-        String[] searches = {"A Star", "Breath First Search", "Depth First Search"};
+        Object[] searches = SearchAlgorithm.allNames().toArray(); // TODO - Not badly done with Object[].
         SelectBoxComponent searchSelectBox = new SelectBoxComponent(skin, font, new Array(searches));
-        searchSelectBox.setSelected("A Star");
+        searchSelectBox.setSelected(searches[0]);
 
         searchSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (searchSelectBox.getSelected().equals("A Star")) {
-                    System.out.println("Set to A*");
-                    world.getWorldGraph().setLearningModeNext(SearchAlgorithm.A_STAR);
-                }
-                if (searchSelectBox.getSelected().equals("Breath First Search")) {
-                    System.out.println("Set to BFS");
-                    world.getWorldGraph().setLearningModeNext(SearchAlgorithm.BREADTH_FIRST);
-                }
-                if (searchSelectBox.getSelected().equals("Depth First Search")) {
-                    System.out.println("Set to DFS");
-                    world.getWorldGraph().setLearningModeNext(SearchAlgorithm.DEPTH_FIRST);
-                }
-
+				SearchAlgorithm algorithm = SearchAlgorithm.fromName((String) searchSelectBox.getSelected());
+				if (algorithm == null) return;
+				System.out.println("Set to " + algorithm.getName());
+				world.getWorldGraph().setLearningModeNext(algorithm);
             }
         });
 

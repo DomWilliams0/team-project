@@ -10,8 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class EventGeneratorTest {
 
@@ -23,7 +23,7 @@ public class EventGeneratorTest {
         eventGenerator = new DummyEventGenerator(world, 1, 3);
     }
 
-    @Test(timeout = 4000)
+    @Test(timeout = 8000)
     public void testGenerateTimeForNextEvent() throws InterruptedException {
         new Thread(eventGenerator).start();
 

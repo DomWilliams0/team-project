@@ -3,6 +3,7 @@ package com.b3;
 import com.b3.input.InputHandler;
 import com.b3.util.Config;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 
 /**
  * Loads the current configuration file and sets up the input handler for the program (onClicks, onMouseOver etc.)
@@ -21,6 +22,9 @@ public class MainGame extends Game {
 	public void create() {
 		// load config
 		Config.loadConfig("core/assets/reference.yml", "core/assets/userconfig.yml");
+
+		// render the models properly
+		DefaultShader.defaultCullFace = 0;
 
 		inputHandler = InputHandler.getInstance();
 		setScreen(new MainMenuScreen(this));

@@ -8,7 +8,6 @@ import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
-import org.omg.CORBA.TIMEOUT;
 
 import java.util.*;
 import java.util.function.Function;
@@ -194,60 +193,60 @@ public class SearchTicker {
 		if (pathComplete)
 			return;
 
-		// done
 		if (frontier.isEmpty()) {
+			// Failed to find a path!
+			// Or node was not added to the frontier on initialisation.
 			setAllCompleted(true);
+			path.clear(); // Clear the path, so no false hopes.
 			return;
 		}
 
 		lastFrontier.clear();
 
 		Node node = frontier.take();
-		// already visited
-		if (!visited.contains(node)) {
 
-			//record us expanding this node
-			mostRecentlyExpanded = node;
+		//record us expanding this node
+		mostRecentlyExpanded = node;
 
-			visited.add(node);
+		visited.add(node);
 
-			path = constructPath(cameFrom, start, node);
-			if (node.equals(end)) {
-				setAllCompleted(true);
-				return;
-			}
-
-			if (algorithm == SearchAlgorithm.DEPTH_FIRST || algorithm == SearchAlgorithm.BREADTH_FIRST) {
-				node.getNeighbours()
-						.stream()
-						.filter(s -> !visited.contains(s))
-						.forEach(s -> {
-							boolean inPending = frontier.contains(s);
-
-							if (!inPending) {
-								cameFrom.put(s, node);
-								frontier.add(s);
-								lastFrontier.add(s);
-							}
-						});
-			} else {
-				node.getNeighbours()
-						.stream()
-						.forEach(child -> {
-							float tentative_g = costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
-							if (tentative_g <= costSoFarFunction.apply(child)) {
-								cameFrom.put(child, node);
-								if (!frontier.contains(child)) {
-									frontier.add(child);
-									lastFrontier.add(child);
-								}
-							}
-						});
-			}
-
-			// Send to search snapshot
-			//snapshotTracker.addSnapshot(new Tuple<>(frontier, visited));
+		path = constructPath(cameFrom, start, node);
+		if (node.equals(end)) {
+			setAllCompleted(true);
+			return;
 		}
+
+		if (algorithm == SearchAlgorithm.DEPTH_FIRST || algorithm == SearchAlgorithm.BREADTH_FIRST) {
+			node.getNeighbours()
+					.stream()
+					.filter(s -> !visited.contains(s))
+					.forEach(s -> {
+						boolean inPending = frontier.contains(s);
+
+						if (!inPending) {
+							cameFrom.put(s, node);
+							frontier.add(s);
+							lastFrontier.add(s);
+						}
+					});
+		} else {
+			node.getNeighbours()
+					.stream()
+					.forEach(child -> {
+						float tentative_g = costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
+						if (tentative_g <= costSoFarFunction.apply(child)) {
+							cameFrom.put(child, node);
+							if (!frontier.contains(child) && !visited.contains(child)) {
+								frontier.add(child);
+								lastFrontier.add(child);
+							}
+						}
+					});
+		}
+
+		// Send to search snapshot
+		//snapshotTracker.addSnapshot(new Tuple<>(frontier, visited));
+
 		setUpdated(true);
 	}
 

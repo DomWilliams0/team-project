@@ -14,8 +14,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -210,7 +210,7 @@ public class VisNodes extends Table {
             //todo perhaps change what is shown for A*. Could do with describing distance (unless it is shown in tooltips??), and the nodes move more with A* so is less useful
 
             ArrayList<Node> frontier = sortFront(front,alg);
-            highestNode = frontier.get(0);
+            highestNode = frontier.isEmpty() ? null : frontier.get(0);
 
             //get the visited set and sort it numerically by x then y
             ArrayList<Node> visitedSorted = new ArrayList<>(visited);
