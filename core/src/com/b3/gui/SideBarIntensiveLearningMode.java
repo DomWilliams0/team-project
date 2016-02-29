@@ -118,8 +118,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         labelTwo.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
         //Play and Pause button
-        //String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
-        ButtonComponent playPause = new ButtonComponent(skin, font, "Pause");
+        ButtonComponent playPause = new ButtonComponent(skin, font, "Play");
         playPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
