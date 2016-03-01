@@ -27,7 +27,7 @@ public class CompareMode implements Screen {
     private WorldCamera camera;
     private Stage sideBarStage;
     private SideBar sideBar;
-    private SideBarNodes sideBarNodes;
+//    private SideBarNodes sideBarNodes;
     private HelpBox helpBox;
     private KeyboardController keyboardController;
 
@@ -77,9 +77,9 @@ public class CompareMode implements Screen {
         sideBar = new SideBar(sideBarStage, world);
         sideBarStage.addActor(sideBar);
 
-        sideBarNodes = new SideBarNodes(sideBarStage, world);
-        sideBarNodes.setStepthrough(true);
-        sideBarStage.addActor(sideBarNodes);
+//        sideBarNodes = new SideBarNodes(sideBarStage, world);
+//        sideBarNodes.setStepthrough(true);
+//        sideBarStage.addActor(sideBarNodes);
 
         helpBox = new HelpBox(sideBarStage, world);
         sideBarStage.addActor(helpBox);
@@ -108,7 +108,7 @@ public class CompareMode implements Screen {
 
         // sidebar rendering
         sideBarStage.act(Gdx.graphics.getDeltaTime());
-        sideBarNodes.render();
+//        sideBarNodes.render();
         sideBarStage.draw();
 
         if (keyboardController.shouldExit())
@@ -119,7 +119,7 @@ public class CompareMode implements Screen {
     public void resize(int width, int height) {
         sideBarStage.getViewport().update(width, height, true);
         sideBar.resize(width, height);
-        sideBarNodes.resize(width, height);
+//        sideBarNodes.resize(width, height);
         helpBox.resize(width, height);
 
         camera.viewportWidth = width;
