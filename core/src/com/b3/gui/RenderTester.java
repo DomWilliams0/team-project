@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.sun.corba.se.impl.naming.cosnaming.NamingUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -414,7 +415,12 @@ public class RenderTester {
 //        System.out.println("Keep this here, bug somewhere and I don't know where so this is the number it's trying to print just in case it does crash: go onto intensive learning mode and click on pop-ups / show more and try to get numbers to show and try and break it " + number);
 
         if (number < 10) {
-            spriteBatch.draw(numbers[number], (float) (currentNodeClickX - scalingZoom / 2 + 0.5 ), (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
+            try {
+                System.out.println("Drawing " + number);
+                spriteBatch.draw(numbers[number], (float) (currentNodeClickX - scalingZoom / 2 + 0.5), (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
+            } catch (NullPointerException e) {
+                System.err.println("Error in drawStaticNumberOnScreen in " + number + ". E" + e);
+            }
         } else {
             //if not
             int firstNo = number / 10;
@@ -422,8 +428,13 @@ public class RenderTester {
             float x1 = (float) (currentNodeClickX - scalingZoom / 2 + 0.5);
             float x2 = x1 + (scalingZoom / 20);
 
-            spriteBatch.draw(numbers[firstNo], x1, (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
-            spriteBatch.draw(numbers[secondNo], x2, (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
+            try {
+                System.out.println("Drawing " + firstNo + " and " + secondNo);
+                spriteBatch.draw(numbers[firstNo], x1, (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
+                spriteBatch.draw(numbers[secondNo], x2, (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
+            } catch (NullPointerException e) {
+                System.err.println("Error in second drawStaticNumberOnScreen in " + number + ". E" + e);
+            }
         }
     }
 

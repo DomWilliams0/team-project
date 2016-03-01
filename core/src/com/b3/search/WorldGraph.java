@@ -320,18 +320,32 @@ public class WorldGraph implements Serializable {
 			}
 		}
 
+		shapeRenderer.end();
+
+		shapeRenderer.setProjectionMatrix(camera.combined);
+//		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
 //		// render the path
 		if (showPaths && currentSearch != null) {// && currentSearch.isPathComplete()) {
-			colPath.add((float)0.05,(float)0.05,(float)-0.05,0);
+			colPath.add((float)0.025,(float)0.025,(float)-0.025,0);
 			colPath.a = 1;
 
 			shapeRenderer.setColor(colPath);
-			//shapeRenderer.setColor(new Color(255,208,0,0));
 
 			List<Node> path = currentSearch.getPath();
 			for (int i = 0, pathSize = path.size(); i < pathSize - 1; i++) {
 				Node pathNodeA = path.get(i);
 				Node pathNodeB = path.get(i + 1);
+
+//				float size = (1 - (colPath.r)) / 5;
+//				if (size < 0.025) size = (float) 0.025;
+//
+//				shapeRenderer.rectLine(
+//						pathNodeA.getPoint().x, pathNodeA.getPoint().y,
+//						pathNodeB.getPoint().x, pathNodeB.getPoint().y,
+//						size
+//				);
 
 				shapeRenderer.line(
 						pathNodeA.getPoint().x, pathNodeA.getPoint().y,

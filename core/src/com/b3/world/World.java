@@ -298,7 +298,21 @@ public class World implements Disposable {
 
 		worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
 		worldGraph.setCurrentSearch(agent, behaviour.getTicker());
+//
+//		for (int i = 0; i < 500; i++) {
+//			Agent a = spawnAgent(generateRandomTile());
+//			BehaviourWander b = new BehaviourWander(a);
+//			a.setBehaviour(b);
+//		}
+	}
 
+	private Vector2 generateRandomTile() {
+		int x, y;
+		do {
+			x = Utils.RANDOM.nextInt(worldGraph.getMaxXValue());
+			y = Utils.RANDOM.nextInt(worldGraph.getMaxYValue());
+		} while (!worldGraph.hasNode(new Point(x, y)));
+		return new Vector2(x, y);
 	}
 
 	/**
