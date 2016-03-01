@@ -10,6 +10,7 @@ import com.b3.search.util.takeable.StackT;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
+import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -32,6 +33,8 @@ import java.util.*;
  * Created by lewis on 08/02/16.
  */
 public class VisNodes extends Table {
+
+	private final World world;
 
 	private ScrollPane fp, vp;
 	private Table ft, vt;
@@ -86,12 +89,14 @@ public class VisNodes extends Table {
 
 	/**
 	 * Create a new data visualisation table
-	 *
-	 * @param stage The stage with which to render
+	 *  @param stage The stage with which to render
 	 * @param skin The skin of the table and scrollpanes (background of scrollpane is removed)
+	 * @param world
 	 */
-	public VisNodes(Stage stage, Skin skin) {
+	public VisNodes(Stage stage, Skin skin, World world) {
 		super(skin);
+
+		this.world = world;
 
 		stepthrough = false;
 		stepString = new StringBuilder();
@@ -225,14 +230,14 @@ public class VisNodes extends Table {
 			});
 
 			//populate the list tables
-			for (int i = 0; i < Math.min(Math.max(frontier.size(), visitedSorted.size()),25); i++) {
+			for (int i = 0; i < Math.min(Math.max(frontier.size(), visitedSorted.size()),250); i++) {
 				if (frontier.size() > i) {
 					addToTable(ft, frontier.get(i));
-					if(i==24) ft.add("(and more...)");
+					if(i==250) ft.add("(and more...)");
 				}
 				if (visitedSorted.size() > i) {
 					addToTable(vt, visitedSorted.get(i));
-					if(i==24) vt.add("(and more...)");
+					if(i==250) vt.add("(and more...)");
 				}
 			}
 		}
@@ -258,43 +263,45 @@ public class VisNodes extends Table {
      * @param n The node to display in the table.
      */
     private void addToTable(Table t, Node n) {
-		t.add(n.toString());
-		t.row();
+		if (world.getWorldGraph().getCurrentSearch().isPaused()) {
+			// TODO I THINK THIS IS THE CULPRIT CODE
+			//create the wrapping table
+			Table row = new Table(this.getSkin());
+			//add the node text to the wrapping table
+			//edit here if you want to use adapted string
+			row.add(n.toString());
 
-		// TODO I THINK THIS IS THE CULPRIT CODE
+			//add a touch listener to the wrapping table in order to detect a click on the given node.
+			row.addListener(new ClickListener() {
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					//we have received a start-of-touch event
+					//note the clicked node
+					clickedNode = n;
+					//don't yet say that this is ready to be accessed; the user might be scrolling the pane.
+					clickedNodeUpdated = false;
+					return true;
+				}
 
-//        //create the wrapping table
-//		Table row = new Table(this.getSkin());
-//        //add the node text to the wrapping table
-//		//edit here if you want to use adapted string
-//		row.add(n.toString());
-//
-//        //add a touch listener to the wrapping table in order to detect a click on the given node.
-//		row.addListener(new ClickListener() {
-//			@Override
-//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                //we have received a start-of-touch event
-//                //note the clicked node
-//				clickedNode = n;
-//                //don't yet say that this is ready to be accessed; the user might be scrolling the pane.
-//                clickedNodeUpdated = false;
-//				return true;
-//			}
-//			@Override
-//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                //we have received an end-of-touch event
-//                //ensure the scrollpanes aren't being used before saying the clicked node can be accessed
-//                if(clickedNode.equals(n) && !scrollpanesBeingUsed()) clickedNodeUpdated = true;
-//			}
-//		});
-//
-//        //add the wrapping table to the overall table
-//		t.add(row);
-//		t.row();
-//        //store the wrapping table in the hashmap, keyed by its node
-//		cellmap.put(n,row);
-//        //apply the highlight colour of the node, if applicable.
-//		applyColour(n);
+				@Override
+				public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+					//we have received an end-of-touch event
+					//ensure the scrollpanes aren't being used before saying the clicked node can be accessed
+					if (clickedNode.equals(n) && !scrollpanesBeingUsed()) clickedNodeUpdated = true;
+				}
+			});
+
+			//add the wrapping table to the overall table
+			t.add(row);
+			t.row();
+			//store the wrapping table in the hashmap, keyed by its node
+			cellmap.put(n, row);
+			//apply the highlight colour of the node, if applicable.
+			applyColour(n);
+		} else {
+			t.add(n.toString());
+			t.row();
+		}
 	}
 
 	/**

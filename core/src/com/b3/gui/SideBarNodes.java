@@ -106,7 +106,7 @@ public class SideBarNodes extends Table implements Disposable {
 
 
         //create the data table which will display the nodes
-        ui = new VisNodes(stage, skin);
+        ui = new VisNodes(stage, skin, world);
         //ui.setBackground(skin.getDrawable("knob_06"));
 
         // ======================
