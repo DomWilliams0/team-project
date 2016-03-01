@@ -2,10 +2,7 @@ package com.b3.world;
 
 import com.b3.DebugRenderer;
 import com.b3.entity.Agent;
-import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
-import com.b3.entity.ai.BehaviourMultiPathFind;
-import com.b3.entity.ai.BehaviourPathFind;
-import com.b3.entity.ai.BehaviourPathFollow;
+import com.b3.entity.ai.*;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
@@ -91,6 +88,7 @@ public class World implements Disposable {
 
 	private RenderTester rt;
 	private int maxHeight;
+	private ArrayList<Agent> roamersList;
 
 	public World() {
 	}
@@ -98,6 +96,9 @@ public class World implements Disposable {
 	public World(String fileName, Boolean compareMode, InputHandler inputHandler) {
 		this.inputHandler = inputHandler;
 		this.compareMode = compareMode;
+
+		roamersList = new ArrayList<Agent>();
+
 		TiledMap map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
 				(int) map.getProperties().get("width"),
@@ -302,12 +303,15 @@ public class World implements Disposable {
 
 		worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
 		worldGraph.setCurrentSearch(agent, behaviour.getTicker());
-//
-//		for (int i = 0; i < 500; i++) {
-//			Agent a = spawnAgent(generateRandomTile());
-//			BehaviourWander b = new BehaviourWander(a);
-//			a.setBehaviour(b);
-//		}
+
+		if (compareMode) {// && Config.getBoolean(ConfigKey.FLOCKING_ENABLED)) { <-NO, no other chance to spawn all of the agents
+			for (int i = 0; i < 250; i++) {
+				Agent a = spawnAgent(generateRandomTile());
+				BehaviourWander b = new BehaviourWander(a);
+				a.setBehaviour(b);
+				roamersList.add(a);
+			}
+		}
 	}
 
 	private Vector2 generateRandomTile() {
