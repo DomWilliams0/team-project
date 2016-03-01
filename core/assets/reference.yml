@@ -14,6 +14,7 @@ physics-rendering: false
 show-grid: true
 show-paths: true
 flatten-buildings: false
+flocking-enabled: false
 game-speed: 1
 
 time-between-ticks-min: 0.05

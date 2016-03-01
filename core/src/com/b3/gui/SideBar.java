@@ -167,6 +167,24 @@ public class SideBar extends Table implements Disposable {
                 .spaceBottom(10);
         settingsTab.row();
 
+        // Flocking enable/disable
+        CheckBoxComponent showFlockingCheckBox = new CheckBoxComponent(skin, font, "Roaming civillians");
+        showFlockingCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLOCKING_ENABLED));
+        showFlockingCheckBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                boolean flocking = Config.getBoolean(ConfigKey.FLOCKING_ENABLED);
+                System.out.println("FLOCKING + " + !flocking);
+                Config.set(ConfigKey.FLOCKING_ENABLED, !flocking);
+            }
+        });
+
+        settingsTab.add(showFlockingCheckBox.getComponent())
+                .align(Align.left)
+                .maxWidth(preferredWidth)
+                .spaceBottom(10);
+        settingsTab.row();
+
         // Show paths checkbox
         CheckBoxComponent showPathsCheckbox = new CheckBoxComponent(skin, font, "Show paths");
         showPathsCheckbox.getComponent().setChecked(Config.getBoolean(ConfigKey.SHOW_PATHS));
