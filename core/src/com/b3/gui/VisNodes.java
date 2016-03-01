@@ -216,7 +216,7 @@ public class VisNodes extends Table {
 			highestNode = frontier.get(0);
 
 			//get the visited set and sort it numerically by x then y
-			ArrayList<Node> visitedSorted = new ArrayList<>(visited);
+			LinkedList<Node> visitedSorted = new LinkedList<>(visited);
 			Collections.sort(visitedSorted, (p1, p2) -> {
 				if (p1.getPoint().getX() == p2.getPoint().getX()) {
 					return p1.getPoint().getY() - p2.getPoint().getY();
@@ -225,18 +225,14 @@ public class VisNodes extends Table {
 			});
 
 			//populate the list tables
-			for (int i = 0; i < Math.max(frontier.size(), visitedSorted.size()); i++) {
-				vt.row();
-				ft.row();
-				// ========================
-				// EDIT IF YOU WANT TO
-				// CHANGE TO ADAPTED STRING
-				// ========================
+			for (int i = 0; i < Math.min(Math.max(frontier.size(), visitedSorted.size()),25); i++) {
 				if (frontier.size() > i) {
 					addToTable(ft, frontier.get(i));
+					if(i==24) ft.add("(and more...)");
 				}
 				if (visitedSorted.size() > i) {
 					addToTable(vt, visitedSorted.get(i));
+					if(i==24) vt.add("(and more...)");
 				}
 			}
 		}
@@ -262,36 +258,41 @@ public class VisNodes extends Table {
      * @param n The node to display in the table.
      */
     private void addToTable(Table t, Node n) {
-        //create the wrapping table
-		Table row = new Table(this.getSkin());
-        //add the node text to the wrapping table
-		row.add(n.toString());
+		t.add(n.toString());
+		t.row();
 
-        //add a touch listener to the wrapping table in order to detect a click on the given node.
-		row.addListener(new ClickListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                //we have received a start-of-touch event
-                //note the clicked node
-				clickedNode = n;
-                //don't yet say that this is ready to be accessed; the user might be scrolling the pane.
-                clickedNodeUpdated = false;
-				return true;
-			}
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                //we have received an end-of-touch event
-                //ensure the scrollpanes aren't being used before saying the clicked node can be accessed
-                if(clickedNode.equals(n) && !scrollpanesBeingUsed()) clickedNodeUpdated = true;
-			}
-		});
-
-        //add the wrapping table to the overall table
-		t.add(row);
-        //store the wrapping table in the hashmap, keyed by its node
-		cellmap.put(n,row);
-        //apply the highlight colour of the node, if applicable.
-		applyColour(n);
+//        //create the wrapping table
+//		Table row = new Table(this.getSkin());
+//        //add the node text to the wrapping table
+//		//edit here if you want to use adapted string
+//		row.add(n.toString());
+//
+//        //add a touch listener to the wrapping table in order to detect a click on the given node.
+//		row.addListener(new ClickListener() {
+//			@Override
+//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                //we have received a start-of-touch event
+//                //note the clicked node
+//				clickedNode = n;
+//                //don't yet say that this is ready to be accessed; the user might be scrolling the pane.
+//                clickedNodeUpdated = false;
+//				return true;
+//			}
+//			@Override
+//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                //we have received an end-of-touch event
+//                //ensure the scrollpanes aren't being used before saying the clicked node can be accessed
+//                if(clickedNode.equals(n) && !scrollpanesBeingUsed()) clickedNodeUpdated = true;
+//			}
+//		});
+//
+//        //add the wrapping table to the overall table
+//		t.add(row);
+//		t.row();
+//        //store the wrapping table in the hashmap, keyed by its node
+//		cellmap.put(n,row);
+//        //apply the highlight colour of the node, if applicable.
+//		applyColour(n);
 	}
 
 	/**
@@ -425,6 +426,7 @@ public class VisNodes extends Table {
 	 * @param rendermore Whether the data collections are being rendered
 	 */
 	private void setupTable(SearchAlgorithm alg, boolean rendermore) {
+
 		//clear the tables
 		clear();
 		ft.clear();
@@ -447,10 +449,6 @@ public class VisNodes extends Table {
 			add("   ");
 			add("Visited nodes");
 			row();
-
-			//spacing
-//            add("");
-//            row();
 
 			//row 2 - description of data collections
 			add(frontierDesc);
