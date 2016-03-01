@@ -230,14 +230,14 @@ public class VisNodes extends Table {
 			});
 
 			//populate the list tables
-			for (int i = 0; i < Math.min(Math.max(frontier.size(), visitedSorted.size()),250); i++) {
+			for (int i = 0; i < Math.min(Math.max(frontier.size(), visitedSorted.size()),100); i++) {
 				if (frontier.size() > i) {
 					addToTable(ft, frontier.get(i));
-					if(i==250) ft.add("(and more...)");
+					if(i==100) ft.add("(and more...)");
 				}
 				if (visitedSorted.size() > i) {
 					addToTable(vt, visitedSorted.get(i));
-					if(i==250) vt.add("(and more...)");
+					if(i==100) vt.add("(and more...)");
 				}
 			}
 		}
