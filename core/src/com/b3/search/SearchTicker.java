@@ -155,7 +155,8 @@ public class SearchTicker {
 		if (timer < timeBetweenTicks)
 			return;
 
-		worldGraph.setColFlicker();
+		if (!isPaused())
+			worldGraph.setColFlicker();
 
 		if(timer > 2*timeBetweenTicks)
 			//it has been a long time since last tick so reset it instead of decrementing it
@@ -176,6 +177,7 @@ public class SearchTicker {
 	 * @param override Whether to force a tick to occur regardless of time or pause status
      */
 	public void tick(boolean override) {
+		worldGraph.setColFlicker();
 		if(override)
 			//override current status
 			tickFinal();

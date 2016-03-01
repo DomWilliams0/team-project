@@ -51,9 +51,10 @@ public class RenderTester {
     private Sprite plus;
     private Sprite equals;
     private boolean popupShowing;
+    private int counterAnimationFade;
 
     public RenderTester(World world) {
-
+        counterAnimationFade = 0;
         popupShowing = false;
 
         this.world = world;
@@ -170,6 +171,8 @@ public class RenderTester {
     }
 
     public void render(int currentNodeClickX, int currentNodeClickY) {
+        counterAnimationFade++;
+
         popupShowing = false;
 
         float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
@@ -245,15 +248,28 @@ public class RenderTester {
                                     break;
                             }
 
+                        //show normal pop-ups (first 2 pages)
                         if (pageNo != 3)
                             spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 
-                        //draw current g(x) function onto the screen.
+                        //draw current g(x) function onto the screen (3rd page)
                         if (pageNo == 2 && world.getWorldGraph().getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR) {
                             drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 11), scalingZoom);
                         }
+
+                        //show how costs are calulated (4th page)
                         if (pageNo == 3) {
-                            spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+                            //if has been shown for a little while
+                            float animate = 0;
+                            if (counterAnimationFade < 200) {
+                                //don't scale
+                                animate = scalingZoom;
+                            } else {
+                                //do scale down (so all costs are shown)
+                                animate = scalingZoom - (counterAnimationFade-200);
+                                if (animate < 0) animate = 0;
+                            }
+                            spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), animate, animate);
                             List<Node> currentPath = worldGraph.getCurrentSearch().getPath();
                             ArrayList<Integer> arrCostsCurrentSerach = getCostsAllNodes(currentPath);
 
@@ -487,5 +503,9 @@ public class RenderTester {
 
     public void resetPage() {
         pageNo = 0;
+    }
+
+    public void resetCounterAnimation() {
+        counterAnimationFade = 0;
     }
 }

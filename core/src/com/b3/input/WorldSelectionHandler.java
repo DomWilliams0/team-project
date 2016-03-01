@@ -47,6 +47,7 @@ public class WorldSelectionHandler extends InputAdapter {
 			//old node so change page number
 			if (world.getrt().getPopupShowing())
 				//if popup showing
+				world.getrt().resetCounterAnimation();
 				world.getrt().flipPageRight();
 		} else {
 			//new node so reset page number
