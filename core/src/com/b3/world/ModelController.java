@@ -16,10 +16,10 @@ public class ModelController {
 		this.flipped = flipped;
 		setPosition(0, 0, 0);
 		setRotation(0);
-//		modelManager.requestModel(modelName, (instance) -> {
-//			this.instance = instance;
-//			updateTransform();
-//		});
+		modelManager.requestModel(modelName, (instance) -> {
+			this.instance = instance;
+			updateTransform();
+		});
 		updateTransform();
 	}
 
