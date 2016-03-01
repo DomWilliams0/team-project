@@ -154,7 +154,7 @@ public class RenderTester {
 
         numbers = new Sprite[10];
         //Load Numbers
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i <= 9; i++) {
             tempTexture = new Texture("core/assets/world/popups/Numbers/"+i+".png");
             tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             numbers[i] = new Sprite(tempTexture);
