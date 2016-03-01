@@ -429,7 +429,6 @@ public class RenderTester {
             float x2 = x1 + (scalingZoom / 20);
 
             try {
-                System.out.println("Drawing " + firstNo + " and " + secondNo);
                 spriteBatch.draw(numbers[firstNo], x1, (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
                 spriteBatch.draw(numbers[secondNo], x2, (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
             } catch (NullPointerException e) {
@@ -444,8 +443,6 @@ public class RenderTester {
             number = 99;
             System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers; using this instead: " + number);
         }
-
-//        System.out.println("Keep this here, bug somewhere and I don't know where so this is the number it's trying to print just in case it does crash: " + number);
 
         if (number < 10) {
             spriteBatch.draw(numbers[number], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);

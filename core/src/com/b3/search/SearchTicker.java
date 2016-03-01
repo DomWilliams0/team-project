@@ -144,8 +144,6 @@ public class SearchTicker {
 	 */
 	public void tick() {
 
-		System.out.println(lastFrontier.size());
-
 		Float timeBetweenTicks;
 		if (isPaused())
 			timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MAX);

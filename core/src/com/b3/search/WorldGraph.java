@@ -323,12 +323,12 @@ public class WorldGraph implements Serializable {
 		shapeRenderer.end();
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
-//		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
 //		// render the path
 		if (showPaths && currentSearch != null) {// && currentSearch.isPathComplete()) {
-			colPath.add((float)0.025,(float)0.025,(float)-0.025,0);
+			colPath.add((float)-0.025,(float)-0.025,(float)0.025,0);
 			colPath.a = 1;
 
 			shapeRenderer.setColor(colPath);
@@ -338,19 +338,19 @@ public class WorldGraph implements Serializable {
 				Node pathNodeA = path.get(i);
 				Node pathNodeB = path.get(i + 1);
 
-//				float size = (1 - (colPath.r)) / 5;
-//				if (size < 0.025) size = (float) 0.025;
-//
-//				shapeRenderer.rectLine(
-//						pathNodeA.getPoint().x, pathNodeA.getPoint().y,
-//						pathNodeB.getPoint().x, pathNodeB.getPoint().y,
-//						size
-//				);
+				float size = (1 - (colPath.r)) / 7;
+				if (size < 0.025) size = (float) 0.025;
 
-				shapeRenderer.line(
+				shapeRenderer.rectLine(
 						pathNodeA.getPoint().x, pathNodeA.getPoint().y,
-						pathNodeB.getPoint().x, pathNodeB.getPoint().y
+						pathNodeB.getPoint().x, pathNodeB.getPoint().y,
+						size
 				);
+
+//				shapeRenderer.line(
+//						pathNodeA.getPoint().x, pathNodeA.getPoint().y,
+//						pathNodeB.getPoint().x, pathNodeB.getPoint().y
+//				);
 			}
 		}
 
@@ -646,8 +646,8 @@ public class WorldGraph implements Serializable {
 	}
 
 	public void setColFlicker() {
-		colPath.r = 0;
-		colPath.g = 0;
-		colPath.b = 255;
+		colPath.r = 255;
+		colPath.g = 255;
+		colPath.b = 0;
 	}
 }
