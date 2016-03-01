@@ -32,6 +32,7 @@ public class LearningMode implements Screen {
     private SideBarNodes sideBarNodes;
     private HelpBox helpBox;
     private KeyboardController keyboardController;
+    private MainGame game;
 
     /**
      * Constructs the world, sets up the camera, loads to worldmap and launches the world paused.
@@ -40,6 +41,8 @@ public class LearningMode implements Screen {
     public LearningMode(MainGame game) {
         // init database
         //Database.init();
+
+        this.game = game;
 
         // create world
         world = new World("core/assets/world/world_smaller_test.tmx", false, game.inputHandler);
@@ -92,6 +95,7 @@ public class LearningMode implements Screen {
         sideBarStage = new Stage(new ScreenViewport());
 
         sideBar = new SideBarIntensiveLearningMode(sideBarStage, world);
+        sideBar.setController(game);
         sideBarStage.addActor(sideBar);
 
         sideBarNodes = new SideBarNodes(sideBarStage, world);

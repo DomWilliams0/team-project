@@ -1,5 +1,7 @@
 package com.b3.gui;
 
+import com.b3.MainGame;
+import com.b3.MainMenuScreen;
 import com.b3.gui.components.*;
 import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
@@ -31,6 +33,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
     private ButtonComponent triggerBtn;
     private boolean isOpen;
     private float preferredWidth;
+    private MainGame controller;
 
     public SideBarIntensiveLearningMode(Stage stage, World world) {
         this(stage, world, 400);
@@ -237,6 +240,24 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                 .spaceTop(5);
         settingsTab.row();
 
+        // ====================
+        // === BACK TO MENU ===
+        // ====================
+
+        ButtonComponent backToMenuBtn = new ButtonComponent(skin, font, "Main menu");
+        backToMenuBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                controller.setScreen(new MainMenuScreen(controller));
+            }
+        });
+
+        settingsTab.add(backToMenuBtn.getComponent())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(25);
+        settingsTab.row();
+
         tabbedPane.addTab("Settings", settingsTab);
 
         // ======================
@@ -288,6 +309,10 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
 
     public void setWorld(World world) {
         this.world = world;
+    }
+
+    public void setController(MainGame controller) {
+        this.controller = controller;
     }
 
     /**
