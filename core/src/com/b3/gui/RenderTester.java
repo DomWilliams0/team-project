@@ -20,6 +20,7 @@ import com.sun.corba.se.impl.naming.cosnaming.NamingUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.copy;
 import static java.util.Collections.reverse;
 import static java.util.Collections.sort;
 
@@ -186,11 +187,39 @@ public class RenderTester {
         } else
             //DONE MULTI_PAGES if end node
             if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
+                //TODO Show heuristic
                 if (pageNo >= 3) pageNo = 0; //reset to first page if neccessary
 
                 if (pageNo == 2) {
+                    //calculate data needed
+                    float x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5); float y1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getY() + 0.5);
+                    float x2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getX() + 0.5); float y2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getY() + 0.5);
+                    float xCoord = (int) (x1 + x2) / 2; float yCoord = (int) (y1 + y2) / 2;
                     float cost = calculateEuclidian(worldGraph.getCurrentSearch().getStart(), worldGraph.getCurrentSearch().getEnd());
+
+                    spriteBatch.end();
+                    //draw lines
                     drawHeuristic(cost, currentNodeClickX, currentNodeClickY, scalingZoom);
+                    spriteBatch.begin();
+                    spriteBatch.setProjectionMatrix(worldCamera.combined);
+                    //draw actual g(x)
+                    drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
+
+                    //draw y cost
+                    xCoord = x1;
+                    yCoord = (y1 + y2) / 2;
+                    cost = Math.abs(y1 - y2);
+                    drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
+
+                    //draw x cost
+                    xCoord = (x1 + x2) / 2;
+                    yCoord = y2;
+                    cost = Math.abs(x1 - x2);
+                    drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
+
+                    spriteBatch.end();
+                    spriteBatch.begin();
+                    spriteBatch.setProjectionMatrix(worldCamera.combined);
                 } else {
                     spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                             (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
@@ -202,7 +231,6 @@ public class RenderTester {
                 //DONE MULTi-PAGES, needs cost breakdown though if recently expanded
                 if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
                     if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-                        //TODO Put some info around the screen somewhere (use cost function below somewhere)
                         if (pageNo >= 4) pageNo = 0; //reset to first page if neccessary
                         float gxFunction = worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded());
 
@@ -343,17 +371,10 @@ public class RenderTester {
 
     private void drawHeuristic(float gcost, int currentNodeClickX, int currentNodeClickY, float scalingZoom) {
 
-        Point p1 = worldGraph.getCurrentSearch().getStart().getPoint();
-        Point p2 = worldGraph.getCurrentSearch().getEnd().getPoint();
         float x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5);
         float y1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getY() + 0.5);
         float x2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getX() + 0.5);
         float y2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getY() + 0.5);
-
-        //draw text
-        float xCoord = (int) (x1 + x2) / 2;
-        float yCoord = (int) (y1 + y2) / 2;
-        drawStaticNumberOnScreen((int) gcost, xCoord, yCoord, scalingZoom);
 
         shapeRenderer.setProjectionMatrix(worldCamera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -365,7 +386,6 @@ public class RenderTester {
 
         drawDottedLine((float) 0.3, x1, y1, x1, y2);
         drawDottedLine((float) 0.3, x2, y2, x1, y2);
-
     }
 
     private void drawDottedLine(float dotDist, float x1, float y1, float x2, float y2) {
@@ -416,7 +436,6 @@ public class RenderTester {
 
         if (number < 10) {
             try {
-                System.out.println("Drawing " + number);
                 spriteBatch.draw(numbers[number], (float) (currentNodeClickX - scalingZoom / 2 + 0.5), (float) (currentNodeClickY - scalingZoom / 2 + 0.25), scalingZoom, scalingZoom);
             } catch (NullPointerException e) {
                 System.err.println("Error in drawStaticNumberOnScreen in " + number + ". E" + e);
