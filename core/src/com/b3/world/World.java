@@ -2,7 +2,10 @@ package com.b3.world;
 
 import com.b3.DebugRenderer;
 import com.b3.entity.Agent;
-import com.b3.entity.ai.*;
+import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
+import com.b3.entity.ai.BehaviourMultiPathFind;
+import com.b3.entity.ai.BehaviourPathFind;
+import com.b3.entity.ai.BehaviourPathFollow;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
@@ -34,9 +37,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
@@ -224,7 +228,7 @@ public class World implements Disposable {
 		FixtureDef boundaryDef = new FixtureDef();
 		PolygonShape shape = new PolygonShape();
 		boundaryDef.shape = shape;
-		boundaryDef.isSensor = true;
+//		boundaryDef.isSensor = true;
 		boundaryDef.filter.groupIndex = ENTITY_CULL_TAG;
 
 		// todo this side doesn't seem quite right...
@@ -240,33 +244,33 @@ public class World implements Disposable {
 		shape.setAsBox(thickness, offset + tileSize.y / 2f, new Vector2(tileSize.x + thickness / 2f + offset, tileSize.y / 2f), 0f); // right
 		buildingBody.createFixture(boundaryDef);
 
-		physicsWorld.setContactListener(new ContactListener() {
-			@Override
-			public void beginContact(Contact contact) {
-				// one must be a sensor
-				if (!contact.getFixtureA().isSensor() || contact.getFixtureB().isSensor())
-					return;
-
-				Fixture f = contact.getFixtureA().getFilterData().groupIndex == ENTITY_CULL_TAG ? contact.getFixtureB() : contact.getFixtureA();
-				Entity entity = (Entity) f.getBody().getUserData();
-				if (entity == null)
-					return;
-
-				deadEntities.add(entity);
-			}
-
-			@Override
-			public void endContact(Contact contact) {
-			}
-
-			@Override
-			public void preSolve(Contact contact, Manifold manifold) {
-			}
-
-			@Override
-			public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-			}
-		});
+//		physicsWorld.setContactListener(new ContactListener() {
+//			@Override
+//			public void beginContact(Contact contact) {
+//				// one must be a sensor
+//				if (!contact.getFixtureA().isSensor() || contact.getFixtureB().isSensor())
+//					return;
+//
+//				Fixture f = contact.getFixtureA().getFilterData().groupIndex == ENTITY_CULL_TAG ? contact.getFixtureB() : contact.getFixtureA();
+//				Entity entity = (Entity) f.getBody().getUserData();
+//				if (entity == null)
+//					return;
+//
+//				deadEntities.add(entity);
+//			}
+//
+//			@Override
+//			public void endContact(Contact contact) {
+//			}
+//
+//			@Override
+//			public void preSolve(Contact contact, Manifold manifold) {
+//			}
+//
+//			@Override
+//			public void postSolve(Contact contact, ContactImpulse contactImpulse) {
+//			}
+//		});
 	}
 
 	/**
