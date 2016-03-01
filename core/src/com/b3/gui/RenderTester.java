@@ -1,37 +1,30 @@
 package com.b3.gui;
 
-import com.b3.gui.components.ButtonComponent;
-import com.b3.gui.components.Component;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
-import com.b3.util.Config;
-import com.b3.util.ConfigKey;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.reverse;
+import static java.util.Collections.sort;
 
 public class RenderTester {
+
+    private ShapeRenderer shapeRenderer;
 
     private WorldCamera textCamera;
     private WorldGraph worldGraph;
@@ -66,28 +59,10 @@ public class RenderTester {
         this.worldCamera = world.getWorldCamera();
 
         spriteBatch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
 
         Texture tempTexture = new Texture("core/assets/world/popups/emptycanvas250x250.png");
         emptyCanvas = new Sprite(tempTexture);
-
-        Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
-        textCamera = new WorldCamera(50, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        textCamera.position.set(cameraPos.x, cameraPos.y, worldCamera.getActualZoom() + 250);
-        textCamera.near = 1f;
-        textCamera.far = 300f;
-        textCamera.lookAt(cameraPos.x, cameraPos.y, 10);
-        textCamera.update();
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/gui/default_bold.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 15;
-        parameter.characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!'()>?:";
-
-        fontButton = generator.generateFont(parameter);
-        parameter.size = 30;
-        fontAStar = generator.generateFont(parameter);
-
-        generator.dispose();
 
         pageNo = 0;
 
@@ -210,13 +185,18 @@ public class RenderTester {
         } else
             //DONE MULTI_PAGES if end node
             if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-                if (pageNo >= endNodeSprite.length) pageNo = 0; //reset to first page if neccessary
+                if (pageNo >= 3) pageNo = 0; //reset to first page if neccessary
 
-                drawHeuristic();
+                if (pageNo == 2) {
+                    float cost = calculateEuclidian(worldGraph.getCurrentSearch().getStart(), worldGraph.getCurrentSearch().getEnd());
+                    drawHeuristic(cost, currentNodeClickX, currentNodeClickY, scalingZoom);
+                } else {
+                    spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+                            (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+                }
 
-                spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-                        (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
                 popupShowing = true;
+
             } else
                 //DONE MULTi-PAGES, needs cost breakdown though if recently expanded
                 if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
@@ -241,7 +221,7 @@ public class RenderTester {
 
                         //draw current g(x) function onto the screen.
                         if (pageNo == 2 && world.getWorldGraph().getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR) {
-                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 17), scalingZoom);
+                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 11), scalingZoom);
                         }
                         if (pageNo == 3) {
                             spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
@@ -330,6 +310,17 @@ public class RenderTester {
         //----ALL RENDERS GO HERE---
 
         spriteBatch.end();
+        shapeRenderer.end();
+    }
+
+    private float calculateEuclidian(Node start, Node end) {
+        Point p1 = start.getPoint();
+        Point p2 = end.getPoint();
+
+        int x = p1.getX() - p2.getX();
+        int y = p1.getY() - p2.getY();
+
+        return (float) Math.sqrt(x * x + y * y);
     }
 
     private ArrayList<Integer> getCostsAllNodes(List<Node> path) {
@@ -349,8 +340,45 @@ public class RenderTester {
         return arrTempCosts;
     }
 
-    private void drawHeuristic() {
+    private void drawHeuristic(float gcost, int currentNodeClickX, int currentNodeClickY, float scalingZoom) {
 
+        Point p1 = worldGraph.getCurrentSearch().getStart().getPoint();
+        Point p2 = worldGraph.getCurrentSearch().getEnd().getPoint();
+        float x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5);
+        float y1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getY() + 0.5);
+        float x2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getX() + 0.5);
+        float y2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getY() + 0.5);
+
+        //draw text
+        float xCoord = (int) (x1 + x2) / 2;
+        float yCoord = (int) (y1 + y2) / 2;
+        drawStaticNumberOnScreen((int) gcost, xCoord, yCoord, scalingZoom);
+
+        shapeRenderer.setProjectionMatrix(worldCamera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.SKY);
+
+        shapeRenderer.rectLine(x1, y1, x2, y2, (float) 0.25);
+
+        shapeRenderer.end();
+
+        drawDottedLine((float) 0.3, x1, y1, x1, y2);
+        drawDottedLine((float) 0.3, x2, y2, x1, y2);
+
+    }
+
+    private void drawDottedLine(float dotDist, float x1, float y1, float x2, float y2) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setProjectionMatrix(worldCamera.combined);
+
+        Vector2 vec2 = new Vector2(x2, y2).sub(new Vector2(x1, y1));
+        float length = vec2.len();
+        for(float i = 0; i < length; i += dotDist) {
+            vec2.clamp(length - i, length - i);
+            shapeRenderer.circle(x1 + vec2.x, y1 + vec2.y, (float) 0.1, 10);
+        }
+
+        shapeRenderer.end();
     }
 
     private void drawEquationOnScreen(int total, int firstNo, int secondNo, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {

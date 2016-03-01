@@ -63,6 +63,7 @@ public class SearchParameters {
 		return createFrontier(null, null, null);
 
 	}
+
 	public Takeable<Node> createFrontier(Function<Node, Float> getGScore, Function2<Node, Node, Float> heuristic, Node end) {
 		switch (algorithm) {
 			case DEPTH_FIRST:
@@ -84,7 +85,6 @@ public class SearchParameters {
 	 * @return The heuristic function
 	 */
 	public Function2<Node, Node, Float> getHeuristic() {
-
 		return h;
 	}
 }
