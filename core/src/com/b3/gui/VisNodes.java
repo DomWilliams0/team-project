@@ -261,6 +261,8 @@ public class VisNodes extends Table {
 		t.add(n.toString());
 		t.row();
 
+		// TODO I THINK THIS IS THE CULPRIT CODE
+
 //        //create the wrapping table
 //		Table row = new Table(this.getSkin());
 //        //add the node text to the wrapping table
@@ -426,13 +428,13 @@ public class VisNodes extends Table {
 	 * @param rendermore Whether the data collections are being rendered
 	 */
 	private void setupTable(SearchAlgorithm alg, boolean rendermore) {
+		//clear the map of stored nodes with their wrapper tables
+		cellmap.clear();
 
 		//clear the tables
 		clear();
 		ft.clear();
 		vt.clear();
-        //clear the map of stored nodes with their wrapper tables
-		cellmap.clear();
 
 		//get what type the frontier is using
 		String frontierDesc = "";
