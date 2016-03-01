@@ -323,20 +323,18 @@ public class VisNodes extends Table {
     public boolean setCellColour(Node n, boolean singleHighlight) {
         //singleHighlight tells us if this is the only node to be highlighted,
         //so remove all other colours if this is true\
-			if (singleHighlight) colours.clear();
-			Color c = Color.YELLOW;
-		if (cellmap.get(n) != null)
+		if (singleHighlight) colours.clear();
+		Color c = Color.YELLOW;
+		if (cellmap.get(n) != null) {
 			if (cellmap.get(n).getParent().equals(vt)) c = WorldGraph.VISITED_COLOUR;
-		if (cellmap.get(n) != null)
 			if (cellmap.get(n).getParent().equals(ft)) c = WorldGraph.FRONTIER_COLOUR;
-		if (newFrontier != null)
-			if (newFrontier.contains(n)) c = WorldGraph.NEW_FRONTIER_COLOUR;
-		if (justExpanded != null)
-			if (justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
-			//store the given colour
-			colours.put(n, c);
-			//apply all node colours, since we may have deleted other colours by using this method.
-			return applyColourAll();
+		}
+		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.NEW_FRONTIER_COLOUR;
+		if (justExpanded!=null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
+		//store the given colour
+		colours.put(n, c);
+		//apply all node colours, since we may have deleted other colours by using this method.
+		return applyColourAll();
 		}
 
 
