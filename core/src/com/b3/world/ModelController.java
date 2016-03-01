@@ -1,6 +1,7 @@
 package com.b3.world;
 
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
@@ -15,10 +16,11 @@ public class ModelController {
 		this.flipped = flipped;
 		setPosition(0, 0, 0);
 		setRotation(0);
-		modelManager.requestModel(modelName, (instance) -> {
-			this.instance = instance;
-			updateTransform();
-		});
+//		modelManager.requestModel(modelName, (instance) -> {
+//			this.instance = instance;
+//			updateTransform();
+//		});
+		updateTransform();
 	}
 
 	public ModelController setPosition(float x, float y, float z) {
