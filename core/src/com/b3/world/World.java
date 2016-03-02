@@ -156,6 +156,10 @@ public class World implements Disposable {
 
 	private void processMapTileTypes(TiledMap map) {
 
+		FixtureDef objectDef = new FixtureDef();
+		objectDef.shape = new PolygonShape();
+
+
 		for (MapLayer layer : map.getLayers()) {
 			if (!layer.isVisible() || !(layer instanceof TiledMapTileLayer))
 				continue;
@@ -163,7 +167,7 @@ public class World implements Disposable {
 			TiledMapTileLayer tileLayer = (TiledMapTileLayer) layer;
 
 			// remove node even if unknown tile type is found
-			boolean removeAll = layer.getName().equals("objects");
+			boolean objectLayer = layer.getName().equals("objects");
 
 			// remove nodes on invalid tiles
 			// todo assign costs to edges
@@ -174,8 +178,17 @@ public class World implements Disposable {
 						continue;
 
 					TileType type = TileType.getFromCell(cell);
-					if (!removeAll && type == TileType.UNKNOWN)
+					if (!objectLayer && type == TileType.UNKNOWN)
 						continue;
+
+
+					// add collision box for objects
+					if (objectLayer) {
+						((PolygonShape) objectDef.shape).setAsBox(
+								0.5f, 0.5f, new Vector2(x + 0.5f, y + 0.5f), 0f
+						);
+						buildingBody.createFixture(objectDef);
+					}
 
 
 					Node node = worldGraph.getNode(new Point(x, y));
@@ -201,7 +214,7 @@ public class World implements Disposable {
 
 		}
 
-
+		objectDef.shape.dispose();
 	}
 
 	/**
