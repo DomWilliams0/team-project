@@ -168,21 +168,28 @@ public class SideBar extends Table implements Disposable {
                 .spaceBottom(10);
         settingsTab.row();
 
-        // Flocking enable/disable
-        CheckBoxComponent showFlockingCheckBox = new CheckBoxComponent(skin, font, "Roaming civilians");
-        showFlockingCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLOCKING_ENABLED));
-        showFlockingCheckBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Config.set(ConfigKey.FLOCKING_ENABLED, showFlockingCheckBox.getComponent().isChecked());
-            }
-        });
+	    // im removing this toggle for now, as it requires a complex design decision
+	    //
+	    // we should remove the FLOCKING_ENABLED config flag, and have it iterate all
+	    // non-searching-agents and set them to invisible. unfortunately, models are
+	    // (for some reason) rendered outside of RenderSystem so this is currently
+	    // difficult to do without mangling everything
 
-        settingsTab.add(showFlockingCheckBox.getComponent())
-                .align(Align.left)
-                .maxWidth(preferredWidth)
-                .spaceBottom(10);
-        settingsTab.row();
+	    // Flocking enable/disable
+//        CheckBoxComponent showFlockingCheckBox = new CheckBoxComponent(skin, font, "Roaming civilians");
+//        showFlockingCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLOCKING_ENABLED));
+//        showFlockingCheckBox.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                Config.set(ConfigKey.FLOCKING_ENABLED, showFlockingCheckBox.getComponent().isChecked());
+//            }
+//        });
+//
+//        settingsTab.add(showFlockingCheckBox.getComponent())
+//                .align(Align.left)
+//                .maxWidth(preferredWidth)
+//                .spaceBottom(10);
+//        settingsTab.row();
 
          // Model rendering toggle
         CheckBoxComponent modelRenderCheckBox = new CheckBoxComponent(skin, font, "Simple agents");
