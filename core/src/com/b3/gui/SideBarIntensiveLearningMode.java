@@ -109,6 +109,25 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                 .spaceBottom(10);
         settingsTab.row();
 
+        // Add Building button
+        ButtonComponent addBuildingMode = new ButtonComponent(skin, font, "Add Building Mode");
+        addBuildingMode.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!world.getWorldGraph().getCurrentSearch().isTickedOnce()) {
+                    Boolean currentBoolean = Config.getBoolean(ConfigKey.ADD_BUILDING_MODE);
+                    Config.set(ConfigKey.ADD_BUILDING_MODE, !currentBoolean);
+                    System.out.println("Add building mode is " + !currentBoolean);
+                } else
+                    System.err.println("Search has begun cannot add");
+            }
+        });
+
+        settingsTab.add(addBuildingMode.getComponent())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(20);
+        settingsTab.row();
 
         // ======================
         // === LABELS AND STU ===
@@ -202,6 +221,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                 Config.set(ConfigKey.GAME_SPEED, gameSpeedSlider.getValue());
             }
         });
+
 
         settingsTab.add(gameSpeedSlider.getSlider())
                 .align(Align.center)

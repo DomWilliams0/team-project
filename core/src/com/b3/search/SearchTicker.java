@@ -40,6 +40,7 @@ public class SearchTicker {
 	private Function2<Node, Node, Float> edgeCostFunction;
 
 	private SearchSnapshotTracker snapshotTracker;
+	private boolean tickedOnce;
 
 	public SearchTicker(WorldGraph worldGraph) {
 		/*try {
@@ -50,6 +51,8 @@ public class SearchTicker {
 		}*/
 
 		this.worldGraph = worldGraph;
+
+		tickedOnce = false;
 
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
@@ -63,6 +66,8 @@ public class SearchTicker {
 	}
 
 	public void reset(SearchAlgorithm algorithm, Node start, Node end) {
+
+		tickedOnce = false;
 
 		this.algorithm = algorithm;
 
@@ -98,6 +103,9 @@ public class SearchTicker {
 
 
 	public void reset(boolean fromResetBtn) {
+
+		tickedOnce = false;
+
 		setAllCompleted(fromResetBtn);
 
 		/*if (start != null)
@@ -114,6 +122,8 @@ public class SearchTicker {
 	}
 
 	private void setAllCompleted(boolean completed) {
+
+		tickedOnce = false;
 
 		pathComplete = completed;
 
@@ -145,10 +155,12 @@ public class SearchTicker {
 	public void tick() {
 
 		Float timeBetweenTicks;
-		if (isPaused())
+		if (isPaused()) {
 			timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MAX);
-		else
+		} else {
+			tickedOnce = true;
 			timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
+		}
 
 		timer += Utils.TRUE_DELTA_TIME;
 
@@ -177,6 +189,8 @@ public class SearchTicker {
 	 * @param override Whether to force a tick to occur regardless of time or pause status
      */
 	public void tick(boolean override) {
+		tickedOnce = true;
+
 		worldGraph.setColFlicker();
 		if(override)
 			//override current status
@@ -191,6 +205,9 @@ public class SearchTicker {
 	 * This being called will progress the search one step regardless of status of timer or pause.
 	 */
 	private void tickFinal() {
+
+		tickedOnce = true;
+
 		// already complete
 		if (pathComplete)
 			return;
@@ -366,5 +383,9 @@ public class SearchTicker {
 	public float getG (Node node) {
 		float g = costSoFarFunction.apply(node);
 		return g;
+	}
+
+	public boolean isTickedOnce () {
+		return tickedOnce;
 	}
 }

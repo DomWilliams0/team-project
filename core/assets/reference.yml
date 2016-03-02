@@ -11,10 +11,12 @@ entity-diameter: 0.3
 entity-spawn-count: 0
 physics-rendering: false
 
+steps-per-tick: 1
 show-grid: true
 show-paths: true
 flatten-buildings: false
 flocking-enabled: false
+add-building-mode: false
 game-speed: 1
 
 time-between-ticks-min: 0.05

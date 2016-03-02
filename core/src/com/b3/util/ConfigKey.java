@@ -22,6 +22,7 @@ public enum ConfigKey {
 	SHOW_PATHS("show-paths"),
 	FLATTEN_BUILDINGS("flatten-buildings"),
 	FLOCKING_ENABLED("flocking-enabled"),
+	ADD_BUILDING_MODE("add-building-mode"),
 	GAME_SPEED("game-speed"),
 
 	TIME_BETWEEN_TICKS("time-between-ticks"),

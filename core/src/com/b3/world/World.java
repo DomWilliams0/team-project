@@ -96,6 +96,8 @@ public class World implements Disposable {
 	private int yNextDestination;
 	private int xNextDestination;
 
+	private Point currentMousePos;
+
 	public World() {
 	}
 
@@ -464,6 +466,15 @@ public class World implements Disposable {
 	 * @return The newly created building
 	 */
 	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
+
+		for (int i = (int) pos.x; i < pos.x + dimensions.x; i++) {
+			for (int j = (int) pos.y; j < pos.y + dimensions.y; j++) {
+				if (!worldGraph.hasNode(new Point(i, j))) {
+					return null;
+				}
+			}
+		}
+
 		Gdx.app.debug("World", String.format("Added a building at (%2f, %2f) of dimensions (%2f, %2f, %2f)", pos.x, pos.y, dimensions.x, dimensions.y,
 				dimensions.z));
 
@@ -572,6 +583,14 @@ public class World implements Disposable {
 				y = roamersList.get(i).getPhysicsComponent().getPosition().y;
 				sr.circle(x,y, (float) 0.25);
 			}
+
+		//render building overlay if needed
+		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)) {
+			x = currentMousePos.getX();
+			y = currentMousePos.getY();
+			sr.box(x, y, 0, (float)4, (float)4, (float)1);
+		}
+
 		sr.end();
 
 		// tick entities and physics
@@ -691,5 +710,9 @@ public class World implements Disposable {
 
 	public RenderTester getrt() {
 		return rt;
+	}
+
+	public void setCurrentMousePos(int screenX, int screenY) {
+		currentMousePos = new Point(screenX, screenY);
 	}
 }

@@ -180,9 +180,10 @@ public class RenderTester {
         spriteBatch.setProjectionMatrix(worldCamera.combined);
         spriteBatch.begin();
 
-        if (stickyCurrentNode) {
+        if (stickyCurrentNode && world.getWorldGraph().getCurrentSearch().isPaused()) {
             currentNodeClickX = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getX();
             currentNodeClickY = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getY();
+            world.setCurrentClick(currentNodeClickX, currentNodeClickY);
         }
 
         //----ALL RENDERS GO HERE---

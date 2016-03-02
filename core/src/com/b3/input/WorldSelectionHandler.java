@@ -5,11 +5,15 @@ import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
+import com.b3.world.BuildingType;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
@@ -43,6 +47,12 @@ public class WorldSelectionHandler extends InputAdapter {
 		WorldGraph worldGraph = world.getWorldGraph();
 		Node node = worldGraph.getNode(new Point((int) tempRayCast.x, (int) tempRayCast.y));
 
+		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)) {
+			System.out.println("Add building @ "+(int)tempRayCast.x+"|"+(int)tempRayCast.y);
+			world.addBuilding(new Vector2((int)tempRayCast.x, (int)tempRayCast.y), new Vector3(4, 4, 10), BuildingType.HOUSE);
+			Config.set(ConfigKey.ADD_BUILDING_MODE, !(Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)));
+		}
+
 		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
 			//old node so change page number
 			if (world.getrt().getPopupShowing())
@@ -69,7 +79,6 @@ public class WorldSelectionHandler extends InputAdapter {
 			world.setNextDestination(node.getPoint().getX(), node.getPoint().getY());
 		}
 
-
 		// no search
 		if (!worldGraph.hasSearchInProgress())
 			return false;
@@ -85,5 +94,17 @@ public class WorldSelectionHandler extends InputAdapter {
 		System.out.println("Added a search goal at " + node.getPoint());
 
 		return true;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		// selecting a tile
+		WorldCamera worldCamera = world.getWorldCamera();
+		Ray ray = worldCamera.getPickRay(screenX, screenY);
+		ray.getEndPoint(tempRayCast, worldCamera.position.z);
+
+		world.setCurrentMousePos((int)tempRayCast.x, (int) tempRayCast.y);
+
+		return super.mouseMoved(screenX, screenY);
 	}
 }

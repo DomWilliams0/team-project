@@ -234,17 +234,19 @@ public class WorldGraph implements Serializable {
 		int upToX = Math.round(dPos.x);
 		int upToY = Math.round(dPos.y);
 
-		Point entryPoint = building.getEntryPoint() == null ? null : Utils.vector2ToPoint(building.getEntryPoint());
+//		Point entryPoint = building.getEntryPoint() == null ? null : Utils.vector2ToPoint(building.getEntryPoint());
 
 		for (int x = baseX; x < baseX + upToX; x++) {
 			for (int y = baseY; y < baseY + upToY; y++) {
-				Point point = new Point(x, y);
-				// Entry point check.
-				if (point.equals(entryPoint))
-					continue;
-				Node node = nodes.get(point);
+//				removeNode(new Node(new Point(x,y)));
+//				Point point = new Point(x, y);
+//				 Entry point check.
+//				if (point.equals(entryPoint))
+//					continue;
+				Node node = nodes.get(new Point(x,y));
 				if (node != null)
-					node.clearNeighbours();
+					removeNode(node);
+					//node.clearNeighbours();
 			}
 		}
 	}

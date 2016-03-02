@@ -16,6 +16,7 @@ show-grid: true
 show-paths: true
 flatten-buildings: false
 flocking-enabled: false
+add-building-mode: false
 game-speed: 1
 
 time-between-ticks-min: 0.05
