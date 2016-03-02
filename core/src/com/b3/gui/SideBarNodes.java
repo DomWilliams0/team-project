@@ -288,15 +288,15 @@ public class SideBarNodes extends Table implements Disposable {
 
             }
         });
-        next = new ButtonComponent(skin, font, "Next step");
-        next.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                ticker.tick(true);
-            }
-        });
-        next.getComponent().setVisible(false);
+//        next = new ButtonComponent(skin, font, "Next step");
+//        next.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+//                ticker.tick(true);
+//            }
+//        });
+//        next.getComponent().setVisible(false);
 
         add(tabbedPane).maxWidth(preferredWidth);
         background(skin.getDrawable("window_02"));

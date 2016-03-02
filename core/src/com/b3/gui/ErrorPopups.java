@@ -1,5 +1,6 @@
-package com.b3.world;
+package com.b3.gui;
 
+import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;

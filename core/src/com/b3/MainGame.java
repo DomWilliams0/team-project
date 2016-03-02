@@ -27,7 +27,7 @@ public class MainGame extends Game {
 		DefaultShader.defaultCullFace = 0;
 
 		inputHandler = InputHandler.getInstance();
-		setScreen(new CompareMode(this));
+		setScreen(new MainMenuScreen(this));
 	}
 
 	@Override

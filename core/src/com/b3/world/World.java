@@ -9,6 +9,7 @@ import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
+import com.b3.gui.ErrorPopups;
 import com.b3.gui.RenderTester;
 import com.b3.input.InputHandler;
 import com.b3.search.Node;

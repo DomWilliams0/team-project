@@ -301,12 +301,14 @@ public class VisNodes extends Table {
 			//store the wrapping table in the hashmap, keyed by its node
 			cellmap.put(n, row);
 			//apply the highlight colour of the node, if applicable.
-			applyColour(n);
+			applyColour(n, new Color(0.56f, 0.69f, 0.83f, 1));
+//			applyBackgroundColour();
 		} else {
 			t.add(n.toString());
 			t.row();
 		}
 	}
+
 
 	/**
 	 * Set a background colour for a cell in the scrollpanes based on the node.
@@ -364,7 +366,7 @@ public class VisNodes extends Table {
 		for(Node n : cellmap.keySet()) {
             //apply the colour and update all
             //ordered this way to avoid short-circuit evaluation; we must apply all node colours regardless.
-			all = applyColour(n) && all;
+			all = applyColour(n, new Color(0.56f, 0.69f, 0.83f, 1)) && all;
 		}
 		return all;
 	}
@@ -374,12 +376,13 @@ public class VisNodes extends Table {
 	 *
 	 * Adapted from code at http://stackoverflow.com/questions/24250791/make-scene2d-ui-table-with-alternate-row-colours
 	 * @param n The node whose colour to apply
+	 * @param backgroundColor
 	 * @return Whether the node was successfully highlighted
 	 */
-	private boolean applyColour(Node n) {
+	private boolean applyColour(Node n, Color backgroundColor) {
         //get the desired colour, or default to white
 		Color c = colours.get(n);
-		if (c == null) c = Color.WHITE;
+		if (c == null) c = backgroundColor;
 
         //setup a pixmap with the desired colour
 		Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
