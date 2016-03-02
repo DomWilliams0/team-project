@@ -2,6 +2,7 @@ package com.b3.entity;
 
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourNop;
+import com.b3.entity.ai.BehaviourType;
 import com.b3.entity.component.AIComponent;
 import com.b3.entity.component.RenderComponent;
 import com.b3.entity.component.PhysicsComponent;
@@ -37,7 +38,7 @@ public class Agent extends Entity {
 		float radius = diameter / 2f;
 
 		// render
-		add(new RenderComponent(new ModelController("agent", world.getModelManager(), true), Color.BLUE));
+		add(new RenderComponent(new ModelController("agent", world.getModelManager(), true)));
 
 		// physics
 		BodyDef bodyDef = new BodyDef();
@@ -64,6 +65,7 @@ public class Agent extends Entity {
 
 	public void setBehaviour(Behaviour behaviour) {
 		ai.behaviour = behaviour;
+		getComponent(RenderComponent.class).dotColour = (behaviour.getType() == BehaviourType.FOLLOW_PATH ? Color.ORANGE : Color.WHITE);
 	}
 
 	public World getWorld() {

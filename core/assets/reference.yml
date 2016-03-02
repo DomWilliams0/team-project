@@ -15,7 +15,7 @@ steps-per-tick: 1
 show-grid: true
 show-paths: true
 flatten-buildings: false
-render-models: true
+render-models: false
 flocking-enabled: false
 add-building-mode: false
 game-speed: 1

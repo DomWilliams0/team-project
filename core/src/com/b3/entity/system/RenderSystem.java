@@ -53,18 +53,22 @@ public class RenderSystem extends IteratingSystem {
 	}
 
 	public void processEntity(Entity entity, float deltaTime) {
-		RenderComponent model = models.get(entity);
+		RenderComponent render = models.get(entity);
+		if (!render.visible)
+			return;
+
 		PhysicsComponent phys = physics.get(entity);
 		Vector2 pos = phys.getPosition();
 		float degrees = angle(phys.lastPosition, pos);
 		phys.lastPosition.set(pos);
 
 		if (modelRendering)
-			model.controller.setPosition(pos.x, pos.y, 0f).setRotation(degrees);
+			render.controller.setPosition(pos.x, pos.y, 0f).setRotation(degrees);
 		else {
 			shapeRenderer.identity();
 			shapeRenderer.translate(pos.x, pos.y, 0f);
 			shapeRenderer.rotate(0, 0, 1, degrees + 45f);
+			shapeRenderer.setColor(render.dotColour);
 			shapeRenderer.circle(0, 0, dotRadius, CIRCLE_SEGMENTS);
 		}
 

@@ -10,11 +10,13 @@ import com.badlogic.gdx.graphics.Color;
 public class RenderComponent implements Component {
 
 	public final ModelController controller;
-	public final Color dotColour;
+	public Color dotColour;
+	public boolean visible;
 
-	public RenderComponent(ModelController controller, Color dotColour) {
+	public RenderComponent(ModelController controller) {
 		this.controller = controller;
-		this.dotColour = dotColour;
+		this.dotColour = Color.WHITE;
+		this.visible = true;
 	}
 
 }
