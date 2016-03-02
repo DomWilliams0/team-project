@@ -1,5 +1,6 @@
 package com.b3.search;
 
+import com.b3.gui.ErrorPopups;
 import com.b3.gui.PseudocodeVisualiser;
 import com.b3.search.util.Function2;
 import com.b3.search.util.SearchAlgorithm;
@@ -53,13 +54,6 @@ public class SearchTicker {
 	private boolean inspectSearch;
 
 	public SearchTicker(WorldGraph worldGraph) {
-		/*try {
-			snapshotTracker = new SearchSnapshotTracker(this);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}*/
-
 		this.worldGraph = worldGraph;
 		inspectSearch = false;
 		tickedOnce = false;

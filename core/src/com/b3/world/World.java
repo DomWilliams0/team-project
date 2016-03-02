@@ -329,8 +329,8 @@ public class World implements Disposable {
 
 		//IF IS COMPAREMODE (compareMode = true) DO ALL THREE BEHAVIOURS
 		Behaviour behaviour = mode == Mode.TRY_YOURSELF ?
-				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.DEPTH_FIRST, worldGraph) :
-				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
+				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.DEPTH_FIRST, worldGraph, worldCamera) :
+				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph, worldCamera);
 		agent.setBehaviour(behaviour);
 
 		if (mode != Mode.TRY_YOURSELF) {
@@ -448,7 +448,7 @@ public class World implements Disposable {
 			throw new IllegalArgumentException("List of goals given must not be empty");
 
 		Agent agent = spawnAgent(tilePos);
-		BehaviourMultiPathFind behaviour = new BehaviourMultiPathFind(agent, tilePos, endTiles[0], algorithm, worldGraph);
+		BehaviourMultiPathFind behaviour = new BehaviourMultiPathFind(agent, tilePos, endTiles[0], algorithm, worldGraph, worldCamera);
 
 		for (int i = 1, endTilesLength = endTiles.length; i < endTilesLength; i++)
 			behaviour.addNextGoal(endTiles[i]);
@@ -470,7 +470,7 @@ public class World implements Disposable {
 	 */
 	private Agent spawnAgentWithPathFinding(Vector2 tilePos, Vector2 endNode, SearchAlgorithm algorithm, boolean visualise) {
 		Agent agent = spawnAgent(tilePos);
-		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, worldGraph);
+		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, worldGraph, worldCamera);
 		agent.setBehaviour(behaviour);
 		if (visualise)
 			worldGraph.setCurrentSearch(agent, behaviour.getTicker());
@@ -622,7 +622,6 @@ public class World implements Disposable {
 			shapeRenderer.box(x, y, 0, (float) 4, (float) 4, (float) 1);
 		}
 
-
 		shapeRenderer.end();
 
 		// tick entities and physics
@@ -642,6 +641,8 @@ public class World implements Disposable {
 
 		//error message render's only if errorSprite.showPopup() is called.
 		errorSprite.render();
+		BehaviourMultiContinuousPathFind b = (BehaviourMultiContinuousPathFind) worldGraph.getCurrentSearchAgent().getBehaviour();
+		b.getErrorPopups().render();
 
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))

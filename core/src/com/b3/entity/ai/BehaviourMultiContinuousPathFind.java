@@ -1,12 +1,15 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
+import com.b3.gui.ErrorPopups;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Utils;
+import com.b3.world.World;
+import com.b3.world.WorldCamera;
 import com.badlogic.gdx.math.Vector2;
 
 public class BehaviourMultiContinuousPathFind extends Behaviour implements BehaviourWithPathFind {
@@ -14,12 +17,13 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	private BehaviourPathFind pathFind;
 	private WorldGraph graph;
 	private SearchAlgorithm algorithm;
+	private ErrorPopups errorPopups;
 
-	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph) {
+	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph, WorldCamera worldCamera) {
 		super(agent, null);
 		graph = worldGraph;
 		algorithm = searchAlgorithm;
-		pathFind = new BehaviourPathFind(agent, agent.getPhysicsComponent().getPosition(), generateRandomTile(), searchAlgorithm, worldGraph);
+		pathFind = new BehaviourPathFind(agent, agent.getPhysicsComponent().getPosition(), generateRandomTile(), searchAlgorithm, worldGraph, worldCamera);
 	}
 
 	@Override
@@ -41,6 +45,10 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 
 			graph.setNextDestination(-5,-5);
 		}
+	}
+
+	public ErrorPopups getErrorPopup () {
+		return pathFind.getErrorPopups();
 	}
 
 	private Vector2 generateRandomTile() {
@@ -78,5 +86,9 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 
 	public SearchTicker getTicker() {
 		return pathFind.getTicker();
+	}
+
+	public ErrorPopups getErrorPopups() {
+		return pathFind.getErrorPopups();
 	}
 }

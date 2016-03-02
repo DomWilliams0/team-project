@@ -1,11 +1,15 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
+import com.b3.gui.ErrorPopups;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
+import com.b3.world.WorldCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;
@@ -17,16 +21,22 @@ import java.util.stream.Collectors;
  */
 public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFind {
 
+	private ErrorPopups errorPopups;
+
 	private Node startNode;
 	private Node endNode;
 	private SearchAlgorithm algorithm;
 	private SearchTicker ticker;
 	protected boolean wasArrivedLastFrame, hasArrivedThisFrame;
 
-	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph) {
+	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph, WorldCamera worldCamera) {
 		super(agent, null);
 		ticker = new SearchTicker(worldGraph);
 		wasArrivedLastFrame = false;
+
+		Texture tempTexture = new Texture("core/assets/world/popups/errorSearch.png");
+		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		errorPopups = new ErrorPopups(worldCamera, new Sprite(tempTexture));
 
 		startNode = getNodeFromTile(worldGraph, startTile);
 		endNode = getNodeFromTile(worldGraph, endTile);
@@ -67,6 +77,8 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 				steering.tick(steeringOutput);
 			} else {
 				if (getPath().size() == 0) {
+					//Path not completed properly, so show error and start again
+					errorPopups.showPopup(300);
 					ticker.reset(algorithm, startNode, endNode);
 				} else {
 					if (!(getPath().get(getPath().size() - 1).x == endNode.getPoint().x && getPath().get(getPath().size() - 1).y == endNode.getPoint().y))
@@ -78,6 +90,10 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 
 		wasArrivedLastFrame = hasArrivedThisFrame;
 		hasArrivedThisFrame = hasArrived();
+	}
+
+	public ErrorPopups getErrorPopups() {
+		return errorPopups;
 	}
 
 	private List<Vector2> getPath () {

@@ -2,6 +2,7 @@ package com.b3.entity;
 
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourNop;
+import com.b3.entity.ai.BehaviourPathFind;
 import com.b3.entity.ai.BehaviourType;
 import com.b3.entity.component.AIComponent;
 import com.b3.entity.component.RenderComponent;
