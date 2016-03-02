@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * Created by Nishanth on 02/03/2016.
  */
-public class ErrorPopups{
+public class ErrorPopups {
 
     private final SpriteBatch spriteBatch;
     private final OrthographicCamera camera;
@@ -38,10 +38,25 @@ public class ErrorPopups{
             //decrement time left allowed on screen
             noOfTicksDisplay--;
             spriteBatch.begin();
+
             int width = Gdx.graphics.getWidth();
             int height = Gdx.graphics.getHeight();
-            float imgWidth = sprite.getWidth();
-            float imgHeight = sprite.getHeight();
+
+            //zoom animation
+            float imgWidth;
+            float imgHeight;
+            if (noOfTicksDisplay < 100) {
+                imgHeight = sprite.getHeight() / (100-noOfTicksDisplay);
+                if (noOfTicksDisplay < 50) {
+                    imgWidth = sprite.getWidth() / (50-noOfTicksDisplay);
+                } else {
+                    imgWidth = sprite.getWidth();
+                }
+            } else {
+                imgWidth = sprite.getWidth();
+                imgHeight = sprite.getHeight();
+            }
+
             spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
             spriteBatch.draw(sprite, width / 2 - (imgWidth/2), height/2 - (imgHeight/2), imgWidth, imgHeight);
             spriteBatch.end();

@@ -805,8 +805,6 @@ public class World implements Disposable {
 					}
 					if (toBeDestroyed != null)
 						buildingBody.destroyFixture(toBeDestroyed);
-//					else
-//						System.out.println("NULL NOOOOO");
 				}
 
 				worldGraph.removeBuilding(positionDeletion);

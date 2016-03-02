@@ -122,7 +122,6 @@ public class SearchTicker {
 		renderProgress = true;
 	}
 
-
 	public void reset(boolean fromResetBtn) {
 
 		tickedOnce = false;

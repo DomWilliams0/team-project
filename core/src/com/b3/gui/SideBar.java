@@ -44,6 +44,8 @@ public class SideBar extends Table implements Disposable {
     private boolean isOpen;
     private float preferredWidth;
 
+    private ButtonComponent playPause;
+
     public SideBar(Stage stage, World world) {
         this(stage, world, 230);
     }
@@ -369,7 +371,7 @@ public class SideBar extends Table implements Disposable {
 
         //Play and Pause button
         //String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
-        ButtonComponent playPause = new ButtonComponent(skin, font, "Pause");
+        playPause = new ButtonComponent(skin, font, "Pause");
         playPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -536,6 +538,10 @@ public class SideBar extends Table implements Disposable {
 
     public void setWorld(World world) {
         this.world = world;
+    }
+
+    public void updatePlayPauseButton() {
+        playPause.setText("Play");
     }
 
     /**
