@@ -74,6 +74,9 @@ public class RenderTester {
 
     }
 
+    /**
+     * Load all of the textures that will be used in render tester - faster to load them now rather than when user clicks on it.
+     */
     private void loadTextures() {
         //Load current node sprites (2 pages + 1 (dfs, bfs or A*)) + costs A*
         currentNodeSprite = new Sprite[6];
@@ -171,6 +174,13 @@ public class RenderTester {
 
     }
 
+    /**
+     * Using the current click of the user's mouse, this will draw the respective pop-up on the screen.
+     * Will change the page if user clicks on the same node twice
+     * Will reset the page counter if the user clicks on a different node.
+     * @param currentNodeClickX the x position (on the nodes graph / worldGraph) that the user last clicked one
+     * @param currentNodeClickY the y position (on the nodes graph / worldGraph) that the user last clicked one
+     */
     public void render(int currentNodeClickX, int currentNodeClickY) {
         counterAnimationFade++;
         popupShowing = false;
@@ -363,6 +373,13 @@ public class RenderTester {
         shapeRenderer.end();
     }
 
+    /**
+     * Calculated the Euclidian distance between first node and second node.
+     * IE SQRT((x2-x1)^2 + (y2-y1)^2)
+     * @param start first node
+     * @param end second node
+     * @return
+     */
     private float calculateEuclidian(Node start, Node end) {
         Point p1 = start.getPoint();
         Point p2 = end.getPoint();
@@ -373,6 +390,11 @@ public class RenderTester {
         return (float) Math.sqrt(x * x + y * y);
     }
 
+    /**
+     * Given a search path (a list of nodes), it will find the costs between each and every pair of adjacent nodes in the list.
+     * @param path the path to generate the cost list for
+     * @return ArrayList of Integer containing a list of costs corrosponding to the edge costs between the path given, in the correct (IE not reversed) order
+     */
     private ArrayList<Integer> getCostsAllNodes(List<Node> path) {
         ArrayList<Integer> arrTempCosts = new ArrayList<Integer>();
         if (path.isEmpty()) return arrTempCosts;
@@ -390,6 +412,13 @@ public class RenderTester {
         return arrTempCosts;
     }
 
+    /**
+     * Draws the heuristic, including how it was worked out. IE a division triangle with cost numbers
+     * @param gcost the actual cost of the heuristic, rounded to the nearest integer.
+     * @param currentNodeClickX the x position (on the nodes graph / worldGraph) that the user last clicked one
+     * @param currentNodeClickY the y position (on the nodes graph / worldGraph) that the user last clicked one
+     * @param scalingZoom
+     */
     private void drawHeuristic(float gcost, int currentNodeClickX, int currentNodeClickY, float scalingZoom) {
 
         float x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5);
