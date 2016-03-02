@@ -54,6 +54,7 @@ public class World implements Disposable {
 
 	private Vector2 tileSize, pixelSize;
 
+	private ShapeRenderer shapeRenderer;
 	private DebugRenderer debugRenderer;
 	private TiledMapRenderer renderer;
 	private Environment environment;
@@ -126,6 +127,7 @@ public class World implements Disposable {
 		buildingBatch = new ModelBatch();
 		buildings = new ArrayList<>();
 		buildingCache = new BuildingModelCache(this);
+		shapeRenderer = new ShapeRenderer();
 
 		// todo shadows
 		environment = new Environment();
@@ -575,26 +577,25 @@ public class World implements Disposable {
 				worldGraph.render(worldCamera, 1, zoomScalar);
 		}
 
-		ShapeRenderer sr = new ShapeRenderer();
-		sr.setProjectionMatrix(worldCamera.combined);
-		sr.begin(ShapeRenderer.ShapeType.Filled);
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+		shapeRenderer.setProjectionMatrix(worldCamera.combined);
 
 		if (animationNextDestination != 0) {
-			sr.setColor(Color.BLUE);
+			shapeRenderer.setColor(Color.BLUE);
 			animationNextDestination = (float) (animationNextDestination - 0.2);
-			sr.ellipse((float) (xNextDestination - (animationNextDestination/2) + 0.5), (float) (yNextDestination - (animationNextDestination/2) + 0.5), animationNextDestination, animationNextDestination);
+			shapeRenderer.ellipse((float) (xNextDestination - (animationNextDestination/2) + 0.5), (float) (yNextDestination - (animationNextDestination/2) + 0.5), animationNextDestination, animationNextDestination);
 		}
 
-		sr.setColor(Color.WHITE);
+		shapeRenderer.setColor(Color.WHITE);
 		float x = agent.getPhysicsComponent().getPosition().x;
 		float y = agent.getPhysicsComponent().getPosition().y;
-		sr.circle(x,y, (float) 0.5);
+		shapeRenderer.circle(x,y, (float) 0.5);
 
 		if (Config.getBoolean(ConfigKey.FLOCKING_ENABLED))
 			for (int i = 0; i < roamersList.size(); i++) {
 				x = roamersList.get(i).getPhysicsComponent().getPosition().x;
 				y = roamersList.get(i).getPhysicsComponent().getPosition().y;
-				sr.circle(x,y, (float) 0.25);
+				shapeRenderer.circle(x,y, (float) 0.25);
 			}
 
 		//render building overlay if needed
@@ -603,14 +604,14 @@ public class World implements Disposable {
 			y = currentMousePos.getY();
 
 			if (isValidBuildingPos(x, y))
-				sr.setColor(Color.LIGHT_GRAY);
+				shapeRenderer.setColor(Color.LIGHT_GRAY);
 			else
-				sr.setColor(Color.RED);
+				shapeRenderer.setColor(Color.RED);
 
-			sr.box(x, y, 0, (float)4, (float)4, (float)1);
+			shapeRenderer.box(x, y, 0, (float)4, (float)4, (float)1);
 		}
 
-		sr.end();
+		shapeRenderer.end();
 
 		// tick entities and physics
 		engine.update(Utils.DELTA_TIME);
