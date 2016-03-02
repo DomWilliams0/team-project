@@ -594,6 +594,12 @@ public class World implements Disposable {
 		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)) {
 			x = currentMousePos.getX();
 			y = currentMousePos.getY();
+
+			if (isValidBuildingPos(x, y))
+				sr.setColor(Color.LIGHT_GRAY);
+			else
+				sr.setColor(Color.RED);
+
 			sr.box(x, y, 0, (float)4, (float)4, (float)1);
 		}
 
@@ -613,11 +619,23 @@ public class World implements Disposable {
 
 		if (!compareMode) rt.render(currentNodeClickX, currentNodeClickY);
 
+		//error message render's only if errorSprite.showPopup() is called.
 		errorSprite.render();
 
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
 			debugRenderer.render(worldCamera);
+	}
+
+	private boolean isValidBuildingPos(float x, float y) {
+		for (int i = (int) x; i < x + 4; i++) {
+			for (int j = (int) y; j < y + 4; j++) {
+				if (!worldGraph.hasNode(new Point(i, j))) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 
