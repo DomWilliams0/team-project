@@ -2,9 +2,11 @@ package com.b3.gui;
 
 import com.b3.Mode;
 import com.b3.gui.components.ButtonComponent;
+import com.b3.gui.components.MessageBoxComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
+import com.b3.search.util.SearchAlgorithm;
 import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -41,7 +43,7 @@ public class SideBarNodes extends Table implements Disposable {
      * @param stage The stage on which to act and draw.
      */
     public SideBarNodes(Stage stage, World world) {
-        this(stage, world, 370);
+        this(stage, world, 420);
     }
 
     /**
@@ -61,7 +63,6 @@ public class SideBarNodes extends Table implements Disposable {
         //set the size to be full-height and preferred width.
         setSize(preferredWidth, Gdx.graphics.getHeight());
 
-        top();
         initComponents();
     }
 
@@ -98,17 +99,149 @@ public class SideBarNodes extends Table implements Disposable {
         //setup the skin
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
         Skin skin = new Skin(atlas);
-//       skin.addRegions(new TextureAtlas(Gdx.files.internal("core/assets/gui/uiscrollskin.atlas")));
         BitmapFont font = new BitmapFont(Gdx.files.internal("core/assets/gui/default.fnt"),
                 Gdx.files.internal("core/assets/gui/default.png"), false);
         skin.add("default", font, BitmapFont.class);
         Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
         skin.add("default", style);
 
+        // ===================
+        // === TABBED PANE ===
+        // ===================
+
+        TabbedPane.TabbedPaneStyle tabbedPaneStyle = new TabbedPane.TabbedPaneStyle();
+        skin.add("default", font, BitmapFont.class);
+        tabbedPaneStyle.font = skin.getFont("default");
+        tabbedPaneStyle.bodyBackground = skin.getDrawable("knob_06");
+        tabbedPaneStyle.titleButtonSelected = skin.getDrawable("button_02");
+        tabbedPaneStyle.titleButtonUnselected = skin.getDrawable("button_01");
+        skin.add("default", tabbedPaneStyle);
+        TabbedPane tabbedPane = new TabbedPane(skin);
+
+        // ==================
+        // === NODES PANE ===
+        // ==================
+
+        Table nodesTab = new Table();
+        nodesTab.setFillParent(true);
+        //nodesTab.pad(10);
 
         //create the data table which will display the nodes
         ui = new VisNodes(stage, skin, world);
-        //ui.setBackground(skin.getDrawable("knob_06"));
+
+        next = new ButtonComponent(skin, font, "Next step");
+        next.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                ticker.tick(true);
+            }
+        });
+        next.getComponent().setVisible(false);
+
+        //put the nodes ui onto this
+        nodesTab.add(ui).maxWidth(preferredWidth).top().pad(20);
+        nodesTab.row();
+        nodesTab.add(next.getComponent());
+
+        tabbedPane.addTab("Nodes", nodesTab);
+
+        // =======================
+        // === PSEUDOCODE PANE ===
+        // =======================
+
+        Table pseudocodeTab = new Table();
+        pseudocodeTab.setFillParent(true);
+
+        // Pseudocode visualiser
+        // ---------------------
+        PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
+        pseudocodeTab.add(pseudocodeVisualiser).spaceBottom(30).row();
+
+        // Next button
+        // -----------
+        ButtonComponent nextBtn = new ButtonComponent(skin, font, "Next");
+        nextBtn.getComponent().setVisible(false);
+        nextBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                ticker.setInspectSearch(true);
+                ticker.tick(true);
+            }
+        });
+
+        // Manual/Automatic inspection
+        // ---------------------------
+        ButtonComponent manualAutoBtn = new ButtonComponent(skin, font, "Manual inspect");
+        manualAutoBtn.setData(true);
+        manualAutoBtn.getComponent().setVisible(false);
+        manualAutoBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if ((Boolean) manualAutoBtn.getData()) {
+                    // Currently automatic -> manual
+                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                    ticker.pause(1);
+                    ticker.setUpdated(true);
+                    ticker.setInspectSearch(true);
+
+                    nextBtn.getComponent().setVisible(true);
+                    manualAutoBtn.setData(false);
+                    manualAutoBtn.setText("Automatic inspect");
+                }
+                else {
+                    // Currently manual -> automatic
+                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                    ticker.resume(1);
+
+                    nextBtn.getComponent().setVisible(false);
+                    manualAutoBtn.setData(true);
+                    manualAutoBtn.setText("Manual inspect");
+                }
+            }
+        });
+
+        // Inspect search button (start/stop)
+        // ----------------------------------
+        ButtonComponent inspectSearchBtn = new ButtonComponent(skin, font, "Activate");
+        inspectSearchBtn.setData(false);
+        inspectSearchBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                boolean currentlyStarted = (Boolean) inspectSearchBtn.getData();
+
+                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+
+                if (ticker.getAlgorithm() == SearchAlgorithm.A_STAR || ticker.getAlgorithm() == SearchAlgorithm.DIJKSTRA) {
+                    MessageBoxComponent.show("To see the pseudocode there must be a search running.\n" +
+                            "Please start a search using the 'Play' button in the left sidebar", "Warning");
+                    return;
+                }
+
+                if (ticker.isTickedOnce()) {
+                    ticker.setInspectSearch(!currentlyStarted);
+                    ticker.resume(1);
+
+                    manualAutoBtn.getComponent().setVisible(!currentlyStarted);
+                    inspectSearchBtn.setData(!currentlyStarted);
+                    inspectSearchBtn.setText(currentlyStarted ? "Activate" : "Stop");
+
+                    // Clear pseudocode information
+                    if (currentlyStarted) {
+                        nextBtn.getComponent().setVisible(false);
+                        manualAutoBtn.setData(true);
+                        manualAutoBtn.setText("Manual inspect");
+                        ticker.clearPseudocodeInfo();
+                    }
+                }
+            }
+        });
+
+        pseudocodeTab.add(inspectSearchBtn.getComponent()).spaceBottom(10).row();
+        pseudocodeTab.add(manualAutoBtn.getComponent()).spaceBottom(10).row();
+        pseudocodeTab.add(nextBtn.getComponent());
+        tabbedPane.addTab("Pseudocode", pseudocodeTab);
 
         // ======================
         // === TRIGGER BUTTON ===
@@ -164,17 +297,8 @@ public class SideBarNodes extends Table implements Disposable {
         });
         next.getComponent().setVisible(false);
 
-
-        //put the nodes ui onto this
-        add(ui).maxWidth(preferredWidth).top().pad(25);
-
-        row();
-        add(next.getComponent());
-
-
-        //set the background
+        add(tabbedPane).maxWidth(preferredWidth);
         background(skin.getDrawable("window_02"));
-        //add the button to the stage.
         this.stage.addActor(triggerBtn.getComponent());
 
     }

@@ -1,5 +1,6 @@
 package com.b3.search;
 
+import com.b3.gui.PseudocodeVisualiser;
 import com.b3.search.util.Function2;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.search.util.SearchParameters;
@@ -11,13 +12,17 @@ import com.b3.util.Utils;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SearchTicker {
 
 	private final WorldGraph worldGraph;
 	private Takeable<Node> frontier;
 	private List<Node> lastFrontier = new ArrayList<>();
-	private Node mostRecentlyExpanded;
+	private Node mostRecentlyExpanded;						// Current node (expanded)
+	private List<Node> currentNeighbours;					// Current neighbours to be expanded
+	private Node currentNeighbour; 							// Current neighbour being analyzed
+	private int neighboursSoFar;							// Neighbours visited so far
 
 	private Set<Node> visited = new HashSet<>();
 	private Map<Node, Node> cameFrom = new HashMap<>();
@@ -34,13 +39,18 @@ public class SearchTicker {
 	//4: stepthrough active
 	private boolean[] paused;
 	private boolean updated;
+	private boolean tickedOnce;
 
 	private SearchAlgorithm algorithm;
 	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
 	private Function2<Node, Node, Float> edgeCostFunction;
 
+	// Snapshot tracker (save/load)
 	private SearchSnapshotTracker snapshotTracker;
-	private boolean tickedOnce;
+
+	// Pseudocode (inspect search)
+	private Pseudocode pseudocode;
+	private boolean inspectSearch;
 
 	public SearchTicker(WorldGraph worldGraph) {
 		/*try {
@@ -51,7 +61,7 @@ public class SearchTicker {
 		}*/
 
 		this.worldGraph = worldGraph;
-
+		inspectSearch = false;
 		tickedOnce = false;
 
 		setAllCompleted(true);
@@ -65,11 +75,22 @@ public class SearchTicker {
 		return renderProgress;
 	}
 
+	public boolean isInspectingSearch() {
+		return inspectSearch;
+	}
+
+	public void setInspectSearch(boolean inspectSearch) {
+		this.inspectSearch = inspectSearch;
+	}
+
 	public void reset(SearchAlgorithm algorithm, Node start, Node end) {
 
 		tickedOnce = false;
 
 		this.algorithm = algorithm;
+
+		pseudocode = new Pseudocode(algorithm);
+		pseudocode.addObserver(PseudocodeVisualiser.getInstance());
 
 		SearchParameters parameters = new SearchParameters(algorithm);
 		Function2<Node, Node, Float> heuristic = parameters.getHeuristic();
@@ -201,12 +222,116 @@ public class SearchTicker {
 	}
 
 	/**
+	 * Performs a search tick for a specific line in the pseudocode
+	 * @param line The line to execute
+     */
+	private void tickPseudocode(int line) {
+		if (pathComplete)
+			return;
+
+		if (frontier.isEmpty()) {
+			setAllCompleted(true);
+			return;
+		}
+
+		lastFrontier.clear();
+
+		if (line == 0) {
+			pseudocode.highlight(line + 1);
+			return;
+		}
+
+		//Node node;
+
+		if (line == 1) {
+			mostRecentlyExpanded = frontier.take();
+			pseudocode.highlight(line + 1);
+			return;
+		}
+
+		if (line == 2) {
+			pseudocode.highlight(line + 1);
+			return;
+		}
+
+		if (line == 3) {
+			visited.add(mostRecentlyExpanded);
+			pseudocode.highlight(line + 1);
+			return;
+		}
+
+		if (line == 4) {
+			path = constructPath(cameFrom, start, mostRecentlyExpanded);
+
+			if (mostRecentlyExpanded.equals(end)) {
+				pseudocode.highlight(5);
+				setAllCompleted(true);
+				return;
+			}
+		}
+
+		if (algorithm == SearchAlgorithm.DEPTH_FIRST || algorithm == SearchAlgorithm.BREADTH_FIRST) {
+			if (line == 4) {
+				pseudocode.highlight(6);
+				currentNeighbours = mostRecentlyExpanded.getNeighbours().stream().collect(Collectors.toList());
+				return;
+			}
+
+			/*for (int i = neighboursSoFar; i < currentNeighbours.size();) {
+
+			}*/
+
+			if (neighboursSoFar < currentNeighbours.size()) {
+				// FOR
+				Node neighbour = currentNeighbours.get(neighboursSoFar);
+				currentNeighbour = neighbour;
+
+				if (line == 6) {
+					pseudocode.highlight(line + 1);
+					return;
+				}
+
+				if (!visited.contains(neighbour) && !frontier.contains(neighbour) && pseudocode.getCurrentLine() == 7) {
+					pseudocode.highlight(8);
+
+					cameFrom.put(neighbour, mostRecentlyExpanded);
+					frontier.add(neighbour);
+					lastFrontier.add(neighbour);
+					return;
+				}
+
+				if (pseudocode.getCurrentLine() == 7 || pseudocode.getCurrentLine() == 8) {
+					pseudocode.highlight(6);
+					neighboursSoFar++;
+					return;
+				}
+				// ENDFOR
+			}
+
+			neighboursSoFar = 0;
+			currentNeighbours = null;
+			currentNeighbour = null;
+		}
+		else {
+			// A STAR
+		}
+
+		pseudocode.setCurrentLine(0);
+		setUpdated(true);
+	}
+
+	/**
 	 * Performs a tick where the only checks are whether it is complete
 	 * This being called will progress the search one step regardless of status of timer or pause.
 	 */
 	private void tickFinal() {
 
 		tickedOnce = true;
+
+		if (inspectSearch) {
+			tickPseudocode(pseudocode.getCurrentLine());
+			return;
+		}
 
 		// already complete
 		if (pathComplete)
@@ -371,6 +496,14 @@ public class SearchTicker {
 		return mostRecentlyExpanded;
 	}
 
+	public List<Node> getCurrentNeighbours() {
+		return currentNeighbours;
+	}
+
+	public Node getCurrentNeighbour() {
+		return currentNeighbour;
+	}
+
 	public void setMostRecentlyExpanded(Node mostRecentlyExpanded) {
 		this.mostRecentlyExpanded = mostRecentlyExpanded;
 	}
@@ -399,5 +532,11 @@ public class SearchTicker {
 
 	public boolean isTickedOnce () {
 		return tickedOnce;
+	}
+
+	public void clearPseudocodeInfo() {
+		currentNeighbour = null;
+		currentNeighbours = new ArrayList<>();
+		neighboursSoFar = 0;
 	}
 }

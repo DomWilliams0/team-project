@@ -27,6 +27,8 @@ public class WorldGraph implements Serializable {
 	public static final Color JUST_EXPANDED_COLOUR = Color.PINK;
 	public static final Color VISITED_COLOUR = Color.LIGHT_GRAY;
 	private static final Color SEARCH_EDGE_COLOUR = Color.YELLOW;
+	private static final Color CURRENT_NEIGHBOUR_COLOUR = Color.YELLOW;
+	private static final Color CURRENT_NEIGHBOURS_COLOUR = Color.FIREBRICK;
 
 	private static final float NODE_RADIUS = 0.10f;
 	private static final Color BORDER_COLOUR = Color.BLACK;
@@ -447,6 +449,7 @@ public class WorldGraph implements Serializable {
 				Collection<Node> frontier = currentSearch.getFrontier();
 				Collection<Node> lastFront = currentSearch.getLastFrontier();
 				Node justExpanded = currentSearch.getMostRecentlyExpanded();
+				List<Node> currentNeighbours = currentSearch.getCurrentNeighbours();
 				// todo last frontier
 
 
@@ -516,6 +519,31 @@ public class WorldGraph implements Serializable {
 					shapeRenderer.circle(
 							justExpanded.getPoint().getX(),
 							justExpanded.getPoint().getY(),
+							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
+							NODE_EDGES
+					);
+				}
+
+				// draw current neighbours
+				if (currentSearch.isInspectingSearch() && currentNeighbours != null) {
+					shapeRenderer.setColor(CURRENT_NEIGHBOURS_COLOUR);
+					for (Node currentNeighbour : currentNeighbours) {
+						shapeRenderer.circle(
+								currentNeighbour.getPoint().getX(),
+								currentNeighbour.getPoint().getY(),
+								(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
+								NODE_EDGES
+						);
+					}
+				}
+
+				// draw current neighbour (to be analysed)
+				Node currentNeighbour = currentSearch.getCurrentNeighbour();
+				if (currentSearch.isInspectingSearch() && currentNeighbour != null) {
+					shapeRenderer.setColor(CURRENT_NEIGHBOUR_COLOUR);
+					shapeRenderer.circle(
+							currentNeighbour.getPoint().getX(),
+							currentNeighbour.getPoint().getY(),
 							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
 							NODE_EDGES
 					);

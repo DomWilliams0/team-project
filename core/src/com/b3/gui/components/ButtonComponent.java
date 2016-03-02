@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 public class ButtonComponent extends Component {
 
     private TextButton textButton;
+    private Object data;
 
     /**
      * Creates an instance of a ButtonComponent
@@ -35,6 +36,22 @@ public class ButtonComponent extends Component {
      */
     public TextButton getComponent() {
         return textButton;
+    }
+
+    public void setText(String text) {
+        textButton.setText(text);
+    }
+
+    public CharSequence getText() {
+        return textButton.getText();
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 
     @Override
