@@ -48,6 +48,8 @@ import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
 
+import static com.b3.world.BuildingType.HOUSE;
+
 public class World implements Disposable {
 
 	private static short ENTITY_CULL_TAG = 10101;
@@ -238,7 +240,7 @@ public class World implements Disposable {
 			Float x = (Float) props.get("x") / Utils.TILESET_RESOLUTION;
 			Float y = (Float) props.get("y") / Utils.TILESET_RESOLUTION;
 
-			addBuilding(new Vector2(x, y), new Vector3(width, length, height), BuildingType.HOUSE);
+			addBuilding(new Vector2(x, y), new Vector3(width, length, height), HOUSE);
 		}
 	}
 
@@ -633,6 +635,7 @@ public class World implements Disposable {
 	}
 
 	public boolean isValidBuildingPos(float x, float y) {
+
 		for (int i = (int) x; i < x + 4; i++) {
 			for (int j = (int) y; j < y + 4; j++) {
 				if (!worldGraph.hasNode(new Point(i, j)) ||
@@ -642,6 +645,15 @@ public class World implements Disposable {
 				}
 			}
 		}
+
+		WorldGraph tempWG = new WorldGraph(this);
+
+		Building building = new Building(new Vector2(x,y), new Vector3(4,4,10), buildingCache);
+		building.setType(BuildingType.HOUSE);
+		tempWG.addBuilding(building);
+
+		tempWG.checkEveryEdge();
+
 		return true;
 	}
 

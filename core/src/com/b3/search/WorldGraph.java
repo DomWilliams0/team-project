@@ -52,6 +52,7 @@ public class WorldGraph implements Serializable {
 	private SearchAlgorithm learningModeNext = null;
 
 	private Color colPath;
+	private Object copy;
 
 	/**
 	 * Constructs a new world graph with the following x and y dimensions.
@@ -679,5 +680,16 @@ public class WorldGraph implements Serializable {
 		colPath.r = 255;
 		colPath.g = 255;
 		colPath.b = 0;
+	}
+
+	public boolean checkEveryEdge() {
+		for (Map.Entry<Point, Node> entry: nodes.entrySet()) {
+			Point point = entry.getKey();
+			Node connected = entry.getValue();
+
+			if (connected.getEdges().size() == 0)
+				return false;
+		}
+		return true;
 	}
 }
