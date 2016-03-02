@@ -10,10 +10,11 @@ import com.badlogic.gdx.physics.box2d.*;
  */
 public class PhysicsComponent implements Component {
 
-	private Body body;
+	public final Body body;
+	public final Vector2 lastPosition;
 
-	private float maxSpeed;
-	private float maxAcceleration;
+	public final float maxSpeed;
+	public final float maxAcceleration;
 
 	public PhysicsComponent(World world, BodyDef bodyDef, Vector2 tilePos, float radius) {
 		bodyDef.position.set(tilePos.x + 0.5f, tilePos.y + 0.5f);
@@ -26,30 +27,16 @@ public class PhysicsComponent implements Component {
 		body.createFixture(fixtureDef);
 		circleShape.dispose();
 
+		lastPosition = new Vector2();
+
 		maxSpeed = 5f;
 		maxAcceleration = 20;
+
 	}
 
-
-	public Body getBody() {
-		return body;
-	}
 
 	public Vector2 getPosition() {
 		return body.getPosition();
 	}
-
-	public Vector2 getLinearVelocity() {
-		return body.getLinearVelocity();
-	}
-
-	public float getMaxSpeed() {
-		return maxSpeed;
-	}
-
-	public float getMaxAcceleration() {
-		return maxAcceleration;
-	}
-
 
 }

@@ -21,6 +21,7 @@ public enum ConfigKey {
 	SHOW_GRID("show-grid"),
 	SHOW_PATHS("show-paths"),
 	FLATTEN_BUILDINGS("flatten-buildings"),
+	RENDER_MODELS("render-models"),
 	FLOCKING_ENABLED("flocking-enabled"),
 	ADD_BUILDING_MODE("add-building-mode"),
 	GAME_SPEED("game-speed"),

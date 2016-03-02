@@ -18,8 +18,8 @@ public class SteeringSeek extends SteeringWithTarget {
 				target.getPosition()
 						.sub(entity.getPosition())
 						.nor()
-						.scl(entity.getMaxAcceleration())
-						.limit(entity.getMaxSpeed())
+						.scl(entity.maxAcceleration)
+						.limit(entity.maxSpeed)
 		);
 	}
 }

@@ -35,7 +35,7 @@ public class AISystem extends IteratingSystem {
 		AIComponent ai = aiComponents.get(entity);
 
 		ai.behaviour.tick(steeringMovement.setZero());
-		phys.getBody().applyForceToCenter(steeringMovement, true);
+		phys.body.applyForceToCenter(steeringMovement, true);
 
 
 		if (worldGraph.hasSearchInProgress() &&

@@ -3,13 +3,14 @@ package com.b3.entity;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourNop;
 import com.b3.entity.component.AIComponent;
-import com.b3.entity.component.ModelComponent;
+import com.b3.entity.component.RenderComponent;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.world.ModelController;
 import com.b3.world.World;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 
@@ -36,14 +37,14 @@ public class Agent extends Entity {
 		float radius = diameter / 2f;
 
 		// render
-		add(new ModelComponent(new ModelController("agent", world.getModelManager(), true)));
+		add(new RenderComponent(new ModelController("agent", world.getModelManager(), true), Color.BLUE));
 
 		// physics
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 		bodyDef.linearDamping = 1f;
 		physics = new PhysicsComponent(world.getPhysicsWorld(), bodyDef, tilePos, radius);
-		physics.getBody().setUserData(this);
+		physics.body.setUserData(this);
 		add(physics);
 
 		// ai

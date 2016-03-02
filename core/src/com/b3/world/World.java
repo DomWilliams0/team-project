@@ -113,7 +113,9 @@ public class World implements Disposable {
 		this.mode = mode;
 
 		roamersList = new ArrayList<Agent>();
-		animationNextDestination = 0; xNextDestination = 0; yNextDestination = 0;
+		animationNextDestination = 0;
+		xNextDestination = 0;
+		yNextDestination = 0;
 
 		TiledMap map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
@@ -326,7 +328,7 @@ public class World implements Disposable {
 		if (mode != Mode.TRY_YOURSELF) {
 			worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
 		}
-		worldGraph.setCurrentSearch(agent, ((BehaviourMultiContinuousPathFind)behaviour).getTicker());
+		worldGraph.setCurrentSearch(agent, ((BehaviourMultiContinuousPathFind) behaviour).getTicker());
 
 		if (mode == Mode.COMPARE) {// && Config.getBoolean(ConfigKey.FLOCKING_ENABLED)) { <-NO, no other chance to spawn all of the agents
 			for (int i = 0; i < 250; i++) {
@@ -538,7 +540,7 @@ public class World implements Disposable {
 
 			PhysicsComponent phys = e.getComponent(PhysicsComponent.class);
 			if (phys != null)
-				physicsWorld.destroyBody(phys.getBody());
+				physicsWorld.destroyBody(phys.body);
 
 			e.removeAll();
 
@@ -554,7 +556,7 @@ public class World implements Disposable {
 
 		if (mode == Mode.COMPARE) {
 			if (worldCamera.getFOV() < 67) {
-				Vector2 cameraPos = new Vector2(getTileSize().scl(0.5f));
+				Vector2 cameraPos = getTileSize().scl(0.5f);
 				worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);
 				worldCamera.lookAt(cameraPos.x + (67 - worldCamera.getFOV()), cameraPos.y + (67 - worldCamera.getFOV()), 0);
 				counterAnimation = 10;
@@ -583,32 +585,20 @@ public class World implements Disposable {
 		if (animationNextDestination != 0) {
 			shapeRenderer.setColor(Color.BLUE);
 			animationNextDestination = (float) (animationNextDestination - 0.2);
-			shapeRenderer.ellipse((float) (xNextDestination - (animationNextDestination/2) + 0.5), (float) (yNextDestination - (animationNextDestination/2) + 0.5), animationNextDestination, animationNextDestination);
+			shapeRenderer.ellipse((float) (xNextDestination - (animationNextDestination / 2) + 0.5), (float) (yNextDestination - (animationNextDestination / 2) + 0.5), animationNextDestination, animationNextDestination);
 		}
-
-		shapeRenderer.setColor(Color.WHITE);
-		float x = agent.getPhysicsComponent().getPosition().x;
-		float y = agent.getPhysicsComponent().getPosition().y;
-		shapeRenderer.circle(x,y, (float) 0.5);
-
-		if (Config.getBoolean(ConfigKey.FLOCKING_ENABLED))
-			for (int i = 0; i < roamersList.size(); i++) {
-				x = roamersList.get(i).getPhysicsComponent().getPosition().x;
-				y = roamersList.get(i).getPhysicsComponent().getPosition().y;
-				shapeRenderer.circle(x,y, (float) 0.25);
-			}
 
 		//render building overlay if needed
 		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)) {
-			x = currentMousePos.getX();
-			y = currentMousePos.getY();
+			float x = currentMousePos.getX();
+			float y = currentMousePos.getY();
 
 			if (isValidBuildingPos(x, y))
 				shapeRenderer.setColor(Color.LIGHT_GRAY);
 			else
 				shapeRenderer.setColor(Color.RED);
 
-			shapeRenderer.box(x, y, 0, (float)4, (float)4, (float)1);
+			shapeRenderer.box(x, y, 0, (float) 4, (float) 4, (float) 1);
 		}
 
 		shapeRenderer.end();
@@ -623,7 +613,8 @@ public class World implements Disposable {
 		buildingBatch.end();
 
 		// render models
-		modelManager.render(worldCamera);
+		if (Config.getBoolean(ConfigKey.RENDER_MODELS))
+			modelManager.render(worldCamera);
 
 		if (mode == Mode.LEARNING) rt.render(currentNodeClickX, currentNodeClickY);
 
@@ -639,8 +630,8 @@ public class World implements Disposable {
 		for (int i = (int) x; i < x + 4; i++) {
 			for (int j = (int) y; j < y + 4; j++) {
 				if (!worldGraph.hasNode(new Point(i, j)) ||
-						new Point(i,j).equals(getWorldGraph().getCurrentSearch().getStart().getPoint()) ||
-						new Point(i,j).equals(getWorldGraph().getCurrentSearch().getEnd().getPoint()) ) {
+						new Point(i, j).equals(getWorldGraph().getCurrentSearch().getStart().getPoint()) ||
+						new Point(i, j).equals(getWorldGraph().getCurrentSearch().getEnd().getPoint())) {
 					return false;
 				}
 			}
@@ -668,7 +659,7 @@ public class World implements Disposable {
 
 		if (counterScaler > 5) {
 			//too long in-between animations
-			worldCamera.setCurrrentZoom((float) (worldCamera.getActualZoom()+ pos));
+			worldCamera.setCurrrentZoom((float) (worldCamera.getActualZoom() + pos));
 		}
 		return zoomScalar;
 	}
@@ -726,7 +717,7 @@ public class World implements Disposable {
 
 	public Point getCurrentClick() {
 		newClick = false;
-		return new Point(currentNodeClickX,currentNodeClickY);
+		return new Point(currentNodeClickX, currentNodeClickY);
 	}
 
 	public void setNextDestination(int x, int y) {

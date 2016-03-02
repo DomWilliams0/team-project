@@ -169,18 +169,32 @@ public class SideBar extends Table implements Disposable {
         settingsTab.row();
 
         // Flocking enable/disable
-        CheckBoxComponent showFlockingCheckBox = new CheckBoxComponent(skin, font, "Roaming civillians");
+        CheckBoxComponent showFlockingCheckBox = new CheckBoxComponent(skin, font, "Roaming civilians");
         showFlockingCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLOCKING_ENABLED));
         showFlockingCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                boolean flocking = Config.getBoolean(ConfigKey.FLOCKING_ENABLED);
-                System.out.println("FLOCKING + " + !flocking);
-                Config.set(ConfigKey.FLOCKING_ENABLED, !flocking);
+                Config.set(ConfigKey.FLOCKING_ENABLED, showFlockingCheckBox.getComponent().isChecked());
             }
         });
 
         settingsTab.add(showFlockingCheckBox.getComponent())
+                .align(Align.left)
+                .maxWidth(preferredWidth)
+                .spaceBottom(10);
+        settingsTab.row();
+
+         // Model rendering toggle
+        CheckBoxComponent modelRenderCheckBox = new CheckBoxComponent(skin, font, "Simple agents");
+        modelRenderCheckBox.getComponent().setChecked(!Config.getBoolean(ConfigKey.RENDER_MODELS));
+        modelRenderCheckBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Config.set(ConfigKey.RENDER_MODELS, !modelRenderCheckBox.getComponent().isChecked());
+            }
+        });
+
+        settingsTab.add(modelRenderCheckBox.getComponent())
                 .align(Align.left)
                 .maxWidth(preferredWidth)
                 .spaceBottom(10);

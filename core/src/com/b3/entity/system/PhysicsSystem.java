@@ -29,7 +29,7 @@ public class PhysicsSystem extends IteratingSystem {
 	}
 
 	public void processEntity(Entity entity, float deltaTime) {
-		Body body = physics.get(entity).getBody();
+		Body body = physics.get(entity).body;
 
 		Vector2 vel = body.getLinearVelocity();
 		vel.scl(0.97f);
