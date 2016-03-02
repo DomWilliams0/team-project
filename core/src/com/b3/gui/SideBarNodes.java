@@ -1,5 +1,6 @@
 package com.b3.gui;
 
+import com.b3.Mode;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -128,26 +129,26 @@ public class SideBarNodes extends Table implements Disposable {
                     _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
                     isOpen = true;
 
-//                    if (!world.getCompareMode()) {
-//                        float posX = world.getWorldCamera().getPosX();
-//                        if (posX < 10) {
-//                            world.getWorldCamera().translateSafe(10 - posX, 0, 0);
-//                        }
-//                    }
+                    /*if (world.getMode() != Mode.COMPARE) {
+                        float posX = world.getWorldCamera().getPosX();
+                        if (posX < 10) {
+                            world.getWorldCamera().translateSafe(10 - posX, 0, 0);
+                        }
+                    }*/
                 }
                 else {
                     setX(Gdx.graphics.getWidth());
                     _triggerBtn.setText("<");
                     _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
                     isOpen = false;
-
-//                    if (!world.getCompareMode()) {
-//                        float posX = world.getWorldCamera().getPosX();
-//                        if (posX >= 10) {
-//                            System.out.println(posX);
-//                            world.getWorldCamera().translateSafe(-posX, 0, 0);
-//                        }
-//                    }
+                    
+                    /*if (world.getMode() != Mode.COMPARE) {
+                        float posX = world.getWorldCamera().getPosX();
+                        if (posX >= 10) {
+                            System.out.println(posX);
+                            world.getWorldCamera().translateSafe(-posX, 0, 0);
+                        }
+                    }*/
 
                 }
 

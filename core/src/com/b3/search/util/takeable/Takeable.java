@@ -4,6 +4,7 @@ import java.util.Collection;
 
 public interface Takeable<E> extends Collection<E> {
 
+	E peek();
 	E take();
 
 }

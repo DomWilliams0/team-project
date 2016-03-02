@@ -24,6 +24,7 @@ public class MainMenuScreen implements Screen {
     private Table wrapper;
     private ButtonComponent learningModeBtn;
     private ButtonComponent compareModeBtn;
+    private ButtonComponent tryYourselfModeBtn;
 
     private OrthographicCamera camera;
     private Stage mainMenuStage;
@@ -69,6 +70,17 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        // Try yourself mode button
+        // ------------------------
+        tryYourselfModeBtn = new ButtonComponent(skin, font, "Try yourself mode");
+        tryYourselfModeBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new TryYourselfMode(game));
+                dispose();
+            }
+        });
+
         wrapper = new Table();
         wrapper.setWidth(Gdx.graphics.getWidth());
         wrapper.setHeight(Gdx.graphics.getHeight());
@@ -76,6 +88,8 @@ public class MainMenuScreen implements Screen {
         wrapper.add(learningModeBtn.getComponent());
         wrapper.row().padTop(30);
         wrapper.add(compareModeBtn.getComponent());
+        wrapper.row().padTop(30);
+        wrapper.add(tryYourselfModeBtn.getComponent());
 
         mainMenuStage.addActor(wrapper);
     }

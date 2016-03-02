@@ -297,8 +297,16 @@ public class SearchTicker {
 		return frontier;
 	}
 
+	public void addToFrontier(Node node) {
+		frontier.add(node);
+	}
+
 	public Set<Node> getVisited() {
 		return visited;
+	}
+
+	public void addToVisited(Node node) {
+		visited.add(node);
 	}
 
 	public List<Node> getPath() {
@@ -361,6 +369,10 @@ public class SearchTicker {
 
 	public Node getMostRecentlyExpanded() {
 		return mostRecentlyExpanded;
+	}
+
+	public void setMostRecentlyExpanded(Node mostRecentlyExpanded) {
+		this.mostRecentlyExpanded = mostRecentlyExpanded;
 	}
 
 	public List<Node> getLastFrontier() {

@@ -26,8 +26,7 @@ public class PriorityQueueT<E> extends ArrayList<E> implements Takeable<E> {
 		this.priorityFunction = pq.getPriorityFunction();
 	}
 
-	@Override
-	public E take() {
+	private int peekIndex() {
 		assert !isEmpty();
 		int bestPos = 0;
 		float lowestPriority = Float.POSITIVE_INFINITY;
@@ -38,7 +37,17 @@ public class PriorityQueueT<E> extends ArrayList<E> implements Takeable<E> {
 				lowestPriority = toCheck;
 			}
 		}
-		return remove(bestPos);
+		return bestPos;
+	}
+
+	@Override
+	public E peek() {
+		return get(peekIndex());
+	}
+
+	@Override
+	public E take() {
+		return remove(peekIndex());
 	}
 
 	public Function<E,Float> getPriorityFunction() {

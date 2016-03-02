@@ -1,6 +1,7 @@
 package com.b3.world;
 
 import com.b3.DebugRenderer;
+import com.b3.Mode;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.*;
 import com.b3.entity.component.PhysicsComponent;
@@ -81,9 +82,10 @@ public class World implements Disposable {
 	private double pos = 1;
 
 	private Agent agent;
-	private BehaviourMultiContinuousPathFind behaviour;
+	private Behaviour behaviour;
 
-	private Boolean compareMode;
+	private Mode mode;
+	//private boolean compareMode;
 	//current node user has clicked on
 	private int currentNodeClickX;
 	private int currentNodeClickY;
@@ -104,9 +106,10 @@ public class World implements Disposable {
 	public World() {
 	}
 
-	public World(String fileName, Boolean compareMode, InputHandler inputHandler) {
+	public World(String fileName, Mode mode, InputHandler inputHandler) {
 		this.inputHandler = inputHandler;
-		this.compareMode = compareMode;
+		//this.compareMode = compareMode;
+		this.mode = mode;
 
 		roamersList = new ArrayList<Agent>();
 		animationNextDestination = 0; xNextDestination = 0; yNextDestination = 0;
@@ -313,13 +316,17 @@ public class World implements Disposable {
 		agent = spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
 
 		//IF IS COMPAREMODE (compareMode = true) DO ALL THREE BEHAVIOURS
-		behaviour = new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
+		behaviour = mode == Mode.TRY_YOURSELF ?
+				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.DEPTH_FIRST, worldGraph) :
+				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
 		agent.setBehaviour(behaviour);
 
-		worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
-		worldGraph.setCurrentSearch(agent, behaviour.getTicker());
+		if (mode != Mode.TRY_YOURSELF) {
+			worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
+		}
+		worldGraph.setCurrentSearch(agent, ((BehaviourMultiContinuousPathFind)behaviour).getTicker());
 
-		if (compareMode) {// && Config.getBoolean(ConfigKey.FLOCKING_ENABLED)) { <-NO, no other chance to spawn all of the agents
+		if (mode == Mode.COMPARE) {// && Config.getBoolean(ConfigKey.FLOCKING_ENABLED)) { <-NO, no other chance to spawn all of the agents
 			for (int i = 0; i < 250; i++) {
 				Agent a = spawnAgent(generateRandomTile());
 				BehaviourWander b = new BehaviourWander(a);
@@ -543,7 +550,7 @@ public class World implements Disposable {
 
 		float zoomScalar = getZoomScalar();
 
-		if (compareMode) {
+		if (mode == Mode.COMPARE) {
 			if (worldCamera.getFOV() < 67) {
 				Vector2 cameraPos = new Vector2(getTileSize().scl(0.5f));
 				worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);
@@ -617,7 +624,7 @@ public class World implements Disposable {
 		// render models
 		modelManager.render(worldCamera);
 
-		if (!compareMode) rt.render(currentNodeClickX, currentNodeClickY);
+		if (mode == Mode.LEARNING) rt.render(currentNodeClickX, currentNodeClickY);
 
 		//error message render's only if errorSprite.showPopup() is called.
 		errorSprite.render();
@@ -728,8 +735,12 @@ public class World implements Disposable {
 		worldGraph.setNextDestination(x, y);
 	}
 
-	public Boolean getCompareMode() {
+	/*public Boolean getCompareMode() {
 		return compareMode;
+	}*/
+
+	public Mode getMode() {
+		return mode;
 	}
 
 	public InputHandler getInputHandler() {

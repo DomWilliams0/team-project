@@ -45,7 +45,7 @@ public class LearningMode implements Screen {
         this.game = game;
 
         // create world
-        world = new World("core/assets/world/world_smaller_test.tmx", false, game.inputHandler);
+        world = new World("core/assets/world/world_smaller_test.tmx", Mode.LEARNING, game.inputHandler);
 
         // init gui
         setupSidebar();
