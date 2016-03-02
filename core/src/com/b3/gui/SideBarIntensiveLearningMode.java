@@ -319,11 +319,11 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
 
                     isOpen = true;
 
-                    float posX = world.getWorldCamera().getPosX();
-                    if (posX > -10) {
-                        System.out.println(posX);
-                        world.getWorldCamera().translateSafe(-(10+posX), 0, 0);
-                    }
+//                    float posX = world.getWorldCamera().getPosX();
+//                    if (posX > -10) {
+//                        System.out.println(posX);
+//                        world.getWorldCamera().translateSafe(-(10+posX), 0, 0);
+//                    }
 
                 } else {
                     setX(-preferredWidth);
@@ -332,10 +332,10 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
 
                     isOpen = false;
 
-                    float posX = world.getWorldCamera().getPosX();
-                    if (posX < 0) {
-                        world.getWorldCamera().translateSafe(-posX, 0, 0);
-                    }
+//                    float posX = world.getWorldCamera().getPosX();
+//                    if (posX < 0) {
+//                        world.getWorldCamera().translateSafe(-posX, 0, 0);
+//                    }
                 }
 
             }

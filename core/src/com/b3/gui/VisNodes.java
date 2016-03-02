@@ -66,6 +66,10 @@ public class VisNodes extends Table {
 			"as visited (using a hash set),\n" +
 			"to ensure we do not expand it again.";
 
+	private final String explaination =
+			"\n\nClick on a coordinate to highlight it on \n" +
+			"the world and see an explanation of it. \n";
+
 	private Node newVisited;
 	private List<Node> newFrontier;
 	private Node highestNode;
@@ -81,7 +85,7 @@ public class VisNodes extends Table {
 	private final String addedToFrontier = "I have added the following\n" +
 			"nodes to the frontier:\n" +
 			"%s\n";
-	private final String nextNode = "My next node to expand is\n (it is at the top of the \ndata structure):\n" +
+	private final String nextNode = "My next node to expand is\n"+
 			"%s";
 
 	private StringBuilder stepString;
@@ -230,14 +234,14 @@ public class VisNodes extends Table {
 			});
 
 			//populate the list tables
-			for (int i = 0; i < Math.min(Math.max(frontier.size(), visitedSorted.size()),100); i++) {
+			for (int i = 0; i < Math.min(Math.max(frontier.size(), visitedSorted.size()),50); i++) {
 				if (frontier.size() > i) {
 					addToTable(ft, frontier.get(i));
-					if(i==100) ft.add("(and more...)");
+					if(i==50) ft.add("(and more...)");
 				}
 				if (visitedSorted.size() > i) {
 					addToTable(vt, visitedSorted.get(i));
-					if(i==100) vt.add("(and more...)");
+					if(i==50) vt.add("(and more...)");
 				}
 			}
 		}
@@ -509,7 +513,7 @@ public class VisNodes extends Table {
 							addedToFrontier + "\n" +
 							nextNode,
 					newVisitedStr, newFrontierStr, highestNodeStr);
-			add(stepString).colspan(3);
+			add(stepString + explaination).colspan(3);
 		} else {
 			//final row - describe the algorithm in words
 			add(description).colspan(3);

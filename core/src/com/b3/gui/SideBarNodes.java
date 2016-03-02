@@ -128,12 +128,12 @@ public class SideBarNodes extends Table implements Disposable {
                     _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
                     isOpen = true;
 
-                    if (!world.getCompareMode()) {
-                        float posX = world.getWorldCamera().getPosX();
-                        if (posX < 10) {
-                            world.getWorldCamera().translateSafe(10 - posX, 0, 0);
-                        }
-                    }
+//                    if (!world.getCompareMode()) {
+//                        float posX = world.getWorldCamera().getPosX();
+//                        if (posX < 10) {
+//                            world.getWorldCamera().translateSafe(10 - posX, 0, 0);
+//                        }
+//                    }
                 }
                 else {
                     setX(Gdx.graphics.getWidth());
@@ -141,13 +141,13 @@ public class SideBarNodes extends Table implements Disposable {
                     _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
                     isOpen = false;
 
-                    if (!world.getCompareMode()) {
-                        float posX = world.getWorldCamera().getPosX();
-                        if (posX >= 10) {
-                            System.out.println(posX);
-                            world.getWorldCamera().translateSafe(-posX, 0, 0);
-                        }
-                    }
+//                    if (!world.getCompareMode()) {
+//                        float posX = world.getWorldCamera().getPosX();
+//                        if (posX >= 10) {
+//                            System.out.println(posX);
+//                            world.getWorldCamera().translateSafe(-posX, 0, 0);
+//                        }
+//                    }
 
                 }
 
@@ -165,7 +165,7 @@ public class SideBarNodes extends Table implements Disposable {
 
 
         //put the nodes ui onto this
-        add(ui).maxWidth(preferredWidth).top().pad(50);
+        add(ui).maxWidth(preferredWidth).top().pad(25);
 
         row();
         add(next.getComponent());
