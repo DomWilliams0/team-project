@@ -20,6 +20,7 @@ import com.b3.util.Utils;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -90,6 +91,10 @@ public class World implements Disposable {
 	private RenderTester rt;
 	private int maxHeight;
 	private ArrayList<Agent> roamersList;
+	private float animationNextDestination;
+
+	private int yNextDestination;
+	private int xNextDestination;
 
 	public World() {
 	}
@@ -99,6 +104,7 @@ public class World implements Disposable {
 		this.compareMode = compareMode;
 
 		roamersList = new ArrayList<Agent>();
+		animationNextDestination = 0; xNextDestination = 0; yNextDestination = 0;
 
 		TiledMap map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
@@ -549,6 +555,13 @@ public class World implements Disposable {
 		sr.setProjectionMatrix(worldCamera.combined);
 		sr.begin(ShapeRenderer.ShapeType.Filled);
 
+		if (animationNextDestination != 0) {
+			sr.setColor(Color.BLUE);
+			animationNextDestination = (float) (animationNextDestination - 0.2);
+			sr.ellipse((float) (xNextDestination - (animationNextDestination/2) + 0.5), (float) (yNextDestination - (animationNextDestination/2) + 0.5), animationNextDestination, animationNextDestination);
+		}
+
+		sr.setColor(Color.WHITE);
 		float x = agent.getPhysicsComponent().getPosition().x;
 		float y = agent.getPhysicsComponent().getPosition().y;
 		sr.circle(x,y, (float) 0.5);
@@ -662,6 +675,9 @@ public class World implements Disposable {
 	}
 
 	public void setNextDestination(int x, int y) {
+		animationNextDestination = (float) 2.0;
+		xNextDestination = x;
+		yNextDestination = y;
 		worldGraph.setNextDestination(x, y);
 	}
 

@@ -65,8 +65,9 @@ public class WorldSelectionHandler extends InputAdapter {
 
 		if (button == Input.Buttons.LEFT)
 			world.setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
-		else
+		else {
 			world.setNextDestination(node.getPoint().getX(), node.getPoint().getY());
+		}
 
 
 		// no search

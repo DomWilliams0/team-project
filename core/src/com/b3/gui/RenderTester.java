@@ -52,6 +52,7 @@ public class RenderTester {
     private Sprite equals;
     private boolean popupShowing;
     private int counterAnimationFade;
+    private boolean stickyCurrentNode;
 
     public RenderTester(World world) {
         counterAnimationFade = 0;
@@ -172,14 +173,17 @@ public class RenderTester {
 
     public void render(int currentNodeClickX, int currentNodeClickY) {
         counterAnimationFade++;
-
         popupShowing = false;
-
         float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
 
         //SPRITES
         spriteBatch.setProjectionMatrix(worldCamera.combined);
         spriteBatch.begin();
+
+        if (stickyCurrentNode) {
+            currentNodeClickX = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getX();
+            currentNodeClickY = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getY();
+        }
 
         //----ALL RENDERS GO HERE---
         //DONE MULTI-PAGES if start node
@@ -190,7 +194,6 @@ public class RenderTester {
         } else
             //DONE MULTI_PAGES if end node
             if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-                //TODO Show heuristic
                 if (pageNo >= 3) pageNo = 0; //reset to first page if neccessary
 
                 if (pageNo == 2) {
@@ -231,9 +234,10 @@ public class RenderTester {
                 popupShowing = true;
 
             } else
-                //DONE MULTi-PAGES, needs cost breakdown though if recently expanded
+                //DONE MULTi-PAGES, needs cost breakdown though if recently expanded - current node being explored
                 if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
                     if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
+                        stickyCurrentNode = true;
                         if (pageNo >= 4) pageNo = 0; //reset to first page if neccessary
                         float gxFunction = worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded());
 
@@ -269,7 +273,7 @@ public class RenderTester {
                                 animate = scalingZoom - (counterAnimationFade-200);
                                 if (animate < 0) animate = 0;
                             }
-                            spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), animate, animate);
+                            spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, animate);
                             List<Node> currentPath = worldGraph.getCurrentSearch().getPath();
                             ArrayList<Integer> arrCostsCurrentSerach = getCostsAllNodes(currentPath);
 
@@ -502,6 +506,7 @@ public class RenderTester {
     }
 
     public void resetPage() {
+        stickyCurrentNode = false;
         pageNo = 0;
     }
 
