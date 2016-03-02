@@ -600,7 +600,7 @@ public class World implements Disposable {
 			shapeRenderer.ellipse((float) (xNextDestination - (animationNextDestination / 2) + 0.5), (float) (yNextDestination - (animationNextDestination / 2) + 0.5), animationNextDestination, animationNextDestination);
 		}
 
-		//render building overlay if needed
+		//render add building overlay if needed
 		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)) {
 			float x = currentMousePos.getX();
 			float y = currentMousePos.getY();
@@ -608,10 +608,21 @@ public class World implements Disposable {
 			if (isValidBuildingPos(x, y))
 				shapeRenderer.setColor(Color.LIGHT_GRAY);
 			else
-				shapeRenderer.setColor(Color.RED);
+				shapeRenderer.setColor(Color.FIREBRICK);
 
 			shapeRenderer.box(x, y, 0, (float) 4, (float) 4, (float) 1);
 		}
+
+		//render remove building overlay if needed
+		if (Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)) {
+			float x = currentMousePos.getX();
+			float y = currentMousePos.getY();
+
+			shapeRenderer.setColor(Color.RED);
+
+			shapeRenderer.box(x, y, 0, (float) 4, (float) 4, (float) 1);
+		}
+
 
 		shapeRenderer.end();
 
