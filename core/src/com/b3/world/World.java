@@ -627,10 +627,12 @@ public class World implements Disposable {
 			debugRenderer.render(worldCamera);
 	}
 
-	private boolean isValidBuildingPos(float x, float y) {
+	public boolean isValidBuildingPos(float x, float y) {
 		for (int i = (int) x; i < x + 4; i++) {
 			for (int j = (int) y; j < y + 4; j++) {
-				if (!worldGraph.hasNode(new Point(i, j))) {
+				if (!worldGraph.hasNode(new Point(i, j)) ||
+						new Point(i,j).equals(getWorldGraph().getCurrentSearch().getStart().getPoint()) ||
+						new Point(i,j).equals(getWorldGraph().getCurrentSearch().getEnd().getPoint()) ) {
 					return false;
 				}
 			}

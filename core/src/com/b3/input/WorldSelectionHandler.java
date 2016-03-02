@@ -49,8 +49,13 @@ public class WorldSelectionHandler extends InputAdapter {
 
 		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)) {
 			System.out.println("Add building @ "+(int)tempRayCast.x+"|"+(int)tempRayCast.y);
-			world.addBuilding(new Vector2((int)tempRayCast.x, (int)tempRayCast.y), new Vector3(4, 4, 10), BuildingType.HOUSE);
+			if (world.isValidBuildingPos((int)tempRayCast.x, (int)tempRayCast.y))
+				world.addBuilding(new Vector2((int)tempRayCast.x, (int)tempRayCast.y), new Vector3(4, 4, 10), BuildingType.HOUSE);
 			Config.set(ConfigKey.ADD_BUILDING_MODE, !(Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)));
+			if (Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS))
+				world.flattenBuildings(true);
+			else
+				world.flattenBuildings(false);
 		}
 
 		// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
