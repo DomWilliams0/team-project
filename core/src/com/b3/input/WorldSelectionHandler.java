@@ -53,6 +53,7 @@ public class WorldSelectionHandler extends InputAdapter {
 			Config.set(ConfigKey.ADD_BUILDING_MODE, !(Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)));
 		}
 
+		// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
 		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
 			//old node so change page number
 			if (world.getrt().getPopupShowing())

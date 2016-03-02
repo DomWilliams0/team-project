@@ -114,12 +114,32 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         addBuildingMode.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
+                TextButton _triggerBtn = triggerBtn.getComponent();
+
+                if (!isOpen) {
+                    setX(0);
+                    setY(0);
+                    _triggerBtn.setText("<");
+                    _triggerBtn.setX(preferredWidth - 20);
+
+                    isOpen = true;
+                } else {
+                    setX(-preferredWidth);
+                    _triggerBtn.setText(">");
+                    _triggerBtn.setX(-20);
+
+                    isOpen = false;
+                }
+
                 if (!world.getWorldGraph().getCurrentSearch().isTickedOnce()) {
                     Boolean currentBoolean = Config.getBoolean(ConfigKey.ADD_BUILDING_MODE);
                     Config.set(ConfigKey.ADD_BUILDING_MODE, !currentBoolean);
                     System.out.println("Add building mode is " + !currentBoolean);
-                } else
+                } else {
+                    world.showPopupError();
                     System.err.println("Search has begun cannot add");
+                }
             }
         });
 

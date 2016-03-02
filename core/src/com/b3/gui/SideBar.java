@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -254,12 +255,33 @@ public class SideBar extends Table implements Disposable {
         addBuildingMode.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
+                //Close Sidebar
+                TextButton _triggerBtn = triggerBtn.getComponent();
+
+                if (!isOpen) {
+                    setX(0);
+                    setY(0);
+                    _triggerBtn.setText("<");
+                    _triggerBtn.setX(preferredWidth - 20);
+
+                    isOpen = true;
+                } else {
+                    setX(-preferredWidth);
+                    _triggerBtn.setText(">");
+                    _triggerBtn.setX(-20);
+
+                    isOpen = false;
+                }
+
                 if (!world.getWorldGraph().getCurrentSearch().isTickedOnce()) {
                     Boolean currentBoolean = Config.getBoolean(ConfigKey.ADD_BUILDING_MODE);
                     Config.set(ConfigKey.ADD_BUILDING_MODE, !currentBoolean);
                     System.out.println("Add building mode is " + !currentBoolean);
-                } else
+                } else {
+                    world.showPopupError();
                     System.err.println("Search has begun cannot add");
+                }
             }
         });
 
@@ -429,7 +451,6 @@ public class SideBar extends Table implements Disposable {
 
                     isOpen = false;
                 }
-
             }
         });
 

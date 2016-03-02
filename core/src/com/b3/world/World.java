@@ -21,6 +21,8 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -97,6 +99,7 @@ public class World implements Disposable {
 	private int xNextDestination;
 
 	private Point currentMousePos;
+	private ErrorPopups errorSprite;
 
 	public World() {
 	}
@@ -294,10 +297,13 @@ public class World implements Disposable {
 		engine.addSystem(new AISystem(worldGraph));
 
 		worldCamera = camera;
-
 		worldCamera.setCurrrentZoom(Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) / 2);
 
+		//set up these after the camera has been setup
 		rt = new RenderTester(this);
+		Texture tempTexture = new Texture("core/assets/world/popups/errorBuildings.png");
+		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		errorSprite = new ErrorPopups(worldCamera, new Sprite(tempTexture));
 
 		// debug: test entities
 		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
@@ -607,6 +613,8 @@ public class World implements Disposable {
 
 		if (!compareMode) rt.render(currentNodeClickX, currentNodeClickY);
 
+		errorSprite.render();
+
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
 			debugRenderer.render(worldCamera);
@@ -714,5 +722,9 @@ public class World implements Disposable {
 
 	public void setCurrentMousePos(int screenX, int screenY) {
 		currentMousePos = new Point(screenX, screenY);
+	}
+
+	public void showPopupError() {
+		errorSprite.showPopup(750);
 	}
 }
