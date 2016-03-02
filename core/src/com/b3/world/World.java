@@ -52,6 +52,7 @@ import static com.b3.world.BuildingType.HOUSE;
 public class World implements Disposable {
 
 	private static short ENTITY_CULL_TAG = 10101;
+	private TiledMap map;
 	private InputHandler inputHandler;
 
 	private Vector2 tileSize, pixelSize;
@@ -113,7 +114,7 @@ public class World implements Disposable {
 		xNextDestination = 0;
 		yNextDestination = 0;
 
-		TiledMap map = new TmxMapLoader().load(fileName);
+		map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
 				(int) map.getProperties().get("width"),
 				(int) map.getProperties().get("height")
@@ -213,8 +214,6 @@ public class World implements Disposable {
 								.forEach(n -> node.setEdgeCost(n, type.getCost()));
 				}
 			}
-
-
 		}
 
 		objectDef.shape.dispose();
@@ -811,6 +810,8 @@ public class World implements Disposable {
 				}
 
 				worldGraph.removeBuilding(positionDeletion);
+
+				processMapTileTypes(map);
 				return;
 			}
 		}
