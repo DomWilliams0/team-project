@@ -682,14 +682,37 @@ public class WorldGraph implements Serializable {
 		colPath.b = 0;
 	}
 
-	public boolean checkEveryEdge() {
-		for (Map.Entry<Point, Node> entry: nodes.entrySet()) {
-			Point point = entry.getKey();
-			Node connected = entry.getValue();
-
-			if (connected.getEdges().size() == 0)
-				return false;
+	public void removeBuilding(Vector2 positionDeletion) {
+		//add nodes back into
+		for (int i = (int) positionDeletion.x; i < positionDeletion.x + 4; i++) {
+			for (int j = (int) positionDeletion.y; j < positionDeletion.y + 4; j++) {
+				addNode(new Point(i, j));
+			}
 		}
-		return true;
+		//add edges back into
+		for (int i = (int) positionDeletion.x; i < positionDeletion.x + 4; i++) {
+			for (int j = (int) positionDeletion.y; j < positionDeletion.y + 4; j++) {
+				Point currentPoint = new Point(i, j);
+				if (nodes.containsKey(new Point(i+1, j)))
+					addEdge(currentPoint, new Point(i+1,j), 1);
+				if (nodes.containsKey(new Point(i-1, j)))
+					addEdge(currentPoint, new Point(i-1,j), 1);
+				if (nodes.containsKey(new Point(i, j+1)))
+					addEdge(currentPoint, new Point(i,j+1), 1);
+				if (nodes.containsKey(new Point(i, j-1)))
+					addEdge(currentPoint, new Point(i,j-1), 1);
+			}
+		}
 	}
+
+//	public boolean checkEveryEdge() {
+//		for (Map.Entry<Point, Node> entry: nodes.entrySet()) {
+//			Point point = entry.getKey();
+//			Node connected = entry.getValue();
+//
+//			if (connected.getEdges().size() == 0)
+//				return false;
+//		}
+//		return true;
+//	}
 }

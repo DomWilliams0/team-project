@@ -18,6 +18,7 @@ flatten-buildings: false
 render-models: false
 flocking-enabled: false
 add-building-mode: false
+remove-building-mode: false
 game-speed: 1
 
 time-between-ticks-min: 0.05

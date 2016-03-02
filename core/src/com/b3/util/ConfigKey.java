@@ -24,6 +24,7 @@ public enum ConfigKey {
 	RENDER_MODELS("render-models"),
 	FLOCKING_ENABLED("flocking-enabled"),
 	ADD_BUILDING_MODE("add-building-mode"),
+	REMOVE_BUILDING_MODE("remove-building-mode"),
 	GAME_SPEED("game-speed"),
 
 	TIME_BETWEEN_TICKS("time-between-ticks"),

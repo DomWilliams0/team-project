@@ -58,6 +58,18 @@ public class WorldSelectionHandler extends InputAdapter {
 				world.flattenBuildings(false);
 		}
 
+		if (Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)) {
+			System.out.println("Remove building @ "+(int)tempRayCast.x+"|"+(int)tempRayCast.y);
+//			if (world.isValidBuildingPos((int)tempRayCast.x, (int)tempRayCast.y))
+//				world.addBuilding(new Vector2((int)tempRayCast.x, (int)tempRayCast.y), new Vector3(4, 4, 10), BuildingType.HOUSE);
+			world.removeBuilding(new Vector2((int) tempRayCast.x, (int) tempRayCast.y));
+			Config.set(ConfigKey.REMOVE_BUILDING_MODE, !(Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)));
+			if (Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS))
+				world.flattenBuildings(true);
+			else
+				world.flattenBuildings(false);
+		}
+
 		// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
 		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
 			//old node so change page number

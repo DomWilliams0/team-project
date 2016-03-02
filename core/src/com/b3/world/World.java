@@ -24,6 +24,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PolygonRegion;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -40,10 +41,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
@@ -100,6 +99,7 @@ public class World implements Disposable {
 
 	private Point currentMousePos;
 	private ErrorPopups errorSprite;
+	private Point p;
 
 	public World() {
 	}
@@ -516,7 +516,11 @@ public class World implements Disposable {
 					new Vector2(pos.x + dimensions.x / 2, pos.y + dimensions.y / 2),
 					0f
 			);
+
 			buildingDef.shape = shape;
+			buildingDef.density = pos.x;
+			buildingDef.friction = pos.y;
+
 			buildingBody.createFixture(buildingDef);
 
 			shape.dispose(); // todo reuse shape and fixture for all buildings
@@ -646,13 +650,13 @@ public class World implements Disposable {
 			}
 		}
 
-		WorldGraph tempWG = new WorldGraph(this);
-
-		Building building = new Building(new Vector2(x,y), new Vector3(4,4,10), buildingCache);
-		building.setType(BuildingType.HOUSE);
-		tempWG.addBuilding(building);
-
-		tempWG.checkEveryEdge();
+//		WorldGraph tempWG = new WorldGraph(this);
+//
+//		Building building = new Building(new Vector2(x,y), new Vector3(4,4,10), buildingCache);
+//		building.setType(BuildingType.HOUSE);
+//		tempWG.addBuilding(building);
+//
+//		tempWG.checkEveryEdge();
 
 		return true;
 	}
@@ -766,5 +770,39 @@ public class World implements Disposable {
 
 	public void showPopupError() {
 		errorSprite.showPopup(750);
+	}
+
+	//TODO make it so don't have to click in bottom left corner
+	public void removeBuilding(Vector2 positionDeletion) {
+		for (int i = 0; i < buildings.size(); i++) {
+			if (buildings.get(i).getTilePosition().equals(positionDeletion)) {
+				buildings.remove(i);
+				//has to be bottom left (assuming 4x4xZ dimensions)
+
+				if (Config.getBoolean(ConfigKey.BUILDING_COLLISIONS)) {
+
+					Array<Fixture> listBuildingsPhysics = buildingBody.getFixtureList();
+
+					Fixture toBeDestroyed = null;
+					for (int j = 0; j < listBuildingsPhysics.size; j++) {
+						Fixture current = listBuildingsPhysics.get(j);
+
+//						System.out.println(current.getDensity() + "|" + current.getFriction());
+
+						if (current.getDensity() == positionDeletion.x && current.getFriction() == positionDeletion.y) {
+							toBeDestroyed = current;
+						}
+					}
+					if (toBeDestroyed != null)
+						buildingBody.destroyFixture(toBeDestroyed);
+//					else
+//						System.out.println("NULL NOOOOO");
+				}
+
+				worldGraph.removeBuilding(positionDeletion);
+				return;
+			}
+		}
+		System.out.println("BAD");
 	}
 }

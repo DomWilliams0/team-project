@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
  */
 public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFind {
 
+	private Node startNode;
+	private Node endNode;
+	private SearchAlgorithm algorithm;
 	private SearchTicker ticker;
 	protected boolean wasArrivedLastFrame, hasArrivedThisFrame;
 
@@ -25,8 +28,10 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		ticker = new SearchTicker(worldGraph);
 		wasArrivedLastFrame = false;
 
-		Node startNode = getNodeFromTile(worldGraph, startTile);
-		Node endNode = getNodeFromTile(worldGraph, endTile);
+		startNode = getNodeFromTile(worldGraph, startTile);
+		endNode = getNodeFromTile(worldGraph, endTile);
+		this.algorithm = algorithm;
+
 		validateNotNull(startNode, startTile, endNode, endTile);
 
 		ticker.reset(algorithm, startNode, endNode);
@@ -58,12 +63,31 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		if (ticker.isPathComplete()) {
 			if (steering == null)
 				updatePathFromTicker();
-			steering.tick(steeringOutput);
+			if (steering != null) {
+				steering.tick(steeringOutput);
+			} else {
+				if (getPath().size() == 0) {
+					ticker.reset(algorithm, startNode, endNode);
+				} else {
+					if (!(getPath().get(getPath().size() - 1).x == endNode.getPoint().x && getPath().get(getPath().size() - 1).y == endNode.getPoint().y))
+						ticker.reset(algorithm, startNode, endNode);
+				}
+			}
 		} else
 			ticker.tick();
 
 		wasArrivedLastFrame = hasArrivedThisFrame;
 		hasArrivedThisFrame = hasArrived();
+	}
+
+	private List<Vector2> getPath () {
+		List<Vector2> path =
+				ticker.getPath()
+						.stream()
+						.map(p -> new Vector2(p.getPoint().x, p.getPoint().y))
+						.collect(Collectors.toList());
+
+		return path;
 	}
 
 	private void updatePathFromTicker() {
@@ -73,7 +97,11 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 						.map(p -> new Vector2(p.getPoint().x, p.getPoint().y))
 						.collect(Collectors.toList());
 
-		steering = new SteeringPathFollow(agent.getPhysicsComponent(), path);
+		if (path.size() > 0)
+			if (path.get(path.size()-1).x == endNode.getPoint().x && path.get(path.size()-1).y == endNode.getPoint().y) {
+				System.out.println("Valid path");
+				steering = new SteeringPathFollow(agent.getPhysicsComponent(), path);
+			}
 	}
 
 	@Override
@@ -95,8 +123,10 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 	 */
 	protected void reset(Vector2 startTile, Vector2 goalTile, SearchAlgorithm algorithm, WorldGraph worldGraph) {
 		wasArrivedLastFrame = hasArrivedThisFrame = false;
-		Node startNode = getNodeFromTile(worldGraph, startTile);
-		Node endNode = getNodeFromTile(worldGraph, goalTile);
+		this.startNode = getNodeFromTile(worldGraph, startTile);
+		this.endNode = getNodeFromTile(worldGraph, goalTile);
+		this.algorithm = algorithm;
+
 		validateNotNull(startNode, startTile, endNode, goalTile);
 
 		ticker.reset(algorithm, startNode, endNode);

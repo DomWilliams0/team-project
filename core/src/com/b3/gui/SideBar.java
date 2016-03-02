@@ -312,6 +312,46 @@ public class SideBar extends Table implements Disposable {
                 .spaceTop(20);
         settingsTab.row();
 
+        // Remove Building button
+        ButtonComponent removeBuildingButton = new ButtonComponent(skin, font, "Remove Building Mode");
+        removeBuildingButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                TextButton _triggerBtn = triggerBtn.getComponent();
+
+                if (!isOpen) {
+                    setX(0);
+                    setY(0);
+                    _triggerBtn.setText("<");
+                    _triggerBtn.setX(preferredWidth - 20);
+
+                    isOpen = true;
+                } else {
+                    setX(-preferredWidth);
+                    _triggerBtn.setText(">");
+                    _triggerBtn.setX(-20);
+
+                    isOpen = false;
+                }
+
+                if (!world.getWorldGraph().getCurrentSearch().isTickedOnce()) {
+                    Boolean currentBoolean = Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE);
+                    Config.set(ConfigKey.REMOVE_BUILDING_MODE, !currentBoolean);
+                    System.out.println("Remove building mode is " + !currentBoolean);
+                } else {
+                    world.showPopupError();
+                    System.err.println("Search has begun cannot add");
+                }
+            }
+        });
+
+        settingsTab.add(removeBuildingButton.getComponent())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(20);
+        settingsTab.row();
+
         // Start button
         ButtonComponent startButton = new ButtonComponent(skin, font, "Start Event");
         startButton.addListener(new ChangeListener() {

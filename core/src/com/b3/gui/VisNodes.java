@@ -222,7 +222,8 @@ public class VisNodes extends Table {
 			//todo perhaps change what is shown for A*. Could do with describing distance (unless it is shown in tooltips??), and the nodes move more with A* so is less useful
 
 			ArrayList<Node> frontier = sortFront(front,alg);
-			highestNode = frontier.get(0);
+			if (frontier.size() > 0)
+				highestNode = frontier.get(0);
 
 			//get the visited set and sort it numerically by x then y
 			LinkedList<Node> visitedSorted = new LinkedList<>(visited);
