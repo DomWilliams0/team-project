@@ -82,20 +82,14 @@ public class World implements Disposable {
 	private int counterScaler = 0;
 	private double pos = 1;
 
-	private Agent agent;
-	private Behaviour behaviour;
-
 	private Mode mode;
 	//private boolean compareMode;
 	//current node user has clicked on
 	private int currentNodeClickX;
 	private int currentNodeClickY;
-	private int timeOutInfographic = 0;
 	private boolean newClick = false;
 
 	private RenderTester rt;
-	private int maxHeight;
-	private ArrayList<Agent> roamersList;
 	private float animationNextDestination;
 
 	private int yNextDestination;
@@ -112,7 +106,6 @@ public class World implements Disposable {
 		//this.compareMode = compareMode;
 		this.mode = mode;
 
-		roamersList = new ArrayList<Agent>();
 		animationNextDestination = 0;
 		xNextDestination = 0;
 		yNextDestination = 0;
@@ -317,10 +310,10 @@ public class World implements Disposable {
 		for (int i = 0; i < debugCount; i++)
 			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
 
-		agent = spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
+		Agent agent = spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
 
 		//IF IS COMPAREMODE (compareMode = true) DO ALL THREE BEHAVIOURS
-		behaviour = mode == Mode.TRY_YOURSELF ?
+		Behaviour behaviour = mode == Mode.TRY_YOURSELF ?
 				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.DEPTH_FIRST, worldGraph) :
 				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph);
 		agent.setBehaviour(behaviour);
@@ -335,7 +328,6 @@ public class World implements Disposable {
 				Agent a = spawnAgent(generateRandomTile());
 				BehaviourWander b = new BehaviourWander(a);
 				a.setBehaviour(b);
-				roamersList.add(a);
 			}
 		}
 	}
@@ -707,7 +699,6 @@ public class World implements Disposable {
 	public void setCurrentClick(int x, int y) {
 		this.currentNodeClickX = x;
 		this.currentNodeClickY = y;
-		timeOutInfographic = 0;
 		newClick = true;
 	}
 
