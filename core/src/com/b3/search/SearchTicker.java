@@ -270,6 +270,8 @@ public class SearchTicker {
 			}
 		}
 
+		// BFS or DFS
+		// ----------
 		if (algorithm == SearchAlgorithm.DEPTH_FIRST || algorithm == SearchAlgorithm.BREADTH_FIRST) {
 			if (line == 4) {
 				pseudocode.highlight(6);
@@ -277,26 +279,21 @@ public class SearchTicker {
 				return;
 			}
 
-			/*for (int i = neighboursSoFar; i < currentNeighbours.size();) {
-
-			}*/
-
 			if (neighboursSoFar < currentNeighbours.size()) {
 				// FOR
-				Node neighbour = currentNeighbours.get(neighboursSoFar);
-				currentNeighbour = neighbour;
+				currentNeighbour = currentNeighbours.get(neighboursSoFar);
 
 				if (line == 6) {
 					pseudocode.highlight(line + 1);
 					return;
 				}
 
-				if (!visited.contains(neighbour) && !frontier.contains(neighbour) && pseudocode.getCurrentLine() == 7) {
+				if (!visited.contains(currentNeighbour) && !frontier.contains(currentNeighbour) && pseudocode.getCurrentLine() == 7) {
 					pseudocode.highlight(8);
 
-					cameFrom.put(neighbour, mostRecentlyExpanded);
-					frontier.add(neighbour);
-					lastFrontier.add(neighbour);
+					cameFrom.put(currentNeighbour, mostRecentlyExpanded);
+					frontier.add(currentNeighbour);
+					lastFrontier.add(currentNeighbour);
 					return;
 				}
 
@@ -312,8 +309,65 @@ public class SearchTicker {
 			currentNeighbours = null;
 			currentNeighbour = null;
 		}
-		else {
-			// A STAR
+		// A*
+		// --
+		else if (algorithm == SearchAlgorithm.A_STAR) {
+			if (line == 4) {
+				pseudocode.highlight(6);
+				currentNeighbours = mostRecentlyExpanded.getNeighbours().stream().collect(Collectors.toList());
+				return;
+			}
+
+			if (neighboursSoFar < currentNeighbours.size()) {
+				// FOR
+				currentNeighbour = currentNeighbours.get(neighboursSoFar);
+
+				if (line == 6) {
+					pseudocode.highlight(line + 1);
+					return;
+				}
+
+				if (line == 7) {
+					pseudocode.highlight(line + 1);
+					return;
+				}
+
+				if (line == 8) {
+					float tentative_g = costSoFarFunction.apply(mostRecentlyExpanded) + edgeCostFunction.apply(mostRecentlyExpanded, currentNeighbour);
+					if (tentative_g <= costSoFarFunction.apply(currentNeighbour)) {
+						cameFrom.put(currentNeighbour, mostRecentlyExpanded);
+						pseudocode.highlight(line + 1);
+						return;
+					}
+				}
+
+				if (line == 9) {
+					pseudocode.highlight(line + 1);
+					return;
+				}
+
+				if (line == 10) {
+					if (!frontier.contains(currentNeighbour) && !visited.contains(currentNeighbour)) {
+						pseudocode.highlight(line + 1);
+						frontier.add(currentNeighbour);
+						lastFrontier.add(currentNeighbour);
+
+						return;
+					}
+				}
+
+				// Next neighbour in the loop
+				if (line == 8 || line == 10 || line == 11) {
+					pseudocode.highlight(6);
+					neighboursSoFar++;
+					return;
+				}
+				// ENDFOR
+			}
+
+			neighboursSoFar = 0;
+			currentNeighbours = null;
+			currentNeighbour = null;
 		}
 
 		pseudocode.setCurrentLine(0);

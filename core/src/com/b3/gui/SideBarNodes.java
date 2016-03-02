@@ -213,13 +213,10 @@ public class SideBarNodes extends Table implements Disposable {
 
                 SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
 
-                if (ticker.getAlgorithm() == SearchAlgorithm.A_STAR || ticker.getAlgorithm() == SearchAlgorithm.DIJKSTRA) {
-                    MessageBoxComponent.show("To see the pseudocode there must be a search running.\n" +
-                            "Please start a search using the 'Play' button in the left sidebar", "Warning");
-                    return;
+                if (ticker.getAlgorithm() == SearchAlgorithm.DIJKSTRA) {
+                    MessageBoxComponent.show("Dijkstra not yet implemented", "Warning");
                 }
-
-                if (ticker.isTickedOnce()) {
+                else if (ticker.isTickedOnce()) {
                     ticker.setInspectSearch(!currentlyStarted);
                     ticker.resume(1);
 
@@ -234,6 +231,10 @@ public class SideBarNodes extends Table implements Disposable {
                         manualAutoBtn.setText("Manual inspect");
                         ticker.clearPseudocodeInfo();
                     }
+                }
+                else {
+                    MessageBoxComponent.show("To see the pseudocode there must be a search running.\n" +
+                            "Please start a search using the 'Play' button in the left sidebar", "Warning");
                 }
             }
         });
