@@ -3,6 +3,7 @@ package com.b3;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.b3.util.Font;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -42,11 +43,7 @@ public class MainMenuScreen implements Screen {
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         Skin skin = new Skin(atlas);
-        BitmapFont font = new BitmapFont(
-                Gdx.files.internal(Config.getString(ConfigKey.FONT_FILE)),
-                Gdx.files.internal(Config.getString(ConfigKey.FONT_IMAGE_FILE)),
-                false
-        );
+        BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
 
         // Learning mode button
         // --------------------

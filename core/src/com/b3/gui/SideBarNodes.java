@@ -7,6 +7,9 @@ import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
+import com.b3.util.Font;
 import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -99,8 +102,7 @@ public class SideBarNodes extends Table implements Disposable {
         //setup the skin
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
         Skin skin = new Skin(atlas);
-        BitmapFont font = new BitmapFont(Gdx.files.internal("core/assets/gui/default.fnt"),
-                Gdx.files.internal("core/assets/gui/default.png"), false);
+        BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
         skin.add("default", font, BitmapFont.class);
         Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
         skin.add("default", style);

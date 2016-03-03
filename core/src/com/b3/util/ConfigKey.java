@@ -36,8 +36,7 @@ public enum ConfigKey {
 	EVENT_GENERATION_MAX_TIME("event-generation-max-time"),
 
 	TEXTURE_ATLAS("texture-atlas"),
-	FONT_FILE("font-file"),
-	FONT_IMAGE_FILE("font-image-file");
+	FONT_FILE("font-file");
 
 	private final String key;
 

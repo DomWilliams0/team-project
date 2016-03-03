@@ -30,5 +30,4 @@ event-generation-min-time: 3
 event-generation-max-time: 10
 
 texture-atlas: core/assets/gui/ui-blue.atlas
-font-file: core/assets/gui/default.fnt
-font-image-file: core/assets/gui/default.png
+font-file: aller/Aller_Rg.ttf
