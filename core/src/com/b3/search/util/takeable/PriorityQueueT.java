@@ -1,6 +1,7 @@
 package com.b3.search.util.takeable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.Function;
 
 public class PriorityQueueT<E> extends ArrayList<E> implements Takeable<E> {
@@ -14,16 +15,6 @@ public class PriorityQueueT<E> extends ArrayList<E> implements Takeable<E> {
      */
 	public PriorityQueueT(Function<E, Float> priorityFunction) {
 		this.priorityFunction = priorityFunction;
-	}
-
-	/**
-	 * Construct a new Priority Queue
-	 * As a copy of the given priority queue
-	 * @param pq the priority queue to clone.
-     */
-	public PriorityQueueT(PriorityQueueT pq) {
-		super(pq);
-		this.priorityFunction = pq.getPriorityFunction();
 	}
 
 	private int peekIndex() {
@@ -50,8 +41,9 @@ public class PriorityQueueT<E> extends ArrayList<E> implements Takeable<E> {
 		return remove(peekIndex());
 	}
 
-	public Function<E,Float> getPriorityFunction() {
-		return priorityFunction;
+	public ArrayList<E> sortedOrder() {
+		Collections.sort(this, (e1, e2) -> Float.compare(priorityFunction.apply(e1), priorityFunction.apply(e2)));
+		return new ArrayList<>(this);
 	}
 
 }

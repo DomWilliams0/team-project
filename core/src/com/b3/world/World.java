@@ -24,7 +24,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.PolygonRegion;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -738,6 +737,7 @@ public class World implements Disposable {
 	}
 
 	public void setCurrentClick(int x, int y) {
+		if (x == currentNodeClickX && y == currentNodeClickY) return;
 		this.currentNodeClickX = x;
 		this.currentNodeClickY = y;
 		newClick = true;

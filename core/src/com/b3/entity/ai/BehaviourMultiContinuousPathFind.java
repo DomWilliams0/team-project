@@ -8,7 +8,6 @@ import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Utils;
-import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.math.Vector2;
 
@@ -35,7 +34,6 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 
 			if (graph.getLearningModeNext() != null)
 				algorithm = graph.getLearningModeNext();
-			System.out.println("Next tick is using this algorithm " + algorithm);
 			Node currentPos = pathFind.getNodeFromTile(graph, agent.getPhysicsComponent().getPosition());
 
 			if (currentPos.equals(new Node(graph.getNextDestination())) || graph.getNextDestination().getY() == 0 && graph.getNextDestination().getX() == 0 || graph.getNextDestination().getX() == -5)

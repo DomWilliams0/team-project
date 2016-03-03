@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -42,6 +43,7 @@ public class VisNodes extends Table {
 	private boolean stepthrough;
 	private HashMap<Node, Table> cellmap;
 	private HashMap<Node, Color> colours;
+	private final HashMap<Color, TextureRegionDrawable> colourTextureCache = new HashMap<>();
 	private Node clickedNode;
 	private boolean clickedNodeUpdated = false;
 
@@ -69,6 +71,7 @@ public class VisNodes extends Table {
 	private final String explaination =
 			"\n\nClick on a coordinate to highlight it on \n" +
 			"the world and see an explanation of it. \n";
+	private static final Color defaultBackground = new Color(0.56f, 0.69f, 0.83f, 1);
 
 	private Node newVisited;
 	private List<Node> newFrontier;
@@ -235,15 +238,11 @@ public class VisNodes extends Table {
 			});
 
 			//populate the list tables
-			for (int i = 0; i < Math.min(Math.max(frontier.size(), visitedSorted.size()),50); i++) {
-				if (frontier.size() > i) {
-					addToTable(ft, frontier.get(i));
-					if(i==50) ft.add("(and more...)");
-				}
-				if (visitedSorted.size() > i) {
-					addToTable(vt, visitedSorted.get(i));
-					if(i==50) vt.add("(and more...)");
-				}
+			for (Node n : frontier) {
+				addToTable(ft, n);
+			}
+			for (Node n : visitedSorted) {
+				addToTable(vt, n);
 			}
 		}
 		setupDescription();
@@ -302,7 +301,7 @@ public class VisNodes extends Table {
 			//store the wrapping table in the hashmap, keyed by its node
 			cellmap.put(n, row);
 			//apply the highlight colour of the node, if applicable.
-			applyColour(n, new Color(0.56f, 0.69f, 0.83f, 1));
+			applyColour(n);
 //			applyBackgroundColour();
 		} else {
 			t.add(n.toString());
@@ -367,7 +366,7 @@ public class VisNodes extends Table {
 		for(Node n : cellmap.keySet()) {
             //apply the colour and update all
             //ordered this way to avoid short-circuit evaluation; we must apply all node colours regardless.
-			all = applyColour(n, new Color(0.56f, 0.69f, 0.83f, 1)) && all;
+			all = applyColour(n) && all;
 		}
 		return all;
 	}
@@ -377,31 +376,29 @@ public class VisNodes extends Table {
 	 *
 	 * Adapted from code at http://stackoverflow.com/questions/24250791/make-scene2d-ui-table-with-alternate-row-colours
 	 * @param n The node whose colour to apply
-	 * @param backgroundColor
 	 * @return Whether the node was successfully highlighted
 	 */
-	private boolean applyColour(Node n, Color backgroundColor) {
-        //get the desired colour, or default to white
-		Color c = colours.get(n);
-		if (c == null) c = backgroundColor;
-
-        //setup a pixmap with the desired colour
-		Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
-		pm.setColor(c);
-		pm.fill();
-
+	private boolean applyColour(Node n) {
         //get the wrapping table which is displaying the node
 		Table t = cellmap.get(n);
-		if(t==null) {
-            //there was no table corresponding, so just cleanup and return
-			pm.dispose();
-			return false;
-		} else {
-            //highlight the node text then cleanup
-			t.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm))));
-			pm.dispose();
+		if (t == null) return false;
+
+        //get the desired colour, or default to white
+		Color c = colours.getOrDefault(n, defaultBackground);
+
+		TextureRegionDrawable backgroundTexture = colourTextureCache.get(c);
+		if (backgroundTexture == null) {
+			//setup a pixmap with the desired colour
+			Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
+			pm.setColor(c);
+			pm.fill();
+			backgroundTexture = new TextureRegionDrawable(new TextureRegion(new Texture(new PixmapTextureData(pm, null, false, false))));
+			colourTextureCache.put(c, backgroundTexture);
 		}
-        //we have reached this point iff the highlight was successful.
+
+		//highlight the node text then cleanup
+		t.setBackground(backgroundTexture);
+		//we have reached this point iff the highlight was successful.
 		return true;
 	}
 
@@ -417,17 +414,16 @@ public class VisNodes extends Table {
 	 */
 	private ArrayList<Node> sortFront(Collection<Node> front, SearchAlgorithm alg) {
 		ArrayList<Node> list = new ArrayList<>(front);
-		//check the algorithm
-		//BFS is already sorted correctly.
+		// BFS is already sorted correctly.
 		switch(alg) {
-			//DFS requires a reverse due to stack
-			case DEPTH_FIRST: Collections.reverse(list); break;
-			//A* will utilise a temporary pq which will take all its items in order and add to list.
-			case A_STAR: PriorityQueueT<Node> temp = new PriorityQueueT((PriorityQueueT)front);
-				list = new ArrayList();
-				for(int i=0;i<front.size();i++) {
-					list.add(temp.take());
-				}
+			// DFS requires a reverse due to stack
+			case DEPTH_FIRST:
+				Collections.reverse(list);
+				break;
+			// A* will utilise a temporary pq which will take all its items in order and add to list.
+			case DIJKSTRA:
+			case A_STAR:
+				list = ((PriorityQueueT<Node>) front).sortedOrder();
 				break;
 		}
 		return list;

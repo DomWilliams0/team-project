@@ -234,7 +234,6 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
             public void changed(ChangeEvent event, Actor actor) {
 				SearchAlgorithm algorithm = SearchAlgorithm.fromName((String) searchSelectBox.getSelected());
 				if (algorithm == null) return;
-				System.out.println("Set to " + algorithm.getName());
 				world.getWorldGraph().setLearningModeNext(algorithm);
             }
         });

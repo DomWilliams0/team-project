@@ -8,13 +8,13 @@ import java.util.Set;
  */
 public enum SearchAlgorithm {
 
-	DEPTH_FIRST("Depth First Search"),
+	DEPTH_FIRST("Depth First Search", "DFS: LIFO (stack)"),
 
-	BREADTH_FIRST("Breadth First Search"),
+	BREADTH_FIRST("Breadth First Search", "BFS: FIFO (queue)"),
 
-	DIJKSTRA("Dijkstra's Algorithm"),
+	DIJKSTRA("Dijkstra's Algorithm", "Dijkstra's: Priority Queue"),
 
-	A_STAR("A* Search");
+	A_STAR("A* Search", "A*: Priority Queue");
 
 	private static final HashMap<String, SearchAlgorithm> NAMES = new HashMap<>();
 
@@ -25,9 +25,11 @@ public enum SearchAlgorithm {
 	}
 
 	private final String name;
+	private final String frontierDescription;
 
-	SearchAlgorithm(String name) {
+	SearchAlgorithm(String name, String frontierDescription) {
 		this.name = name;
+		this.frontierDescription = frontierDescription;
 	}
 
 	public static SearchAlgorithm fromName(String name) {
@@ -40,6 +42,10 @@ public enum SearchAlgorithm {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getFrontierDescription() {
+		return frontierDescription;
 	}
 
 }
