@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 public class MainGame extends Game {
 
 	public InputHandler inputHandler;
+	private String[] soundsDirList;
 
 	/**
 	 * On first launch of program
@@ -20,6 +21,9 @@ public class MainGame extends Game {
 	 */
 	@Override
 	public void create() {
+		soundsDirList = new String[1];
+		soundsDirList[0] = "core/assets/sounds/shotgun.mp3";
+
 		// load config
 		Config.loadConfig("core/assets/reference.yml", "core/assets/userconfig.yml");
 
@@ -33,5 +37,9 @@ public class MainGame extends Game {
 	@Override
 	public void render() {
 		super.render();
+	}
+
+	public String[] getSoundsDirList() {
+		return soundsDirList;
 	}
 }

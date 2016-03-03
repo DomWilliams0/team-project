@@ -7,6 +7,7 @@ import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
+import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
  */
 public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFind {
 
+	private World world;
 	private ErrorPopups errorPopups;
 
 	private Node startNode;
@@ -29,7 +31,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 	private SearchTicker ticker;
 	protected boolean wasArrivedLastFrame, hasArrivedThisFrame;
 
-	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph, WorldCamera worldCamera) {
+	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph, WorldCamera worldCamera, World world) {
 		super(agent, null);
 		ticker = new SearchTicker(worldGraph);
 		wasArrivedLastFrame = false;
@@ -41,6 +43,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		startNode = getNodeFromTile(worldGraph, startTile);
 		endNode = getNodeFromTile(worldGraph, endTile);
 		this.algorithm = algorithm;
+		this.world = world;
 
 		validateNotNull(startNode, startTile, endNode, endTile);
 
@@ -79,6 +82,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 				if (getPath().size() == 0) {
 					//Path not completed properly, so show error and start again
 					errorPopups.showPopup(400);
+					world.getSoundController().playSounds(0);
 					ticker.reset(algorithm, startNode, endNode);
 				} else {
 					if (!(getPath().get(getPath().size() - 1).x == endNode.getPoint().x && getPath().get(getPath().size() - 1).y == endNode.getPoint().y))

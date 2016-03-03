@@ -4,6 +4,7 @@ import com.b3.entity.Agent;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
+import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.math.Vector2;
 
@@ -19,10 +20,10 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 	private BehaviourPathFind pathFind;
 	private final SearchAlgorithm originalAlgorithm;
 
-	public BehaviourMultiPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph, WorldCamera worldCamera) {
+	public BehaviourMultiPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph, WorldCamera worldCamera, World world) {
 		super(agent, null);
 		originalAlgorithm = algorithm;
-		pathFind = new BehaviourPathFind(agent, startTile, endTile, algorithm, worldGraph, worldCamera);
+		pathFind = new BehaviourPathFind(agent, startTile, endTile, algorithm, worldGraph, worldCamera, world);
 		goals = new ArrayDeque<>();
 		graph = worldGraph;
 	}

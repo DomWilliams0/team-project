@@ -3,10 +3,7 @@ package com.b3;
 import com.b3.gui.SideBarIntensiveLearningMode;
 import com.b3.gui.SideBarNodes;
 import com.b3.gui.help.HelpBox;
-import com.b3.input.InputHandler;
-import com.b3.input.KeyboardController;
-import com.b3.input.TYMWorldSelection;
-import com.b3.input.WorldSelectionHandler;
+import com.b3.input.*;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -30,8 +27,12 @@ public class TryYourselfMode implements Screen {
     private KeyboardController keyboardController;
 
     public TryYourselfMode(MainGame game) {
+        // set up the sounds
+        String[] arrSoundsDir = game.getSoundsDirList();
+        SoundController soundController = new SoundController(arrSoundsDir);
+
         // create world
-        world = new World("core/assets/world/world_smaller_test.tmx", Mode.TRY_YOURSELF, game.inputHandler);
+        world = new World("core/assets/world/world_smaller_test.tmx", Mode.TRY_YOURSELF, game.inputHandler, soundController);
 
         // init gui
         //setupSidebar();

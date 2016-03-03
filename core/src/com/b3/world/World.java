@@ -12,6 +12,7 @@ import com.b3.event.EventGenerator;
 import com.b3.gui.ErrorPopups;
 import com.b3.gui.RenderTester;
 import com.b3.input.InputHandler;
+import com.b3.input.SoundController;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -51,6 +52,9 @@ import static com.b3.world.BuildingType.HOUSE;
 public class World implements Disposable {
 
 	private static short ENTITY_CULL_TAG = 10101;
+
+	private SoundController soundController;
+
 	private TiledMap map;
 	private InputHandler inputHandler;
 
@@ -102,12 +106,13 @@ public class World implements Disposable {
 	private Point p;
 
 	public World() {
+
 	}
 
-	public World(String fileName, Mode mode, InputHandler inputHandler) {
+	public World(String fileName, Mode mode, InputHandler inputHandler, SoundController soundController) {
 		this.inputHandler = inputHandler;
-		//this.compareMode = compareMode;
 		this.mode = mode;
+		this.soundController = soundController;
 
 		animationNextDestination = 0;
 		xNextDestination = 0;
@@ -328,8 +333,8 @@ public class World implements Disposable {
 
 		//IF IS COMPAREMODE (compareMode = true) DO ALL THREE BEHAVIOURS
 		Behaviour behaviour = mode == Mode.TRY_YOURSELF ?
-				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.DEPTH_FIRST, worldGraph, worldCamera) :
-				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph, worldCamera);
+				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.DEPTH_FIRST, worldGraph, worldCamera, this) :
+				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph, worldCamera, this);
 		agent.setBehaviour(behaviour);
 
 		if (mode != Mode.TRY_YOURSELF) {
@@ -447,7 +452,7 @@ public class World implements Disposable {
 			throw new IllegalArgumentException("List of goals given must not be empty");
 
 		Agent agent = spawnAgent(tilePos);
-		BehaviourMultiPathFind behaviour = new BehaviourMultiPathFind(agent, tilePos, endTiles[0], algorithm, worldGraph, worldCamera);
+		BehaviourMultiPathFind behaviour = new BehaviourMultiPathFind(agent, tilePos, endTiles[0], algorithm, worldGraph, worldCamera, this);
 
 		for (int i = 1, endTilesLength = endTiles.length; i < endTilesLength; i++)
 			behaviour.addNextGoal(endTiles[i]);
@@ -469,7 +474,7 @@ public class World implements Disposable {
 	 */
 	private Agent spawnAgentWithPathFinding(Vector2 tilePos, Vector2 endNode, SearchAlgorithm algorithm, boolean visualise) {
 		Agent agent = spawnAgent(tilePos);
-		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, worldGraph, worldCamera);
+		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, worldGraph, worldCamera, this);
 		agent.setBehaviour(behaviour);
 		if (visualise)
 			worldGraph.setCurrentSearch(agent, behaviour.getTicker());
@@ -815,5 +820,9 @@ public class World implements Disposable {
 			}
 		}
 		System.out.println("BAD");
+	}
+
+	public SoundController getSoundController() {
+		return soundController;
 	}
 }

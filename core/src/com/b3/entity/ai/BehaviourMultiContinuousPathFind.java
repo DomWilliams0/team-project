@@ -8,6 +8,7 @@ import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Utils;
+import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.math.Vector2;
 
@@ -18,11 +19,11 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	private SearchAlgorithm algorithm;
 	private ErrorPopups errorPopups;
 
-	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph, WorldCamera worldCamera) {
+	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph, WorldCamera worldCamera, World world) {
 		super(agent, null);
 		graph = worldGraph;
 		algorithm = searchAlgorithm;
-		pathFind = new BehaviourPathFind(agent, agent.getPhysicsComponent().getPosition(), generateRandomTile(), searchAlgorithm, worldGraph, worldCamera);
+		pathFind = new BehaviourPathFind(agent, agent.getPhysicsComponent().getPosition(), generateRandomTile(), searchAlgorithm, worldGraph, worldCamera, world);
 	}
 
 	@Override

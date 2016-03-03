@@ -5,6 +5,7 @@ import com.b3.gui.SideBarNodes;
 import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
+import com.b3.input.SoundController;
 import com.b3.input.WorldSelectionHandler;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -44,8 +45,12 @@ public class LearningMode implements Screen {
 
         this.game = game;
 
+        // set up the sounds
+        String[] arrSoundsDir = game.getSoundsDirList();
+        SoundController soundController = new SoundController(arrSoundsDir);
+
         // create world
-        world = new World("core/assets/world/world_smaller_test.tmx", Mode.LEARNING, game.inputHandler);
+        world = new World("core/assets/world/world_smaller_test.tmx", Mode.LEARNING, game.inputHandler, soundController);
 
         // init gui
         setupSidebar();
