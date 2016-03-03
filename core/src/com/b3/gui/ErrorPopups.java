@@ -12,11 +12,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class ErrorPopups {
 
-    private final SpriteBatch spriteBatch;
     private final OrthographicCamera camera;
     private final WorldCamera worldCamera;
+
+    private SpriteBatch spriteBatch;
     private Sprite sprite;
+
     private int noOfTicksDisplay;
+    private int maxTicks;
 
     public ErrorPopups(WorldCamera worldCamera, Sprite sprite) {
         this.worldCamera = worldCamera;
@@ -29,7 +32,12 @@ public class ErrorPopups {
     }
 
     public void showPopup(int noOfTicksDisplay) {
-        this.noOfTicksDisplay = noOfTicksDisplay;
+        if (this.noOfTicksDisplay > 10) {
+            System.err.println("ALREADY DISPLAYING POPUP");
+        } else {
+            this.maxTicks = noOfTicksDisplay;
+            this.noOfTicksDisplay = noOfTicksDisplay;
+        }
     }
 
     public void render() {
@@ -53,8 +61,18 @@ public class ErrorPopups {
                     imgWidth = sprite.getWidth();
                 }
             } else {
-                imgWidth = sprite.getWidth();
-                imgHeight = sprite.getHeight();
+                //if first 50 ticks
+                if (noOfTicksDisplay > (maxTicks - 50)) {
+                    imgHeight = sprite.getHeight() / (50-(maxTicks-noOfTicksDisplay));
+                    if (noOfTicksDisplay > (maxTicks - 25)) {
+                        imgWidth = sprite.getWidth() / (25-(maxTicks-noOfTicksDisplay));
+                    } else {
+                        imgWidth = sprite.getWidth();
+                    }
+                } else {
+                    imgWidth = sprite.getWidth();
+                    imgHeight = sprite.getHeight();
+                }
             }
 
             spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);

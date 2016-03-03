@@ -315,7 +315,7 @@ public class SideBar extends Table implements Disposable {
         settingsTab.row();
 
         // Remove Building button
-        ButtonComponent removeBuildingButton = new ButtonComponent(skin, font, "Remove Building Mode");
+        ButtonComponent removeBuildingButton = new ButtonComponent(skin, font, "Remove Building");
         removeBuildingButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
