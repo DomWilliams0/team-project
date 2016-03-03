@@ -26,23 +26,12 @@ public class Pseudocode extends Observable {
     }
 
     private void initLines() {
-        lines = new ArrayList<Tuple<String, Tuple<Boolean, Integer>>>() {{
-            add(new Tuple<>("while frontier is not empty:",                 new Tuple<>(false, 0)));
-            add(new Tuple<>("current = frontier.take()\n",                  new Tuple<>(false, 1)));
-            add(new Tuple<>("visited.add(current)\n",                       new Tuple<>(false, 2)));
-            add(new Tuple<>("if current is target:",                        new Tuple<>(false, 2)));
-            add(new Tuple<>("return constructed path\n",                    new Tuple<>(false, 3)));
-            add(new Tuple<>("for each node n that is adjacent to current:", new Tuple<>(false, 2)));
-            add(new Tuple<>("if n not in visited and not in frontier:",     new Tuple<>(false, 3)));
-            add(new Tuple<>("frontier.add(s)\n",                            new Tuple<>(false, 4)));
-        }};
-
         switch (algorithm) {
             case BREADTH_FIRST:
             case DEPTH_FIRST:
                 lines = new ArrayList<Tuple<String, Tuple<Boolean, Integer>>>() {{
                     add(new Tuple<>("while frontier is not empty:",                 new Tuple<>(false, 0)));
-                    add(new Tuple<>("current <- frontier.take()\n",                  new Tuple<>(false, 1)));
+                    add(new Tuple<>("current <- frontier.take()\n",                 new Tuple<>(false, 1)));
                     add(new Tuple<>("visited.add(current)\n",                       new Tuple<>(false, 1)));
                     add(new Tuple<>("if current is target:",                        new Tuple<>(false, 1)));
                     add(new Tuple<>("return constructed path\n",                    new Tuple<>(false, 2)));
@@ -54,17 +43,17 @@ public class Pseudocode extends Observable {
 
             case A_STAR:
                 lines = new ArrayList<Tuple<String, Tuple<Boolean, Integer>>>() {{
-                    add(new Tuple<>("while frontier is not empty:",                 new Tuple<>(false, 0)));
-                    add(new Tuple<>("current = frontier.take()\n",                  new Tuple<>(false, 1)));
-                    add(new Tuple<>("visited.add(current)\n",                       new Tuple<>(false, 1)));
-                    add(new Tuple<>("if current is target:",                        new Tuple<>(false, 1)));
-                    add(new Tuple<>("return constructed path\n",                    new Tuple<>(false, 2)));
-                    add(new Tuple<>("for each node n that is adjacent to current:", new Tuple<>(false, 1)));
-                    add(new Tuple<>("tentative_g <- costSoFarFunction(current) + edgeCostFunction(current, n)",     new Tuple<>(false, 2)));
-                    add(new Tuple<>("if tentative_g <= costSoFarFunction(n):",                            new Tuple<>(false, 2)));
-                    add(new Tuple<>("cameFrom.put(n, current)",                            new Tuple<>(false, 3)));
-                    add(new Tuple<>("if n not in visited and not in frontier:",                            new Tuple<>(false, 3)));
-                    add(new Tuple<>("frontier.add(n)\n",                            new Tuple<>(false, 4)));
+                    add(new Tuple<>("while frontier is not empty:",                     new Tuple<>(false, 0)));
+                    add(new Tuple<>("current = frontier.take()\n",                      new Tuple<>(false, 1)));
+                    add(new Tuple<>("visited.add(current)\n",                           new Tuple<>(false, 1)));
+                    add(new Tuple<>("if current is target:",                            new Tuple<>(false, 1)));
+                    add(new Tuple<>("return constructed path\n",                        new Tuple<>(false, 2)));
+                    add(new Tuple<>("for each node n that is adjacent to current:",     new Tuple<>(false, 1)));
+                    add(new Tuple<>("tentative_g <- g(current) + edgeCost(current, n)", new Tuple<>(false, 2)));
+                    add(new Tuple<>("if tentative_g <= g(n):",                          new Tuple<>(false, 2)));
+                    add(new Tuple<>("cameFrom.put(n, current)",                         new Tuple<>(false, 3)));
+                    add(new Tuple<>("if n not in visited and not in frontier:",         new Tuple<>(false, 3)));
+                    add(new Tuple<>("frontier.add(n)\n",                                new Tuple<>(false, 4)));
                 }};
 
                 break;

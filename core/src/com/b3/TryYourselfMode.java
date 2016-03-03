@@ -28,11 +28,8 @@ public class TryYourselfMode implements Screen {
     //private SideBarNodes sideBarNodes;
     //private HelpBox helpBox;
     private KeyboardController keyboardController;
-    private MainGame game;
 
     public TryYourselfMode(MainGame game) {
-        this.game = game;
-
         // create world
         world = new World("core/assets/world/world_smaller_test.tmx", Mode.TRY_YOURSELF, game.inputHandler);
 
@@ -73,7 +70,6 @@ public class TryYourselfMode implements Screen {
 
         // world clicking
         inputHandler.addProcessor(new TYMWorldSelection(world));
-
     }
 
     /**

@@ -82,8 +82,6 @@ public class TYMWorldSelection extends InputAdapter {
             Takeable<Node> frontier = currentSearch.getFrontier();
             Set<Node> visited = currentSearch.getVisited();
 
-            System.out.println(visited);
-
             switch (currentStage) {
                 case CURRENT_NODE_SELECTION:
                     Node actualNode = frontier.peek();
@@ -96,11 +94,6 @@ public class TYMWorldSelection extends InputAdapter {
                         currentStage = Stage.ADD_TO_FRONTIER_SELECTION;
                     }
                     break;
-
-                /*case ADD_TO_EXPLORED_SELECTION:
-                    currentSearch.addToVisited(node);
-                    currentStage = Stage.ADD_TO_FRONTIER_SELECTION;
-                    break;*/
 
                 case ADD_TO_FRONTIER_SELECTION:
                     List<Node> actualFrontier = currentSearch.getMostRecentlyExpanded().getNeighbours()
@@ -121,11 +114,6 @@ public class TYMWorldSelection extends InputAdapter {
                     break;
             }
         }
-
-        /*if (button == Input.Buttons.LEFT)
-            world.setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
-        else
-            world.setNextDestination(node.getPoint().getX(), node.getPoint().getY());*/
 
         // no search
         if (!worldGraph.hasSearchInProgress())
