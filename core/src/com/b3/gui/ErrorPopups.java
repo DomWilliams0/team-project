@@ -21,6 +21,8 @@ public class ErrorPopups {
     private int noOfTicksDisplay;
     private int maxTicks;
 
+    private long startSeconds;
+
     public ErrorPopups(WorldCamera worldCamera, Sprite sprite) {
         this.worldCamera = worldCamera;
         this.sprite = sprite;
@@ -35,8 +37,11 @@ public class ErrorPopups {
         if (this.noOfTicksDisplay > 10) {
             System.err.println("ALREADY DISPLAYING POPUP");
         } else {
+//            this.maxTicks = noOfTicksDisplay;
+//            this.noOfTicksDisplay = noOfTicksDisplay;
             this.maxTicks = noOfTicksDisplay;
             this.noOfTicksDisplay = noOfTicksDisplay;
+            this.startSeconds = System.currentTimeMillis();
         }
     }
 
@@ -44,7 +49,12 @@ public class ErrorPopups {
         //if has not ran out of time
         if (noOfTicksDisplay != 0) {
             //decrement time left allowed on screen
-            noOfTicksDisplay--;
+//            noOfTicksDisplay--;
+            long change = (System.currentTimeMillis() - startSeconds);
+
+            noOfTicksDisplay = noOfTicksDisplay - ((int)change/10);
+
+            startSeconds = System.currentTimeMillis();
             spriteBatch.begin();
 
             int width = Gdx.graphics.getWidth();
@@ -62,10 +72,10 @@ public class ErrorPopups {
                 }
             } else {
                 //if first 50 ticks
-                if (noOfTicksDisplay > (maxTicks - 50)) {
-                    imgHeight = sprite.getHeight() / (50-(maxTicks-noOfTicksDisplay));
-                    if (noOfTicksDisplay > (maxTicks - 25)) {
-                        imgWidth = sprite.getWidth() / (25-(maxTicks-noOfTicksDisplay));
+                if (noOfTicksDisplay > (maxTicks - 25)) {
+                    imgHeight = sprite.getHeight() / (25-(maxTicks-noOfTicksDisplay));
+                    if (noOfTicksDisplay > (maxTicks - 12)) {
+                        imgWidth = sprite.getWidth() / (12-(maxTicks-noOfTicksDisplay));
                     } else {
                         imgWidth = sprite.getWidth();
                     }

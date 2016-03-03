@@ -24,6 +24,11 @@ import static java.util.Collections.copy;
 import static java.util.Collections.reverse;
 import static java.util.Collections.sort;
 
+/**
+ * A pop-up visual that explains what each node is
+ * Including drawing the heurstic and explaining to the user where the costs come from.
+ */
+
 public class RenderTester {
 
     private ShapeRenderer shapeRenderer;
@@ -438,6 +443,14 @@ public class RenderTester {
         drawDottedLine((float) 0.3, x2, y2, x1, y2);
     }
 
+    /**
+     * Draws a dotted line from one place to another using a ShapeRenderer
+     * @param dotDist the distance between each dot. 0.3 is recommended value.
+     * @param x1 x coordination of beginning of dotted line
+     * @param y1 y coordination of beginning of dotted line
+     * @param x2 x coordination of end of dotted line
+     * @param y2 y coordination of end of dotted line
+     */
     private void drawDottedLine(float dotDist, float x1, float y1, float x2, float y2) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setProjectionMatrix(worldCamera.combined);
@@ -452,6 +465,18 @@ public class RenderTester {
         shapeRenderer.end();
     }
 
+    /**
+     * Draws an equation in the following format:
+     * total = firstNo + secondNo
+     * onto the screen.
+     * @param total the total value that will be displaed left of all other numbers
+     * @param firstNo the number in between = and +
+     * @param secondNo the number most to the right
+     * @param currentNodeClickX the x coordinate of a Node on the WorldGraph
+     * @param currentNodeClickY the y coordinate of a Node on the WorldGraph
+     * @param scalingZoom the current amount of zoom that the camera has.
+     *
+     */
     private void drawEquationOnScreen(int total, int firstNo, int secondNo, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
         drawNumberOnScreen(total, currentNodeClickX-(scalingZoom/10), currentNodeClickY, scalingZoom);
         spriteBatch.draw(equals, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
@@ -460,6 +485,16 @@ public class RenderTester {
         drawNumberOnScreen(secondNo, currentNodeClickX+3*(scalingZoom/10), currentNodeClickY, scalingZoom);
     }
 
+    /**
+     * Draws an cost in the following format:
+     * cost
+     * onto the screen, inbetween
+     * @param cost the value of g(x) to thus node. that will be displaed left of all other numbers
+     * @param one the first node
+     * @param two the second node
+     * @param scalingZoom the current amount of zoom that the camera has.
+     *
+     */
     private void drawCostOnScreen(int cost, Point one, Point two, float scalingZoom) {
         //change in x
         if (one.getY() == two.getY()) {

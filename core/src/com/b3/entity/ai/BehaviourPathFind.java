@@ -78,7 +78,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			} else {
 				if (getPath().size() == 0) {
 					//Path not completed properly, so show error and start again
-					errorPopups.showPopup(300);
+					errorPopups.showPopup(400);
 					ticker.reset(algorithm, startNode, endNode);
 				} else {
 					if (!(getPath().get(getPath().size() - 1).x == endNode.getPoint().x && getPath().get(getPath().size() - 1).y == endNode.getPoint().y))
