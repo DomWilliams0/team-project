@@ -12,6 +12,7 @@ import com.b3.world.WorldCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,16 +74,19 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 
 	@Override
 	public void tick(Vector2 steeringOutput) {
+		int shouldPlayFail = 0;
 		if (ticker.isPathComplete()) {
-			if (steering == null)
+			if (steering == null) {
+				shouldPlayFail = 1;
 				updatePathFromTicker();
+			}
 			if (steering != null) {
 				steering.tick(steeringOutput);
 			} else {
 				if (getPath().size() == 0) {
 					//Path not completed properly, so show error and start again
 					errorPopups.showPopup(400);
-					world.getSoundController().playSounds(0);
+					shouldPlayFail = -1;
 					ticker.reset(algorithm, startNode, endNode);
 				} else {
 					if (!(getPath().get(getPath().size() - 1).x == endNode.getPoint().x && getPath().get(getPath().size() - 1).y == endNode.getPoint().y))
@@ -91,6 +95,13 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			}
 		} else
 			ticker.tick();
+
+		if (shouldPlayFail == 1) {
+			world.getSoundController().playSounds(1);
+		}
+		if (shouldPlayFail == -1) {
+			world.getSoundController().playSounds(0);
+		}
 
 		wasArrivedLastFrame = hasArrivedThisFrame;
 		hasArrivedThisFrame = hasArrived();

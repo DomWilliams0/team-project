@@ -140,6 +140,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                     System.out.println("Add building mode is " + !currentBoolean);
                 } else {
                     world.showPopupError();
+                    //TODO SOUND GO HERE
                     System.err.println("Search has begun cannot add");
                 }
             }
@@ -180,6 +181,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                     System.out.println("Remove building mode is " + !currentBoolean);
                 } else {
                     world.showPopupError();
+                    //TODO SOUND GO HERE
                     System.err.println("Search has begun cannot add");
                 }
             }

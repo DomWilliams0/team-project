@@ -21,8 +21,9 @@ public class MainGame extends Game {
 	 */
 	@Override
 	public void create() {
-		soundsDirList = new String[1];
-		soundsDirList[0] = "core/assets/sounds/shotgun.mp3";
+		soundsDirList = new String[2];
+		soundsDirList[0] = "core/assets/sounds/sad_failure.mp3";
+		soundsDirList[1] = "core/assets/sounds/search_complete.mp3";
 
 		// load config
 		Config.loadConfig("core/assets/reference.yml", "core/assets/userconfig.yml");
