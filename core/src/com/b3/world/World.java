@@ -103,6 +103,7 @@ public class World implements Disposable {
 
 	private Point currentMousePos;
 	private ErrorPopups errorSprite;
+	private ErrorPopups errorSpriteTwo;
 	private Point p;
 
 	public World() {
@@ -320,9 +321,14 @@ public class World implements Disposable {
 
 		//set up these after the camera has been setup
 		rt = new RenderTester(this);
+		//load error textures
 		Texture tempTexture = new Texture("core/assets/world/popups/errorBuildings.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		errorSprite = new ErrorPopups(worldCamera, new Sprite(tempTexture));
+
+		tempTexture = new Texture("core/assets/world/popups/errorCode.png");
+		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		errorSpriteTwo = new ErrorPopups(worldCamera, new Sprite(tempTexture));
 
 		// debug: test entities
 		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
@@ -645,6 +651,8 @@ public class World implements Disposable {
 
 		//error message render's only if errorSprite.showPopup() is called.
 		errorSprite.render();
+		errorSpriteTwo.render();
+
 		BehaviourMultiContinuousPathFind b = (BehaviourMultiContinuousPathFind) worldGraph.getCurrentSearchAgent().getBehaviour();
 		b.getErrorPopups().render();
 
@@ -784,8 +792,11 @@ public class World implements Disposable {
 		currentMousePos = new Point(screenX, screenY);
 	}
 
-	public void showPopupError() {
-		errorSprite.showPopup(750);
+	public void showPopupError(int errorNo) {
+		if (errorNo==1)
+			errorSprite.showPopup(750);
+		if (errorNo==2)
+			errorSpriteTwo.showPopup(750);
 	}
 
 	//TODO make it so don't have to click in bottom left corner

@@ -235,8 +235,25 @@ public class SideBarNodes extends Table implements Disposable {
                     }
                 }
                 else {
-                    MessageBoxComponent.show("To see the pseudocode there must be a search running.\n" +
-                            "Please start a search using the 'Play' button in the left sidebar", "Warning");
+                    //Close Sidebar
+                    TextButton _triggerBtn = triggerBtn.getComponent();
+
+                    if (!isOpen) {
+                        setX(0);
+                        setY(0);
+                        _triggerBtn.setText(">");
+                        _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
+
+                        isOpen = true;
+                    } else {
+                        setX(-preferredWidth);
+                        _triggerBtn.setText("<");
+                        _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
+
+                        isOpen = false;
+                    }
+
+                    world.showPopupError(2);
                 }
             }
         });
@@ -256,7 +273,6 @@ public class SideBarNodes extends Table implements Disposable {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 TextButton _triggerBtn = triggerBtn.getComponent();
-
 
                 if (!isOpen) {
                     setX(Gdx.graphics.getWidth()- preferredWidth);

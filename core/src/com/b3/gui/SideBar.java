@@ -23,7 +23,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -299,7 +298,7 @@ public class SideBar extends Table implements Disposable {
                     Config.set(ConfigKey.ADD_BUILDING_MODE, !currentBoolean);
                     System.out.println("Add building mode is " + !currentBoolean);
                 } else {
-                    world.showPopupError();
+                    world.showPopupError(1);
                     //TODO SOUND GO HERE
                     System.err.println("Search has begun cannot add");
                 }
@@ -340,7 +339,7 @@ public class SideBar extends Table implements Disposable {
                     Config.set(ConfigKey.REMOVE_BUILDING_MODE, !currentBoolean);
                     System.out.println("Remove building mode is " + !currentBoolean);
                 } else {
-                    world.showPopupError();
+                    world.showPopupError(1);
                     //TODO SOUND GO HERE
                     System.err.println("Search has begun cannot add");
                 }
