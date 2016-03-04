@@ -272,7 +272,7 @@ public class World implements Disposable {
 		boundaryDef.filter.groupIndex = ENTITY_CULL_TAG;
 
 		// todo this side doesn't seem quite right...
-		shape.setAsBox(offset + tileSize.x / 2f, thickness, new Vector2(tileSize.x / 2f, thickness / 2f - offset), 0f); // bottom
+		shape.setAsBox(offset + tileSize.x / 2f, thickness, new Vector2(tileSize.x / 2f, -thickness / 2f - offset), 0f); // bottom
 		buildingBody.createFixture(boundaryDef);
 
 		shape.setAsBox(offset + tileSize.x / 2f, thickness, new Vector2(tileSize.x / 2f, tileSize.y + thickness / 2f + offset), 0f); // top
