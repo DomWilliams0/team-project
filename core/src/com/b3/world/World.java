@@ -46,6 +46,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static com.b3.world.BuildingType.HOUSE;
 
@@ -82,6 +84,7 @@ public class World implements Disposable {
 	private WorldGraph worldGraph;
 
 	private Set<Entity> deadEntities;
+	private List<PendingTeleport> pendingTeleports;
 	private WorldCamera worldCamera;
 
 	private float counterAnimation = -1;
@@ -147,6 +150,7 @@ public class World implements Disposable {
 		// entities
 		engine = new Engine();
 		deadEntities = new HashSet<>();
+		pendingTeleports = new ArrayList<>();
 		physicsWorld = new com.badlogic.gdx.physics.box2d.World(Vector2.Zero, true);
 		BodyDef buildingBodyDef = new BodyDef();
 		buildingBodyDef.type = BodyDef.BodyType.StaticBody;
@@ -264,7 +268,7 @@ public class World implements Disposable {
 		FixtureDef boundaryDef = new FixtureDef();
 		PolygonShape shape = new PolygonShape();
 		boundaryDef.shape = shape;
-//		boundaryDef.isSensor = true;
+		boundaryDef.isSensor = true;
 		boundaryDef.filter.groupIndex = ENTITY_CULL_TAG;
 
 		// todo this side doesn't seem quite right...
@@ -280,33 +284,50 @@ public class World implements Disposable {
 		shape.setAsBox(thickness, offset + tileSize.y / 2f, new Vector2(tileSize.x + thickness / 2f + offset, tileSize.y / 2f), 0f); // right
 		buildingBody.createFixture(boundaryDef);
 
-//		physicsWorld.setContactListener(new ContactListener() {
-//			@Override
-//			public void beginContact(Contact contact) {
-//				// one must be a sensor
-//				if (!contact.getFixtureA().isSensor() || contact.getFixtureB().isSensor())
-//					return;
-//
-//				Fixture f = contact.getFixtureA().getFilterData().groupIndex == ENTITY_CULL_TAG ? contact.getFixtureB() : contact.getFixtureA();
-//				Entity entity = (Entity) f.getBody().getUserData();
-//				if (entity == null)
-//					return;
-//
-//				deadEntities.add(entity);
-//			}
-//
-//			@Override
-//			public void endContact(Contact contact) {
-//			}
-//
-//			@Override
-//			public void preSolve(Contact contact, Manifold manifold) {
-//			}
-//
-//			@Override
-//			public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-//			}
-//		});
+		physicsWorld.setContactListener(new ContactListener() {
+			@Override
+			public void beginContact(Contact contact) {
+				// one must be a sensor
+				if (!contact.getFixtureA().isSensor() || contact.getFixtureB().isSensor())
+					return;
+
+				Fixture f = contact.getFixtureA().getFilterData().groupIndex == ENTITY_CULL_TAG ? contact.getFixtureB() : contact.getFixtureA();
+				Entity entity = (Entity) f.getBody().getUserData();
+				if (entity == null)
+					return;
+
+				// searching
+				if (entity == worldGraph.getCurrentSearchAgent())
+					return;
+
+				// teleport to other side of the world
+				Vector2 position = f.getBody().getPosition();
+				TeleportType teleportType;
+				if (position.x < 0)
+					teleportType = TeleportType.TO_RIGHT;
+				else if (position.x >= tileSize.x)
+					teleportType = TeleportType.TO_LEFT;
+
+				else if (position.y < 0)
+					teleportType = TeleportType.TO_BOTTOM;
+				else
+					teleportType = TeleportType.TO_TOP;
+
+				pendingTeleports.add(new PendingTeleport(f.getBody(), teleportType));
+			}
+
+			@Override
+			public void endContact(Contact contact) {
+			}
+
+			@Override
+			public void preSolve(Contact contact, Manifold manifold) {
+			}
+
+			@Override
+			public void postSolve(Contact contact, ContactImpulse contactImpulse) {
+			}
+		});
 	}
 
 	/**
@@ -570,6 +591,28 @@ public class World implements Disposable {
 			engine.removeEntity(e);
 		});
 		deadEntities.clear();
+
+		// teleport entities
+		pendingTeleports.forEach(pendingTeleport -> {
+			Vector2 position = pendingTeleport.body.getPosition();
+			switch (pendingTeleport.teleportType) {
+				case TO_LEFT:
+					position.x = 0;
+					break;
+				case TO_TOP:
+					position.y = 0;
+					break;
+				case TO_RIGHT:
+					position.x = tileSize.x;
+					break;
+				case TO_BOTTOM:
+					position.y = tileSize.y;
+					break;
+			}
+
+			pendingTeleport.body.setTransform(position, pendingTeleport.body.getAngle());
+		});
+		pendingTeleports.clear();
 
 		// render tiled world
 		worldCamera.positionMapRenderer(renderer);
