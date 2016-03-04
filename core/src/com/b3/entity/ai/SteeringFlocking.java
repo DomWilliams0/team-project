@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class SteeringFlocking extends Steering {
 
 	private static Vector2 tmpVector = new Vector2();
-	private static final int DISTANCE_SQRD = 5 * 5;
+	private static final double DISTANCE_SQRD = Math.pow(10, 2);
 
 	private ImmutableArray<Entity> entities;
 

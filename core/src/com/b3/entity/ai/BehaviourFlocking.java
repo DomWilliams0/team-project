@@ -13,11 +13,13 @@ public class BehaviourFlocking extends Behaviour {
 	private static final Vector2 additionVector = new Vector2();
 
 	private Family family;
+	private Engine engine;
+
+	private BehaviourWander wander;
 
 	private SteeringAlignment alignment;
 	private SteeringCohesion cohesion;
 	private SteeringSeparation separation;
-	private Engine engine;
 
 	/**
 	 * Constructs a new behaviour with an agent and a type of movement behaviour
@@ -33,11 +35,17 @@ public class BehaviourFlocking extends Behaviour {
 
 		engine = entityEngine;
 		family = Family.all(PhysicsComponent.class).get();
+
+		wander = new BehaviourWander(agent);
 	}
 
 	@Override
 	public void tick(Vector2 steeringOutput) {
 		steeringOutput.setZero();
+
+		wander.tick(steeringOutput);
+		steeringOutput.nor();
+
 		ImmutableArray<Entity> entities = engine.getEntitiesFor(family);
 
 		tickSteering(alignment, entities, additionVector, steeringOutput);
