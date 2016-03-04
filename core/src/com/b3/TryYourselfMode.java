@@ -2,6 +2,7 @@ package com.b3;
 
 import com.b3.gui.SideBarIntensiveLearningMode;
 import com.b3.gui.SideBarNodes;
+import com.b3.gui.components.MessageBoxComponent;
 import com.b3.gui.help.HelpBox;
 import com.b3.input.*;
 import com.b3.util.Config;
@@ -25,6 +26,7 @@ public class TryYourselfMode implements Screen {
     //private SideBarNodes sideBarNodes;
     //private HelpBox helpBox;
     private KeyboardController keyboardController;
+    private Stage popupStage;
 
     public TryYourselfMode(MainGame game) {
         // set up the sounds
@@ -36,6 +38,7 @@ public class TryYourselfMode implements Screen {
 
         // init gui
         //setupSidebar();
+        popupStage = new Stage(new ScreenViewport());
 
         // register input handlers
         initInputHandlers(game.inputHandler);
@@ -55,6 +58,14 @@ public class TryYourselfMode implements Screen {
 
         world.getWorldGraph().getCurrentSearch().pause(1);
         world.getWorldGraph().getCurrentSearch().setUpdated(true);
+
+        // Display first popup
+        MessageBoxComponent descriptionPopup = new MessageBoxComponent(popupStage,
+                "Welcome to the 'Try it yourself' mode.\n" +
+                        "Here you can practice what you have learned in the 'Learning mode'.\n" +
+                        "Now please click on the node to be expanded next.",
+                "OK");
+        descriptionPopup.show();
     }
 
     /**
@@ -66,11 +77,11 @@ public class TryYourselfMode implements Screen {
         keyboardController = new KeyboardController();
         inputHandler.addProcessor(keyboardController);
 
-        // world clicking
-        //inputHandler.addProcessor(sideBarStage);
+        // popup clicking
+        inputHandler.addProcessor(popupStage);
 
         // world clicking
-        inputHandler.addProcessor(new TYMWorldSelection(world));
+        inputHandler.addProcessor(new TYMWorldSelection(world, popupStage));
     }
 
     /**
@@ -105,6 +116,9 @@ public class TryYourselfMode implements Screen {
         // world rendering
         world.render();
 
+        popupStage.act(Gdx.graphics.getDeltaTime());
+        popupStage.draw();
+
         // sidebar rendering
         /*sideBarStage.act(Gdx.graphics.getDeltaTime());
         sideBarNodes.render();
@@ -130,6 +144,7 @@ public class TryYourselfMode implements Screen {
         sideBar.resize(width, height);
         sideBarNodes.resize(width, height);
         helpBox.resize(width, height);*/
+        popupStage.getViewport().update(width, height, true);
 
         camera.viewportWidth = width;
         camera.viewportHeight = height;

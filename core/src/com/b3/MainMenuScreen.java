@@ -84,9 +84,9 @@ public class MainMenuScreen implements Screen {
 
         wrapper.add(learningModeBtn.getComponent());
         wrapper.row().padTop(30);
-        wrapper.add(compareModeBtn.getComponent());
-        wrapper.row().padTop(30);
         wrapper.add(tryYourselfModeBtn.getComponent());
+        wrapper.row().padTop(30);
+        wrapper.add(compareModeBtn.getComponent());
 
         mainMenuStage.addActor(wrapper);
     }

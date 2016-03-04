@@ -407,7 +407,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
      */
     public void resize(int width, int height) {
         setHeight(height);
-//        triggerBtn.getComponent().setY(height / 2);
+        triggerBtn.getComponent().setY(height / 2);
     }
 
     public void render() {

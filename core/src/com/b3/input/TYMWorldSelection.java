@@ -2,6 +2,7 @@ package com.b3.input;
 
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
+import com.b3.gui.components.MessageBoxComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -31,11 +32,13 @@ public class TYMWorldSelection extends InputAdapter {
     private World world;
     private Stage currentStage;
     private Point currentSelection;
+    private MessageBoxComponent descriptionPopup;
 
-    public TYMWorldSelection(World world) {
+    public TYMWorldSelection(World world, com.badlogic.gdx.scenes.scene2d.Stage popupStage) {
         this.world = world;
         this.currentStage = Stage.CURRENT_NODE_SELECTION;
         this.currentSelection = new Point(1,1);
+        this.descriptionPopup = new MessageBoxComponent(popupStage, "", "OK");
     }
 
     @Override
@@ -86,12 +89,16 @@ public class TYMWorldSelection extends InputAdapter {
                 case CURRENT_NODE_SELECTION:
                     Node actualNode = frontier.peek();
                     if (!actualNode.equals(node)) {
-                        System.out.println("This is not the node to be selected next!");
+                        descriptionPopup.setText("Attention! This node is not the one to be selected for expansion.");
+                        descriptionPopup.show();
                     }
                     else {
                         frontier.take();
                         currentSearch.setMostRecentlyExpanded(node);
                         currentStage = Stage.ADD_TO_FRONTIER_SELECTION;
+
+                        descriptionPopup.setText("Good! Now please select the nodes to add to the frontier.");
+                        descriptionPopup.show();
                     }
                     break;
 
@@ -101,16 +108,28 @@ public class TYMWorldSelection extends InputAdapter {
                             .filter(s -> !frontier.contains(s) && !visited.contains(s))
                             .collect(Collectors.toList());
 
-                    if (actualFrontier.isEmpty()) {
-                        currentSearch.addToVisited(currentSearch.getMostRecentlyExpanded());
-                        currentStage = Stage.CURRENT_NODE_SELECTION;
-                    }
-                    else if (!actualFrontier.contains(node)) {
-                        System.out.println("Node not to be added to frontier!");
+                    if (!actualFrontier.contains(node)) {
+                        descriptionPopup.setText("Attention! This node can't be added to the frontier.");
+                        descriptionPopup.show();
                     }
                     else {
                         currentSearch.addToFrontier(node);
+
+                        // Recalculate frontier to see if it's empty
+                        actualFrontier = currentSearch.getMostRecentlyExpanded().getNeighbours()
+                                .stream()
+                                .filter(s -> !frontier.contains(s) && !visited.contains(s))
+                                .collect(Collectors.toList());
+
+                        if (actualFrontier.isEmpty()) {
+                            currentSearch.addToVisited(currentSearch.getMostRecentlyExpanded());
+                            currentStage = Stage.CURRENT_NODE_SELECTION;
+
+                            descriptionPopup.setText("Great! Now follow the algorithm steps in order to reach the goal node.");
+                            descriptionPopup.show();
+                        }
                     }
+
                     break;
             }
         }
