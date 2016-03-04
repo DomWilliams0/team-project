@@ -424,7 +424,7 @@ public class SideBarNodes extends Table implements Disposable {
 
         SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
             ticker.setInspectSearch(false);
-            ticker.resume(1);
+            //ticker.resume(1);
 
             manualAutoBtn.getComponent().setVisible(false);
             inspectSearchBtn.setData(false);
