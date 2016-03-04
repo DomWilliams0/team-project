@@ -2,46 +2,53 @@ package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
 import com.b3.entity.component.PhysicsComponent;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.List;
 
 public class BehaviourFlocking extends Behaviour {
 
 	private static final Vector2 additionVector = new Vector2();
 
+	private Family family;
 
 	private SteeringAlignment alignment;
 	private SteeringCohesion cohesion;
 	private SteeringSeparation separation;
-
+	private Engine engine;
 
 	/**
 	 * Constructs a new behaviour with an agent and a type of movement behaviour
 	 *
-	 * @param agent    the agent that this new behaviour will be applied to
+	 * @param agent the agent that this new behaviour will be applied to
 	 */
-	public BehaviourFlocking(Agent agent, List<PhysicsComponent> entities) {
+	public BehaviourFlocking(Agent agent, Engine entityEngine) {
 		super(agent, null);
 
-		alignment = new SteeringAlignment(agent.getPhysicsComponent(), entities);
-		cohesion = new SteeringCohesion(agent.getPhysicsComponent(), entities);
-		separation = new SteeringSeparation(agent.getPhysicsComponent(), entities);
+		alignment = new SteeringAlignment(agent.getPhysicsComponent());
+		cohesion = new SteeringCohesion(agent.getPhysicsComponent());
+		separation = new SteeringSeparation(agent.getPhysicsComponent());
+
+		engine = entityEngine;
+		family = Family.all(PhysicsComponent.class).get();
 	}
 
 	@Override
 	public void tick(Vector2 steeringOutput) {
 		steeringOutput.setZero();
+		ImmutableArray<Entity> entities = engine.getEntitiesFor(family);
 
-		alignment.tick(additionVector);
+		tickSteering(alignment, entities, additionVector, steeringOutput);
+		tickSteering(cohesion, entities, additionVector, steeringOutput);
+		tickSteering(separation, entities, additionVector, steeringOutput);
+	}
+
+	private void tickSteering(SteeringFlocking steering, ImmutableArray<Entity> entities, Vector2 additionVector, Vector2 steeringOutput) {
+		steering.setEntities(entities);
+		steering.tick(additionVector);
 		steeringOutput.add(additionVector);
-
-		cohesion.tick(additionVector);
-		steeringOutput.add(additionVector);
-
-		separation.tick(additionVector);
-		steeringOutput.add(additionVector);
-
 	}
 
 	@Override

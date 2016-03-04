@@ -12,9 +12,8 @@ public abstract class SteeringFlocking extends Steering {
 
 	private ImmutableArray<Entity> entities;
 
-	public SteeringFlocking(PhysicsComponent entity, ImmutableArray<Entity> entities) {
+	public SteeringFlocking(PhysicsComponent entity) {
 		super(entity);
-		this.entities = entities;
 	}
 
 	@Override
@@ -47,4 +46,7 @@ public abstract class SteeringFlocking extends Steering {
 
 	protected abstract void finaliseOutput(Vector2 steeringOut);
 
+	public void setEntities(ImmutableArray<Entity> entities) {
+		this.entities = entities;
+	}
 }

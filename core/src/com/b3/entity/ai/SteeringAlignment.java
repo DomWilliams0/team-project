@@ -1,15 +1,13 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.component.PhysicsComponent;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 
 public class SteeringAlignment extends SteeringFlocking {
 
 
-	public SteeringAlignment(PhysicsComponent entity, ImmutableArray<Entity> entities) {
-		super(entity, entities);
+	public SteeringAlignment(PhysicsComponent entity) {
+		super(entity);
 	}
 
 	@Override

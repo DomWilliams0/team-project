@@ -1,17 +1,13 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.component.PhysicsComponent;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.List;
 
 public class SteeringCohesion extends SteeringFlocking {
 
 
-	public SteeringCohesion(PhysicsComponent entity, ImmutableArray<Entity> entities) {
-		super(entity, entities);
+	public SteeringCohesion(PhysicsComponent entity) {
+		super(entity);
 	}
 
 	@Override
