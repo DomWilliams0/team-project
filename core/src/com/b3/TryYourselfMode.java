@@ -34,7 +34,7 @@ public class TryYourselfMode implements Screen {
         SoundController soundController = new SoundController(arrSoundsDir);
 
         // create world
-        world = new World("core/assets/world/world_smaller_test.tmx", Mode.TRY_YOURSELF, game.inputHandler, soundController);
+        world = new World("core/assets/world/world_smaller_test_tiym.tmx", Mode.TRY_YOURSELF, game.inputHandler, soundController);
 
         // init gui
         //setupSidebar();

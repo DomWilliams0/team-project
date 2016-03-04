@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="15" height="15" tilewidth="16" tileheight="16" nextobjectid="48">
+ <tileset firstgid="1" name="roguelikeCity" tilewidth="16" tileheight="16" spacing="1" tilecount="1036" columns="37">
+  <image source="tileset.png" width="628" height="475"/>
+  <terraintypes>
+   <terrain name="Grass" tile="963"/>
+   <terrain name="Pavement" tile="14"/>
+   <terrain name="Water" tile="212"/>
+  </terraintypes>
+  <tile id="8" terrain=",,,1"/>
+  <tile id="9" terrain=",,1,"/>
+  <tile id="12" terrain="1,1,1,"/>
+  <tile id="13" terrain="1,1,,1"/>
+  <tile id="45" terrain=",1,,"/>
+  <tile id="46" terrain="1,,,"/>
+  <tile id="49" terrain="1,,1,1"/>
+  <tile id="50" terrain=",1,1,1"/>
+  <tile id="174" terrain=",,,2"/>
+  <tile id="175" terrain=",,2,2"/>
+  <tile id="176" terrain=",,2,"/>
+  <tile id="177" terrain="2,2,2,"/>
+  <tile id="178" terrain="2,2,,2"/>
+  <tile id="211" terrain=",2,,2"/>
+  <tile id="213" terrain="2,,2,"/>
+  <tile id="214" terrain="2,,2,2"/>
+  <tile id="215" terrain=",2,2,2"/>
+  <tile id="248" terrain=",2,,"/>
+  <tile id="249" terrain="2,2,,"/>
+  <tile id="250" terrain="2,,,"/>
+  <tile id="925" terrain=",,,0"/>
+  <tile id="926" terrain=",,0,0"/>
+  <tile id="927" terrain=",,0,"/>
+  <tile id="928" terrain="0,0,0,"/>
+  <tile id="929" terrain="0,0,,0"/>
+  <tile id="962" terrain=",0,,0"/>
+  <tile id="963" terrain="0,0,0,0"/>
+  <tile id="964" terrain="0,,0,"/>
+  <tile id="965" terrain="0,,0,0"/>
+  <tile id="966" terrain=",0,0,0"/>
+  <tile id="999" terrain=",0,,"/>
+  <tile id="1000" terrain="0,0,,"/>
+  <tile id="1001" terrain="0,,,"/>
+ </tileset>
+ <layer name="terrain" width="15" height="15">
+  <data encoding="csv">
+964,964,964,964,964,964,964,964,964,964,964,964,964,964,964,
+964,964,964,964,964,964,964,964,964,964,964,964,964,964,964,
+964,964,964,964,964,964,964,964,964,964,964,964,964,964,964,
+85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,
+714,714,714,714,825,714,714,714,714,714,825,714,714,714,714,
+751,751,751,751,825,751,751,751,751,751,825,751,751,751,751,
+85,85,85,85,85,85,85,85,85,85,85,85,85,85,85,
+964,964,964,964,711,964,964,964,964,964,711,964,964,964,964,
+748,748,748,748,748,748,748,748,748,748,748,748,748,748,748,
+748,748,748,748,748,748,748,748,748,748,748,748,748,748,748,
+748,748,748,748,748,748,748,748,748,748,748,748,748,748,748,
+748,748,964,748,748,748,748,748,748,748,748,748,748,748,748,
+748,748,964,748,748,748,748,748,748,748,748,748,748,748,748,
+748,748,964,748,748,748,748,748,748,748,748,748,748,748,748,
+748,748,748,748,748,748,748,748,748,748,748,748,748,748,748
+</data>
+ </layer>
+ <layer name="objects" width="15" height="15">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,289,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,288,0,0,0,0,289,0,0,0,0,288,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,513,0,0,0,0,537,0,0,0,0,0,0,0,
+0,0,513,0,0,0,0,537,0,0,0,0,0,0,0,
+0,0,513,0,0,0,0,537,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="buildings">
+  <object id="2" x="151.598" y="168.673" width="64" height="64">
+   <properties>
+    <property name="building-height" value="4"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="models"/>
+</map>
