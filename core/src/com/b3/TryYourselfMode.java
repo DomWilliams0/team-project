@@ -63,6 +63,7 @@ public class TryYourselfMode implements Screen {
         MessageBoxComponent descriptionPopup = new MessageBoxComponent(popupStage,
                 "Welcome to the 'Try it yourself' mode.\n" +
                         "Here you can practice what you have learned in the 'Learning mode'.\n" +
+                        "Currently you can interact using DFS" +
                         "Now please click on the node to be expanded next.",
                 "OK");
         descriptionPopup.show();

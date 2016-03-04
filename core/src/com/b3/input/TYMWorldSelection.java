@@ -33,12 +33,14 @@ public class TYMWorldSelection extends InputAdapter {
     private Stage currentStage;
     private Point currentSelection;
     private MessageBoxComponent descriptionPopup;
+    private boolean firstTime;
 
     public TYMWorldSelection(World world, com.badlogic.gdx.scenes.scene2d.Stage popupStage) {
         this.world = world;
         this.currentStage = Stage.CURRENT_NODE_SELECTION;
         this.currentSelection = new Point(1,1);
         this.descriptionPopup = new MessageBoxComponent(popupStage, "", "OK");
+        this.firstTime = true;
     }
 
     @Override
@@ -78,8 +80,6 @@ public class TYMWorldSelection extends InputAdapter {
         if (node == null)
             return false;
 
-        System.out.println("You clicked node: " + node.getPoint());
-
         if (button == Input.Buttons.LEFT) {
             SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
             Takeable<Node> frontier = currentSearch.getFrontier();
@@ -97,8 +97,14 @@ public class TYMWorldSelection extends InputAdapter {
                         currentSearch.setMostRecentlyExpanded(node);
                         currentStage = Stage.ADD_TO_FRONTIER_SELECTION;
 
-                        descriptionPopup.setText("Good! Now please select the nodes to add to the frontier.");
-                        descriptionPopup.show();
+                        if (currentSearch.getEnd().equals(node)) {
+                            descriptionPopup.setText("Great! You reached the target");
+                            descriptionPopup.show();
+                        }
+                        else if (firstTime) {
+                            descriptionPopup.setText("Good! Now please select the nodes to add to the frontier.");
+                            descriptionPopup.show();
+                        }
                     }
                     break;
 
@@ -125,8 +131,12 @@ public class TYMWorldSelection extends InputAdapter {
                             currentSearch.addToVisited(currentSearch.getMostRecentlyExpanded());
                             currentStage = Stage.CURRENT_NODE_SELECTION;
 
-                            descriptionPopup.setText("Great! Now follow the algorithm steps in order to reach the goal node.");
-                            descriptionPopup.show();
+                            if (firstTime) {
+                                descriptionPopup.setText("Great! Now follow the algorithm steps in order to reach the goal node.");
+                                descriptionPopup.show();
+
+                                firstTime = !firstTime;
+                            }
                         }
                     }
 
@@ -145,8 +155,6 @@ public class TYMWorldSelection extends InputAdapter {
 
         BehaviourMultiPathFind multiPathFind = (BehaviourMultiPathFind) behaviour;
         multiPathFind.addNextGoal(node.getPoint().toVector2());
-
-        System.out.println("Added a search goal at " + node.getPoint());
 
         return true;
     }
