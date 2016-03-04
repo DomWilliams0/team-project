@@ -1,42 +1,25 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.component.PhysicsComponent;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.List;
+public class SteeringAlignment extends SteeringFlocking {
 
-public class SteeringAlignment extends Steering {
 
-	private static Vector2 tmpVector = new Vector2();
-	private static final int ALIGNMENT_DISTANCE_SQRD = 5 * 5;
-
-	private List<PhysicsComponent> entities;
-
-	public SteeringAlignment(PhysicsComponent entity, List<PhysicsComponent> entities) {
-		super(entity);
-		this.entities = entities;
-
-		// remove self
-		entities.remove(entity);
+	public SteeringAlignment(PhysicsComponent entity, ImmutableArray<Entity> entities) {
+		super(entity, entities);
 	}
 
 	@Override
-	public void tick(Vector2 steeringOut) {
-		steeringOut.setZero();
-		int count = 0;
+	protected void processNeighbour(Vector2 steeringOut, Vector2 neighbourPosition, PhysicsComponent neighbour) {
+		steeringOut.add(neighbour.body.getLinearVelocity());
+	}
 
-		for (PhysicsComponent e : entities) {
-			tmpVector.set(e.getPosition());
-			if (tmpVector.sub(entity.getPosition()).len2() < ALIGNMENT_DISTANCE_SQRD) {
-				steeringOut.add(e.body.getLinearVelocity());
-				count += 1;
-			}
-		}
-
-		if (count != 0)
-			steeringOut
-					.scl(1f / count)
-					.nor();
-
+	@Override
+	protected void finaliseOutput(Vector2 steeringOut) {
+		steeringOut
+				.nor();
 	}
 }
