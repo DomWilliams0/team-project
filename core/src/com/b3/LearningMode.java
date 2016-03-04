@@ -1,7 +1,7 @@
 package com.b3;
 
-import com.b3.gui.SideBarIntensiveLearningMode;
-import com.b3.gui.SideBarNodes;
+import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
+import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;

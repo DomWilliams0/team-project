@@ -1,9 +1,10 @@
-package com.b3.gui;
+package com.b3.gui.sidebars;
 
 import com.b3.entity.Agent;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.entity.ai.BehaviourType;
+import com.b3.gui.TabbedPane;
 import com.b3.gui.components.*;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -36,7 +37,7 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SideBar extends Table implements Disposable {
+public class SideBarCompareMode extends Table implements Disposable {
 
     private Stage stage;
     private World world;
@@ -46,11 +47,11 @@ public class SideBar extends Table implements Disposable {
 
     private ButtonComponent playPause;
 
-    public SideBar(Stage stage, World world) {
+    public SideBarCompareMode(Stage stage, World world) {
         this(stage, world, 230);
     }
 
-    public SideBar(Stage stage, World world, float preferredWidth) {
+    public SideBarCompareMode(Stage stage, World world, float preferredWidth) {
         this.stage = stage;
         this.world = world;
         this.isOpen = false;

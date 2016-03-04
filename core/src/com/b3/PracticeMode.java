@@ -1,9 +1,9 @@
 package com.b3;
 
-import com.b3.gui.SideBarIntensiveLearningMode;
-import com.b3.gui.SideBarNodes;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.gui.help.HelpBox;
+import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
+import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.*;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -17,7 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class TryYourselfMode implements Screen {
+public class PracticeMode implements Screen {
 
     private World world;
     private WorldCamera camera;
@@ -27,8 +27,10 @@ public class TryYourselfMode implements Screen {
     //private HelpBox helpBox;
     private KeyboardController keyboardController;
     private Stage popupStage;
+    private Stage sideBarStage;
+    private SideBarNodes sideBarNodes;
 
-    public TryYourselfMode(MainGame game) {
+    public PracticeMode(MainGame game) {
         // set up the sounds
         String[] arrSoundsDir = game.getSoundsDirList();
         SoundController soundController = new SoundController(arrSoundsDir);
@@ -37,8 +39,7 @@ public class TryYourselfMode implements Screen {
         world = new World("core/assets/world/world_smaller_test_tiym.tmx", Mode.TRY_YOURSELF, game.inputHandler, soundController);
 
         // init gui
-        //setupSidebar();
-        popupStage = new Stage(new ScreenViewport());
+        setupSidebar();
 
         // register input handlers
         initInputHandlers(game.inputHandler);
@@ -63,7 +64,7 @@ public class TryYourselfMode implements Screen {
         MessageBoxComponent descriptionPopup = new MessageBoxComponent(popupStage,
                 "Welcome to the 'Try it yourself' mode.\n" +
                         "Here you can practice what you have learned in the 'Learning mode'.\n" +
-                        "Currently you can interact using DFS" +
+                        "Currently you can interact using DFS.\n" +
                         "Now please click on the node to be expanded next.",
                 "OK");
         descriptionPopup.show();
@@ -74,22 +75,30 @@ public class TryYourselfMode implements Screen {
      * @param inputHandler
      */
     private void initInputHandlers(InputHandler inputHandler) {
-        // keyboard control has top priority
+        // Keyboard control has top priority
         keyboardController = new KeyboardController();
         inputHandler.addProcessor(keyboardController);
 
-        // popup clicking
+        // Sidebar clicking
+        inputHandler.addProcessor(sideBarStage);
+
+        // Popup clicking
         inputHandler.addProcessor(popupStage);
 
-        // world clicking
-        inputHandler.addProcessor(new TYMWorldSelection(world, popupStage));
+        // World clicking
+        inputHandler.addProcessor(new PracticeModeWorldSelectionHandler(world, popupStage));
     }
 
     /**
      * Sets up the sidebars (one with options on the left; one with nodes and step-by-step buttons on right; and help box on top)
      */
     private void setupSidebar() {
+        popupStage = new Stage(new ScreenViewport());
+        sideBarStage = new Stage(new ScreenViewport());
 
+        sideBarNodes = new SideBarNodes(sideBarStage, world, false);
+        sideBarNodes.setStepthrough(true);
+        sideBarStage.addActor(sideBarNodes);
     }
 
     @Override
@@ -121,12 +130,11 @@ public class TryYourselfMode implements Screen {
         popupStage.draw();
 
         // sidebar rendering
-        /*sideBarStage.act(Gdx.graphics.getDeltaTime());
+        sideBarStage.act(Gdx.graphics.getDeltaTime());
         sideBarNodes.render();
         if(world.hasNewClick()) sideBarNodes.highlightNode(world.getCurrentClick(), true);
         if(sideBarNodes.hasNewClick()) world.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
-        sideBar.render();
-        sideBarStage.draw();*/
+        sideBarStage.draw();
 
         if (keyboardController.shouldExit())
             Gdx.app.exit();
@@ -141,11 +149,9 @@ public class TryYourselfMode implements Screen {
      */
     @Override
     public void resize(int width, int height) {
-        /*sideBarStage.getViewport().update(width, height, true);
-        sideBar.resize(width, height);
-        sideBarNodes.resize(width, height);
-        helpBox.resize(width, height);*/
         popupStage.getViewport().update(width, height, true);
+        sideBarStage.getViewport().update(width, height, true);
+        sideBarNodes.resize(width, height);
 
         camera.viewportWidth = width;
         camera.viewportHeight = height;

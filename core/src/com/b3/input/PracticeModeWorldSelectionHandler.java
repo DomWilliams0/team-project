@@ -27,7 +27,7 @@ enum Stage {
     ADD_TO_EXPLORED_SELECTION
 }
 
-public class TYMWorldSelection extends InputAdapter {
+public class PracticeModeWorldSelectionHandler extends InputAdapter {
     private static final Vector3 tempRayCast = new Vector3();
     private World world;
     private Stage currentStage;
@@ -35,7 +35,7 @@ public class TYMWorldSelection extends InputAdapter {
     private MessageBoxComponent descriptionPopup;
     private boolean firstTime;
 
-    public TYMWorldSelection(World world, com.badlogic.gdx.scenes.scene2d.Stage popupStage) {
+    public PracticeModeWorldSelectionHandler(World world, com.badlogic.gdx.scenes.scene2d.Stage popupStage) {
         this.world = world;
         this.currentStage = Stage.CURRENT_NODE_SELECTION;
         this.currentSelection = new Point(1,1);

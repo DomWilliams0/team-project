@@ -14,6 +14,7 @@ import javax.swing.*;
 
 /**
  * Represents a dialog box
+ * @author oxe410
  */
 public class MessageBoxComponent {
     private Stage popupStage;

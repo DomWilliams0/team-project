@@ -1,7 +1,8 @@
-package com.b3.gui;
+package com.b3.gui.sidebars;
 
 import com.b3.MainGame;
 import com.b3.MainMenuScreen;
+import com.b3.gui.TabbedPane;
 import com.b3.gui.components.*;
 import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;

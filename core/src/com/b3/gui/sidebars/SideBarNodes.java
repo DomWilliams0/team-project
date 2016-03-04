@@ -1,6 +1,8 @@
-package com.b3.gui;
+package com.b3.gui.sidebars;
 
-import com.b3.Mode;
+import com.b3.gui.PseudocodeVisualiser;
+import com.b3.gui.TabbedPane;
+import com.b3.gui.VisNodes;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.search.Node;
@@ -50,7 +52,7 @@ public class SideBarNodes extends Table implements Disposable {
      * @param stage The stage on which to act and draw.
      */
     public SideBarNodes(Stage stage, World world) {
-        this(stage, world, 420);
+        this(stage, world, 420, true);
     }
 
     /**
@@ -59,7 +61,7 @@ public class SideBarNodes extends Table implements Disposable {
      * @param stage The stage on which to act and draw
      * @param preferredWidth The preferred width of the gui table
      */
-    public SideBarNodes(Stage stage, World world, float preferredWidth) {
+    public SideBarNodes(Stage stage, World world, float preferredWidth, boolean pseudocodeTab) {
         this.stage = stage;
         this.isOpen = false;
         this.preferredWidth = preferredWidth;
@@ -70,8 +72,13 @@ public class SideBarNodes extends Table implements Disposable {
         //set the size to be full-height and preferred width.
         setSize(preferredWidth, Gdx.graphics.getHeight());
 
-        initComponents();
+        initComponents(pseudocodeTab);
     }
+
+    public SideBarNodes(Stage stage, World world, boolean pseudocodeTab) {
+        this(stage, world, 420, pseudocodeTab);
+    }
+
 
     /**
      * Set the world with which to get the search ticker
@@ -98,8 +105,9 @@ public class SideBarNodes extends Table implements Disposable {
 
     /**
      * Initialise the components used by this object
+     * @param pseudocodeTabVisible
      */
-    private void initComponents() {
+    private void initComponents(boolean pseudocodeTabVisible) {
         //set a default background colour
         setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
@@ -156,116 +164,115 @@ public class SideBarNodes extends Table implements Disposable {
         // === PSEUDOCODE PANE ===
         // =======================
 
-        Table pseudocodeTab = new Table();
-        pseudocodeTab.setFillParent(true);
+        if (pseudocodeTabVisible) {
+            Table pseudocodeTab = new Table();
+            pseudocodeTab.setFillParent(true);
 
-        // Pseudocode visualiser
-        // ---------------------
-        PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
-        pseudocodeTab.add(pseudocodeVisualiser).spaceBottom(30).row();
+            // Pseudocode visualiser
+            // ---------------------
+            PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
+            pseudocodeTab.add(pseudocodeVisualiser).spaceBottom(30).row();
 
-        // Next button
-        // -----------
-        nextBtn = new ButtonComponent(skin, font, "Next");
-        nextBtn.getComponent().setVisible(false);
-        nextBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                ticker.setInspectSearch(true);
-                ticker.tick(true);
-            }
-        });
-
-        // Manual/Automatic inspection
-        // ---------------------------
-        manualAutoBtn = new ButtonComponent(skin, font, "Manual inspect");
-        manualAutoBtn.setData(true);
-        manualAutoBtn.getComponent().setVisible(false);
-        manualAutoBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if ((Boolean) manualAutoBtn.getData()) {
-                    // Currently automatic -> manual
+            // Next button
+            // -----------
+            nextBtn = new ButtonComponent(skin, font, "Next");
+            nextBtn.getComponent().setVisible(false);
+            nextBtn.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
                     SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                    ticker.pause(1);
-                    ticker.setUpdated(true);
                     ticker.setInspectSearch(true);
-
-                    nextBtn.getComponent().setVisible(true);
-                    manualAutoBtn.setData(false);
-                    manualAutoBtn.setText("Automatic inspect");
+                    ticker.tick(true);
                 }
-                else {
-                    // Currently manual -> automatic
-                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                    ticker.resume(1);
+            });
 
-                    nextBtn.getComponent().setVisible(false);
-                    manualAutoBtn.setData(true);
-                    manualAutoBtn.setText("Manual inspect");
-                }
-            }
-        });
+            // Manual/Automatic inspection
+            // ---------------------------
+            manualAutoBtn = new ButtonComponent(skin, font, "Manual inspect");
+            manualAutoBtn.setData(true);
+            manualAutoBtn.getComponent().setVisible(false);
+            manualAutoBtn.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if ((Boolean) manualAutoBtn.getData()) {
+                        // Currently automatic -> manual
+                        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                        ticker.pause(1);
+                        ticker.setUpdated(true);
+                        ticker.setInspectSearch(true);
 
-        // Inspect search button (start/stop)
-        // ----------------------------------
-        inspectSearchBtn = new ButtonComponent(skin, font, "Activate");
-        inspectSearchBtn.setData(false);
-        inspectSearchBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                boolean currentlyStarted = (Boolean) inspectSearchBtn.getData();
+                        nextBtn.getComponent().setVisible(true);
+                        manualAutoBtn.setData(false);
+                        manualAutoBtn.setText("Automatic inspect");
+                    } else {
+                        // Currently manual -> automatic
+                        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                        ticker.resume(1);
 
-                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-
-                if (ticker.getAlgorithm() == SearchAlgorithm.DIJKSTRA) {
-                    MessageBoxComponent.show("Dijkstra not yet implemented", "Warning");
-                }
-                else if (ticker.isTickedOnce()) {
-                    ticker.setInspectSearch(!currentlyStarted);
-                    ticker.resume(1);
-
-                    manualAutoBtn.getComponent().setVisible(!currentlyStarted);
-                    inspectSearchBtn.setData(!currentlyStarted);
-                    inspectSearchBtn.setText(currentlyStarted ? "Activate" : "Stop");
-
-                    // Clear pseudocode information
-                    if (currentlyStarted) {
                         nextBtn.getComponent().setVisible(false);
                         manualAutoBtn.setData(true);
                         manualAutoBtn.setText("Manual inspect");
-                        ticker.clearPseudocodeInfo();
                     }
                 }
-                else {
-                    //Close Sidebar
-                    TextButton _triggerBtn = triggerBtn.getComponent();
+            });
 
-                    if (!isOpen) {
-                        setX(0);
-                        setY(0);
-                        _triggerBtn.setText(">");
-                        _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
+            // Inspect search button (start/stop)
+            // ----------------------------------
+            inspectSearchBtn = new ButtonComponent(skin, font, "Activate");
+            inspectSearchBtn.setData(false);
+            inspectSearchBtn.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    boolean currentlyStarted = (Boolean) inspectSearchBtn.getData();
 
-                        isOpen = true;
+                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+
+                    if (ticker.getAlgorithm() == SearchAlgorithm.DIJKSTRA) {
+                        MessageBoxComponent.show("Dijkstra not yet implemented", "Warning");
+                    } else if (ticker.isTickedOnce()) {
+                        ticker.setInspectSearch(!currentlyStarted);
+                        ticker.resume(1);
+
+                        manualAutoBtn.getComponent().setVisible(!currentlyStarted);
+                        inspectSearchBtn.setData(!currentlyStarted);
+                        inspectSearchBtn.setText(currentlyStarted ? "Activate" : "Stop");
+
+                        // Clear pseudocode information
+                        if (currentlyStarted) {
+                            nextBtn.getComponent().setVisible(false);
+                            manualAutoBtn.setData(true);
+                            manualAutoBtn.setText("Manual inspect");
+                            ticker.clearPseudocodeInfo();
+                        }
                     } else {
-                        setX(-preferredWidth);
-                        _triggerBtn.setText("<");
-                        _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
+                        //Close Sidebar
+                        TextButton _triggerBtn = triggerBtn.getComponent();
 
-                        isOpen = false;
+                        if (!isOpen) {
+                            setX(0);
+                            setY(0);
+                            _triggerBtn.setText(">");
+                            _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
+
+                            isOpen = true;
+                        } else {
+                            setX(-preferredWidth);
+                            _triggerBtn.setText("<");
+                            _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
+
+                            isOpen = false;
+                        }
+
+                        world.showPopupError(2);
                     }
-
-                    world.showPopupError(2);
                 }
-            }
-        });
+            });
 
-        pseudocodeTab.add(inspectSearchBtn.getComponent()).spaceBottom(10).row();
-        pseudocodeTab.add(manualAutoBtn.getComponent()).spaceBottom(10).row();
-        pseudocodeTab.add(nextBtn.getComponent());
-        tabbedPane.addTab("Pseudocode", pseudocodeTab);
+            pseudocodeTab.add(inspectSearchBtn.getComponent()).spaceBottom(10).row();
+            pseudocodeTab.add(manualAutoBtn.getComponent()).spaceBottom(10).row();
+            pseudocodeTab.add(nextBtn.getComponent());
+            tabbedPane.addTab("Pseudocode", pseudocodeTab);
+        }
 
         // ======================
         // === TRIGGER BUTTON ===

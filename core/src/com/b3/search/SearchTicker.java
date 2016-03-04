@@ -471,6 +471,7 @@ public class SearchTicker {
 
 	public void addToFrontier(Node node) {
 		frontier.add(node);
+		setUpdated(true);
 	}
 
 	public Set<Node> getVisited() {
@@ -479,6 +480,7 @@ public class SearchTicker {
 
 	public void addToVisited(Node node) {
 		visited.add(node);
+		setUpdated(true);
 	}
 
 	public List<Node> getPath() {

@@ -1,8 +1,6 @@
 package com.b3;
 
-import com.b3.db.Database;
-import com.b3.gui.SideBar;
-import com.b3.gui.SideBarNodes;
+import com.b3.gui.sidebars.SideBarCompareMode;
 import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
@@ -16,9 +14,7 @@ import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -27,7 +23,7 @@ public class CompareMode implements Screen {
     private World world;
     private WorldCamera camera;
     private Stage sideBarStage;
-    private SideBar sideBar;
+    private SideBarCompareMode sideBar;
 //    private SideBarNodes sideBarNodes;
     private HelpBox helpBox;
     private KeyboardController keyboardController;
@@ -79,7 +75,7 @@ public class CompareMode implements Screen {
     private void setupSidebar() {
         sideBarStage = new Stage(new ScreenViewport());
 
-        sideBar = new SideBar(sideBarStage, world);
+        sideBar = new SideBarCompareMode(sideBarStage, world);
         sideBarStage.addActor(sideBar);
 
 //        sideBarNodes = new SideBarNodes(sideBarStage, world);
