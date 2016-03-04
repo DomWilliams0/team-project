@@ -140,6 +140,7 @@ public class LearningMode implements Screen {
         // sidebar rendering
         sideBarStage.act(Gdx.graphics.getDeltaTime());
         sideBarNodes.render();
+        if (!world.getPseudoCode()) {sideBarNodes.resetPseudoCode(); world.setPseudoCode(true);}
         if(world.hasNewClick()) sideBarNodes.highlightNode(world.getCurrentClick(), true);
         if(sideBarNodes.hasNewClick()) world.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
         sideBar.render();

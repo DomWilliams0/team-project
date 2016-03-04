@@ -105,12 +105,15 @@ public class World implements Disposable {
 	private ErrorPopups errorSprite;
 	private ErrorPopups errorSpriteTwo;
 	private Point p;
+	private boolean pseudoCodeEnabled;
 
 	public World() {
 
 	}
 
 	public World(String fileName, Mode mode, InputHandler inputHandler, SoundController soundController) {
+		pseudoCodeEnabled = true;
+
 		this.inputHandler = inputHandler;
 		this.mode = mode;
 		this.soundController = soundController;
@@ -835,5 +838,13 @@ public class World implements Disposable {
 
 	public SoundController getSoundController() {
 		return soundController;
+	}
+
+	public void setPseudoCode(boolean enabled) {
+		pseudoCodeEnabled = enabled;
+	}
+
+	public boolean getPseudoCode() {
+		return pseudoCodeEnabled;
 	}
 }

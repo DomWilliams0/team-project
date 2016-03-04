@@ -40,6 +40,10 @@ public class SideBarNodes extends Table implements Disposable {
     private float preferredWidth;
     private ButtonComponent next;
 
+    private ButtonComponent inspectSearchBtn;
+    private ButtonComponent manualAutoBtn;
+    private ButtonComponent nextBtn;
+
     /**
      * Create a new gui element with a default preferred size
      *
@@ -162,7 +166,7 @@ public class SideBarNodes extends Table implements Disposable {
 
         // Next button
         // -----------
-        ButtonComponent nextBtn = new ButtonComponent(skin, font, "Next");
+        nextBtn = new ButtonComponent(skin, font, "Next");
         nextBtn.getComponent().setVisible(false);
         nextBtn.addListener(new ChangeListener() {
             @Override
@@ -175,7 +179,7 @@ public class SideBarNodes extends Table implements Disposable {
 
         // Manual/Automatic inspection
         // ---------------------------
-        ButtonComponent manualAutoBtn = new ButtonComponent(skin, font, "Manual inspect");
+        manualAutoBtn = new ButtonComponent(skin, font, "Manual inspect");
         manualAutoBtn.setData(true);
         manualAutoBtn.getComponent().setVisible(false);
         manualAutoBtn.addListener(new ChangeListener() {
@@ -206,7 +210,7 @@ public class SideBarNodes extends Table implements Disposable {
 
         // Inspect search button (start/stop)
         // ----------------------------------
-        ButtonComponent inspectSearchBtn = new ButtonComponent(skin, font, "Activate");
+        inspectSearchBtn = new ButtonComponent(skin, font, "Activate");
         inspectSearchBtn.setData(false);
         inspectSearchBtn.addListener(new ChangeListener() {
             @Override
@@ -414,6 +418,17 @@ public class SideBarNodes extends Table implements Disposable {
 
     public Point getNewClick() {
         return ui.getClickedNode();
+    }
+
+    public void resetPseudoCode() {
+
+        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+            ticker.setInspectSearch(false);
+            ticker.resume(1);
+
+            manualAutoBtn.getComponent().setVisible(false);
+            inspectSearchBtn.setData(false);
+            inspectSearchBtn.setText("Activate");
     }
 
     /**

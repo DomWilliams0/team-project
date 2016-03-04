@@ -96,6 +96,10 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		} else
 			ticker.tick();
 
+		if (shouldPlayFail == 1 || shouldPlayFail == -1) {
+			world.setPseudoCode(false);
+		}
+
 		if (shouldPlayFail == 1) {
 			world.getSoundController().playSounds(1);
 		}
