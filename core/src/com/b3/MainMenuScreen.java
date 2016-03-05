@@ -1,6 +1,6 @@
 package com.b3;
 
-import com.b3.gui.components.ButtonComponent;
+import com.b3.gui.components.ImageButtonComponent;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Font;
@@ -23,9 +23,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class MainMenuScreen implements Screen {
 
     private Table wrapper;
-    private ButtonComponent learningModeBtn;
-    private ButtonComponent compareModeBtn;
-    private ButtonComponent practiceModeBtn;
+    private ImageButtonComponent learningModeBtn;
+    private ImageButtonComponent compareModeBtn;
+    private ImageButtonComponent practiceModeBtn;
 
     private OrthographicCamera camera;
     private Stage mainMenuStage;
@@ -45,9 +45,9 @@ public class MainMenuScreen implements Screen {
         Skin skin = new Skin(atlas);
         BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
 
-        // Learning mode button
+        // Compare mode button
         // --------------------
-        compareModeBtn = new ButtonComponent(skin, font, "Compare mode");
+        compareModeBtn = new ImageButtonComponent("compare_mode_primary.png", "compare_mode_mouseover.png", "compare_mode_mouseover.png");
         compareModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -58,7 +58,7 @@ public class MainMenuScreen implements Screen {
 
         // Practice mode button
         // --------------------
-        practiceModeBtn = new ButtonComponent(skin, font, "Practice mode");
+        practiceModeBtn = new ImageButtonComponent("practice_mode_primary.png", "practice_mode_mouseover.png", "practice_mode_mouseover.png");
         practiceModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -67,9 +67,9 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        // Compare mode button
-        // -------------------
-        learningModeBtn = new ButtonComponent(skin, font, "Learning mode");
+        // Learning mode button
+        // --------------------
+        learningModeBtn = new ImageButtonComponent("learning_mode_primary.png", "learning_mode_mouseover.png", "learning_mode_mouseover.png");
         learningModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -100,7 +100,7 @@ public class MainMenuScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClearColor(0.925490196f, 0.941176471f, 0.941176471f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.viewportWidth = Gdx.graphics.getWidth();
