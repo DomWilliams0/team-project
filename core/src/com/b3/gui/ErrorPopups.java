@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
+ * Creates a pop-up and displays it to the user for x amount of time (or next click)
+ * Displayed in middle of the GUI (width / 2; height / 2)
  * Created by Nishanth on 02/03/2016.
  */
 public class ErrorPopups {
@@ -26,6 +28,12 @@ public class ErrorPopups {
 
     private long startSeconds;
 
+    /**
+     * Creates a new pop-up in a closed positons (make this initally, and then call showPopup, takes time to load texture from file)
+     * Note that render(); needs to be put in a current render method.
+     * @param worldCamera the camera that this pop-up will be linked to
+     * @param sprite the texture / image file that this pop-up will display.
+     */
     public ErrorPopups(WorldCamera worldCamera, Sprite sprite) {
         justOpen = false;
         shouldClose = false;
@@ -38,21 +46,28 @@ public class ErrorPopups {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
+    /**
+     * Will show the pop-up for x amount of time
+     * @param noOfTicksDisplay number of ticks that this display will be shown for, will not be affected by how many calls to render is happening, as it linked to seconds.
+     */
     public void showPopup(int noOfTicksDisplay) {
 
         justOpen = true;
 
         if (this.noOfTicksDisplay > 10) {
-            System.err.println("ALREADY DISPLAYING POPUP");
+            System.out.println("ALREADY DISPLAYING POPUP");
         } else {
-//            this.maxTicks = noOfTicksDisplay;
-//            this.noOfTicksDisplay = noOfTicksDisplay;
             this.maxTicks = noOfTicksDisplay;
             this.noOfTicksDisplay = noOfTicksDisplay;
             this.startSeconds = System.currentTimeMillis();
         }
     }
 
+    /**
+     * Renders the pop-up if it should be displayed.
+     * Calculates the time it should be open in via timeInMilliseconds so number of calls to this method will not matter
+     * More calls to this method means smoother animation.
+     */
     public void render() {
 
         if (shouldClose && noOfTicksDisplay > 50) { noOfTicksDisplay = 50; shouldClose = false; justOpen = false;}
@@ -60,7 +75,6 @@ public class ErrorPopups {
         //if has not ran out of time
         if (noOfTicksDisplay != 0) {
             //decrement time left allowed on screen
-//            noOfTicksDisplay--;
             long change = (System.currentTimeMillis() - startSeconds);
 
             noOfTicksDisplay = noOfTicksDisplay - ((int)change/10);

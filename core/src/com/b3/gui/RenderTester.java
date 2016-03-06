@@ -59,6 +59,10 @@ public class RenderTester {
     private int counterAnimationFade;
     private boolean stickyCurrentNode;
 
+    /**
+     * Creates a new pop-up, with an empty canas
+     * @param world the world that this pop-up will be shown on top of
+     */
     public RenderTester(World world) {
         counterAnimationFade = 0;
         popupShowing = false;
@@ -76,7 +80,6 @@ public class RenderTester {
         pageNo = 0;
 
         loadTextures();
-
     }
 
     /**
@@ -510,14 +513,19 @@ public class RenderTester {
         }
     }
 
+    /**
+     * Draws an number onto the screen at the x and y position, with the current z position. Will not move when z value changes
+     * @param number the number to be shown on the screen
+     * @param currentNodeClickX the x coordinate that the number should be displayed at
+     * @param currentNodeClickY the Y coordinate that the number should be displayed at
+     * @param scalingZoom the current amount of zoom that the camera has.
+     */
     private void drawStaticNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
         //if single digits
         if (number > 100 || number < 0) {
             number = 99;
             System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers; using this instead: " + number);
         }
-
-//        System.out.println("Keep this here, bug somewhere and I don't know where so this is the number it's trying to print just in case it does crash: go onto intensive learning mode and click on pop-ups / show more and try to get numbers to show and try and break it " + number);
 
         if (number < 10) {
             try {
@@ -541,6 +549,13 @@ public class RenderTester {
         }
     }
 
+    /**
+     * Draws an number onto the screen at the x and y position, with the current z position. WILL move when z value changes (to prevent overlap)
+     * @param number the number to be shown on the screen
+     * @param currentNodeClickX the x coordinate that the number should be displayed at
+     * @param currentNodeClickY the Y coordinate that the number should be displayed at
+     * @param scalingZoom the current amount of zoom that the camera has.
+     */
     private void drawNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
         //if single digits
         if (number > 100 || number < 0) {
@@ -562,14 +577,24 @@ public class RenderTester {
         }
     }
 
+    /**
+     * Checks if any pop-up is currently showing
+     * @return true iff pop-up is showing; else false.
+     */
     public boolean getPopupShowing() {
         return popupShowing;
     }
 
+    /**
+     * Change the page number if the pop-up is showing
+     */
     public void flipPageRight() {
         pageNo++;
     }
 
+    /**
+     * Change the page number back to the first (aka 0)
+     */
     public void resetPage() {
         stickyCurrentNode = false;
         pageNo = 0;
