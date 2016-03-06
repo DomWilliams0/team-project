@@ -2,6 +2,7 @@ package com.b3.input;
 
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
+import com.b3.gui.ErrorPopups;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -47,6 +48,11 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         // selecting an entity
         // todo
+
+        if (ErrorPopups.justOpen) {
+            ErrorPopups.shouldClose = true;
+            return false;
+        }
 
         //if near bottom of screen hitting the intensive learning mode button so ignore
         if (screenX < 100 && screenY > Gdx.graphics.getHeight()-100) {

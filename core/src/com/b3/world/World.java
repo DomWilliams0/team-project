@@ -47,6 +47,9 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static com.b3.Mode.*;
+import static com.b3.Mode.COMPARE;
+import static com.b3.Mode.LEARNING;
 import static com.b3.world.BuildingType.HOUSE;
 
 public class World implements Disposable {
@@ -102,8 +105,12 @@ public class World implements Disposable {
 	private int xNextDestination;
 
 	private Point currentMousePos;
+
 	private ErrorPopups errorSprite;
 	private ErrorPopups errorSpriteTwo;
+	private ErrorPopups firstPopup;
+
+
 	private Point p;
 	private boolean pseudoCodeEnabled;
 
@@ -351,6 +358,20 @@ public class World implements Disposable {
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		errorSpriteTwo = new ErrorPopups(worldCamera, new Sprite(tempTexture));
 
+		switch (mode) {
+			case COMPARE: tempTexture = new Texture("core/assets/world/popups/Intro/C.png");
+				break;
+			case TRY_YOURSELF: tempTexture = new Texture("core/assets/world/popups/Intro/TY.png");
+				break;
+			case LEARNING: tempTexture = new Texture("core/assets/world/popups/Intro/ILM.png");
+				break;
+			default: tempTexture = null; break;
+		}
+
+		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+		firstPopup = new ErrorPopups(worldCamera, new Sprite(tempTexture));
+
 		// debug: test entities
 		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
 		for (int i = 0; i < debugCount; i++)
@@ -359,22 +380,25 @@ public class World implements Disposable {
 		Agent agent = spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
 
 		//IF IS COMPAREMODE (compareMode = true) DO ALL THREE BEHAVIOURS
-		Behaviour behaviour = mode == Mode.TRY_YOURSELF ?
+		Behaviour behaviour = mode == TRY_YOURSELF ?
 				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.DEPTH_FIRST, worldGraph, worldCamera, this) :
 				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph, worldCamera, this);
 		agent.setBehaviour(behaviour);
 
-		if (mode != Mode.TRY_YOURSELF) {
+		if (mode != TRY_YOURSELF) {
 			worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
 		}
 		worldGraph.setCurrentSearch(agent, ((BehaviourMultiContinuousPathFind) behaviour).getTicker());
 
-		if (mode == Mode.COMPARE) {// && Config.getBoolean(ConfigKey.FLOCKING_ENABLED)) { <-NO, no other chance to spawn all of the agents
+		if (mode == COMPARE) {// && Config.getBoolean(ConfigKey.FLOCKING_ENABLED)) { <-NO, no other chance to spawn all of the agents
 			for (int i = 0; i < 250; i++) {
 				Agent a = spawnAgent(generateRandomTile());
 				a.setBehaviour(new BehaviourFlocking(a, engine));
 			}
 		}
+
+		firstPopup.showPopup(2000);
+
 	}
 
 	private Vector2 generateRandomTile() {
@@ -617,7 +641,7 @@ public class World implements Disposable {
 
 		float zoomScalar = getZoomScalar();
 
-		if (mode == Mode.COMPARE) {
+		if (mode == COMPARE) {
 			if (worldCamera.getFOV() < 67) {
 				Vector2 cameraPos = getTileSize().scl(0.5f);
 				worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);
@@ -689,9 +713,10 @@ public class World implements Disposable {
 		if (Config.getBoolean(ConfigKey.RENDER_MODELS))
 			modelManager.render(worldCamera);
 
-		if (mode == Mode.LEARNING) rt.render(currentNodeClickX, currentNodeClickY);
+		if (mode == LEARNING) rt.render(currentNodeClickX, currentNodeClickY);
 
 		//error message render's only if errorSprite.showPopup() is called.
+		firstPopup.render();
 		errorSprite.render();
 		errorSpriteTwo.render();
 

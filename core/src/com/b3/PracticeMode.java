@@ -57,13 +57,13 @@ public class PracticeMode implements Screen {
         world.getWorldGraph().getCurrentSearch().setUpdated(true);
 
         // Display first popup
-        MessageBoxComponent descriptionPopup = new MessageBoxComponent(popupStage,
-                "Welcome to the 'Try it yourself' mode.\n" +
-                        "Here you can practice what you have learned in the 'Learning mode'.\n" +
-                        "Currently you can interact using DFS.\n" +
-                        "Now please click on the node to be expanded next.",
-                "OK");
-        descriptionPopup.show();
+//        MessageBoxComponent descriptionPopup = new MessageBoxComponent(popupStage,
+//                "Welcome to the 'Try it yourself' mode.\n" +
+//                        "Here you can practice what you have learned in the 'Learning mode'.\n" +
+//                        "Currently you can interact using DFS.\n" +
+//                        "Now please click on the node to be expanded next.",
+//                "OK");
+//        descriptionPopup.show();
     }
 
     /**
