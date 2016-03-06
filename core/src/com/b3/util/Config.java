@@ -72,7 +72,9 @@ public class Config {
 		if (gameValue != null)
 			return (T) gameValue;
 
-		return configFile.get(key.getKey(), type);
+		T value = configFile.get(key.getKey(), type);
+		gameConfig.put(key, value);
+		return value;
 	}
 
 	// helpers
