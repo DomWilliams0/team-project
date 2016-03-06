@@ -325,7 +325,7 @@ public class RenderTester {
                                 float cost = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getEdgeCost(new Node(new Point(currentNodeClickX, currentNodeClickY)));
                                 float total = cost + gxFunction;
 
-                                if (pageNo == 1)
+                                if (pageNo == 1 && worldGraph.getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR)
                                     drawEquationOnScreen((int)total, (int)gxFunction, (int)cost, currentNodeClickX, currentNodeClickY + (scalingZoom/50), scalingZoom);
 
                                 popupShowing = true;

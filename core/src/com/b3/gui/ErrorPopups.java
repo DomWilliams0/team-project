@@ -55,7 +55,7 @@ public class ErrorPopups {
 
     public void render() {
 
-        if (shouldClose && noOfTicksDisplay > 100) { noOfTicksDisplay = 100; shouldClose = false; justOpen = false;}
+        if (shouldClose && noOfTicksDisplay > 50) { noOfTicksDisplay = 50; shouldClose = false; justOpen = false;}
 
         //if has not ran out of time
         if (noOfTicksDisplay != 0) {
@@ -74,11 +74,11 @@ public class ErrorPopups {
             //zoom animation
             float imgWidth;
             float imgHeight;
-            if (noOfTicksDisplay < 100) {
+            if (noOfTicksDisplay < 50) {
                 justOpen = false;
-                imgHeight = sprite.getHeight() / (100-noOfTicksDisplay);
-                if (noOfTicksDisplay < 50) {
-                    imgWidth = sprite.getWidth() / (50-noOfTicksDisplay);
+                imgHeight = sprite.getHeight() / (50-noOfTicksDisplay);
+                if (noOfTicksDisplay < 25) {
+                    imgWidth = sprite.getWidth() / (25-noOfTicksDisplay);
                 } else {
                     imgWidth = sprite.getWidth();
                 }

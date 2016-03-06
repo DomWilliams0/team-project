@@ -34,8 +34,6 @@ public class WorldSelectionHandler extends InputAdapter {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		//TODO selecting an entity
 
-		System.out.println("justOpen: " + ErrorPopups.justOpen + " | shouldClose + " + ErrorPopups.shouldClose);
-
 		//Close error pop-ups if need
 		if (ErrorPopups.justOpen) {
 			ErrorPopups.shouldClose = true;
