@@ -9,6 +9,7 @@ import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
+import com.b3.gui.CoordinatePopup;
 import com.b3.gui.ErrorPopups;
 import com.b3.gui.RenderTester;
 import com.b3.input.InputHandler;
@@ -55,6 +56,7 @@ import static com.b3.world.BuildingType.HOUSE;
 public class World implements Disposable {
 
 	private static short ENTITY_CULL_TAG = 10101;
+	private CoordinatePopup coordinatePopup;
 
 	private TiledMap map;
 	private InputHandler inputHandler;
@@ -172,6 +174,9 @@ public class World implements Disposable {
 		// model manager
 		flattenListeners = new ArrayList<>();
 		modelManager = new ModelManager(this, environment, map);
+
+		//GUI overlay
+		coordinatePopup = new CoordinatePopup();
 	}
 
 	private void processMapTileTypes(TiledMap map) {
@@ -713,7 +718,12 @@ public class World implements Disposable {
 		if (Config.getBoolean(ConfigKey.RENDER_MODELS))
 			modelManager.render(worldCamera);
 
+		//pop-ups on nodes
 		if (mode == LEARNING) rt.render(currentNodeClickX, currentNodeClickY);
+
+		//pop-ups to show current coordinate
+		coordinatePopup.render();
+
 
 		//error message render's only if errorSprite.showPopup() is called.
 		firstPopup.render();
@@ -921,4 +931,7 @@ public class World implements Disposable {
 		return pseudoCodeEnabled;
 	}
 
+	public CoordinatePopup getCoordinatePopup() {
+		return coordinatePopup;
+	}
 }

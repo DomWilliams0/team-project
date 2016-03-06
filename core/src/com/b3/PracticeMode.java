@@ -148,6 +148,7 @@ public class PracticeMode implements Screen {
         popupStage.getViewport().update(width, height, true);
         sideBarStage.getViewport().update(width, height, true);
         sideBarNodes.resize(width, height);
+        world.getCoordinatePopup().resize();
 
         camera.viewportWidth = width;
         camera.viewportHeight = height;

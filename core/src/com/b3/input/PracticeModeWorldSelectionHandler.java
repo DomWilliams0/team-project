@@ -2,6 +2,7 @@ package com.b3.input;
 
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
+import com.b3.gui.CoordinatePopup;
 import com.b3.gui.ErrorPopups;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.search.Node;
@@ -45,9 +46,27 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
     }
 
     @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        // selecting a tile
+        WorldCamera worldCamera = world.getWorldCamera();
+        Ray ray = worldCamera.getPickRay(screenX, screenY);
+        ray.getEndPoint(tempRayCast, worldCamera.position.z);
+
+        // convert to node
+        WorldGraph worldGraph = world.getWorldGraph();
+        Node node = worldGraph.getNode(new Point((int) tempRayCast.x, (int) tempRayCast.y));
+
+        if (node != null) {
+            CoordinatePopup.visibility = true;
+            CoordinatePopup.setCoordinate(node.getPoint().getX(), node.getPoint().getY());
+        } else CoordinatePopup.visibility = false;
+
+        return true;
+    }
+
+    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // selecting an entity
-        // todo
+        // todo selecting an entity
 
         if (ErrorPopups.justOpen) {
             ErrorPopups.shouldClose = true;

@@ -159,6 +159,7 @@ public class LearningMode implements Screen {
         sideBar.resize(width, height);
         sideBarNodes.resize(width, height);
         helpBox.resize(width, height);
+        world.getCoordinatePopup().resize();
 
         camera.viewportWidth = width;
         camera.viewportHeight = height;

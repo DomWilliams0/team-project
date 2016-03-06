@@ -55,7 +55,7 @@ public class ErrorPopups {
 
     public void render() {
 
-        if (shouldClose && noOfTicksDisplay > 100) { noOfTicksDisplay = 100; shouldClose = false;}
+        if (shouldClose && noOfTicksDisplay > 100) { noOfTicksDisplay = 100; shouldClose = false; justOpen = false;}
 
         //if has not ran out of time
         if (noOfTicksDisplay != 0) {

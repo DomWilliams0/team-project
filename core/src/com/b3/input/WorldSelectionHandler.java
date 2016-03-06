@@ -2,6 +2,7 @@ package com.b3.input;
 
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
+import com.b3.gui.CoordinatePopup;
 import com.b3.gui.ErrorPopups;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -31,11 +32,15 @@ public class WorldSelectionHandler extends InputAdapter {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// selecting an entity
-		// todo
+		//TODO selecting an entity
+
+		System.out.println("justOpen: " + ErrorPopups.justOpen + " | shouldClose + " + ErrorPopups.shouldClose);
+
 		//Close error pop-ups if need
-		if (ErrorPopups.justOpen)
+		if (ErrorPopups.justOpen) {
 			ErrorPopups.shouldClose = true;
+			return false;
+		}
 
 		//if near bottom of screen hitting the intensive learning mode button so ignore
 		if (screenX < 100 && screenY > Gdx.graphics.getHeight()-100) {
@@ -124,6 +129,14 @@ public class WorldSelectionHandler extends InputAdapter {
 		ray.getEndPoint(tempRayCast, worldCamera.position.z);
 
 		world.setCurrentMousePos((int)tempRayCast.x, (int) tempRayCast.y);
+
+		WorldGraph worldGraph = world.getWorldGraph();
+		Node node = worldGraph.getNode(new Point((int) tempRayCast.x, (int) tempRayCast.y));
+
+		if (node != null) {
+			CoordinatePopup.visibility = true;
+			CoordinatePopup.setCoordinate(node.getPoint().getX(), node.getPoint().getY());
+		} else CoordinatePopup.visibility = false;
 
 		return super.mouseMoved(screenX, screenY);
 	}
