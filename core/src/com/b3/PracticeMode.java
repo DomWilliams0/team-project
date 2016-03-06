@@ -17,6 +17,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * Mainly edited (ordered by no. of lines) firstly and significatly by oxe410; secondly nbg481.
+ * Commits:
+ * 3  nbg481
+ * 1  oxe410
+ */
 public class PracticeMode implements Screen {
 
     private World world;

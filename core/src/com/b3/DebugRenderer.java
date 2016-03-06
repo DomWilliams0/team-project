@@ -5,6 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
+/**
+ * Mainly edited (ordered by no. of lines) by dxw405
+ * Commits:
+ * 1  dxw405
+ */
 public class DebugRenderer {
 	private SpriteBatch spriteBatch;
 	private Box2DDebugRenderer renderer;

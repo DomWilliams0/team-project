@@ -12,6 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
+ * Mainly edited (ordered by no. of lines) by equally oxe410 & nbg481.
+ * Commits:
+ *  10  oxe410
+ *  4  nbg481
+ *
  * Shows the main menu, allowing the user to choose learning mode or comparison mode.
  */
 public class MainMenuScreen implements Screen {

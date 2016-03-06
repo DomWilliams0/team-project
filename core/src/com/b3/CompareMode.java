@@ -18,6 +18,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * Mainly edited (ordered by no. of lines) by firstly and significantly, oxe410 then secondly, nbg481
+ * Commits:
+ * 9  nbg481
+ * 2  oxe410
+ */
 public class CompareMode implements Screen {
 
     private World world;

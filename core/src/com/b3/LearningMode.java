@@ -20,6 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
+ * Mainly edited (ordered by no. of lines) by firstly, oxe410 and secondly, nbg481
+ * Commits:
+ * 15  nbg481
+ * 3  oxe410
+ * 2  lxd417
+ *
  * A small scale world with step by step views and pop-ups to allow for uneducated 2nd year CS university students to learn about algorithms they should've learnt in year 1.
  * Sets up small world, camera, input handler and launches the world paused (forcing / implying step-by-step)
  */
