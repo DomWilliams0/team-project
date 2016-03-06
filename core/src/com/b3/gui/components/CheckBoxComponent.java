@@ -33,6 +33,10 @@ public class CheckBoxComponent extends Component {
         checkBox.setText(text);
     }
 
+    public CharSequence getText() {
+        return checkBox.getText();
+    }
+
     @Override
     public CheckBox getComponent() {
         return checkBox;
