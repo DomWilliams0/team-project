@@ -591,7 +591,7 @@ public class WorldGraph implements Serializable {
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 			shapeRenderer.setColor(currentHighlightColor);
-			currentHighlightTimer--;
+			currentHighlightTimer = currentHighlightTimer - 5;
 			shapeRenderer.ellipse((float) (currentHighlightPoint.x - ((currentHighlightTimer / 75.0) / 2.0)), (float) ((float) currentHighlightPoint.y - ((currentHighlightTimer / 75.0) / 2.0)), (float) (currentHighlightTimer/75.0), (float) (currentHighlightTimer/75.0));
 			shapeRenderer.end();
 		}
