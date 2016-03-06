@@ -8,7 +8,7 @@ import com.badlogic.gdx.audio.Sound;
  */
 public class SoundController {
 
-    private Sound[] sounds;
+    private static Sound[] sounds;
 
     /**
      * Loads the sounds controller and loads all the potential sounds in to memory, should be called once at program launch.
@@ -27,7 +27,7 @@ public class SoundController {
      * @param soundIndex the number of the sounds to be played (ie the position it was in, when this object was created
      * @return true if played successfully; false if cannot find sounds or cannot be played
      */
-    public boolean playSounds (int soundIndex) {
+    public static boolean playSounds (int soundIndex) {
         if (soundIndex >= sounds.length) return false;
         sounds[soundIndex].play(1.0f);
         return true;

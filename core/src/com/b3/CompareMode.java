@@ -32,12 +32,8 @@ public class CompareMode implements Screen {
         // init database
         //Database.init();
 
-        // set up the sounds
-        String[] arrSoundsDir = game.getSoundsDirList();
-        SoundController soundController = new SoundController(arrSoundsDir);
-
         // create world
-        world = new World("core/assets/world/world.tmx", Mode.COMPARE, game.inputHandler, soundController);
+        world = new World("core/assets/world/world.tmx", Mode.COMPARE, game.inputHandler);
 
         // init gui
         setupSidebar();

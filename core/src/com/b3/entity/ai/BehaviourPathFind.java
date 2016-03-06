@@ -2,6 +2,7 @@ package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
 import com.b3.gui.ErrorPopups;
+import com.b3.input.SoundController;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -101,10 +102,10 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			world.setPseudoCode(false);
 		}
 		if (shouldPlayFail == 1) {
-			world.getSoundController().playSounds(1);
+			SoundController.playSounds(1);
 		}
 		if (shouldPlayFail == -1) {
-			world.getSoundController().playSounds(0);
+			SoundController.playSounds(0);
 		}
 
 		wasArrivedLastFrame = hasArrivedThisFrame;

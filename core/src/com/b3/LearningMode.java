@@ -45,12 +45,8 @@ public class LearningMode implements Screen {
 
         this.game = game;
 
-        // set up the sounds
-        String[] arrSoundsDir = game.getSoundsDirList();
-        SoundController soundController = new SoundController(arrSoundsDir);
-
         // create world
-        world = new World("core/assets/world/world_smaller_test.tmx", Mode.LEARNING, game.inputHandler, soundController);
+        world = new World("core/assets/world/world_smaller_test.tmx", Mode.LEARNING, game.inputHandler);
 
         // init gui
         setupSidebar();

@@ -6,6 +6,7 @@ import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.entity.ai.BehaviourType;
 import com.b3.gui.TabbedPane;
 import com.b3.gui.components.*;
+import com.b3.input.SoundController;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -300,7 +301,7 @@ public class SideBarCompareMode extends Table implements Disposable {
                     System.out.println("Add building mode is " + !currentBoolean);
                 } else {
                     world.showPopupError(1);
-                    //TODO SOUND GO HERE
+                    SoundController.playSounds(2);
                     System.err.println("Search has begun cannot add");
                 }
             }
@@ -341,7 +342,7 @@ public class SideBarCompareMode extends Table implements Disposable {
                     System.out.println("Remove building mode is " + !currentBoolean);
                 } else {
                     world.showPopupError(1);
-                    //TODO SOUND GO HERE
+                    SoundController.playSounds(2);
                     System.err.println("Search has begun cannot add");
                 }
             }

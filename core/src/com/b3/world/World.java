@@ -12,7 +12,6 @@ import com.b3.event.EventGenerator;
 import com.b3.gui.ErrorPopups;
 import com.b3.gui.RenderTester;
 import com.b3.input.InputHandler;
-import com.b3.input.SoundController;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -54,8 +53,6 @@ import static com.b3.world.BuildingType.HOUSE;
 public class World implements Disposable {
 
 	private static short ENTITY_CULL_TAG = 10101;
-
-	private SoundController soundController;
 
 	private TiledMap map;
 	private InputHandler inputHandler;
@@ -114,12 +111,11 @@ public class World implements Disposable {
 
 	}
 
-	public World(String fileName, Mode mode, InputHandler inputHandler, SoundController soundController) {
+	public World(String fileName, Mode mode, InputHandler inputHandler) {
 		pseudoCodeEnabled = true;
 
 		this.inputHandler = inputHandler;
 		this.mode = mode;
-		this.soundController = soundController;
 
 		animationNextDestination = 0;
 		xNextDestination = 0;
@@ -878,10 +874,6 @@ public class World implements Disposable {
 		System.out.println("BAD");
 	}
 
-	public SoundController getSoundController() {
-		return soundController;
-	}
-
 	public void setPseudoCode(boolean enabled) {
 		pseudoCodeEnabled = enabled;
 	}
@@ -889,4 +881,5 @@ public class World implements Disposable {
 	public boolean getPseudoCode() {
 		return pseudoCodeEnabled;
 	}
+
 }

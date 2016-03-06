@@ -1,6 +1,7 @@
 package com.b3;
 
 import com.b3.input.InputHandler;
+import com.b3.input.SoundController;
 import com.b3.util.Config;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
@@ -21,9 +22,11 @@ public class MainGame extends Game {
 	 */
 	@Override
 	public void create() {
-		soundsDirList = new String[2];
+		soundsDirList = new String[3];
 		soundsDirList[0] = "core/assets/sounds/sad_failure.wav";
 		soundsDirList[1] = "core/assets/sounds/search_complete.mp3";
+		soundsDirList[2] = "core/assets/sounds/error_buildings.mp3";
+		new SoundController(soundsDirList);
 
 		// load config
 		Config.loadConfig("core/assets/reference.yml", "core/assets/userconfig.yml");

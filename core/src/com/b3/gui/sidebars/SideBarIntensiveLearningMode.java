@@ -4,6 +4,7 @@ import com.b3.MainGame;
 import com.b3.MainMenuScreen;
 import com.b3.gui.TabbedPane;
 import com.b3.gui.components.*;
+import com.b3.input.SoundController;
 import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
@@ -141,7 +142,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                     System.out.println("Add building mode is " + !currentBoolean);
                 } else {
                     world.showPopupError(1);
-                    //TODO SOUND GO HERE
+                    SoundController.playSounds(2);
                     System.err.println("Search has begun cannot add");
                 }
             }
@@ -182,7 +183,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
                     System.out.println("Remove building mode is " + !currentBoolean);
                 } else {
                     world.showPopupError(1);
-                    //TODO SOUND GO HERE
+                    SoundController.playSounds(2);
                     System.err.println("Search has begun cannot add");
                 }
             }

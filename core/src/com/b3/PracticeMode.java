@@ -31,12 +31,8 @@ public class PracticeMode implements Screen {
     private SideBarNodes sideBarNodes;
 
     public PracticeMode(MainGame game) {
-        // set up the sounds
-        String[] arrSoundsDir = game.getSoundsDirList();
-        SoundController soundController = new SoundController(arrSoundsDir);
-
         // create world
-        world = new World("core/assets/world/world_smaller_test_tiym.tmx", Mode.TRY_YOURSELF, game.inputHandler, soundController);
+        world = new World("core/assets/world/world_smaller_test_tiym.tmx", Mode.TRY_YOURSELF, game.inputHandler);
 
         // init gui
         setupSidebar();

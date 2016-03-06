@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class ErrorPopups {
 
+    public static boolean shouldClose;
+    public static boolean justOpen;
+
     private final OrthographicCamera camera;
     private final WorldCamera worldCamera;
 
@@ -24,6 +27,8 @@ public class ErrorPopups {
     private long startSeconds;
 
     public ErrorPopups(WorldCamera worldCamera, Sprite sprite) {
+        justOpen = false;
+        shouldClose = false;
         this.worldCamera = worldCamera;
         this.sprite = sprite;
         noOfTicksDisplay = 0;
@@ -34,6 +39,9 @@ public class ErrorPopups {
     }
 
     public void showPopup(int noOfTicksDisplay) {
+
+        justOpen = true;
+
         if (this.noOfTicksDisplay > 10) {
             System.err.println("ALREADY DISPLAYING POPUP");
         } else {
@@ -46,6 +54,9 @@ public class ErrorPopups {
     }
 
     public void render() {
+
+        if (shouldClose && noOfTicksDisplay > 100) { noOfTicksDisplay = 100; shouldClose = false;}
+
         //if has not ran out of time
         if (noOfTicksDisplay != 0) {
             //decrement time left allowed on screen
@@ -64,6 +75,7 @@ public class ErrorPopups {
             float imgWidth;
             float imgHeight;
             if (noOfTicksDisplay < 100) {
+                justOpen = false;
                 imgHeight = sprite.getHeight() / (100-noOfTicksDisplay);
                 if (noOfTicksDisplay < 50) {
                     imgWidth = sprite.getWidth() / (50-noOfTicksDisplay);
