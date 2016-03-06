@@ -1,12 +1,11 @@
 package com.b3.world;
 
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 public class ModelController {
 
-	private ModelInstance instance;
+	private Matrix4 transform;
 	private Vector3 position;
 	private float rotation = 0;
 	private boolean flipped;
@@ -14,13 +13,11 @@ public class ModelController {
 
 	public ModelController(String modelName, ModelManager modelManager, boolean flipped) {
 		this.flipped = flipped;
-		setPosition(0, 0, 0);
-		setRotation(0);
-		modelManager.requestModel(modelName, (instance) -> {
-			this.instance = instance;
+		setPositionAndRotation(0, 0, 0, 0);
+		modelManager.requestModel(this, modelName, (transform) -> {
+			this.transform = transform;
 			updateTransform();
 		});
-		updateTransform();
 	}
 
 	public ModelController setPosition(float x, float y, float z) {
@@ -40,29 +37,39 @@ public class ModelController {
 		updateTransform();
 		return this;
 	}
+	
+	public ModelController setPositionAndRotation(float x, float y, float z, float degrees) {
+		position = new Vector3(x, y, z);
+		rotation = degrees;
+		updateTransform();
+		return this;
+	}
+	
+	public ModelController setPositionAndRotation(Vector3 vector3, float degrees) {
+		position = new Vector3(vector3);
+		rotation = degrees;
+		updateTransform();
+		return this;
+	}
+	
+	public boolean isVisible() {
+		return visible;
+	}
 
-	public void setVisible(boolean visible) {
+	public ModelController setVisible(boolean visible) {
 		this.visible = visible;
-		if (visible) {
-			updateTransform();
-		} else {
-			instance.transform = new Matrix4().translate(-200f, -20f, 200f);
-		}
+		return this;
 	}
 
 	private void updateTransform() {
-		if (!visible)
-			return;
-		if (instance == null)
+		if (transform == null)
 			return;
 		if (flipped) {
-			instance.transform
-					= new Matrix4(new float[] {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1})
+			transform.set(new float[] {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1})
 					.translate(position.x, position.z, position.y)
 					.rotate(Vector3.Y, rotation);
 		} else {
-			instance.transform
-					= new Matrix4()
+			transform.set(new Matrix4())
 					.translate(position)
 					.rotate(Vector3.Z, -rotation);
 		}

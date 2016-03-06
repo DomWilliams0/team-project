@@ -46,11 +46,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static com.b3.Mode.*;
-import static com.b3.Mode.COMPARE;
-import static com.b3.Mode.LEARNING;
 import static com.b3.world.BuildingType.HOUSE;
 
 public class World implements Disposable {
@@ -73,7 +70,6 @@ public class World implements Disposable {
 	private BuildingModelCache buildingCache;
 
 	private ModelManager modelManager;
-	private ArrayList<Consumer<Boolean>> flattenListeners;
 
 	private Engine engine;
 
@@ -111,8 +107,7 @@ public class World implements Disposable {
 	private ErrorPopups errorSprite;
 	private ErrorPopups errorSpriteTwo;
 	private ErrorPopups firstPopup;
-
-
+	
 	private Point p;
 	private boolean pseudoCodeEnabled;
 
@@ -172,9 +167,8 @@ public class World implements Disposable {
 		processMapTileTypes(map);
 
 		// model manager
-		flattenListeners = new ArrayList<>();
-		modelManager = new ModelManager(this, environment, map);
-
+		modelManager = new ModelManager(environment, map);
+		
 		//GUI overlay
 		coordinatePopup = new CoordinatePopup();
 	}
@@ -715,8 +709,7 @@ public class World implements Disposable {
 		buildingBatch.end();
 
 		// render models
-		if (Config.getBoolean(ConfigKey.RENDER_MODELS))
-			modelManager.render(worldCamera);
+		modelManager.render(worldCamera);
 
 		//pop-ups on nodes
 		if (mode == LEARNING) rt.render(currentNodeClickX, currentNodeClickY);
@@ -794,15 +787,6 @@ public class World implements Disposable {
 		for (Building building : buildings) {
 			building.setFlattened(flatten);
 		}
-		for (Consumer<Boolean> c : flattenListeners) {
-			c.accept(flatten);
-		}
-	}
-
-	public void addFlattenListener(Consumer<Boolean> listener) {
-		boolean flatBuildings = Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS);
-		flattenListeners.add(listener);
-		listener.accept(flatBuildings);
 	}
 
 	@Override

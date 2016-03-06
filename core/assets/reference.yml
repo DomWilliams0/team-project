@@ -15,7 +15,8 @@ steps-per-tick: 1
 show-grid: true
 show-paths: true
 flatten-buildings: false
-render-models: false
+render-agent-models: false
+render-static-models: true
 flocking-enabled: false
 add-building-mode: false
 remove-building-mode: false

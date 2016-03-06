@@ -36,6 +36,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SideBarCompareMode extends Table implements Disposable {
@@ -134,39 +135,15 @@ public class SideBarCompareMode extends Table implements Disposable {
         settingsTab.row();
 
         // Show grid checkbox
-        CheckBoxComponent showGridCheckBox = new CheckBoxComponent(skin, font, "Show grid");
-        showGridCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.SHOW_GRID));
-        showGridCheckBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                boolean showGrid = Config.getBoolean(ConfigKey.SHOW_GRID);
-                Config.set(ConfigKey.SHOW_GRID, !showGrid);
-            }
-        });
-
-        settingsTab.add(showGridCheckBox.getComponent())
-                .align(Align.left)
-                .maxWidth(preferredWidth)
-                .spaceBottom(10);
-        settingsTab.row();
+		createCheckbox(skin, font, settingsTab, "Show grid", ConfigKey.SHOW_GRID);
 
         // Flat buildings checkbox
-        CheckBoxComponent showLabelsCheckBox = new CheckBoxComponent(skin, font, "Flat buildings");
-        showLabelsCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS));
-        showLabelsCheckBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                boolean flatBuildings = Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS);
-                world.flattenBuildings(!flatBuildings);
-                Config.set(ConfigKey.FLATTEN_BUILDINGS, !flatBuildings);
-            }
-        });
-
-        settingsTab.add(showLabelsCheckBox.getComponent())
-                .align(Align.left)
-                .maxWidth(preferredWidth)
-                .spaceBottom(10);
-        settingsTab.row();
+		createCheckbox(skin, font, settingsTab, "Flat buildings", ConfigKey.FLATTEN_BUILDINGS,
+				(flatBuildings) -> world.flattenBuildings(flatBuildings));
+	
+		// Render static models checkbox
+		createCheckbox(skin, font, settingsTab, "Render static models", ConfigKey.RENDER_STATIC_MODELS,
+				(visible) -> world.getModelManager().setStaticsVisible(visible));
 
 	    // im removing this toggle for now, as it requires a complex design decision
 	    //
@@ -191,36 +168,11 @@ public class SideBarCompareMode extends Table implements Disposable {
 //                .spaceBottom(10);
 //        settingsTab.row();
 
-         // Model rendering toggle
-        CheckBoxComponent modelRenderCheckBox = new CheckBoxComponent(skin, font, "Simple agents");
-        modelRenderCheckBox.getComponent().setChecked(!Config.getBoolean(ConfigKey.RENDER_MODELS));
-        modelRenderCheckBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Config.set(ConfigKey.RENDER_MODELS, !modelRenderCheckBox.getComponent().isChecked());
-            }
-        });
-
-        settingsTab.add(modelRenderCheckBox.getComponent())
-                .align(Align.left)
-                .maxWidth(preferredWidth)
-                .spaceBottom(10);
-        settingsTab.row();
+         // Agent model rendering toggle
+        createCheckbox(skin, font, settingsTab, "Render agent models", ConfigKey.RENDER_AGENT_MODELS);
 
         // Show paths checkbox
-        CheckBoxComponent showPathsCheckbox = new CheckBoxComponent(skin, font, "Show paths");
-        showPathsCheckbox.getComponent().setChecked(Config.getBoolean(ConfigKey.SHOW_PATHS));
-        showPathsCheckbox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Config.set(ConfigKey.SHOW_PATHS, !Config.getBoolean(ConfigKey.SHOW_PATHS));
-            }
-        });
-
-        settingsTab.add(showPathsCheckbox.getComponent())
-                .align(Align.left)
-                .maxWidth(preferredWidth);
-        settingsTab.row();
+        createCheckbox(skin, font, settingsTab, "Show paths", ConfigKey.SHOW_PATHS);
 
         // Search speed slider
         LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.WHITE);
@@ -521,6 +473,31 @@ public class SideBarCompareMode extends Table implements Disposable {
         background(skin.getDrawable("window_03"));
         this.stage.addActor(triggerBtn.getComponent());
     }
+	
+	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey) {
+		createCheckbox(skin, font, table, label, configKey, null);
+	}
+	
+	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey,
+								Consumer<Boolean> checkedListener) {
+		CheckBoxComponent checkBox = new CheckBoxComponent(skin, font, label);
+		checkBox.getComponent().setChecked(Config.getBoolean(configKey));
+		checkBox.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				boolean checked = checkBox.getComponent().isChecked();
+				Config.set(configKey, checked);
+				if (checkedListener != null)
+					checkedListener.accept(checked);
+			}
+		});
+		
+		table.add(checkBox.getComponent())
+				.align(Align.left)
+				.maxWidth(preferredWidth)
+				.spaceBottom(10);
+		table.row();
+	}
 
     /*public void setPreferredWidth(float preferredWidth) {
         this.preferredWidth = preferredWidth;

@@ -1,7 +1,7 @@
 package com.b3.entity.system;
 
-import com.b3.entity.component.RenderComponent;
 import com.b3.entity.component.PhysicsComponent;
+import com.b3.entity.component.RenderComponent;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -37,7 +37,7 @@ public class RenderSystem extends IteratingSystem {
 
 	@Override
 	public void beginProcessing() {
-		modelRendering = Config.getBoolean(ConfigKey.RENDER_MODELS);
+		modelRendering = Config.getBoolean(ConfigKey.RENDER_AGENT_MODELS);
 		dotRadius = Config.getFloat(ConfigKey.ENTITY_DIAMETER) / 2f;
 
 		if (!modelRendering) {
@@ -63,8 +63,9 @@ public class RenderSystem extends IteratingSystem {
 		phys.lastPosition.set(pos);
 
 		if (modelRendering)
-			render.controller.setPosition(pos.x, pos.y, 0f).setRotation(degrees);
+			render.controller.setVisible(true).setPositionAndRotation(pos.x, pos.y, 0f, degrees);
 		else {
+			render.controller.setVisible(false);
 			shapeRenderer.identity();
 			shapeRenderer.translate(pos.x, pos.y, 0f);
 			shapeRenderer.rotate(0, 0, 1, degrees + 45f);
