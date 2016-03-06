@@ -52,7 +52,10 @@ public class WorldGraph implements Serializable {
 	private SearchAlgorithm learningModeNext = null;
 
 	private Color colPath;
-	private Object copy;
+
+	private int currentHighlightTimer;
+	private Point currentHighlightPoint;
+	private Color currentHighlightColor;
 
 	/**
 	 * Constructs a new world graph with the following x and y dimensions.
@@ -62,6 +65,8 @@ public class WorldGraph implements Serializable {
 	 * @param height maximum y value (IE Point goes to max (-, height)
 	 */
 	public WorldGraph(int width, int height) {
+		this.currentHighlightPoint = null;
+		this.currentHighlightTimer = 0;
 		this.nodes = new LinkedHashMap<>();
 		this.width = width;
 		this.height = height;
@@ -582,6 +587,15 @@ public class WorldGraph implements Serializable {
 
 		shapeRenderer.end();
 
+		if (currentHighlightTimer > 0) {
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+			shapeRenderer.setColor(currentHighlightColor);
+			currentHighlightTimer--;
+			shapeRenderer.ellipse((float) (currentHighlightPoint.x - ((currentHighlightTimer / 75.0) / 2.0)), (float) ((float) currentHighlightPoint.y - ((currentHighlightTimer / 75.0) / 2.0)), (float) (currentHighlightTimer/75.0), (float) (currentHighlightTimer/75.0));
+			shapeRenderer.end();
+		}
+
 	}
 
 	@Override
@@ -703,6 +717,13 @@ public class WorldGraph implements Serializable {
 					addEdge(currentPoint, new Point(i,j-1), 1);
 			}
 		}
+
+	}
+
+	public void highlightOver(Point highlightingPoint, Color colors) {
+		currentHighlightTimer = 100;
+		currentHighlightPoint = highlightingPoint;
+		currentHighlightColor = colors;
 	}
 
 //	public boolean checkEveryEdge() {

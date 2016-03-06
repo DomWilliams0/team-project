@@ -293,6 +293,12 @@ public class VisNodes extends Table {
 					//ensure the scrollpanes aren't being used before saying the clicked node can be accessed
 					if (clickedNode.equals(n) && !scrollpanesBeingUsed()) clickedNodeUpdated = true;
 				}
+
+				@Override
+				public boolean mouseMoved(InputEvent event, float x, float y) {
+					world.getWorldGraph().highlightOver(n.getPoint(), getColors(n));
+					return super.mouseMoved(event, x, y);
+				}
 			});
 
 			//add the wrapping table to the overall table
@@ -351,9 +357,18 @@ public class VisNodes extends Table {
 		colours.put(n, c);
 		//apply all node colours, since we may have deleted other colours by using this method.
 		return applyColourAll();
+	}
+
+	public Color getColors(Node n) {
+		Color c = Color.YELLOW;
+		if (cellmap.get(n) != null) {
+			if (cellmap.get(n).getParent().equals(vt)) c = WorldGraph.VISITED_COLOUR;
+			if (cellmap.get(n).getParent().equals(ft)) c = WorldGraph.FRONTIER_COLOUR;
 		}
-
-
+		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.NEW_FRONTIER_COLOUR;
+		if (justExpanded!=null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
+		return c;
+	}
 
 	/**
 	 * Update the colour of all nodes known to this object.
