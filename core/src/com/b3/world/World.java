@@ -45,7 +45,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.b3.world.BuildingType.HOUSE;
@@ -69,6 +68,7 @@ public class World implements Disposable {
 	private BuildingModelCache buildingCache;
 
 	private ModelManager modelManager;
+	private ArrayList<Consumer<Boolean>> flattenListeners;
 
 	private Engine engine;
 
@@ -140,9 +140,6 @@ public class World implements Disposable {
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
-		// model manager
-		modelManager = new ModelManager(environment, map);
-
 		// entities
 		engine = new Engine();
 		deadEntities = new HashSet<>();
@@ -164,6 +161,10 @@ public class World implements Disposable {
 		// load map tiles
 		loadBuildings(map);
 		processMapTileTypes(map);
+
+		// model manager
+		flattenListeners = new ArrayList<>();
+		modelManager = new ModelManager(this, environment, map);
 	}
 
 	private void processMapTileTypes(TiledMap map) {
@@ -750,10 +751,23 @@ public class World implements Disposable {
 		return zoomScalar;
 	}
 
+	/**
+	 * Flatten buildings and models.
+	 * @param flatten whether they should be flat or not.
+	 */
 	public void flattenBuildings(boolean flatten) {
 		for (Building building : buildings) {
 			building.setFlattened(flatten);
 		}
+		for (Consumer<Boolean> c : flattenListeners) {
+			c.accept(flatten);
+		}
+	}
+
+	public void addFlattenListener(Consumer<Boolean> listener) {
+		boolean flatBuildings = Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS);
+		flattenListeners.add(listener);
+		listener.accept(flatBuildings);
 	}
 
 	@Override

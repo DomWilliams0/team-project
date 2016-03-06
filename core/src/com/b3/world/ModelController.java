@@ -1,7 +1,6 @@
 package com.b3.world;
 
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
@@ -11,6 +10,7 @@ public class ModelController {
 	private Vector3 position;
 	private float rotation = 0;
 	private boolean flipped;
+	private boolean visible = true;
 
 	public ModelController(String modelName, ModelManager modelManager, boolean flipped) {
 		this.flipped = flipped;
@@ -41,7 +41,18 @@ public class ModelController {
 		return this;
 	}
 
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+		if (visible) {
+			updateTransform();
+		} else {
+			instance.transform = new Matrix4().translate(-200f, -20f, 200f);
+		}
+	}
+
 	private void updateTransform() {
+		if (!visible)
+			return;
 		if (instance == null)
 			return;
 		if (flipped) {

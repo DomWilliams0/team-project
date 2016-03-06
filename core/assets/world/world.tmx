@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="48" tilewidth="16" tileheight="16" nextobjectid="47">
- <tileset firstgid="1" name="roguelikeCity" tilewidth="16" tileheight="16" spacing="1" tilecount="1036" columns="37">
+ <tileset firstgid="1" name="roguelikeCity" tilewidth="16" tileheight="16" spacing="1">
   <image source="tileset.png" width="628" height="475"/>
   <terraintypes>
    <terrain name="Grass" tile="963"/>
@@ -178,28 +178,28 @@
   </object>
  </objectgroup>
  <objectgroup name="models">
-  <object id="39" x="544" y="128" width="16" height="16">
-   <properties>
-    <property name="model" value="light"/>
-    <property name="rotation" value="90"/>
-   </properties>
-  </object>
-  <object id="43" x="592" y="128" width="16" height="16">
+  <object id="39" name="Light" x="544" y="128" width="16" height="16">
    <properties>
     <property name="model" value="light"/>
     <property name="rotation" value="180"/>
    </properties>
   </object>
-  <object id="45" x="592" y="176" width="16" height="16">
+  <object id="43" name="Light" x="592" y="128" width="16" height="16">
+   <properties>
+    <property name="model" value="light"/>
+    <property name="rotation" value="270"/>
+   </properties>
+  </object>
+  <object id="45" name="Light" x="592" y="176" width="16" height="16">
    <properties>
     <property name="model" value="light"/>
     <property name="rotation" value="360"/>
    </properties>
   </object>
-  <object id="46" x="544" y="176" width="16" height="16">
+  <object id="46" name="Light" x="544" y="176" width="16" height="16">
    <properties>
     <property name="model" value="light"/>
-    <property name="rotation" value="270"/>
+    <property name="rotation" value="90"/>
    </properties>
   </object>
  </objectgroup>

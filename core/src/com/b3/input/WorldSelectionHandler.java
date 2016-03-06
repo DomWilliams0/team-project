@@ -57,10 +57,9 @@ public class WorldSelectionHandler extends InputAdapter {
 			if (world.isValidBuildingPos((int)tempRayCast.x, (int)tempRayCast.y))
 				world.addBuilding(new Vector2((int)tempRayCast.x, (int)tempRayCast.y), new Vector3(4, 4, 10), BuildingType.HOUSE);
 			Config.set(ConfigKey.ADD_BUILDING_MODE, !(Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)));
-			if (Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS))
-				world.flattenBuildings(true);
-			else
-				world.flattenBuildings(false);
+
+			boolean flatBuildings = Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS);
+			world.flattenBuildings(flatBuildings);
 		}
 
 		if (Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)) {
@@ -69,10 +68,9 @@ public class WorldSelectionHandler extends InputAdapter {
 //				world.addBuilding(new Vector2((int)tempRayCast.x, (int)tempRayCast.y), new Vector3(4, 4, 10), BuildingType.HOUSE);
 			world.removeBuilding(new Vector2((int) tempRayCast.x, (int) tempRayCast.y));
 			Config.set(ConfigKey.REMOVE_BUILDING_MODE, !(Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)));
-			if (Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS))
-				world.flattenBuildings(true);
-			else
-				world.flattenBuildings(false);
+
+			boolean flatBuildings = Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS);
+			world.flattenBuildings(flatBuildings);
 		}
 
 		// Check if node page no. should be incremented or reset to beginning (as clicked on different node)

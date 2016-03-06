@@ -1,12 +1,16 @@
 package com.b3.search;
 
+import com.b3.gui.PseudocodeVisualiser;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.Utils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests for the {@link SearchTicker} class.
@@ -28,6 +32,11 @@ public class SearchTickerTest {
 
 		// Setup the config.
 		Config.loadConfig("assets/reference.yml");
+
+		// Stop PseudocodeVisualiser errors.
+		Field fieldInstance = PseudocodeVisualiser.class.getDeclaredField("instance");
+		fieldInstance.setAccessible(true);
+		fieldInstance.set(null, mock(PseudocodeVisualiser.class));
 	}
 
 	private void setGraph(WorldGraph graph) throws Exception {
@@ -62,6 +71,10 @@ public class SearchTickerTest {
 				new Point(8,2), new Point(8,1), new Point(8,0), new Point(7,0), new Point(6,0), new Point(5,0),
 				new Point(4,0), new Point(3,0), new Point(2,0), new Point(1,0), new Point(0,0)};
 		testTick(0, 11, 0, 0, path, DIJ, AS);
+		path = new Point[] {new Point(0,11), new Point(0,10), new Point(0,9), new Point(0,8), new Point(0,7),
+				new Point(0,6), new Point(0,5), new Point(0,4), new Point(0,3), new Point(0,2), new Point(0,1),
+				new Point(0,0)};
+		testTick(0, 11, 0, 0, path, BFS);
 	}
 
 	/**

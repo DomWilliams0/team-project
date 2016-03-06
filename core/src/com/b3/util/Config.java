@@ -1,6 +1,6 @@
 package com.b3.util;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class Config {
@@ -13,7 +13,7 @@ public class Config {
 	 * it will override the value set in the user config, unless it is
 	 * unset using {@link Config#unset(ConfigKey)}
 	 */
-	private static Map<ConfigKey, Object> gameConfig = new HashMap<>();
+	private static Map<ConfigKey, Object> gameConfig = new EnumMap<>(ConfigKey.class);
 
 	private Config() {
 		// no instantiation 4 u

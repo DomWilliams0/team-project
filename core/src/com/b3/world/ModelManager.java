@@ -2,13 +2,18 @@ package com.b3.world;
 
 import com.b3.util.Utils;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g3d.*;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.utils.Array;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
@@ -38,7 +43,7 @@ public class ModelManager {
 	private AssetManager assetManager = new AssetManager();
 	private ModelBatch modelBatch = new ModelBatch();
 
-	public ModelManager(Environment environment, TiledMap map) {
+	public ModelManager(World world, Environment environment, TiledMap map) {
 		this.environment = environment;
 
 		MapLayer modelLayer = map.getLayers().get("models");
@@ -48,18 +53,36 @@ public class ModelManager {
 		for (MapObject object : modelLayer.getObjects()) {
 			MapProperties props = object.getProperties();
 			String modelName = props.get("model", String.class);
+			float x = (props.get("x", Float.class) / Utils.TILESET_RESOLUTION) + 0.5f;
+			float y = (props.get("y", Float.class) / Utils.TILESET_RESOLUTION) + 0.5f;
+			float rotation = Float.parseFloat(props.get("rotation", String.class));
+			// Possibly not flipped, should really check.
+			ModelController controller = new ModelController(modelName, this, true).setPosition(x, y, 0f).setRotation(rotation);
+			world.addFlattenListener((flat) -> controller.setVisible(!flat));
+		}
 
-			ModelController model = new ModelController(
-					modelName, this, true);
+		TiledMapTileLayer objectLayer = (TiledMapTileLayer) map.getLayers().get("objects");
+		for (int x = 0; x < objectLayer.getWidth(); x++) {
+			for (int y = 0; y < objectLayer.getHeight(); y++) {
+				TiledMapTileLayer.Cell cell = objectLayer.getCell(x, y);
+				if (cell == null)
+					continue;
+				TileType type = TileType.getFromCell(cell);
+				if (type == TileType.UNKNOWN)
+					continue;
+				File f = new File(getModelPath(type.name().toLowerCase()));
+				if (!f.exists())
+					continue;
 
-			Float x = props.get("x", Float.class) + 0.5f * Utils.TILESET_RESOLUTION;
-			Float y = props.get("y", Float.class) + 0.5f * Utils.TILESET_RESOLUTION;
-			model.setPosition(
-					x / Utils.TILESET_RESOLUTION,
-					y / Utils.TILESET_RESOLUTION,
-					0f
-			);
-			model.setRotation(Float.parseFloat(props.get("rotation", String.class)));
+				// Possibly not flipped, should really check.
+				final ModelController controller = new ModelController(type.name().toLowerCase(), this, true)
+						.setPosition(x + 0.5f, y + 0.5f, 0f);
+				final int xF = x, yF = y;
+				world.addFlattenListener((flat) -> {
+					controller.setVisible(!flat);
+					objectLayer.setCell(xF, yF, flat ? cell : null);
+				});
+			}
 		}
 	}
 
