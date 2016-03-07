@@ -1,7 +1,7 @@
 package com.b3.world;
 
 import com.b3.DebugRenderer;
-import com.b3.Mode;
+import com.b3.mode.Mode;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.*;
 import com.b3.entity.component.PhysicsComponent;
@@ -47,7 +47,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
 
-import static com.b3.Mode.*;
+import static com.b3.mode.Mode.*;
 import static com.b3.world.BuildingType.HOUSE;
 
 public class World implements Disposable {

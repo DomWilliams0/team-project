@@ -1,51 +1,58 @@
-package com.b3;
+package com.b3.mode;
 
+import com.b3.MainGame;
+import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
 import com.b3.gui.sidebars.SideBarNodes;
-import com.b3.gui.sidebars.tabs.PracticeModeSettingsTab;
+import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
-import com.b3.input.PracticeModeWorldSelectionHandler;
+import com.b3.input.WorldSelectionHandler;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Font;
 import com.b3.util.Utils;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * Mainly edited (ordered by no. of lines) firstly and significantly by oxe410; secondly nbg481.
+ * Mainly edited (ordered by no. of lines) by firstly, oxe410 and secondly, nbg481
  * Commits:
- * 3  nbg481
- * 1  oxe410
+ * 15  nbg481
+ * 3  oxe410
+ * 2  lxd417
+ *
+ * A small scale world with step by step views and pop-ups to allow for uneducated 2nd year CS university students to learn about algorithms they should've learnt in year 1.
+ * Sets up small world, camera, input handler and launches the world paused (forcing / implying step-by-step)
  */
-public class PracticeMode implements Screen {
+
+public class LearningMode implements Screen {
 
     private World world;
     private WorldCamera camera;
-    private KeyboardController keyboardController;
-    private Stage popupStage;
     private Stage sideBarStage;
+    private SideBarIntensiveLearningMode sideBar;
     private SideBarNodes sideBarNodes;
+    private HelpBox helpBox;
+    private KeyboardController keyboardController;
     private MainGame game;
 
-    public PracticeMode(MainGame game) {
-        // create world
-        world = new World("core/assets/world/world_smaller_test_tiym.tmx", Mode.TRY_YOURSELF, game.inputHandler);
+    /**
+     * Constructs the world, sets up the camera, loads to worldmap and launches the world paused.
+     * @param game used to set up the world, contains directories to config files
+     */
+    public LearningMode(MainGame game) {
+        // init database
+        //Database.init();
 
         this.game = game;
+
+        // create world
+        world = new World("core/assets/world/world_smaller_test.tmx", Mode.LEARNING, game.inputHandler);
 
         // init gui
         setupSidebar();
@@ -65,18 +72,10 @@ public class PracticeMode implements Screen {
 
         camera.setWorld(world);
         world.initEngine(camera);
+        //world.initEventGenerator();
 
         world.getWorldGraph().getCurrentSearch().pause(1);
         world.getWorldGraph().getCurrentSearch().setUpdated(true);
-
-        // Display first popup
-//        MessageBoxComponent descriptionPopup = new MessageBoxComponent(popupStage,
-//                "Welcome to the 'Try it yourself' mode.\n" +
-//                        "Here you can practice what you have learned in the 'Learning mode'.\n" +
-//                        "Currently you can interact using DFS.\n" +
-//                        "Now please click on the node to be expanded next.",
-//                "OK");
-//        descriptionPopup.show();
     }
 
     /**
@@ -84,50 +83,34 @@ public class PracticeMode implements Screen {
      * @param inputHandler
      */
     private void initInputHandlers(InputHandler inputHandler) {
-        // Keyboard control has top priority
+        // keyboard control has top priority
         keyboardController = new KeyboardController();
         inputHandler.addProcessor(keyboardController);
 
-        // Sidebar clicking
+        // world clicking
         inputHandler.addProcessor(sideBarStage);
 
-        // Popup clicking
-        inputHandler.addProcessor(popupStage);
+        // world clicking
+        inputHandler.addProcessor(new WorldSelectionHandler(world));
 
-        // World clicking
-        inputHandler.addProcessor(new PracticeModeWorldSelectionHandler(world, popupStage));
     }
 
     /**
      * Sets up the sidebars (one with options on the left; one with nodes and step-by-step buttons on right; and help box on top)
      */
     private void setupSidebar() {
-        popupStage = new Stage(new ScreenViewport());
         sideBarStage = new Stage(new ScreenViewport());
 
-        // INITIALISE SKIN AND FONT
-        // ------------------------
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
-        Skin skin = new Skin(atlas);
-        BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+        sideBar = new SideBarIntensiveLearningMode(sideBarStage, world);
+        sideBar.setController(game);
+        sideBarStage.addActor(sideBar);
 
-        // SIDEBAR NODES
-        // -------------
-        sideBarNodes = new SideBarNodes(sideBarStage, world, new ArrayList<>());
-
-        // Get world and controller (for settings tab)
-        Map<String, Object> data = new HashMap<String, Object>() {{
-            put("world", world);
-            put("controller", game);
-        }};
-
-        // Add settings tab
-        PracticeModeSettingsTab settingsTab = new PracticeModeSettingsTab(skin, font, sideBarNodes.getPreferredWidth(), data);
-        settingsTab.setName("Settings");
-
-        sideBarNodes.addTab(settingsTab.getTab());
+        sideBarNodes = new SideBarNodes(sideBarStage, world);
         sideBarNodes.setStepthrough(true);
         sideBarStage.addActor(sideBarNodes);
+
+        helpBox = new HelpBox(sideBarStage, world);
+        sideBarStage.addActor(helpBox);
     }
 
     @Override
@@ -155,14 +138,13 @@ public class PracticeMode implements Screen {
         // world rendering
         world.render();
 
-        popupStage.act(Gdx.graphics.getDeltaTime());
-        popupStage.draw();
-
         // sidebar rendering
         sideBarStage.act(Gdx.graphics.getDeltaTime());
         sideBarNodes.render();
+        if (!world.getPseudoCode()) {sideBarNodes.resetPseudoCode(); world.setPseudoCode(true);}
         if(world.hasNewClick()) sideBarNodes.highlightNode(world.getCurrentClick(), true);
         if(sideBarNodes.hasNewClick()) world.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
+        sideBar.render();
         sideBarStage.draw();
 
         if (keyboardController.shouldExit())
@@ -178,9 +160,10 @@ public class PracticeMode implements Screen {
      */
     @Override
     public void resize(int width, int height) {
-        popupStage.getViewport().update(width, height, true);
         sideBarStage.getViewport().update(width, height, true);
+        sideBar.resize(width, height);
         sideBarNodes.resize(width, height);
+        helpBox.resize(width, height);
         world.getCoordinatePopup().resize();
 
         camera.viewportWidth = width;

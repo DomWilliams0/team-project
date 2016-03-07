@@ -1,6 +1,9 @@
 package com.b3;
 
 import com.b3.gui.components.ImageButtonComponent;
+import com.b3.mode.CompareMode;
+import com.b3.mode.LearningMode;
+import com.b3.mode.PracticeMode;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;

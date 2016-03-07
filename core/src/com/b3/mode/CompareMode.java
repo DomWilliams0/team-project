@@ -1,10 +1,10 @@
-package com.b3;
+package com.b3.mode;
 
+import com.b3.MainGame;
 import com.b3.gui.sidebars.SideBarCompareMode;
 import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
-import com.b3.input.SoundController;
 import com.b3.input.WorldSelectionHandler;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
