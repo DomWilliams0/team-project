@@ -50,6 +50,9 @@ public class WorldGraphTest {
 	public void testHasNode() throws Exception {
 		testHasNode(0, 0, true);
 		testGetNode(0, 1000, false);
+		testGetNode(1000, 0, false);
+		testGetNode(-1, 0, false);
+		testGetNode(0, -1, false);
 	}
 
 	/**

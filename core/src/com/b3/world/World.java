@@ -172,12 +172,17 @@ public class World implements Disposable {
 		//GUI overlay
 		coordinatePopup = new CoordinatePopup();
 	}
-
+	
 	private void processMapTileTypes(TiledMap map) {
-
-		FixtureDef objectDef = new FixtureDef();
-		objectDef.shape = new PolygonShape();
-
+		processMapTileTypes(map, true);
+	}
+	
+	private void processMapTileTypes(TiledMap map, boolean renderBoxes) {
+		FixtureDef objectDef = null;
+		if (renderBoxes) { // renderBoxes is needed so as to be compatible with the tests.
+			objectDef = new FixtureDef();
+			objectDef.shape = new PolygonShape();
+		}
 
 		for (MapLayer layer : map.getLayers()) {
 			if (!layer.isVisible() || !(layer instanceof TiledMapTileLayer))
@@ -202,7 +207,7 @@ public class World implements Disposable {
 
 
 					// add collision box for objects
-					if (objectLayer) {
+					if (objectLayer && renderBoxes) {
 						((PolygonShape) objectDef.shape).setAsBox(
 								0.5f, 0.5f, new Vector2(x + 0.5f, y + 0.5f), 0f
 						);
@@ -230,8 +235,10 @@ public class World implements Disposable {
 				}
 			}
 		}
-
-		objectDef.shape.dispose();
+		
+		if (renderBoxes) {
+			objectDef.shape.dispose();
+		}
 	}
 
 	/**

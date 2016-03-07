@@ -19,7 +19,7 @@ public class WorldGraphBasic {
 		try {
 			worldGraphField = World.class.getDeclaredField("worldGraph");
 			worldGraphField.setAccessible(true);
-			processMapTileTypesMethod = World.class.getDeclaredMethod("processMapTileTypes", TiledMap.class);
+			processMapTileTypesMethod = World.class.getDeclaredMethod("processMapTileTypes", TiledMap.class, boolean.class);
 			processMapTileTypesMethod.setAccessible(true);
 		} catch (NoSuchFieldException | NoSuchMethodException ex) {
 			ex.printStackTrace();
@@ -34,7 +34,7 @@ public class WorldGraphBasic {
 				(int) map.getProperties().get("height")
 		);
 		worldGraphField.set(world, graph);
-		processMapTileTypesMethod.invoke(world, map);
+		processMapTileTypesMethod.invoke(world, map, false);
 		return graph;
 	}
 
