@@ -35,7 +35,7 @@ import java.util.ArrayList;
  *
  * Created by lewis on 15/02/16.
  */
-public class SideBarNodes extends Table implements Disposable {
+public class SideBarNodes extends SideBar implements Disposable {
     private Stage stage;
     private ButtonComponent triggerBtn;
     private VisNodes ui;
@@ -211,10 +211,92 @@ public class SideBarNodes extends Table implements Disposable {
     }
 
     /**
+     * Set the world with which to get the search ticker
+     *
+     * @param world The world being simulated.
+     */
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public void addTab(Table tab) {
+        tabbedPane.addTab(tab.getName(), tab);
+    }
+
+    /**
+     * Highlight a node in the sidebar by a given point
+     * with a given colour
+     * @param p The point whose node to highlight
+     * @param c The colour to highlight it in
+     * @param singleHighlight whether this is to be the only highlighted node
+     * @return Whether the highlight was successful
+     */
+    public boolean highlightNode(Point p, Color c, boolean singleHighlight) {
+        return highlightNode(new Node(p), c, singleHighlight);
+    }
+    /**
+     * Highlight a given node in the sidebar
+     * with a given colour
+     * @param n The Node to highlight in the sidebar
+     * @param c The colour to highlight it in
+     * @param singleHighlight whether this is to be the only highlighted node
+     * @return Whether the highlight was successful
+     */
+    public boolean highlightNode(Node n, Color c, boolean singleHighlight) {
+        return ui.setCellColour(n, c, singleHighlight);
+    }
+
+    /**
+     * Highlight a node in the sidebar by a given point
+     * with a colour to match the colour on the graph
+     * @param p The point whose node to highlight
+     * @param singleHighlight whether this is to be the only highlighted node
+     * @return Whether the highlight was successful
+     */
+    public boolean highlightNode(Point p, boolean singleHighlight) {
+        return highlightNode(new Node(p), singleHighlight);
+    }
+    /**
+     * Highlight a given node in the sidebar
+     * with a colour to match the colour on the graph
+     * @param n The Node to highlight in the sidebar
+     * @param singleHighlight whether this is to be the only highlighted node
+     * @return Whether the highlight was successful
+     */
+    public boolean highlightNode(Node n, boolean singleHighlight) {
+        return ui.setCellColour(n, singleHighlight);
+    }
+
+    public void setStepthrough(boolean stepthrough) {
+        ui.setStepthrough(stepthrough);
+        next.getComponent().setVisible(stepthrough);
+    }
+
+    public boolean hasNewClick() {
+        return ui.isClickedUpdated();
+    }
+
+    public Point getNewClick() {
+        return ui.getClickedNode();
+    }
+
+    public void resetPseudoCode() {
+
+        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+            ticker.setInspectSearch(false);
+            //ticker.resume(1);
+
+            manualAutoBtn.getComponent().setVisible(false);
+            inspectSearchBtn.setData(false);
+            inspectSearchBtn.setText("Activate");
+    }
+
+    /**
      * Initialise the components used by this object
      * @param additionalTabs Additional tabs
      */
-    private void initComponents(ArrayList<Table> additionalTabs) {
+    @Override
+    protected void initComponents(ArrayList<Table> additionalTabs) {
         //set a default background colour
         setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
@@ -302,7 +384,7 @@ public class SideBarNodes extends Table implements Disposable {
                     _triggerBtn.setText("<");
                     _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
                     isOpen = false;
-                    
+
                     /*if (world.getMode() != Mode.COMPARE) {
                         float posX = world.getWorldCamera().getPosX();
                         if (posX >= 10) {
@@ -331,21 +413,12 @@ public class SideBarNodes extends Table implements Disposable {
 
     }
 
+    @Override
+    protected void initComponents() {}
+
+    @Override
     public float getPreferredWidth() {
         return preferredWidth;
-    }
-
-    /**
-     * Set the world with which to get the search ticker
-     *
-     * @param world The world being simulated.
-     */
-    public void setWorld(World world) {
-        this.world = world;
-    }
-
-    public void addTab(Table tab) {
-        tabbedPane.addTab(tab.getName(), tab);
     }
 
     /**
@@ -355,6 +428,7 @@ public class SideBarNodes extends Table implements Disposable {
      * @param width Window width
      * @param height Window height
      */
+    @Override
     public void resize(int width, int height) {
         setHeight(height);
         triggerBtn.getComponent().setY(height / 2);
@@ -374,6 +448,7 @@ public class SideBarNodes extends Table implements Disposable {
      * Render this menu and the underlying nodes table.
      * Will update the current progress of the search from the world provided in {@link SideBarNodes#setWorld(World)}
      */
+    @Override
     public void render() {
         SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
         if(currentSearch!=null) {
@@ -383,74 +458,6 @@ public class SideBarNodes extends Table implements Disposable {
         }
         ui.render(currentSearch);
         //ui.setCellColour(new Node(new Point(11,11)), Color.GREEN, true);
-    }
-
-    /**
-     * Highlight a node in the sidebar by a given point
-     * with a given colour
-     * @param p The point whose node to highlight
-     * @param c The colour to highlight it in
-     * @param singleHighlight whether this is to be the only highlighted node
-     * @return Whether the highlight was successful
-     */
-    public boolean highlightNode(Point p, Color c, boolean singleHighlight) {
-        return highlightNode(new Node(p), c, singleHighlight);
-    }
-    /**
-     * Highlight a given node in the sidebar
-     * with a given colour
-     * @param n The Node to highlight in the sidebar
-     * @param c The colour to highlight it in
-     * @param singleHighlight whether this is to be the only highlighted node
-     * @return Whether the highlight was successful
-     */
-    public boolean highlightNode(Node n, Color c, boolean singleHighlight) {
-        return ui.setCellColour(n, c, singleHighlight);
-    }
-
-    /**
-     * Highlight a node in the sidebar by a given point
-     * with a colour to match the colour on the graph
-     * @param p The point whose node to highlight
-     * @param singleHighlight whether this is to be the only highlighted node
-     * @return Whether the highlight was successful
-     */
-    public boolean highlightNode(Point p, boolean singleHighlight) {
-        return highlightNode(new Node(p), singleHighlight);
-    }
-    /**
-     * Highlight a given node in the sidebar
-     * with a colour to match the colour on the graph
-     * @param n The Node to highlight in the sidebar
-     * @param singleHighlight whether this is to be the only highlighted node
-     * @return Whether the highlight was successful
-     */
-    public boolean highlightNode(Node n, boolean singleHighlight) {
-        return ui.setCellColour(n, singleHighlight);
-    }
-
-    public void setStepthrough(boolean stepthrough) {
-        ui.setStepthrough(stepthrough);
-        next.getComponent().setVisible(stepthrough);
-    }
-
-    public boolean hasNewClick() {
-        return ui.isClickedUpdated();
-    }
-
-    public Point getNewClick() {
-        return ui.getClickedNode();
-    }
-
-    public void resetPseudoCode() {
-
-        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-            ticker.setInspectSearch(false);
-            //ticker.resume(1);
-
-            manualAutoBtn.getComponent().setVisible(false);
-            inspectSearchBtn.setData(false);
-            inspectSearchBtn.setText("Activate");
     }
 
     /**

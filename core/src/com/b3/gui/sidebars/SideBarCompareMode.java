@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class SideBarCompareMode extends Table implements Disposable {
+public class SideBarCompareMode extends SideBar implements Disposable {
 
     private Stage stage;
     private World world;
@@ -71,8 +71,42 @@ public class SideBarCompareMode extends Table implements Disposable {
         pm1.fill();
         setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
     }
+	
+	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey) {
+		createCheckbox(skin, font, table, label, configKey, null);
+	}
+	
+	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey,
+								Consumer<Boolean> checkedListener) {
+		CheckBoxComponent checkBox = new CheckBoxComponent(skin, font, label);
+		checkBox.getComponent().setChecked(Config.getBoolean(configKey));
+		checkBox.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				boolean checked = checkBox.getComponent().isChecked();
+				Config.set(configKey, checked);
+				if (checkedListener != null)
+					checkedListener.accept(checked);
+			}
+		});
+		
+		table.add(checkBox.getComponent())
+				.align(Align.left)
+				.maxWidth(preferredWidth)
+				.spaceBottom(10);
+		table.row();
+	}
 
-    private void initComponents() {
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public void updatePlayPauseButton() {
+        playPause.setText("Play");
+    }
+
+    @Override
+    protected void initComponents() {
         setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
@@ -135,24 +169,24 @@ public class SideBarCompareMode extends Table implements Disposable {
         settingsTab.row();
 
         // Show grid checkbox
-		createCheckbox(skin, font, settingsTab, "Show grid", ConfigKey.SHOW_GRID);
+        createCheckbox(skin, font, settingsTab, "Show grid", ConfigKey.SHOW_GRID);
 
         // Flat buildings checkbox
-		createCheckbox(skin, font, settingsTab, "Flat buildings", ConfigKey.FLATTEN_BUILDINGS,
-				(flatBuildings) -> world.flattenBuildings(flatBuildings));
-	
-		// Render static models checkbox
-		createCheckbox(skin, font, settingsTab, "Render static models", ConfigKey.RENDER_STATIC_MODELS,
-				(visible) -> world.getModelManager().setStaticsVisible(visible));
+        createCheckbox(skin, font, settingsTab, "Flat buildings", ConfigKey.FLATTEN_BUILDINGS,
+                (flatBuildings) -> world.flattenBuildings(flatBuildings));
 
-	    // im removing this toggle for now, as it requires a complex design decision
-	    //
-	    // we should remove the FLOCKING_ENABLED config flag, and have it iterate all
-	    // non-searching-agents and set them to invisible. unfortunately, models are
-	    // (for some reason) rendered outside of RenderSystem so this is currently
-	    // difficult to do without mangling everything
+        // Render static models checkbox
+        createCheckbox(skin, font, settingsTab, "Render static models", ConfigKey.RENDER_STATIC_MODELS,
+                (visible) -> world.getModelManager().setStaticsVisible(visible));
 
-	    // Flocking enable/disable
+        // im removing this toggle for now, as it requires a complex design decision
+        //
+        // we should remove the FLOCKING_ENABLED config flag, and have it iterate all
+        // non-searching-agents and set them to invisible. unfortunately, models are
+        // (for some reason) rendered outside of RenderSystem so this is currently
+        // difficult to do without mangling everything
+
+        // Flocking enable/disable
 //        CheckBoxComponent showFlockingCheckBox = new CheckBoxComponent(skin, font, "Roaming civilians");
 //        showFlockingCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLOCKING_ENABLED));
 //        showFlockingCheckBox.addListener(new ChangeListener() {
@@ -168,7 +202,7 @@ public class SideBarCompareMode extends Table implements Disposable {
 //                .spaceBottom(10);
 //        settingsTab.row();
 
-         // Agent model rendering toggle
+        // Agent model rendering toggle
         createCheckbox(skin, font, settingsTab, "Render agent models", ConfigKey.RENDER_AGENT_MODELS);
 
         // Show paths checkbox
@@ -473,64 +507,19 @@ public class SideBarCompareMode extends Table implements Disposable {
         background(skin.getDrawable("window_03"));
         this.stage.addActor(triggerBtn.getComponent());
     }
-	
-	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey) {
-		createCheckbox(skin, font, table, label, configKey, null);
-	}
-	
-	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey,
-								Consumer<Boolean> checkedListener) {
-		CheckBoxComponent checkBox = new CheckBoxComponent(skin, font, label);
-		checkBox.getComponent().setChecked(Config.getBoolean(configKey));
-		checkBox.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				boolean checked = checkBox.getComponent().isChecked();
-				Config.set(configKey, checked);
-				if (checkedListener != null)
-					checkedListener.accept(checked);
-			}
-		});
-		
-		table.add(checkBox.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceBottom(10);
-		table.row();
-	}
 
-    /*public void setPreferredWidth(float preferredWidth) {
-        this.preferredWidth = preferredWidth;
-
-        setSize(preferredWidth, Gdx.graphics.getHeight());
-
-        if (isOpen) {
-            triggerBtn.getComponent().setX(preferredWidth - 20);
-        }
-
-        for (Actor component : getChildren()) {
-            getCell(component).maxWidth(preferredWidth);
-        }
-    }*/
-
-    public void setWorld(World world) {
-        this.world = world;
-    }
-
-    public void updatePlayPauseButton() {
-        playPause.setText("Play");
-    }
-
-    /**
-     * Resize this menu
-     * Should be called whenever the window is resized.
-     *
-     * @param width Window width
-     * @param height Window height
-     */
+    @Override
     public void resize(int width, int height) {
         setHeight(height);
         triggerBtn.getComponent().setY(height / 2);
+    }
+
+    @Override
+    public void render() {}
+
+    @Override
+    public float getPreferredWidth() {
+        return preferredWidth;
     }
 
     @Override

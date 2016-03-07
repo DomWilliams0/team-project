@@ -111,10 +111,6 @@ public class PracticeMode implements Screen {
         Skin skin = new Skin(atlas);
         BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
 
-        //sideBar = new SideBarPracticeMode(sideBarStage, world);
-        //sideBar.setController(game);
-        //sideBarStage.addActor(sideBar);
-
         // SIDEBAR NODES
         // -------------
         sideBarNodes = new SideBarNodes(sideBarStage, world, new ArrayList<>());

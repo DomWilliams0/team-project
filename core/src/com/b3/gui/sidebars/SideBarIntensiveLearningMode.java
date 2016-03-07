@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
-public class SideBarIntensiveLearningMode extends Table implements Disposable {
+public class SideBarIntensiveLearningMode extends SideBar implements Disposable {
 
     private Stage stage;
     private World world;
@@ -61,7 +61,16 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
     }
 
-    private void initComponents() {
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public void setController(MainGame controller) {
+        this.controller = controller;
+    }
+
+    @Override
+    protected void initComponents() {
         setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
@@ -233,9 +242,9 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         searchSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-				SearchAlgorithm algorithm = SearchAlgorithm.fromName((String) searchSelectBox.getSelected());
-				if (algorithm == null) return;
-				world.getWorldGraph().setLearningModeNext(algorithm);
+                SearchAlgorithm algorithm = SearchAlgorithm.fromName((String) searchSelectBox.getSelected());
+                if (algorithm == null) return;
+                world.getWorldGraph().setLearningModeNext(algorithm);
             }
         });
 
@@ -387,28 +396,19 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
 
     }
 
-    public void setWorld(World world) {
-        this.world = world;
+    @Override
+    public float getPreferredWidth() {
+        return preferredWidth;
     }
 
-    public void setController(MainGame controller) {
-        this.controller = controller;
-    }
-
-    /**
-     * Resize this menu
-     * Should be called whenever the window is resized.
-     *
-     * @param width Window width
-     * @param height Window height
-     */
+    @Override
     public void resize(int width, int height) {
         setHeight(height);
         triggerBtn.getComponent().setY(height / 2);
     }
 
-    public void render() {
-    }
+    @Override
+    public void render() {}
 
     @Override
     public void dispose() {
