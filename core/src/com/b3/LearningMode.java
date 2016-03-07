@@ -110,7 +110,6 @@ public class LearningMode implements Screen {
         sideBarStage.addActor(sideBarNodes);
 
         helpBox = new HelpBox(sideBarStage, world);
-
         sideBarStage.addActor(helpBox);
     }
 

@@ -67,11 +67,6 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         Skin skin = new Skin(atlas);
         BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
-        /*BitmapFont font = new BitmapFont(
-                Gdx.files.internal(Config.getString(ConfigKey.FONT_FILE)),
-                Gdx.files.internal(Config.getString(ConfigKey.FONT_IMAGE_FILE)),
-                false
-        );*/
 
         // ===================
         // === TABBED PANE ===
@@ -79,7 +74,7 @@ public class SideBarIntensiveLearningMode extends Table implements Disposable {
 
         TabbedPane.TabbedPaneStyle tabbedPaneStyle = new TabbedPane.TabbedPaneStyle();
         skin.add("default", font, BitmapFont.class);
-        tabbedPaneStyle.font = skin.getFont("default");
+        tabbedPaneStyle.font = font;
         tabbedPaneStyle.bodyBackground = skin.getDrawable("knob_06");
         tabbedPaneStyle.titleButtonSelected = skin.getDrawable("button_02");
         tabbedPaneStyle.titleButtonUnselected = skin.getDrawable("button_01");

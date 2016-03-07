@@ -27,6 +27,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 
+import java.util.ArrayList;
+
 /**
  * Provides a table to display the frontier and visited nodes
  * As part of the gui.
@@ -40,19 +42,131 @@ public class SideBarNodes extends Table implements Disposable {
     private World world;
     private boolean isOpen;
     private float preferredWidth;
+    private Skin skin;
+    private BitmapFont font;
+    private TabbedPane tabbedPane;
     private ButtonComponent next;
-
     private ButtonComponent inspectSearchBtn;
     private ButtonComponent manualAutoBtn;
     private ButtonComponent nextBtn;
 
     /**
-     * Create a new gui element with a default preferred size
+     * Create a new gui element with a default preferred size and a default pseudocode tab
      *
      * @param stage The stage on which to act and draw.
      */
     public SideBarNodes(Stage stage, World world) {
-        this(stage, world, 420, true);
+        this(stage, world, 420, new ArrayList<>());
+
+        // Add default pseudocode
+        // ----------------------
+        Table pseudocodeTab = new Table();
+        pseudocodeTab.setFillParent(true);
+
+        // Pseudocode visualiser
+        // ---------------------
+        PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
+        pseudocodeTab.add(pseudocodeVisualiser).spaceBottom(30).row();
+
+        // Next button
+        // -----------
+        nextBtn = new ButtonComponent(skin, font, "Next");
+        nextBtn.getComponent().setVisible(false);
+        nextBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                ticker.setInspectSearch(true);
+                ticker.tick(true);
+            }
+        });
+
+        // Manual/Automatic inspection
+        // ---------------------------
+        manualAutoBtn = new ButtonComponent(skin, font, "Manual inspect");
+        manualAutoBtn.setData(true);
+        manualAutoBtn.getComponent().setVisible(false);
+        manualAutoBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if ((Boolean) manualAutoBtn.getData()) {
+                    // Currently automatic -> manual
+                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                    ticker.pause(1);
+                    ticker.setUpdated(true);
+                    ticker.setInspectSearch(true);
+
+                    nextBtn.getComponent().setVisible(true);
+                    manualAutoBtn.setData(false);
+                    manualAutoBtn.setText("Automatic inspect");
+                } else {
+                    // Currently manual -> automatic
+                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                    ticker.resume(1);
+
+                    nextBtn.getComponent().setVisible(false);
+                    manualAutoBtn.setData(true);
+                    manualAutoBtn.setText("Manual inspect");
+                }
+            }
+        });
+
+        // Inspect search button (start/stop)
+        // ----------------------------------
+        inspectSearchBtn = new ButtonComponent(skin, font, "Activate");
+        inspectSearchBtn.setData(false);
+        inspectSearchBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                boolean currentlyStarted = (Boolean) inspectSearchBtn.getData();
+
+                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+
+                if (ticker.getAlgorithm() == SearchAlgorithm.DIJKSTRA) {
+                    MessageBoxComponent.show("Dijkstra not yet implemented", "Warning");
+                } else if (ticker.isTickedOnce()) {
+                    ticker.setInspectSearch(!currentlyStarted);
+                    ticker.resume(1);
+
+                    manualAutoBtn.getComponent().setVisible(!currentlyStarted);
+                    inspectSearchBtn.setData(!currentlyStarted);
+                    inspectSearchBtn.setText(currentlyStarted ? "Activate" : "Stop");
+
+                    // Clear pseudocode information
+                    if (currentlyStarted) {
+                        nextBtn.getComponent().setVisible(false);
+                        manualAutoBtn.setData(true);
+                        manualAutoBtn.setText("Manual inspect");
+                        ticker.clearPseudocodeInfo();
+                    }
+                } else {
+                    //Close Sidebar
+                    TextButton _triggerBtn = triggerBtn.getComponent();
+
+                    if (!isOpen) {
+                        setX(0);
+                        setY(0);
+                        _triggerBtn.setText(">");
+                        _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
+
+                        isOpen = true;
+                    } else {
+                        setX(-preferredWidth);
+                        _triggerBtn.setText("<");
+                        _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
+
+                        isOpen = false;
+                    }
+
+                    world.showPopupError(2);
+                }
+            }
+        });
+
+        pseudocodeTab.add(inspectSearchBtn.getComponent()).spaceBottom(10).row();
+        pseudocodeTab.add(manualAutoBtn.getComponent()).spaceBottom(10).row();
+        pseudocodeTab.add(nextBtn.getComponent());
+        tabbedPane.addTab("Pseudocode", pseudocodeTab);
     }
 
     /**
@@ -61,32 +175,25 @@ public class SideBarNodes extends Table implements Disposable {
      * @param stage The stage on which to act and draw
      * @param preferredWidth The preferred width of the gui table
      */
-    public SideBarNodes(Stage stage, World world, float preferredWidth, boolean pseudocodeTab) {
+    public SideBarNodes(Stage stage, World world, float preferredWidth, ArrayList<Table> additionalTabs) {
         this.stage = stage;
         this.isOpen = false;
         this.preferredWidth = preferredWidth;
         this.world = world;
 
-        //set the position to be off-screen to the right
+        //setup the skin
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
+        this.skin = new Skin(atlas);
+        this.font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+
         setPosition(Gdx.graphics.getWidth(), 0);
-        //set the size to be full-height and preferred width.
         setSize(preferredWidth, Gdx.graphics.getHeight());
 
-        initComponents(pseudocodeTab);
+        initComponents(additionalTabs);
     }
 
-    public SideBarNodes(Stage stage, World world, boolean pseudocodeTab) {
-        this(stage, world, 420, pseudocodeTab);
-    }
-
-
-    /**
-     * Set the world with which to get the search ticker
-     *
-     * @param world The world being simulated.
-     */
-    public void setWorld(World world) {
-        this.world = world;
+    public SideBarNodes(Stage stage, World world, ArrayList<Table> additionalTabs) {
+        this(stage, world, 420, additionalTabs);
     }
 
     /**
@@ -105,17 +212,12 @@ public class SideBarNodes extends Table implements Disposable {
 
     /**
      * Initialise the components used by this object
-     * @param pseudocodeTabVisible
+     * @param additionalTabs Additional tabs
      */
-    private void initComponents(boolean pseudocodeTabVisible) {
+    private void initComponents(ArrayList<Table> additionalTabs) {
         //set a default background colour
         setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
-        //setup the skin
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
-        Skin skin = new Skin(atlas);
-        BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
-        skin.add("default", font, BitmapFont.class);
         Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
         skin.add("default", style);
 
@@ -125,12 +227,12 @@ public class SideBarNodes extends Table implements Disposable {
 
         TabbedPane.TabbedPaneStyle tabbedPaneStyle = new TabbedPane.TabbedPaneStyle();
         skin.add("default", font, BitmapFont.class);
-        tabbedPaneStyle.font = skin.getFont("default");
+        tabbedPaneStyle.font = font;
         tabbedPaneStyle.bodyBackground = skin.getDrawable("knob_06");
         tabbedPaneStyle.titleButtonSelected = skin.getDrawable("button_02");
         tabbedPaneStyle.titleButtonUnselected = skin.getDrawable("button_01");
         skin.add("default", tabbedPaneStyle);
-        TabbedPane tabbedPane = new TabbedPane(skin);
+        tabbedPane = new TabbedPane(skin);
 
         // ==================
         // === NODES PANE ===
@@ -161,117 +263,13 @@ public class SideBarNodes extends Table implements Disposable {
         tabbedPane.addTab("Nodes", nodesTab);
 
         // =======================
-        // === PSEUDOCODE PANE ===
+        // === ADDITIONAL TABS ===
         // =======================
 
-        if (pseudocodeTabVisible) {
-            Table pseudocodeTab = new Table();
-            pseudocodeTab.setFillParent(true);
-
-            // Pseudocode visualiser
-            // ---------------------
-            PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
-            pseudocodeTab.add(pseudocodeVisualiser).spaceBottom(30).row();
-
-            // Next button
-            // -----------
-            nextBtn = new ButtonComponent(skin, font, "Next");
-            nextBtn.getComponent().setVisible(false);
-            nextBtn.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                    ticker.setInspectSearch(true);
-                    ticker.tick(true);
-                }
-            });
-
-            // Manual/Automatic inspection
-            // ---------------------------
-            manualAutoBtn = new ButtonComponent(skin, font, "Manual inspect");
-            manualAutoBtn.setData(true);
-            manualAutoBtn.getComponent().setVisible(false);
-            manualAutoBtn.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    if ((Boolean) manualAutoBtn.getData()) {
-                        // Currently automatic -> manual
-                        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                        ticker.pause(1);
-                        ticker.setUpdated(true);
-                        ticker.setInspectSearch(true);
-
-                        nextBtn.getComponent().setVisible(true);
-                        manualAutoBtn.setData(false);
-                        manualAutoBtn.setText("Automatic inspect");
-                    } else {
-                        // Currently manual -> automatic
-                        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                        ticker.resume(1);
-
-                        nextBtn.getComponent().setVisible(false);
-                        manualAutoBtn.setData(true);
-                        manualAutoBtn.setText("Manual inspect");
-                    }
-                }
-            });
-
-            // Inspect search button (start/stop)
-            // ----------------------------------
-            inspectSearchBtn = new ButtonComponent(skin, font, "Activate");
-            inspectSearchBtn.setData(false);
-            inspectSearchBtn.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    boolean currentlyStarted = (Boolean) inspectSearchBtn.getData();
-
-                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-
-                    if (ticker.getAlgorithm() == SearchAlgorithm.DIJKSTRA) {
-                        MessageBoxComponent.show("Dijkstra not yet implemented", "Warning");
-                    } else if (ticker.isTickedOnce()) {
-                        ticker.setInspectSearch(!currentlyStarted);
-                        ticker.resume(1);
-
-                        manualAutoBtn.getComponent().setVisible(!currentlyStarted);
-                        inspectSearchBtn.setData(!currentlyStarted);
-                        inspectSearchBtn.setText(currentlyStarted ? "Activate" : "Stop");
-
-                        // Clear pseudocode information
-                        if (currentlyStarted) {
-                            nextBtn.getComponent().setVisible(false);
-                            manualAutoBtn.setData(true);
-                            manualAutoBtn.setText("Manual inspect");
-                            ticker.clearPseudocodeInfo();
-                        }
-                    } else {
-                        //Close Sidebar
-                        TextButton _triggerBtn = triggerBtn.getComponent();
-
-                        if (!isOpen) {
-                            setX(0);
-                            setY(0);
-                            _triggerBtn.setText(">");
-                            _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
-
-                            isOpen = true;
-                        } else {
-                            setX(-preferredWidth);
-                            _triggerBtn.setText("<");
-                            _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
-
-                            isOpen = false;
-                        }
-
-                        world.showPopupError(2);
-                    }
-                }
-            });
-
-            pseudocodeTab.add(inspectSearchBtn.getComponent()).spaceBottom(10).row();
-            pseudocodeTab.add(manualAutoBtn.getComponent()).spaceBottom(10).row();
-            pseudocodeTab.add(nextBtn.getComponent());
-            tabbedPane.addTab("Pseudocode", pseudocodeTab);
+        if (additionalTabs != null) {
+            for (Table tab : additionalTabs) {
+                tabbedPane.addTab(tab.getName(), tab);
+            }
         }
 
         // ======================
@@ -331,6 +329,23 @@ public class SideBarNodes extends Table implements Disposable {
         background(skin.getDrawable("window_02"));
         this.stage.addActor(triggerBtn.getComponent());
 
+    }
+
+    public float getPreferredWidth() {
+        return preferredWidth;
+    }
+
+    /**
+     * Set the world with which to get the search ticker
+     *
+     * @param world The world being simulated.
+     */
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public void addTab(Table tab) {
+        tabbedPane.addTab(tab.getName(), tab);
     }
 
     /**

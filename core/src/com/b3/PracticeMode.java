@@ -1,24 +1,32 @@
 package com.b3;
 
-import com.b3.gui.components.MessageBoxComponent;
-import com.b3.gui.help.HelpBox;
-import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
 import com.b3.gui.sidebars.SideBarNodes;
-import com.b3.input.*;
+import com.b3.gui.sidebars.tabs.PracticeModeSettingsTab;
+import com.b3.input.InputHandler;
+import com.b3.input.KeyboardController;
+import com.b3.input.PracticeModeWorldSelectionHandler;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.b3.util.Font;
 import com.b3.util.Utils;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Mainly edited (ordered by no. of lines) firstly and significatly by oxe410; secondly nbg481.
+ * Mainly edited (ordered by no. of lines) firstly and significantly by oxe410; secondly nbg481.
  * Commits:
  * 3  nbg481
  * 1  oxe410
@@ -27,18 +35,17 @@ public class PracticeMode implements Screen {
 
     private World world;
     private WorldCamera camera;
-    //private Stage sideBarStage;
-    //private SideBarIntensiveLearningMode sideBar;
-    //private SideBarNodes sideBarNodes;
-    //private HelpBox helpBox;
     private KeyboardController keyboardController;
     private Stage popupStage;
     private Stage sideBarStage;
     private SideBarNodes sideBarNodes;
+    private MainGame game;
 
     public PracticeMode(MainGame game) {
         // create world
         world = new World("core/assets/world/world_smaller_test_tiym.tmx", Mode.TRY_YOURSELF, game.inputHandler);
+
+        this.game = game;
 
         // init gui
         setupSidebar();
@@ -98,7 +105,31 @@ public class PracticeMode implements Screen {
         popupStage = new Stage(new ScreenViewport());
         sideBarStage = new Stage(new ScreenViewport());
 
-        sideBarNodes = new SideBarNodes(sideBarStage, world, false);
+        // INITIALISE SKIN AND FONT
+        // ------------------------
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
+        Skin skin = new Skin(atlas);
+        BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+
+        //sideBar = new SideBarPracticeMode(sideBarStage, world);
+        //sideBar.setController(game);
+        //sideBarStage.addActor(sideBar);
+
+        // SIDEBAR NODES
+        // -------------
+        sideBarNodes = new SideBarNodes(sideBarStage, world, new ArrayList<>());
+
+        // Get world and controller (for settings tab)
+        Map<String, Object> data = new HashMap<String, Object>() {{
+            put("world", world);
+            put("controller", game);
+        }};
+
+        // Add settings tab
+        PracticeModeSettingsTab settingsTab = new PracticeModeSettingsTab(skin, font, sideBarNodes.getPreferredWidth(), data);
+        settingsTab.setName("Settings");
+
+        sideBarNodes.addTab(settingsTab.getTab());
         sideBarNodes.setStepthrough(true);
         sideBarStage.addActor(sideBarNodes);
     }
