@@ -66,8 +66,6 @@ public class WorldSelectionHandler extends InputAdapter {
 
 		if (Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)) {
 			System.out.println("Remove building @ "+(int)tempRayCast.x+"|"+(int)tempRayCast.y);
-//			if (world.isValidBuildingPos((int)tempRayCast.x, (int)tempRayCast.y))
-//				world.addBuilding(new Vector2((int)tempRayCast.x, (int)tempRayCast.y), new Vector3(4, 4, 10), BuildingType.HOUSE);
 			world.removeBuilding(new Vector2((int) tempRayCast.x, (int) tempRayCast.y));
 			Config.set(ConfigKey.REMOVE_BUILDING_MODE, !(Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)));
 

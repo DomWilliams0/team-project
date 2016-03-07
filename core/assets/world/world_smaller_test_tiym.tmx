@@ -80,7 +80,7 @@
 </data>
  </layer>
  <objectgroup name="buildings">
-  <object id="2" x="151.598" y="168.673" width="64" height="64">
+  <object id="2" x="143.494" y="176.072" width="64" height="64">
    <properties>
     <property name="building-height" value="4"/>
    </properties>
