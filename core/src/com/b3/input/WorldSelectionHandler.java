@@ -74,17 +74,12 @@ public class WorldSelectionHandler extends InputAdapter {
 		}
 
 		// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
-		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y
-				|| currentSelection.x + 2 == (int) tempRayCast.x && currentSelection.y +1  == (int) tempRayCast.y
-				) {
+		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
 			//old node so change page number
-			world.setCurrentClick(currentSelection.x, currentSelection.y);
-			if (world.getrt().getPopupShowing()) {
+			if (world.getrt().getPopupShowing())
 				//if popup showing
 				world.getrt().resetCounterAnimation();
-			}
-				world.getrt().flipPageRight();
-			return true;
+			world.getrt().flipPageRight();
 		} else {
 			//new node so reset page number
 			if (world.getrt().getPopupShowing())

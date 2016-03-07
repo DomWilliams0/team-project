@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.sun.corba.se.impl.naming.cosnaming.NamingUtils;
+import com.sun.xml.internal.ws.server.sei.SEIInvokerTube;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class RenderTester {
     private boolean popupShowing;
     private int counterAnimationFade;
     private boolean stickyCurrentNode;
+    private Sprite endNodeDFSBFS;
 
     /**
      * Creates a new pop-up, with an empty canas
@@ -124,6 +126,10 @@ public class RenderTester {
         tempTexture = new Texture("core/assets/world/popups/endnode250x250.JPG_2.png");
         tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         endNodeSprite[1] = new Sprite(tempTexture);
+
+        tempTexture = new Texture("core/assets/world/popups/endnode250x250DFSBFS.png");
+        tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        endNodeDFSBFS = new Sprite(tempTexture);
 
         //Aqua nodes - just added to frontire
         lastFrontierSprite = new Sprite[4];
@@ -213,14 +219,29 @@ public class RenderTester {
         } else
             //DONE MULTI_PAGES if end node
             if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-                if (pageNo >= 3) pageNo = 0; //reset to first page if neccessary
+                if (pageNo >= 3 && worldGraph.getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR) pageNo = 0; //reset to first page if neccessary
+                if (pageNo >= 2 && worldGraph.getCurrentSearch().getAlgorithm() != SearchAlgorithm.A_STAR) pageNo = 0; //reset to first page if neccessary
 
                 if (pageNo == 2) {
                     //calculate data needed
-                    float x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5); float y1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getY() + 0.5);
+                    float x1;
+                    float y1;
+                    if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
+                        x1 = (float) (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getX() + 0.5);
+                        y1 = (float) (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getY() + 0.5);
+                    } else {
+                        x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5);
+                        y1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getY() + 0.5);
+                    }
+
                     float x2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getX() + 0.5); float y2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getY() + 0.5);
                     float xCoord = (int) (x1 + x2) / 2; float yCoord = (int) (y1 + y2) / 2;
-                    float cost = calculateEuclidian(worldGraph.getCurrentSearch().getStart(), worldGraph.getCurrentSearch().getEnd());
+                    float cost;
+                    if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
+                        cost = calculateEuclidian(worldGraph.getCurrentSearch().getMostRecentlyExpanded(), worldGraph.getCurrentSearch().getEnd());
+                    } else {
+                        cost = calculateEuclidian(worldGraph.getCurrentSearch().getStart(), worldGraph.getCurrentSearch().getEnd());
+                    }
 
                     spriteBatch.end();
                     //draw lines
@@ -246,8 +267,17 @@ public class RenderTester {
                     spriteBatch.begin();
                     spriteBatch.setProjectionMatrix(worldCamera.combined);
                 } else {
-                    spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+                    if (worldGraph.getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR)
+                        spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
                             (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+                    else
+                        if (pageNo == 0)
+                            spriteBatch.draw(endNodeDFSBFS, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+                                (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+                        else
+                            spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+                                    (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+
                 }
 
                 popupShowing = true;
@@ -429,8 +459,15 @@ public class RenderTester {
      */
     private void drawHeuristic(float gcost, int currentNodeClickX, int currentNodeClickY, float scalingZoom) {
 
-        float x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5);
-        float y1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getY() + 0.5);
+        float x1;
+        float y1;
+        if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
+            x1 = (float) (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getX() + 0.5);
+            y1 = (float) (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getY() + 0.5);
+        } else {
+            x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5);
+            y1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getY() + 0.5);
+        }
         float x2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getX() + 0.5);
         float y2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getY() + 0.5);
 
