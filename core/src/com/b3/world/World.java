@@ -392,7 +392,7 @@ public class World implements Disposable {
 		if (mode == COMPARE) {// && Config.getBoolean(ConfigKey.FLOCKING_ENABLED)) { <-NO, no other chance to spawn all of the agents
 			for (int i = 0; i < 250; i++) {
 				Agent a = spawnAgent(generateRandomTile());
-				a.setBehaviour(new BehaviourFlocking(a, engine));
+				a.setBehaviour(new BehaviourFlocking(a, physicsWorld));
 			}
 		}
 

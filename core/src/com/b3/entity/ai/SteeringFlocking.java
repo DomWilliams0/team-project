@@ -1,44 +1,29 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.component.PhysicsComponent;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SteeringFlocking extends Steering {
 
-	private static Vector2 tmpVector = new Vector2();
-	private static final double DISTANCE_SQRD = Math.pow(10, 2);
-
-	private ImmutableArray<Entity> entities;
+	private List<PhysicsComponent> neighbours;
 
 	public SteeringFlocking(PhysicsComponent entity) {
 		super(entity);
+		this.neighbours = new ArrayList<>();
 	}
 
 	@Override
 	public void tick(Vector2 steeringOut) {
 		steeringOut.setZero();
-		int count = 0;
 
+		for (PhysicsComponent neighbour : neighbours)
+			processNeighbour(steeringOut, neighbour.getPosition(), neighbour);
 
-		for (Entity e : entities) {
-			PhysicsComponent phys = e.getComponent(PhysicsComponent.class);
-			if (phys == null || phys == entity)
-				continue;
-
-			tmpVector.set(phys.getPosition());
-			if (tmpVector.sub(entity.getPosition()).len2() < DISTANCE_SQRD) {
-				processNeighbour(steeringOut, tmpVector, phys);
-				count += 1;
-			}
-
-
-		}
-
-
-		if (count != 0)
-			finaliseOutput(steeringOut.scl(1f / count));
+		if (!neighbours.isEmpty())
+			finaliseOutput(steeringOut.scl(1f / neighbours.size()));
 	}
 
 
@@ -46,7 +31,7 @@ public abstract class SteeringFlocking extends Steering {
 
 	protected abstract void finaliseOutput(Vector2 steeringOut);
 
-	public void setEntities(ImmutableArray<Entity> entities) {
-		this.entities = entities;
+	public void setNeighbours(List<PhysicsComponent> neighbours) {
+		this.neighbours = neighbours;
 	}
 }
