@@ -1,5 +1,6 @@
 package com.b3.desktop;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.b3.MainGame;
@@ -9,6 +10,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1024;
 		config.height = 768;
+		config.title = "Cop Chase";
 		new LwjglApplication(new MainGame(), config);
 	}
 }
