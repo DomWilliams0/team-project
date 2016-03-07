@@ -8,6 +8,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -23,6 +26,9 @@ public class MainMenuScreen implements Screen {
 
     private final OrthographicCamera camera;
     private final Stage mainMenuStage;
+    private final SpriteBatch spriteBatch;
+    private final Sprite sprite;
+    private final Sprite spriteTwoText;
 
     /**
      * Constructs the (static / final) main menu camera and the two buttons, and sets up events for each respective button.
@@ -79,6 +85,12 @@ public class MainMenuScreen implements Screen {
         wrapper.add(compareModeBtn.getComponent());
 
         mainMenuStage.addActor(wrapper);
+
+        //Load texture for ICON
+        spriteBatch = new SpriteBatch();
+        sprite = new Sprite(new Texture("core/assets/icon.png"));
+
+        spriteTwoText= new Sprite(new Texture("core/assets/icon_final.png"));
     }
 
     @Override
@@ -99,9 +111,15 @@ public class MainMenuScreen implements Screen {
         mainMenuStage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
         camera.update();
+
+        spriteBatch.begin();
+        float size = (float) (Gdx.graphics.getHeight() / 5);
+        spriteBatch.draw(sprite, Gdx.graphics.getWidth() / 2 - size / 2, Gdx.graphics.getHeight() - size, size, size);
+        spriteBatch.draw(spriteTwoText, Gdx.graphics.getWidth() / 2 - spriteTwoText.getWidth()/2, (float) (Gdx.graphics.getHeight() - size*1.25) - 10);
+        spriteBatch.end();
+
         mainMenuStage.act();
         mainMenuStage.draw();
-
     }
 
     /**
@@ -112,6 +130,7 @@ public class MainMenuScreen implements Screen {
      */
     @Override
     public void resize(int width, int height) {
+        spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
         wrapper.setWidth(width);
         wrapper.setHeight(height);
     }
