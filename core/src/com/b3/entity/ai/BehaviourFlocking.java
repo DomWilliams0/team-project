@@ -12,7 +12,7 @@ import java.util.List;
 public class BehaviourFlocking extends Behaviour {
 
 	private static final Vector2 additionVector = new Vector2();
-	private static final double DISTANCE = 10.0;
+	private static final double DISTANCE = 0.05f;
 
 	private List<PhysicsComponent> neighbours;
 	private World world;
