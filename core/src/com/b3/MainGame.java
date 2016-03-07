@@ -7,13 +7,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 
 /**
- * Mainly edited by dxw405, added to (max a few lines) by (no particular order) nbg481, oxe410, lxd417, bxd428
- * 31  dxw405
- * 9  oxe410
- * 6  nbg481
- * 3  bxd428
- * 3  lxd417
- *
  * Loads the current configuration file and sets up the input handler for the program (onClicks, onMouseOver etc.)
  */
 
@@ -45,12 +38,4 @@ public class MainGame extends Game {
 		setScreen(new MainMenuScreen(this));
 	}
 
-	@Override
-	public void render() {
-		super.render();
-	}
-
-	public String[] getSoundsDirList() {
-		return soundsDirList;
-	}
 }

@@ -15,22 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
- * Mainly edited (ordered by no. of lines) by equally oxe410 & nbg481.
- * Commits:
- *  10  oxe410
- *  4  nbg481
- *
  * Shows the main menu, allowing the user to choose learning mode or comparison mode.
  */
 public class MainMenuScreen implements Screen {
 
-    private Table wrapper;
-    private ImageButtonComponent learningModeBtn;
-    private ImageButtonComponent compareModeBtn;
-    private ImageButtonComponent practiceModeBtn;
+    private final Table wrapper;
 
-    private OrthographicCamera camera;
-    private Stage mainMenuStage;
+    private final OrthographicCamera camera;
+    private final Stage mainMenuStage;
 
     /**
      * Constructs the (static / final) main menu camera and the two buttons, and sets up events for each respective button.
@@ -45,7 +37,7 @@ public class MainMenuScreen implements Screen {
 
         // Compare mode button
         // --------------------
-        compareModeBtn = new ImageButtonComponent("compare_mode_primary.png", "compare_mode_mouseover.png", "compare_mode_mouseover.png");
+        ImageButtonComponent compareModeBtn = new ImageButtonComponent("compare_mode_primary.png", "compare_mode_mouseover.png", "compare_mode_mouseover.png");
         compareModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -56,7 +48,7 @@ public class MainMenuScreen implements Screen {
 
         // Practice mode button
         // --------------------
-        practiceModeBtn = new ImageButtonComponent("practice_mode_primary.png", "practice_mode_mouseover.png", "practice_mode_mouseover.png");
+        ImageButtonComponent practiceModeBtn = new ImageButtonComponent("practice_mode_primary.png", "practice_mode_mouseover.png", "practice_mode_mouseover.png");
         practiceModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -67,7 +59,7 @@ public class MainMenuScreen implements Screen {
 
         // Learning mode button
         // --------------------
-        learningModeBtn = new ImageButtonComponent("learning_mode_primary.png", "learning_mode_mouseover.png", "learning_mode_mouseover.png");
+        ImageButtonComponent learningModeBtn = new ImageButtonComponent("learning_mode_primary.png", "learning_mode_mouseover.png", "learning_mode_mouseover.png");
         learningModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

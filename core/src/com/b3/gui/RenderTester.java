@@ -27,7 +27,7 @@ import static java.util.Collections.sort;
 
 /**
  * A pop-up visual that explains what each node is
- * Including drawing the heurstic and explaining to the user where the costs come from.
+ * Including drawing the heuristic and explaining to the user where the costs come from.
  */
 
 public class RenderTester {

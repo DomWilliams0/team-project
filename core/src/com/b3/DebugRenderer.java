@@ -9,11 +9,13 @@ import com.badlogic.gdx.physics.box2d.World;
  * Mainly edited (ordered by no. of lines) by dxw405
  * Commits:
  * 1  dxw405
+ *
+ * Debugs the renderer, used for rendering the world, spriteBatch and the Box2Drenderer
  */
 public class DebugRenderer {
-	private SpriteBatch spriteBatch;
-	private Box2DDebugRenderer renderer;
-	private World world;
+	private final SpriteBatch spriteBatch;
+	private final Box2DDebugRenderer renderer;
+	private final World world;
 
 	public DebugRenderer(World world) {
 		this.world = world;
@@ -22,6 +24,10 @@ public class DebugRenderer {
 		renderer = new Box2DDebugRenderer();
 	}
 
+	/**
+	 * Renders the world using the current camera
+	 * @param camera the PerspectiveCamera used to render the world using the spriteBatch
+     */
 	public void render(PerspectiveCamera camera) {
 		spriteBatch.begin();
 		renderer.render(world, camera.combined);
