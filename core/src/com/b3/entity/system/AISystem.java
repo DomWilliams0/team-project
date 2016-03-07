@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class AISystem extends IteratingSystem {
 	private static Vector2 steeringMovement = new Vector2();
+	private static final float ENTITY_SPEED = 100.f; // tweaked to perfection
 
 	private ComponentMapper<PhysicsComponent> physicsComponents;
 	private ComponentMapper<AIComponent> aiComponents;
@@ -35,7 +36,14 @@ public class AISystem extends IteratingSystem {
 		AIComponent ai = aiComponents.get(entity);
 
 		ai.behaviour.tick(steeringMovement.setZero());
-		phys.body.applyForceToCenter(steeringMovement, true);
+		steeringMovement
+				.nor()
+				.scl(deltaTime * ENTITY_SPEED);
+
+		if (ai.behaviour.getType() == BehaviourType.FOLLOW_PATH)
+			phys.body.setLinearVelocity(steeringMovement);
+		else
+			phys.body.applyForceToCenter(steeringMovement, true);
 
 
 		if (worldGraph.hasSearchInProgress() &&
