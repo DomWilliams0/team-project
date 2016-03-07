@@ -1,8 +1,8 @@
 package com.b3.gui;
 
 import com.b3.search.Pseudocode;
-import com.b3.util.Font;
 import com.b3.util.Tuple;
+import com.b3.util.Utils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,7 +31,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
         //this.stage = stage;
         //this.skin = skin;
-        this.font = Font.getFont("monaco.ttf", 14);
+        this.font = Utils.getFont("monaco.ttf", 14);
 
         this.pixmap = new Pixmap(1, 1, Pixmap.Format.RGB565);
         this.pixmap.setColor(Color.LIME);

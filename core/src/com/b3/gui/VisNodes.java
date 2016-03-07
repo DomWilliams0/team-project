@@ -462,14 +462,6 @@ public class VisNodes extends Table {
 		ft.clear();
 		vt.clear();
 
-		//get what type the frontier is using
-		String frontierDesc = "";
-		switch(alg) {
-			case DEPTH_FIRST: frontierDesc = "DFS: LIFO (stack)"; break;
-			case BREADTH_FIRST: frontierDesc = "BFS: FIFO (queue)"; break;
-			case A_STAR: frontierDesc = "A*: Priority Queue"; break;
-		}
-
 		//we need to render the data collections
 		if(rendermore) {
 			//row 1 - titles
@@ -479,7 +471,7 @@ public class VisNodes extends Table {
 			row();
 
 			//row 2 - description of data collections
-			add(frontierDesc);
+			add(alg.getFrontierDescription());
 			add("   ");
 			add("Using Hash Set");
 			row();

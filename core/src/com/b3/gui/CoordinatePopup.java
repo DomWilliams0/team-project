@@ -2,7 +2,7 @@ package com.b3.gui;
 
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Font;
+import com.b3.util.Utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -28,7 +28,7 @@ public class CoordinatePopup {
     public CoordinatePopup () {
         spriteBatch = new SpriteBatch();
         //load font from file
-        font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 18);
+        font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 18);
         //load texture
         Texture tempTexture = new Texture("core/assets/world/popups/bottom_canvas.png");
         tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

@@ -13,7 +13,6 @@ import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Font;
 import com.b3.util.Utils;
 import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
@@ -111,7 +110,7 @@ public class SideBarCompareMode extends SideBar implements Disposable {
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         Skin skin = new Skin(atlas);
-        BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+        BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
 
         // ===================
         // === TABBED PANE ===

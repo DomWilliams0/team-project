@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Describes a search algorithm
+ * Describes a search algorithm.
  */
 public enum SearchAlgorithm {
 

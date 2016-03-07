@@ -2,7 +2,7 @@ package com.b3.gui.components;
 
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Font;
+import com.b3.util.Utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -30,7 +30,7 @@ public class MessageBoxComponent {
         // Get atlas, skin and font
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         Skin skin = new Skin(atlas);
-        BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+        BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
 
         // Setup styles
         Window.WindowStyle windowStyle = new Window.WindowStyle(font, Color.BLACK, skin.getDrawable("window_03"));

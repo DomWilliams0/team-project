@@ -11,7 +11,7 @@ import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Font;
+import com.b3.util.Utils;
 import com.b3.world.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -22,7 +22,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
@@ -184,7 +187,7 @@ public class SideBarNodes extends SideBar implements Disposable {
         //setup the skin
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         this.skin = new Skin(atlas);
-        this.font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+        this.font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
 
         setPosition(Gdx.graphics.getWidth(), 0);
         setSize(preferredWidth, Gdx.graphics.getHeight());

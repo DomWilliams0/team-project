@@ -2,7 +2,12 @@ package com.b3.util;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
+/**
+ * The value of every setting should be set and got through this class.
+ * Config is originally loaded from (a) file(s) and stored in a {@link Map}.
+ */
 public class Config {
 
 	private static ConfigurationFile configFile;
@@ -14,10 +19,12 @@ public class Config {
 	 * unset using {@link Config#unset(ConfigKey)}
 	 */
 	private static Map<ConfigKey, Object> gameConfig = new EnumMap<>(ConfigKey.class);
-
-	private Config() {
-		// no instantiation 4 u
-	}
+	
+	/**
+	 * Prevent instantiation.
+	 * Everything should be <code>static</code>.
+	 */
+	private Config() {}
 
 	/**
 	 * Loads the given config(s)
@@ -60,11 +67,14 @@ public class Config {
 	}
 
 	/**
-	 * Gets a value from the game config, or loaded config file(s) if not found
+	 * Gets a value from the game config, or loaded config file(s) if not found.
 	 *
 	 * @param key  Key for the desired value
 	 * @param type The desired return type
-	 * @return The config value. Null is never returned, an exception is thrown if the key does not exist.
+	 * @return The config value. Never <code>null</code>.
+	 * @throws NoSuchElementException   When the provided {@code key} doesn't have a corresponding config value.
+	 * @throws IllegalArgumentException When property can't be converted to {@code type}.
+	 * @throws IllegalStateException    When provider is unable to fetch configuration value for the given {@code key}.
 	 * @see {@link ConfigurationFile#get(String, Class)}
 	 */
 	private static <T> T get(ConfigKey key, Class<T> type) {
@@ -76,21 +86,61 @@ public class Config {
 		gameConfig.put(key, value);
 		return value;
 	}
-
-	// helpers
+	
+	/**
+	 * Gets a value from the game config, or loaded config file(s) if not found.
+	 * Casts the value to a {@link String}.
+	 * @param key Key for the desired value.
+	 * @return The config value as a {@link String}. Never <code>null</code>.
+	 * @throws NoSuchElementException   When the provided {@code key} doesn't have a corresponding config value.
+	 * @throws IllegalArgumentException When property can't be converted to {@link String}.
+	 * @throws IllegalStateException    When provider is unable to fetch configuration value for the given {@code key}.
+	 * @see {@link #get(ConfigKey, Class)}
+	 */
 	public static String getString(ConfigKey key) {
 		return get(key, String.class);
 	}
-
+	
+	/**
+	 * Gets a value from the game config, or loaded config file(s) if not found.
+	 * Casts the value to an {@link Integer}.
+	 * @param key Key for the desired value.
+	 * @return The config value as an {@link Integer}. Never <code>null</code>.
+	 * @throws NoSuchElementException   When the provided {@code key} doesn't have a corresponding config value.
+	 * @throws IllegalArgumentException When property can't be converted to {@link Integer}.
+	 * @throws IllegalStateException    When provider is unable to fetch configuration value for the given {@code key}.
+	 * @see {@link #get(ConfigKey, Class)}
+	 */
 	public static Integer getInt(ConfigKey key) {
 		return get(key, Integer.class);
 	}
-
+	
+	/**
+	 * Gets a value from the game config, or loaded config file(s) if not found.
+	 * Casts the value to a {@link Boolean}.
+	 * @param key Key for the desired value.
+	 * @return The config value as a {@link Boolean}. Never <code>null</code>.
+	 * @throws NoSuchElementException   When the provided {@code key} doesn't have a corresponding config value.
+	 * @throws IllegalArgumentException When property can't be converted to {@link Boolean}.
+	 * @throws IllegalStateException    When provider is unable to fetch configuration value for the given {@code key}.
+	 * @see {@link #get(ConfigKey, Class)}
+	 */
 	public static Boolean getBoolean(ConfigKey key) {
 		return get(key, Boolean.class);
 	}
-
+	
+	/**
+	 * Gets a value from the game config, or loaded config file(s) if not found.
+	 * Casts the value to a {@link Float}.
+	 * @param key Key for the desired value.
+	 * @return The config value as a {@link Float}. Never <code>null</code>.
+	 * @throws NoSuchElementException   When the provided {@code key} doesn't have a corresponding config value.
+	 * @throws IllegalArgumentException When property can't be converted to {@link Float}.
+	 * @throws IllegalStateException    When provider is unable to fetch configuration value for the given {@code key}.
+	 * @see {@link #get(ConfigKey, Class)}
+	 */
 	public static Float getFloat(ConfigKey key) {
 		return get(key, Float.class);
 	}
+	
 }

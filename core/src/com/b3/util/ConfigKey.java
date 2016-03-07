@@ -1,7 +1,9 @@
 package com.b3.util;
 
+/**
+ * All the different setting config keys.
+ */
 public enum ConfigKey {
-	//todo remove debug prefix
 
 	CAMERA_RESTRICT("camera-restrict"),
 	CAMERA_ZOOM_SPEED("camera-zoom-speed"),

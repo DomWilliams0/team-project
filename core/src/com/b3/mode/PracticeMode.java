@@ -8,7 +8,6 @@ import com.b3.input.KeyboardController;
 import com.b3.input.PracticeModeWorldSelectionHandler;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Font;
 import com.b3.util.Utils;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
@@ -110,7 +109,7 @@ public class PracticeMode implements Screen {
         // ------------------------
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         Skin skin = new Skin(atlas);
-        BitmapFont font = Font.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+        BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
 
         // SIDEBAR NODES
         // -------------
