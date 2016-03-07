@@ -64,15 +64,27 @@ public class Agent extends Entity {
 		return ai.behaviour;
 	}
 
+	/**
+	 * sets the behaviour of this current agent
+	 * @param behaviour the behaviour that this agent should follow
+     */
 	public void setBehaviour(Behaviour behaviour) {
 		ai.behaviour = behaviour;
 		getComponent(RenderComponent.class).dotColour = (behaviour.getType() == BehaviourType.FOLLOW_PATH ? Color.ORANGE : Color.WHITE);
 	}
 
+	/**
+	 * Gets the world that this agent is in
+	 * @return the world of type World that this agent it in
+     */
 	public World getWorld() {
 		return world;
 	}
 
+	/**
+	 * Gets the PhysicsComponent that this agents is using
+	 * @return the PhysicsComponent that this agent is following
+     */
 	public PhysicsComponent getPhysicsComponent() {
 		return physics;
 	}

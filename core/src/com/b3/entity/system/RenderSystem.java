@@ -27,6 +27,10 @@ public class RenderSystem extends IteratingSystem {
 	private boolean modelRendering;
 	private float dotRadius;
 
+	/**
+	 * Creates a new render system to place dots on screen (to represent people)
+	 * @param camera the camera that the dots will be laid in front of
+     */
 	public RenderSystem(PerspectiveCamera camera) {
 		super(Family.all(RenderComponent.class, PhysicsComponent.class).get());
 		this.camera = camera;
@@ -35,6 +39,10 @@ public class RenderSystem extends IteratingSystem {
 		this.shapeRenderer = new ShapeRenderer();
 	}
 
+	/**
+	 * Begin the processing of the models
+	 * Set up the shape rendering to use the camera in the world
+	 */
 	@Override
 	public void beginProcessing() {
 		modelRendering = Config.getBoolean(ConfigKey.RENDER_AGENT_MODELS);
@@ -46,12 +54,20 @@ public class RenderSystem extends IteratingSystem {
 		}
 	}
 
+	/**
+	 * Ends the shape rendering, no rendering can occur after this
+	 */
 	@Override
 	public void endProcessing() {
 		if (!modelRendering)
 			shapeRenderer.end();
 	}
 
+	/**
+	 * For each entity in the world, this will see where they are and make them wander around, taking into account nearby buildings and other entities
+	 * @param entity    The current Entity being processed
+	 * @param deltaTime The delta time between the last and current frame
+     */
 	public void processEntity(Entity entity, float deltaTime) {
 		RenderComponent render = models.get(entity);
 		if (!render.visible)
@@ -75,6 +91,12 @@ public class RenderSystem extends IteratingSystem {
 
 	}
 
+	/**
+	 * The angle in degrees between the two input vector v1 and v2
+	 * @param v1 the vector to be processed
+	 * @param v2 the vector to be processed
+     * @return the angle in degrees between the two inputs
+     */
 	private float angle(Vector2 v1, Vector2 v2) {
 		double xdiff = v1.x - v2.x,
 				ydiff = v2.y - v1.y;
