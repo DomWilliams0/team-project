@@ -39,11 +39,12 @@ import java.util.ArrayList;
  * Created by lewis on 15/02/16.
  */
 public class SideBarNodes extends SideBar implements Disposable {
+
     private Stage stage;
     private ButtonComponent triggerBtn;
     private VisNodes ui;
     private World world;
-    private boolean isOpen;
+    public static boolean isOpen;
     private float preferredWidth;
     private Skin skin;
     private BitmapFont font;

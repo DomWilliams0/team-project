@@ -5,6 +5,8 @@ import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.gui.CoordinatePopup;
 import com.b3.gui.ErrorPopup;
 import com.b3.gui.components.MessageBoxComponent;
+import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
+import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -115,6 +117,7 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
                     Node actualNode = frontier.peek();
                     if (!actualNode.equals(node)) {
                         descriptionPopup.setText("Attention! This node is not the one to be selected for expansion.");
+                        if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
                         descriptionPopup.show();
                     }
                     else {
@@ -124,10 +127,12 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
 
                         if (currentSearch.getEnd().equals(node)) {
                             descriptionPopup.setText("Great! You reached the target");
+                            if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
                             descriptionPopup.show();
                         }
                         else if (firstTime) {
                             descriptionPopup.setText("Good! Now please select the nodes to add to the frontier.");
+                            if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
                             descriptionPopup.show();
                         }
                     }
@@ -141,6 +146,7 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
 
                     if (!actualFrontier.contains(node)) {
                         descriptionPopup.setText("Attention! This node can't be added to the frontier.");
+                        if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
                         descriptionPopup.show();
                     }
                     else {
@@ -158,8 +164,8 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
 
                             if (firstTime) {
                                 descriptionPopup.setText("Great! Now follow the algorithm steps in order to reach the goal node.");
+                                if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
                                 descriptionPopup.show();
-
                                 firstTime = !firstTime;
                             }
                         }

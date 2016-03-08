@@ -34,10 +34,11 @@ import java.util.function.Function;
 
 public class SideBarIntensiveLearningMode extends SideBar implements Disposable {
 
+    public static boolean isOpen;
+
     private Stage stage;
     private World world;
     private ButtonComponent triggerBtn;
-    private boolean isOpen;
     private float preferredWidth;
     private MainGame controller;
 
@@ -370,6 +371,7 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
                 TextButton _triggerBtn = triggerBtn.getComponent();
 
                 if (!isOpen) {
+                    //closes it
                     setX(0);
                     setY(0);
                     _triggerBtn.setText("<");

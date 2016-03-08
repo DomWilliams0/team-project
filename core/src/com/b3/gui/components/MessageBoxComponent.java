@@ -17,8 +17,10 @@ import javax.swing.*;
  * @author oxe410
  */
 public class MessageBoxComponent {
+
     private Stage popupStage;
     private Dialog dialog;
+    private boolean moveLeft;
 
     /**
      * Creates a dialog box
@@ -69,7 +71,11 @@ public class MessageBoxComponent {
      * Shows the current dialog
      */
     public void show() {
-        dialog.show(popupStage);
+        if (moveLeft) {
+            dialog.show(popupStage).setPosition(10, Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
+        } else {
+            dialog.show(popupStage).setPosition(Gdx.graphics.getWidth() / 2 - dialog.getWidth() / 2, Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
+        }
     }
 
     /**
@@ -79,5 +85,9 @@ public class MessageBoxComponent {
      */
     public static void show(String infoMessage, String titleBar) {
         JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void transposeLeft(boolean moveLeft) {
+        this.moveLeft = moveLeft;
     }
 }

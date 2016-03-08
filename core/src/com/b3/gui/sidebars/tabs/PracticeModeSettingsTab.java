@@ -26,7 +26,7 @@ public class PracticeModeSettingsTab {
 
     private Table settingsTab;
 
-    public PracticeModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, Map<String, Object> data) {
+    public PracticeModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, Map<String, Object> data, Boolean learningMode) {
         settingsTab = new Table();
         settingsTab.setFillParent(true);
         settingsTab.pad(20);
@@ -51,7 +51,7 @@ public class PracticeModeSettingsTab {
 
         Object[] searches = SearchAlgorithm.allNames().toArray(); // TODO - Not badly done with Object[].
         SelectBoxComponent searchSelectBox = new SelectBoxComponent(skin, font, new Array(searches));
-        searchSelectBox.setSelected(searches[0]);
+        if (learningMode) searchSelectBox.setSelected(searches[1]); else searchSelectBox.setSelected(searches[0]);
 
         searchSelectBox.addListener(new ChangeListener() {
             @Override

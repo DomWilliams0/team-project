@@ -122,7 +122,7 @@ public class PracticeMode implements Screen {
         }};
 
         // Add settings tab
-        PracticeModeSettingsTab settingsTab = new PracticeModeSettingsTab(skin, font, sideBarNodes.getPreferredWidth(), data);
+        PracticeModeSettingsTab settingsTab = new PracticeModeSettingsTab(skin, font, sideBarNodes.getPreferredWidth(), data, true);
         settingsTab.setName("Settings");
 
         sideBarNodes.addTab(settingsTab.getTab());
