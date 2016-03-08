@@ -107,6 +107,10 @@ public class ModelManager {
 		}
 	}
 	
+	/**
+	 * Changes the visibility of all the statically loaded models.
+	 * @param visible Whether they should be visible.
+	 */
 	public void setStaticsVisible(boolean visible) {
 		for (ModelController controller : staticModels) {
 			controller.setVisible(visible);

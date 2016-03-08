@@ -36,19 +36,34 @@ public class Node implements Serializable {
 	public String toAdaptedString() {
 		return ((char)(getPoint().getX()+65)) + Integer.toString(getPoint().getY());
 	}
-
+	
+	/**
+	 * @return The {@link Point} this Node is at.
+	 */
 	public Point getPoint() {
 		return point;
 	}
-
+	
+	/**
+	 * @return A {@link Map} of the connected neighbors to the cost of the edge.
+	 */
 	public Map<Node, Float> getEdges() {
 		return edges;
 	}
-
+	
+	/**
+	 * @return A {@link Set} of the connected neighbouring nodes.
+	 */
 	public Set<Node> getNeighbours() {
 		return edges.keySet();
 	}
-
+	
+	/**
+	 * 
+	 * @param neighbour The connected neighbour to get the cost of the edge between this Node and it.
+	 * @return The cost of the edge between the two Nodes.
+	 * @throws IllegalArgumentException If the Node specified is not a connected neighbour.
+	 */
 	public float getEdgeCost(Node neighbour) {
 		Float cost = edges.get(neighbour);
 		if (cost == null)
@@ -62,8 +77,9 @@ public class Node implements Serializable {
 	 *
 	 * @param neighbour The neighbour who shares this edge
 	 * @param cost      The new cost
-	 * @return True if the neighbour is a valid neighbour and the
-	 * operation was successful, otherwise false
+	 * @return <code>true</code> if the neighbour is a valid neighbour and the
+	 *         operation was successful;
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean setEdgeCost(Node neighbour, float cost) {
 		if (!edges.containsKey(neighbour))
@@ -73,16 +89,25 @@ public class Node implements Serializable {
 		neighbour.edges.put(this, cost);
 		return true;
 	}
-
+	
+	/**
+	 * Creates an edge from this Node to another with a specified cost.
+	 * @param key  The other Node to create an edge tp.
+	 * @param cost The edge cost.
+	 */
 	public void addNeighbour(Node key, float cost) {
 		edges.put(key, cost);
 	}
-
+	
+	/**
+	 * Checks if there is an edge from this Node to the one specified.
+	 * @param node The neighbour to check if there is an edge to.
+	 * @return <code>true</code> if there is an edge from this Node to another.
+	 */
 	public boolean hasNeighbour(Node node) {
 		return edges.containsKey(node);
 	}
-
-
+	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -100,11 +125,21 @@ public class Node implements Serializable {
 	public int hashCode() {
 		return point.hashCode();
 	}
-
+	
+	/**
+	 * Removes the edge from this Node to the one specified.
+	 * @param node The Node to remove the edge to.
+	 * @return <code>true</code> if the node was a neighbour;
+	 *         <code>false</code> otherwise.
+	 */
 	public boolean removeNeighbours(Node node) {
 		return edges.remove(node) != null;
 	}
-
+	
+	/**
+	 * Removes all the edges between this Node and its neighbours.
+	 * Will remove them bidirectionally.
+	 */
 	public void clearNeighbours() {
 		for (Node neighbour : getNeighbours())
 			neighbour.removeNeighbours(this);

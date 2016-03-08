@@ -1,7 +1,6 @@
 package com.b3.world;
 
 import com.b3.DebugRenderer;
-import com.b3.mode.Mode;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.*;
 import com.b3.entity.component.PhysicsComponent;
@@ -12,6 +11,7 @@ import com.b3.gui.CoordinatePopup;
 import com.b3.gui.ErrorPopup;
 import com.b3.gui.RenderTester;
 import com.b3.input.InputHandler;
+import com.b3.mode.Mode;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -19,6 +19,7 @@ import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
+import com.b3.world.PendingTeleport.TeleportType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -344,7 +345,7 @@ public class World implements Disposable {
 		engine.addSystem(new AISystem(worldGraph));
 
 		worldCamera = camera;
-		worldCamera.setCurrrentZoom(Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) / 2);
+		worldCamera.setCurrentZoom(Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) / 2);
 
 		//set up these after the camera has been setup
 		rt = new RenderTester(this);
@@ -757,7 +758,7 @@ public class World implements Disposable {
 
 		if (counterScaler > 5) {
 			//too long in-between animations
-			worldCamera.setCurrrentZoom((float) (worldCamera.getActualZoom() + pos));
+			worldCamera.setCurrentZoom((float) (worldCamera.getActualZoom() + pos));
 		}
 		return zoomScalar;
 	}

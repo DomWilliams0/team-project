@@ -9,6 +9,7 @@ import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
+import com.sun.istack.internal.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -519,35 +520,67 @@ public class SearchTicker extends Observable {
 	public boolean isPaused(int index) {
 		return paused[index];
 	}
-
+	
+	/**
+	 * @return The {@link Node} that the search is starting from.
+	 */
 	public Node getStart() {
 		return start;
 	}
-
+	
+	/**
+	 * Sets the {@link Node} that the search will start expanding from.
+	 * @param start The new start {@link Node}.
+	 */
 	public void setStart(Node start) {
 		this.start = start;
 	}
-
+	
+	/**
+	 * @return The {@link Node} that the search is trying to reach (the goal).
+	 */
 	public Node getEnd() {
 		return end;
 	}
-
+	
+	/**
+	 * Sets the {@link Node} that the search is looking for.
+	 * @param end The new goal {@link Node}.
+	 */
 	public void setEnd(Node end) {
 		this.end = end;
 	}
-
+	
+	/**
+	 * @return The algorithm being used for this search.
+	 */
 	public SearchAlgorithm getAlgorithm() {
 		return algorithm;
 	}
-
+	
+	/**
+	 * @return The {@link Node} that the search has just expanded.
+	 *         May be <code>null</code>!
+	 */
+	@Nullable
 	public Node getMostRecentlyExpanded() {
 		return mostRecentlyExpanded;
 	}
-
+	
+	/**
+	 * @return The neighbours of the most recently expanded {@link Node} of the search.
+	 *         May be <code>null</code>!
+	 */
+	@Nullable
 	public List<Node> getCurrentNeighbours() {
 		return currentNeighbours;
 	}
-
+	
+	/**
+	 * @return The neighbour of the most recently expanded {@link Node} that is currently being evaluated.
+	 *         May be <code>null</code>!
+	 */
+	@Nullable
 	public Node getCurrentNeighbour() {
 		return currentNeighbour;
 	}
@@ -568,12 +601,18 @@ public class SearchTicker extends Observable {
 		return updated;
 	}
 
-	public float getG (Node node, Node child) {
+	public float getG(Node node, Node child) {
 		float g = costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
 		return g;
 	}
-
-	public float getG (Node node) {
+	
+	/**
+	 * Gets the cost so far that is needed to reach a {@link Node}.
+	 * Value may decrease after successive calls of {@link #tick()}.
+	 * @param node The {@link Node} to get the current cost it takes to reach.
+	 * @return A positive cost that the search has currently achieved to reach {@code node}.
+	 */
+	public float getG(Node node) {
 		float g = costSoFarFunction.apply(node);
 		return g;
 	}

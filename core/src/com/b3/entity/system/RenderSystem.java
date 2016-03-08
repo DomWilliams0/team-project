@@ -68,8 +68,6 @@ public class RenderSystem extends IteratingSystem {
      */
 	public void processEntity(Entity entity, float deltaTime) {
 		RenderComponent render = models.get(entity);
-		if (!render.visible)
-			return;
 
 		PhysicsComponent phys = physics.get(entity);
 		Vector2 pos = phys.getPosition();

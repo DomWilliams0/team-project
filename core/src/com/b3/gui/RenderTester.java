@@ -2,8 +2,10 @@ package com.b3.gui;
 
 import com.b3.search.Node;
 import com.b3.search.Point;
+import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
+import com.b3.search.util.SearchParameters;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.graphics.Color;
@@ -12,24 +14,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.sun.corba.se.impl.naming.cosnaming.NamingUtils;
-import com.sun.xml.internal.ws.server.sei.SEIInvokerTube;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.copy;
 import static java.util.Collections.reverse;
-import static java.util.Collections.sort;
 
 /**
  * A pop-up visual that explains what each node is
  * Including drawing the heuristic and explaining to the user where the costs come from.
  */
-
 public class RenderTester {
 
     private ShapeRenderer shapeRenderer;
@@ -131,7 +127,7 @@ public class RenderTester {
         tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         endNodeDFSBFS = new Sprite(tempTexture);
 
-        //Aqua nodes - just added to frontire
+        //Aqua nodes - just added to frontier
         lastFrontierSprite = new Sprite[4];
         tempTexture = new Texture("core/assets/world/popups/lastF250x250.JPG.png");
         tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -199,233 +195,225 @@ public class RenderTester {
         counterAnimationFade++;
         popupShowing = false;
         float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
-
+		
         //SPRITES
         spriteBatch.setProjectionMatrix(worldCamera.combined);
         spriteBatch.begin();
-
-        if (stickyCurrentNode && world.getWorldGraph().getCurrentSearch().isPaused()) {
-            currentNodeClickX = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getX();
-            currentNodeClickY = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getY();
+		
+		SearchTicker currentSearch = worldGraph.getCurrentSearch();
+		Node mostRecentExpand = currentSearch.getMostRecentlyExpanded();
+		
+		if (stickyCurrentNode && currentSearch.isPaused()) {
+            currentNodeClickX = mostRecentExpand.getPoint().getX();
+            currentNodeClickY = mostRecentExpand.getPoint().getY();
             world.setCurrentClick(currentNodeClickX, currentNodeClickY);
         }
-
+		
         //----ALL RENDERS GO HERE---
         //DONE MULTI-PAGES if start node
-        if (worldGraph.getCurrentSearch().getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
+        if (currentSearch.getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
             if (pageNo >= startNodeSprite.length) pageNo = 0; //reset to first page
             spriteBatch.draw(startNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
             popupShowing = true;
-        } else
-            //DONE MULTI_PAGES if end node
-            if (worldGraph.getCurrentSearch().getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-                if (pageNo >= 3 && worldGraph.getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR) pageNo = 0; //reset to first page if neccessary
-                if (pageNo >= 2 && worldGraph.getCurrentSearch().getAlgorithm() != SearchAlgorithm.A_STAR) pageNo = 0; //reset to first page if neccessary
+        } else if (currentSearch.getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
+			//DONE MULTI_PAGES if end node
+			if (pageNo >= 3 && currentSearch.getAlgorithm() == SearchAlgorithm.A_STAR) pageNo = 0; //reset to first page if neccessary
+			if (pageNo >= 2 && currentSearch.getAlgorithm() != SearchAlgorithm.A_STAR) pageNo = 0; //reset to first page if neccessary
 
-                if (pageNo == 2) {
-                    //calculate data needed
-                    float x1;
-                    float y1;
-                    if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
-                        x1 = (float) (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getX() + 0.5);
-                        y1 = (float) (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getY() + 0.5);
-                    } else {
-                        x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5);
-                        y1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getY() + 0.5);
-                    }
+			if (pageNo == 2) {
+				//calculate data needed
+				float x1;
+				float y1;
+				if (mostRecentExpand != null) {
+					x1 = (float) (mostRecentExpand.getPoint().getX() + 0.5);
+					y1 = (float) (mostRecentExpand.getPoint().getY() + 0.5);
+				} else {
+					x1 = (float) (currentSearch.getStart().getPoint().getX() + 0.5);
+					y1 = (float) (currentSearch.getStart().getPoint().getY() + 0.5);
+				}
 
-                    float x2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getX() + 0.5); float y2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getY() + 0.5);
-                    float xCoord = (int) (x1 + x2) / 2; float yCoord = (int) (y1 + y2) / 2;
-                    float cost;
-                    if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
-                        cost = calculateEuclidian(worldGraph.getCurrentSearch().getMostRecentlyExpanded(), worldGraph.getCurrentSearch().getEnd());
-                    } else {
-                        cost = calculateEuclidian(worldGraph.getCurrentSearch().getStart(), worldGraph.getCurrentSearch().getEnd());
-                    }
+				float x2 = (float) (currentSearch.getEnd().getPoint().getX() + 0.5); float y2 = (float) (currentSearch.getEnd().getPoint().getY() + 0.5);
+				float xCoord = (int) (x1 + x2) / 2; float yCoord = (int) (y1 + y2) / 2;
+				
+				Node euclideanStartNode = mostRecentExpand == null ? currentSearch.getStart() : mostRecentExpand;
+				float cost = SearchParameters.calculateEuclidean(euclideanStartNode, currentSearch.getEnd());
 
-                    spriteBatch.end();
-                    //draw lines
-                    drawHeuristic(cost, currentNodeClickX, currentNodeClickY, scalingZoom);
-                    spriteBatch.begin();
-                    spriteBatch.setProjectionMatrix(worldCamera.combined);
-                    //draw actual g(x)
-                    drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
+				spriteBatch.end();
+				//draw lines
+				drawHeuristic(cost, currentNodeClickX, currentNodeClickY, scalingZoom);
+				spriteBatch.begin();
+				spriteBatch.setProjectionMatrix(worldCamera.combined);
+				//draw actual g(x)
+				drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
 
-                    //draw y cost
-                    xCoord = x1;
-                    yCoord = (y1 + y2) / 2;
-                    cost = Math.abs(y1 - y2);
-                    drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
+				//draw y cost
+				xCoord = x1;
+				yCoord = (y1 + y2) / 2;
+				cost = Math.abs(y1 - y2);
+				drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
 
-                    //draw x cost
-                    xCoord = (x1 + x2) / 2;
-                    yCoord = y2;
-                    cost = Math.abs(x1 - x2);
-                    drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
+				//draw x cost
+				xCoord = (x1 + x2) / 2;
+				yCoord = y2;
+				cost = Math.abs(x1 - x2);
+				drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
 
-                    spriteBatch.end();
-                    spriteBatch.begin();
-                    spriteBatch.setProjectionMatrix(worldCamera.combined);
-                } else {
-                    if (worldGraph.getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR)
-                        spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-                            (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-                    else
-                        if (pageNo == 0)
-                            spriteBatch.draw(endNodeDFSBFS, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-                                (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-                        else
-                            spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-                                    (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-
-                }
-
-                popupShowing = true;
-
-            } else
-                //DONE MULTi-PAGES, needs cost breakdown though if recently expanded - current node being explored
-                if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null)
-                    if (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-                        stickyCurrentNode = true;
-                        if (pageNo >= 4) pageNo = 0; //reset to first page if neccessary
-                        float gxFunction = worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded());
-
-                        int convertedPageNo = pageNo;
-                        if (convertedPageNo == 2)
-                            switch (world.getWorldGraph().getCurrentSearch().getAlgorithm()) {
-                                case A_STAR: convertedPageNo = 4;
-                                    break;
-                                case BREADTH_FIRST: convertedPageNo = 3;
-                                    break;
-                                case DEPTH_FIRST: convertedPageNo = 2;
-                                    break;
-                            }
-
-                        //show normal pop-ups (first 2 pages)
-                        if (pageNo != 3)
-                            spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-
-                        //draw current g(x) function onto the screen (3rd page)
-                        if (pageNo == 2 && world.getWorldGraph().getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR) {
-                            drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 11), scalingZoom);
-                        }
-
-                        //show how costs are calulated (4th page)
-                        if (pageNo == 3) {
-                            //if has been shown for a little while
-                            float animate = 0;
-                            if (counterAnimationFade < 200) {
-                                //don't scale
-                                animate = scalingZoom;
-                            } else {
-                                //do scale down (so all costs are shown)
-                                animate = scalingZoom - (counterAnimationFade-200);
-                                if (animate < 0) animate = 0;
-                            }
-                            spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, animate);
-                            List<Node> currentPath = worldGraph.getCurrentSearch().getPath();
-                            ArrayList<Integer> arrCostsCurrentSerach = getCostsAllNodes(currentPath);
-
-                            for (int i = 0; i < currentPath.size(); i++) {
-                                if (arrCostsCurrentSerach.size() > 0) {
-                                    drawCostOnScreen(arrCostsCurrentSerach.get(0), currentPath.get(i).getPoint(), currentPath.get(i+1).getPoint(), scalingZoom);
-                                    arrCostsCurrentSerach.remove(0);
-                                }
-                            }
-                        }
-                        popupShowing = true;
-                    } else
-                        //DONE MULTI PAGE if JUST added to stack / queue
-                        if (worldGraph.getCurrentSearch().getLastFrontier() != null)
-                            if (worldGraph.getCurrentSearch().getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-                                if (pageNo >= 2) pageNo = 0; //reset to first page if neccessary
-
-                                int convertedPageNo = pageNo;
-                                if (convertedPageNo == 1)
-                                    switch (world.getWorldGraph().getCurrentSearch().getAlgorithm()) {
-                                        case A_STAR: convertedPageNo = 3;
-                                            break;
-                                        case BREADTH_FIRST: convertedPageNo = 2;
-                                            break;
-                                        case DEPTH_FIRST: convertedPageNo = 1;
-                                            break;
-                                    }
-
-                                spriteBatch.draw(lastFrontierSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-                                        (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-
-                                float gxFunction = worldGraph.getCurrentSearch().getG(worldGraph.getCurrentSearch().getMostRecentlyExpanded());
-                                float cost = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getEdgeCost(new Node(new Point(currentNodeClickX, currentNodeClickY)));
-                                float total = cost + gxFunction;
-
-                                if (pageNo == 1 && worldGraph.getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR)
-                                    drawEquationOnScreen((int)total, (int)gxFunction, (int)cost, currentNodeClickX, currentNodeClickY + (scalingZoom/50), scalingZoom);
-
-                                popupShowing = true;
-                            } else if (worldGraph.getCurrentSearch().getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-                                //DONE MULTIPAGE if the old frontier
-                                if (pageNo >= 2) pageNo = 0; //reset to first page if neccessary
-
-                                int convertedPageNo = pageNo;
-                                if (convertedPageNo == 1)
-                                    switch (world.getWorldGraph().getCurrentSearch().getAlgorithm()) {
-                                        case A_STAR: convertedPageNo = 3;
-                                            break;
-                                        case BREADTH_FIRST: convertedPageNo = 2;
-                                            break;
-                                        case DEPTH_FIRST: convertedPageNo = 1;
-                                            break;
-                                    }
-
-                                spriteBatch.draw(olderFrontierSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-                                        (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-
-                                float gxFunction = -1;
-
-                                Object[] arrFront = worldGraph.getCurrentSearch().getFrontier().toArray();
-                                for (int i = 0; i < arrFront.length; i++) {
-                                    Node node = (Node) arrFront[i];
-                                    if (node.equals(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-                                        gxFunction = worldGraph.getCurrentSearch().getG(node);
-                                    }
-                                }
-
-                                if (pageNo == 1 && world.getWorldGraph().getCurrentSearch().getAlgorithm() == SearchAlgorithm.A_STAR)
-                                    drawNumberOnScreen((int) gxFunction, currentNodeClickX, (float) currentNodeClickY + (scalingZoom / 11), scalingZoom);
-
-                                popupShowing = true;
-                            } else
-                                //MULTI PAGE DONE if already expanded
-                                if (worldGraph.getCurrentSearch().getVisited() != null)
-                                    if (worldGraph.getCurrentSearch().getVisited().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-                                        if (pageNo >= fullyExploredSprite.length) pageNo = 0; //reset to first page if neccessary
-                                        //TODO Put some info around the screen somewhere
-                                        spriteBatch.draw(fullyExploredSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
-                                                (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
-
-                                        popupShowing = true;
-                                    }
+				spriteBatch.end();
+				spriteBatch.begin();
+				spriteBatch.setProjectionMatrix(worldCamera.combined);
+			} else {
+				if (currentSearch.getAlgorithm() == SearchAlgorithm.A_STAR) {
+					spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+							(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+				} else {
+					if (pageNo == 0) {
+						spriteBatch.draw(endNodeDFSBFS, (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+								(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+					} else {
+						spriteBatch.draw(endNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+								(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+					}
+				}
+			}
+			
+			popupShowing = true;
+			
+		} else if (mostRecentExpand != null) {
+			//DONE MULTi-PAGES, needs cost breakdown though if recently expanded - current node being explored
+			if (mostRecentExpand.getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
+				stickyCurrentNode = true;
+				if (pageNo >= 4) pageNo = 0; //reset to first page if neccessary
+				float gxFunction = currentSearch.getG(mostRecentExpand);
+				
+				int convertedPageNo = pageNo;
+				if (convertedPageNo == 2) {
+					switch (currentSearch.getAlgorithm()) {
+						case A_STAR:
+							convertedPageNo = 4;
+							break;
+						case BREADTH_FIRST:
+							convertedPageNo = 3;
+							break;
+						case DEPTH_FIRST:
+							convertedPageNo = 2;
+							break;
+					}
+				}
+				
+				//show normal pop-ups (first 2 pages)
+				if (pageNo != 3)
+					spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+				
+				//draw current g(x) function onto the screen (3rd page)
+				if (pageNo == 2 && currentSearch.getAlgorithm() == SearchAlgorithm.A_STAR) {
+					drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 11), scalingZoom);
+				}
+				
+				//show how costs are calulated (4th page)
+				if (pageNo == 3) {
+					//if has been shown for a little while
+					float animate = 0;
+					if (counterAnimationFade < 200) {
+						//don't scale
+						animate = scalingZoom;
+					} else {
+						//do scale down (so all costs are shown)
+						animate = scalingZoom - (counterAnimationFade - 200);
+						if (animate < 0) animate = 0;
+					}
+					spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, animate);
+					List<Node> currentPath = currentSearch.getPath();
+					ArrayList<Integer> arrCostsCurrentSerach = getCostsAllNodes(currentPath);
+					
+					for (int i = 0; i < currentPath.size(); i++) {
+						if (arrCostsCurrentSerach.size() > 0) {
+							drawCostOnScreen(arrCostsCurrentSerach.get(0), currentPath.get(i).getPoint(), currentPath.get(i + 1).getPoint(), scalingZoom);
+							arrCostsCurrentSerach.remove(0);
+						}
+					}
+				}
+				popupShowing = true;
+			} else if (currentSearch.getLastFrontier() != null) {
+				//DONE MULTI PAGE if JUST added to stack / queue
+				if (currentSearch.getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
+					if (pageNo >= 2) pageNo = 0; //reset to first page if neccessary
+					
+					int convertedPageNo = pageNo;
+					if (convertedPageNo == 1) {
+						switch (currentSearch.getAlgorithm()) {
+							case A_STAR:
+								convertedPageNo = 3;
+								break;
+							case BREADTH_FIRST:
+								convertedPageNo = 2;
+								break;
+							case DEPTH_FIRST:
+								convertedPageNo = 1;
+								break;
+						}
+					}
+					
+					spriteBatch.draw(lastFrontierSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+							(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+					
+					float gxFunction = currentSearch.getG(mostRecentExpand);
+					float cost = mostRecentExpand.getEdgeCost(new Node(new Point(currentNodeClickX, currentNodeClickY)));
+					float total = cost + gxFunction;
+					
+					if (pageNo == 1 && currentSearch.getAlgorithm() == SearchAlgorithm.A_STAR)
+						drawEquationOnScreen((int) total, (int) gxFunction, (int) cost, currentNodeClickX, currentNodeClickY + (scalingZoom / 50), scalingZoom);
+					
+					popupShowing = true;
+				} else if (currentSearch.getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
+					//DONE MULTIPAGE if the old frontier
+					if (pageNo >= 2) pageNo = 0; //reset to first page if neccessary
+					
+					int convertedPageNo = pageNo;
+					if (convertedPageNo == 1)
+						switch (currentSearch.getAlgorithm()) {
+							case A_STAR:
+								convertedPageNo = 3;
+								break;
+							case BREADTH_FIRST:
+								convertedPageNo = 2;
+								break;
+							case DEPTH_FIRST:
+								convertedPageNo = 1;
+								break;
+						}
+					
+					spriteBatch.draw(olderFrontierSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+							(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+					
+					float gxFunction = -1;
+					
+					for (Node node : currentSearch.getFrontier()) {
+						if (node.equals(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
+							gxFunction = currentSearch.getG(node);
+						}
+					}
+					
+					if (pageNo == 1 && currentSearch.getAlgorithm() == SearchAlgorithm.A_STAR)
+						drawNumberOnScreen((int) gxFunction, currentNodeClickX, (float) currentNodeClickY + (scalingZoom / 11), scalingZoom);
+					
+					popupShowing = true;
+				} else if (currentSearch.getVisited() != null) {
+					//MULTI PAGE DONE if already expanded
+					if (currentSearch.getVisited().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
+						if (pageNo >= fullyExploredSprite.length) pageNo = 0; //reset to first page if necessary
+						//TODO Put some info around the screen somewhere
+						spriteBatch.draw(fullyExploredSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
+								(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
+						
+						popupShowing = true;
+					}
+				}
+			}
+		}
         //----ALL RENDERS GO HERE---
 
         spriteBatch.end();
         shapeRenderer.end();
-    }
-
-    /**
-     * Calculated the Euclidian distance between first node and second node.
-     * IE SQRT((x2-x1)^2 + (y2-y1)^2)
-     * @param start first node
-     * @param end second node
-     * @return
-     */
-    private float calculateEuclidian(Node start, Node end) {
-        Point p1 = start.getPoint();
-        Point p2 = end.getPoint();
-
-        int x = p1.getX() - p2.getX();
-        int y = p1.getY() - p2.getY();
-
-        return (float) Math.sqrt(x * x + y * y);
     }
 
     /**

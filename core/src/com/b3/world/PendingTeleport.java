@@ -14,12 +14,15 @@ public class PendingTeleport {
 		this.body = body;
 		this.teleportType = teleportType;
 	}
-}
-
-
-enum TeleportType {
-	TO_LEFT,
-	TO_TOP,
-	TO_RIGHT,
-	TO_BOTTOM
+	
+	/**
+	 * Where to teleport to.
+	 */
+	public enum TeleportType {
+		TO_LEFT,
+		TO_TOP,
+		TO_RIGHT,
+		TO_BOTTOM
+	}
+	
 }

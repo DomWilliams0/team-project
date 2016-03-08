@@ -4,12 +4,18 @@ import com.b3.entity.ai.Behaviour;
 import com.badlogic.ashley.core.Component;
 
 /**
- * An agent's brain
+ * An agent's brain through the power of friendship
  */
 public class AIComponent implements Component {
-
+	
+	/**
+	 * The path following {@link Behaviour} of the agent.
+	 */
 	public Behaviour behaviour;
-
+	
+	/**
+	 * @param behaviour The path following {@link Behaviour} of the agent.
+	 */
 	public AIComponent(Behaviour behaviour) {
 		this.behaviour = behaviour;
 	}

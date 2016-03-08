@@ -15,15 +15,24 @@ public class SearchParameters {
 	private static final Function2<Node, Node, Float> EUCLIDEAN;
 
 	static {
-		EUCLIDEAN = (n1, n2) -> {
-			Point p1 = n1.getPoint();
-			Point p2 = n2.getPoint();
-			int x = p1.getX() - p2.getX();
-			int y = p1.getY() - p2.getY();
-
-			return (float) Math.sqrt(x * x + y * y);
-		};
+		EUCLIDEAN = SearchParameters::calculateEuclidean;
 		NOTHING = (a, b) -> 0f;
+	}
+	
+	/**
+	 * Calculated the Euclidean distance between two {@link Node Nodes}.
+	 * IE SQRT((x2-x1)^2 + (y2-y1)^2)
+	 * @param n1 first node
+	 * @param n2 second node
+	 * @return The calculated Euclidean distance.
+	 */
+	public static float calculateEuclidean(Node n1, Node n2) {
+		Point p1 = n1.getPoint();
+		Point p2 = n2.getPoint();
+		int x = p1.getX() - p2.getX();
+		int y = p1.getY() - p2.getY();
+		
+		return (float) Math.sqrt(x * x + y * y);
 	}
 
 	private SearchAlgorithm algorithm;
@@ -53,15 +62,6 @@ public class SearchParameters {
 				h = NOTHING;
 				break;
 		}
-	}
-
-	public Takeable<Node> createFrontier() {
-
-		if (algorithm != SearchAlgorithm.BREADTH_FIRST && algorithm != SearchAlgorithm.DEPTH_FIRST)
-			throw new IllegalArgumentException("No heuristic supplied for A* frontier");
-
-		return createFrontier(null, null, null);
-
 	}
 
 	public Takeable<Node> createFrontier(Function<Node, Float> getGScore, Function2<Node, Node, Float> heuristic, Node end) {

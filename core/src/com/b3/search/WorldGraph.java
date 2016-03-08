@@ -4,7 +4,6 @@ import com.b3.entity.Agent;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.util.Utils;
 import com.b3.world.Building;
 import com.b3.world.World;
 import com.badlogic.gdx.graphics.Camera;
@@ -18,6 +17,9 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The internal graph at a low level.
+ */
 public class WorldGraph implements Serializable {
 
 	private static final Color EDGE_COLOUR = Color.BLACK;
@@ -299,7 +301,13 @@ public class WorldGraph implements Serializable {
 			ex.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Renders the world graph with pretty node and edge colours, as well as the current search.
+	 * @param camera The {@link Camera} to render on.
+	 * @param counter The current step in the animation.
+	 * @param zoomScalar How zoomed the {@code Camera} is.
+	 */
 	public void render(Camera camera, float counter, float zoomScalar) {
 		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
 
@@ -650,16 +658,27 @@ public class WorldGraph implements Serializable {
 		height = -1;
 		nodes.clear();
 	}
-
+	
+	/**
+	 * Sets the current search to display and the agent responsible.
+	 * @param agent The agent who will use the path generated.
+	 * @param currentSearch The {@link SearchTicker} doing the path generation.
+	 */
 	public void setCurrentSearch(Agent agent, SearchTicker currentSearch) {
 		this.currentSearch = currentSearch;
 		this.currentSearchAgent = agent;
 	}
-
+	
+	/**
+	 * @return The {@link SearchTicker} that is currently being displayed.
+	 */
 	public SearchTicker getCurrentSearch() {
 		return currentSearch;
 	}
-
+	
+	/**
+	 * @return The agent that will follow {@link #getCurrentSearch()}.
+	 */
 	public Agent getCurrentSearchAgent() {
 		return currentSearchAgent;
 	}
@@ -668,16 +687,29 @@ public class WorldGraph implements Serializable {
 		// todo just for prototype
 		currentSearch.reset(true);
 	}
-
+	
+	/**
+	 * Whether there is a search currently being displayed.
+	 * @return <code>true</code> if there is a search being displayed;
+	 *         <code>false</code> otherwise.
+	 */
 	public boolean hasSearchInProgress() {
 		return currentSearch != null;
 	}
-
+	
+	/**
+	 * Sets the next destination for the {@link SearchTicker}.
+	 * @param x The x coordinate to request.
+	 * @param y The y coordinate to request.
+	 */
 	public void setNextDestination(int x, int y) {
 		wantedNextDestinationX = x;
 		wantedNextDestinationY = y;
 	}
-
+	
+	/**
+	 * @return The next destination the {@link SearchTicker} will try reach.
+	 */
 	public Point getNextDestination() {
 		return new Point(wantedNextDestinationX, wantedNextDestinationY);
 	}
@@ -695,7 +727,12 @@ public class WorldGraph implements Serializable {
 		colPath.g = 255;
 		colPath.b = 0;
 	}
-
+	
+	/**
+	 * Removed a building from the WorldGraph,
+	 * the {@link Node Nodes} and edges that were covered will be restored. 
+	 * @param positionDeletion The bottom left hand corner of the building to delete.
+	 */
 	public void removeBuilding(Vector2 positionDeletion) {
 		//add nodes back into
 		for (int i = (int) positionDeletion.x; i < positionDeletion.x + 4; i++) {

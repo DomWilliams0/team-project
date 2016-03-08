@@ -10,16 +10,30 @@ import com.badlogic.gdx.graphics.Color;
  * An agent's physical manifestation on the screen, through the power of magnets
  */
 public class RenderComponent implements Component {
-
+	
+	/**
+	 * The render model of the agent.
+	 * If rendering of models is enabled.
+	 */
 	public final ModelController controller;
+	
+	/**
+	 * If the model is not rendered, the colour the dot representative will be.
+	 */
 	public Color dotColour;
-	public boolean visible;
+	
+	/**
+	 * If the model is not rendered, the radius the dot representative will be.
+	 */
 	public float radius;
-
+	
+	/**
+	 * @param controller The model that the agent will have.
+	 *                   (If rendering of models is enabled)
+	 */
 	public RenderComponent(ModelController controller) {
 		this.controller = controller;
 		this.dotColour = Color.WHITE;
-		this.visible = true;
 		this.radius = Config.getFloat(ConfigKey.ENTITY_DIAMETER) / 2f;
 	}
 

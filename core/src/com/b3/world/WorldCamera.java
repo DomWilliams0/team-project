@@ -14,6 +14,9 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The control class for the main {@link com.badlogic.gdx.graphics.Camera}.
+ */
 public class WorldCamera extends PerspectiveCamera {
 
 	private List<BoundingBox> borders;
@@ -30,7 +33,13 @@ public class WorldCamera extends PerspectiveCamera {
 	private float FOV;
 
 	// todo redo camera restriction
-
+	
+	/**
+	 * @param fieldOfViewY The field of view of the height, in degrees, the field of view for
+	 *                     the width will be calculated according to the aspect ratio.
+	 * @param viewportWidth The viewport width.
+	 * @param viewportHeight The viewport height.
+	 */
 	public WorldCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
 		super(fieldOfViewY, viewportWidth, viewportHeight);
 
@@ -42,9 +51,12 @@ public class WorldCamera extends PerspectiveCamera {
 
 		posX = 0; posY = 0; posZ = 0;
 	}
-
-	public void setFieldOfViewY (float fov) {
-
+	
+	/**
+	 * Changes the field of view.
+	 * @param fov The new field of view.
+	 */
+	public void setFieldOfViewY(float fov) {
 		this.FOV = fov;
 
 		PerspectiveCamera a = this;
@@ -140,33 +152,44 @@ public class WorldCamera extends PerspectiveCamera {
 
 		zoomAmount = newZ;
 	}
+	
+	/**
+	 * Sets the current zoom level with a smooth animation.
+	 * Obeys the max and min config limits.
+	 * @param zoom The new zoom level.
+	 */
+	public void setCurrentZoom(float zoom) {
+		float delta = zoom - position.z;
 
-	public void setCurrrentZoom (float zoom) {
-		float newZ = zoom;
-		float delta = newZ - position.z;
-
-		if (newZ >= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MINIMUM)
-				&& newZ <= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM))
+		if (zoom >= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MINIMUM)
+				&& zoom <= Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM))
 			translateSafe(0f, 0f, delta);
 
-		zoomAmount = newZ;
+		zoomAmount = zoom;
 	}
-
+	
 	public float getActualZoom() {
 		return zoomAmount;
 	}
-
+	
 	public float getCurrentZoom() {
 		if (zoomAmount > 30) {
 			return zoomAmount - 30;
 		} else return 1;
 	}
-
+	
+	/**
+	 * Updates the camera to the new position of the tracked entity.
+	 */
 	private void trackEntity() {
 		position.set(followedAgent.getPosition(), position.z);
 		update();
 	}
-
+	
+	/**
+	 * Makes the camera follow an entity.
+	 * @param agent The agent to follow.
+	 */
 	public void setFollowedAgent(Agent agent) {
 		followedAgent = agent.getPhysicsComponent();
 	}
@@ -186,4 +209,5 @@ public class WorldCamera extends PerspectiveCamera {
 	public float getFOV() {
 		return FOV;
 	}
+	
 }
