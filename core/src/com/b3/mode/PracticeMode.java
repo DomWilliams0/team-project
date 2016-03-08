@@ -47,12 +47,6 @@ public class PracticeMode implements Screen {
 
         this.game = game;
 
-        // init gui
-        setupSidebar();
-
-        // register input handlers
-        initInputHandlers(game.inputHandler);
-
         // init camera
         Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
         camera = new WorldCamera(1, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -68,6 +62,12 @@ public class PracticeMode implements Screen {
 
         world.getWorldGraph().getCurrentSearch().pause(1);
         world.getWorldGraph().getCurrentSearch().setUpdated(true);
+
+        // init gui
+        setupSidebar();
+
+        // register input handlers
+        initInputHandlers(game.inputHandler);
 
         // Display first popup
 //        MessageBoxComponent descriptionPopup = new MessageBoxComponent(popupStage,

@@ -5,6 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import java.util.Observable;
+import java.util.function.Function;
+
 /**
  * Represents a button component
  */
@@ -31,13 +34,6 @@ public class ButtonComponent extends Component {
         textButton = new TextButton(text, skin);
     }
 
-    /**
-     * @return The inner button representation
-     */
-    public TextButton getComponent() {
-        return textButton;
-    }
-
     public void setText(String text) {
         textButton.setText(text);
     }
@@ -52,6 +48,11 @@ public class ButtonComponent extends Component {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    @Override
+    public TextButton getComponent() {
+        return textButton;
     }
 
     @Override

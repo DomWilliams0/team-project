@@ -26,18 +26,6 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
     private PseudocodeVisualiser() {}
 
-    private PseudocodeVisualiser(Skin skin) {
-        super(skin);
-
-        //this.stage = stage;
-        //this.skin = skin;
-        this.font = Utils.getFont("monaco.ttf", 14);
-
-        this.pixmap = new Pixmap(1, 1, Pixmap.Format.RGB565);
-        this.pixmap.setColor(Color.LIME);
-        this.pixmap.fill();
-    }
-
     public static PseudocodeVisualiser getInstance() {
         if (instance == null)
             instance = new PseudocodeVisualiser();
@@ -45,8 +33,16 @@ public class PseudocodeVisualiser extends Table implements Observer {
     }
 
     public static PseudocodeVisualiser getInstance(Skin skin) {
-        if (instance == null)
-            instance = new PseudocodeVisualiser(skin);
+        if (instance == null) {
+            instance = new PseudocodeVisualiser();
+        }
+
+        instance.setSkin(skin);
+        instance.font = Utils.getFont("monaco.ttf", 14);
+        instance.pixmap = new Pixmap(1, 1, Pixmap.Format.RGB565);
+        instance.pixmap.setColor(Color.LIME);
+        instance.pixmap.fill();
+
         return instance;
     }
 

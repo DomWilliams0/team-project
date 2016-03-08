@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class SearchTicker {
+public class SearchTicker extends Observable {
 
 	private final WorldGraph worldGraph;
 	private Takeable<Node> frontier;
@@ -45,9 +45,6 @@ public class SearchTicker {
 	private SearchAlgorithm algorithm;
 	private Function<Node, Float> costSoFarFunction; // g in f(x) = g(x)+h(x)
 	private Function2<Node, Node, Float> edgeCostFunction;
-
-	// Snapshot tracker (save/load)
-	private SearchSnapshotTracker snapshotTracker;
 
 	// Pseudocode (inspect search)
 	private Pseudocode pseudocode;
@@ -435,9 +432,6 @@ public class SearchTicker {
 					});
 		}
 
-		// Send to search snapshot
-		//snapshotTracker.addSnapshot(new Tuple<>(frontier, visited));
-
 		setUpdated(true);
 	}
 
@@ -497,6 +491,9 @@ public class SearchTicker {
      */
 	public void pause(int index) {
 		paused[index] = true;
+
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
@@ -505,6 +502,9 @@ public class SearchTicker {
      */
 	public void resume(int index) {
 		paused[index] = false;
+
+		setChanged();
+		notifyObservers();
 	}
 
 	public boolean isPaused() {

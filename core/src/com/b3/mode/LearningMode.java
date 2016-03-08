@@ -54,12 +54,6 @@ public class LearningMode implements Screen {
         // create world
         world = new World("core/assets/world/world_smaller_test.tmx", Mode.LEARNING, game.inputHandler);
 
-        // init gui
-        setupSidebar();
-
-        // register input handlers
-        initInputHandlers(game.inputHandler);
-
         // init camera
         Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
         camera = new WorldCamera(1, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -72,10 +66,15 @@ public class LearningMode implements Screen {
 
         camera.setWorld(world);
         world.initEngine(camera);
-        //world.initEventGenerator();
 
         world.getWorldGraph().getCurrentSearch().pause(1);
         world.getWorldGraph().getCurrentSearch().setUpdated(true);
+
+        // init gui
+        setupSidebar();
+
+        // register input handlers
+        initInputHandlers(game.inputHandler);
     }
 
     /**

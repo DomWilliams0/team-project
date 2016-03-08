@@ -29,6 +29,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+import java.util.Observable;
+import java.util.function.Function;
+
 public class SideBarIntensiveLearningMode extends SideBar implements Disposable {
 
     private Stage stage;
@@ -214,19 +217,25 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
 
         //Play and Pause button
         ButtonComponent playPause = new ButtonComponent(skin, font, "Play");
+        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+        ticker.addObserver(playPause);
+
+        playPause.setUpdateListener(observable -> {
+            //SearchTicker searchTicker = (SearchTicker) observable;
+            playPause.setText(ticker.isPaused() ? "Play" : "Pause");
+            return null;
+        });
+
         playPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                TextButton btnplaypause = playPause.getComponent();
-                String text = btnplaypause.getText().toString();
-                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                if(text.equals("Pause")) {
+                //SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+                if (ticker.isPaused()) {
+                    ticker.resume(1);
+                }
+                else {
                     ticker.pause(1);
                     ticker.setUpdated(true);
-                    btnplaypause.setText("Play");
-                } else if(text.equals("Play")){
-                    ticker.resume(1);
-                    btnplaypause.setText("Pause");
                 }
             }
         });
