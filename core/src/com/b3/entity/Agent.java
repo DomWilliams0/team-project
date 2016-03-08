@@ -17,6 +17,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 
 public class Agent extends Entity {
 
+	public static final Color FLOCKING_COLOUR = Color.BLUE;
+	public static final Color SEARCHING_COLOUR = Color.PINK;
+
+
 	private World world;
 	private RenderComponent render;
 	private PhysicsComponent physics;
@@ -71,7 +75,7 @@ public class Agent extends Entity {
      */
 	public void setBehaviour(Behaviour behaviour) {
 		ai.behaviour = behaviour;
-		getComponent(RenderComponent.class).dotColour = (behaviour.getType() == BehaviourType.FOLLOW_PATH ? Color.ORANGE : Color.WHITE);
+		getComponent(RenderComponent.class).dotColour = (behaviour.getType() == BehaviourType.FOLLOW_PATH ? SEARCHING_COLOUR : FLOCKING_COLOUR);
 	}
 
 	/**

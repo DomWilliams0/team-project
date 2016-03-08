@@ -1,5 +1,6 @@
 package com.b3.entity.component;
 
+import com.b3.entity.Agent;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.world.ModelController;
@@ -33,8 +34,7 @@ public class RenderComponent implements Component {
 	 */
 	public RenderComponent(ModelController controller) {
 		this.controller = controller;
-		this.dotColour = Color.WHITE;
+		this.dotColour = Agent.FLOCKING_COLOUR;
 		this.radius = Config.getFloat(ConfigKey.ENTITY_DIAMETER) / 2f;
 	}
-
 }
