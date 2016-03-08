@@ -1,7 +1,6 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
-import com.b3.gui.ErrorPopup;
 import com.b3.input.SoundController;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -10,8 +9,6 @@ import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;
@@ -24,7 +21,6 @@ import java.util.stream.Collectors;
 public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFind {
 
 	private World world;
-	private ErrorPopup errorPopup;
 
 	private Node startNode;
 	private Node endNode;
@@ -36,10 +32,6 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		super(agent, null);
 		ticker = new SearchTicker(worldGraph);
 		wasArrivedLastFrame = false;
-
-		Texture tempTexture = new Texture("core/assets/world/popups/errorSearch.png");
-		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		errorPopup = new ErrorPopup(worldCamera, new Sprite(tempTexture));
 
 		startNode = getNodeFromTile(worldGraph, startTile);
 		endNode = getNodeFromTile(worldGraph, endTile);
@@ -85,7 +77,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			} else {
 				if (getPath().size() == 0) {
 					//Path not completed properly, so show error and start again
-					errorPopup.showPopup(400);
+					world.getPopupManager().showBehaviourError();
 					shouldPlayFail = -1;
 					SearchAlgorithm algo = world.getWorldGraph().getLearningModeNext();
 					ticker.reset(algo, startNode, endNode);
@@ -109,10 +101,6 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 
 		wasArrivedLastFrame = hasArrivedThisFrame;
 		hasArrivedThisFrame = hasArrived();
-	}
-
-	public ErrorPopup getErrorPopup() {
-		return errorPopup;
 	}
 
 	private List<Vector2> getPath () {

@@ -3,15 +3,15 @@ package com.b3.input;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.gui.CoordinatePopup;
-import com.b3.gui.ErrorPopup;
+import com.b3.gui.popup.Popup;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
-import com.b3.world.BuildingType;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
+import com.b3.world.building.BuildingType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -35,8 +35,8 @@ public class WorldSelectionHandler extends InputAdapter {
 		//TODO selecting an entity
 
 		//Close error pop-ups if need
-		if (ErrorPopup.justOpen) {
-			ErrorPopup.shouldClose = true;
+		if (Popup.justOpen) {
+			Popup.shouldClose = true;
 			return false;
 		}
 

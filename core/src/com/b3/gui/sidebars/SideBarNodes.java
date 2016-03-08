@@ -162,7 +162,7 @@ public class SideBarNodes extends SideBar implements Disposable {
                         isOpen = false;
                     }
 
-                    world.showPopupError(2);
+                    world.getPopupManager().showPseudocodeError();
                 }
             }
         });

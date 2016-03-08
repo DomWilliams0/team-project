@@ -1,4 +1,4 @@
-package com.b3.world;
+package com.b3.world.building;
 
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;

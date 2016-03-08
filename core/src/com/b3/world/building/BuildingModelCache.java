@@ -1,6 +1,7 @@
-package com.b3.world;
+package com.b3.world.building;
 
 import com.b3.util.Utils;
+import com.b3.world.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;

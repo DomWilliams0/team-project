@@ -1,8 +1,7 @@
-package com.b3.gui;
+package com.b3.gui.popup;
 
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Displayed in middle of the GUI (width / 2; height / 2)
  * Created by Nishanth on 02/03/2016.
  */
-public class ErrorPopup {
+public class Popup {
 
     public static boolean shouldClose;
     public static boolean justOpen;
@@ -34,7 +33,7 @@ public class ErrorPopup {
      * @param worldCamera the camera that this pop-up will be linked to
      * @param sprite the texture / image file that this pop-up will display.
      */
-    public ErrorPopup(WorldCamera worldCamera, Sprite sprite) {
+    public Popup(WorldCamera worldCamera, Sprite sprite) {
         justOpen = false;
         shouldClose = false;
         this.worldCamera = worldCamera;

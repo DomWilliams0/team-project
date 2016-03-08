@@ -8,8 +8,8 @@ import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.gui.CoordinatePopup;
-import com.b3.gui.ErrorPopup;
 import com.b3.gui.RenderTester;
+import com.b3.gui.popup.PopupManager;
 import com.b3.input.InputHandler;
 import com.b3.mode.Mode;
 import com.b3.search.Node;
@@ -20,12 +20,13 @@ import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
 import com.b3.world.PendingTeleport.TeleportType;
+import com.b3.world.building.Building;
+import com.b3.world.building.BuildingModelCache;
+import com.b3.world.building.BuildingType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -48,7 +49,7 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.*;
 
 import static com.b3.mode.Mode.*;
-import static com.b3.world.BuildingType.HOUSE;
+import static com.b3.world.building.BuildingType.HOUSE;
 
 public class World implements Disposable {
 
@@ -70,6 +71,7 @@ public class World implements Disposable {
 	private BuildingModelCache buildingCache;
 
 	private ModelManager modelManager;
+	private PopupManager popupManager;
 
 	private Engine engine;
 
@@ -100,14 +102,9 @@ public class World implements Disposable {
 	private int xNextDestination;
 
 	private Point currentMousePos;
-
-	private ErrorPopup errorSprite;
-	private ErrorPopup errorSpriteTwo;
-	private ErrorPopup firstPopup;
 	
-	private Point p;
 	private boolean pseudoCodeEnabled;
-
+	
 	public World() {
 
 	}
@@ -349,28 +346,6 @@ public class World implements Disposable {
 
 		//set up these after the camera has been setup
 		rt = new RenderTester(this);
-		//load error textures
-		Texture tempTexture = new Texture("core/assets/world/popups/errorBuildings.png");
-		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		errorSprite = new ErrorPopup(worldCamera, new Sprite(tempTexture));
-
-		tempTexture = new Texture("core/assets/world/popups/errorCode.png");
-		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		errorSpriteTwo = new ErrorPopup(worldCamera, new Sprite(tempTexture));
-
-		switch (mode) {
-			case COMPARE: tempTexture = new Texture("core/assets/world/popups/Intro/C.png");
-				break;
-			case TRY_YOURSELF: tempTexture = new Texture("core/assets/world/popups/Intro/TY.png");
-				break;
-			case LEARNING: tempTexture = new Texture("core/assets/world/popups/Intro/ILM.png");
-				break;
-			default: tempTexture = null; break;
-		}
-
-		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-		firstPopup = new ErrorPopup(worldCamera, new Sprite(tempTexture));
 
 		// debug: test entities
 		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
@@ -396,9 +371,9 @@ public class World implements Disposable {
 				a.setBehaviour(new BehaviourFlocking(a, physicsWorld));
 			}
 		}
-
-		firstPopup.showPopup(2000);
-
+		
+		popupManager = new PopupManager(worldCamera, mode);
+		getPopupManager().showIntro();
 	}
 
 	private Vector2 generateRandomTile() {
@@ -412,6 +387,10 @@ public class World implements Disposable {
 
 	public ModelManager getModelManager() {
 		return modelManager;
+	}
+	
+	public PopupManager getPopupManager() {
+		return popupManager;
 	}
 
 	public Engine getEngine() {
@@ -622,21 +601,13 @@ public class World implements Disposable {
 		renderer.render();
 
 		float zoomScalar = getZoomScalar();
-
-		if (mode == COMPARE) {
-			if (worldCamera.getFOV() < 67) {
-				Vector2 cameraPos = getTileSize().scl(0.5f);
-				worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);
-				worldCamera.lookAt(cameraPos.x + (67 - worldCamera.getFOV()), cameraPos.y + (67 - worldCamera.getFOV()), 0);
-				counterAnimation = 10;
-			}
-		} else {
-			if (worldCamera.getFOV() < 40) {
-				Vector2 cameraPos = new Vector2(getTileSize().scl(0.5f));
-				worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);
-				worldCamera.lookAt(cameraPos.x + (40 - worldCamera.getFOV()), cameraPos.y + (40 - worldCamera.getFOV()), 0);
-				counterAnimation = 10;
-			}
+		
+		int fovNumber = mode == COMPARE ? 67 : 40; // Todo - Nish, what is this?
+		if (worldCamera.getFOV() < fovNumber) {
+			Vector2 cameraPos = getTileSize().scl(0.5f);
+			worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);
+			worldCamera.lookAt(cameraPos.x + (fovNumber - worldCamera.getFOV()), cameraPos.y + (fovNumber - worldCamera.getFOV()), 0);
+			counterAnimation = 10;
 		}
 
 		if (counterAnimation > 1) {
@@ -700,14 +671,8 @@ public class World implements Disposable {
 		//pop-ups to show current coordinate
 		coordinatePopup.render();
 
-
-		//error message render's only if errorSprite.showPopup() is called.
-		firstPopup.render();
-		errorSprite.render();
-		errorSpriteTwo.render();
-
-		BehaviourMultiContinuousPathFind b = (BehaviourMultiContinuousPathFind) worldGraph.getCurrentSearchAgent().getBehaviour();
-		b.getErrorPopup().render();
+		//render big pop-ups
+		getPopupManager().render();
 
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
@@ -849,13 +814,6 @@ public class World implements Disposable {
 		currentMousePos = new Point(screenX, screenY);
 	}
 
-	public void showPopupError(int errorNo) {
-		if (errorNo==1)
-			errorSprite.showPopup(750);
-		if (errorNo==2)
-			errorSpriteTwo.showPopup(750);
-	}
-
 	//TODO make it so don't have to click in bottom left corner
 	public void removeBuilding(Vector2 positionDeletion) {
 		for (int i = 0; i < buildings.size(); i++) {
@@ -901,4 +859,5 @@ public class World implements Disposable {
 	public CoordinatePopup getCoordinatePopup() {
 		return coordinatePopup;
 	}
+	
 }
