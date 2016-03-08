@@ -7,7 +7,7 @@ camera-distance-max: 45
 
 building-collisions: true
 entity-kill-distance: 1.5
-entity-diameter: 0.3
+entity-diameter: 0.5
 entity-spawn-count: 0
 physics-rendering: false
 
