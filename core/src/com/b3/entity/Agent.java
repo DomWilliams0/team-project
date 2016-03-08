@@ -2,11 +2,10 @@ package com.b3.entity;
 
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourNop;
-import com.b3.entity.ai.BehaviourPathFind;
 import com.b3.entity.ai.BehaviourType;
 import com.b3.entity.component.AIComponent;
-import com.b3.entity.component.RenderComponent;
 import com.b3.entity.component.PhysicsComponent;
+import com.b3.entity.component.RenderComponent;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.world.ModelController;
@@ -19,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 public class Agent extends Entity {
 
 	private World world;
+	private RenderComponent render;
 	private PhysicsComponent physics;
 	private AIComponent ai;
 
@@ -39,7 +39,8 @@ public class Agent extends Entity {
 		float radius = diameter / 2f;
 
 		// render
-		add(new RenderComponent(new ModelController("agent", world.getModelManager(), true)));
+		render = new RenderComponent(new ModelController("agent", world.getModelManager(), true));
+		add(render);
 
 		// physics
 		BodyDef bodyDef = new BodyDef();
@@ -87,5 +88,13 @@ public class Agent extends Entity {
      */
 	public PhysicsComponent getPhysicsComponent() {
 		return physics;
+	}
+
+	public float getRadius() {
+		return render.radius;
+	}
+
+	public void setRadius(float radius) {
+		render.radius = radius;
 	}
 }

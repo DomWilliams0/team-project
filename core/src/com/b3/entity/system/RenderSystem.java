@@ -25,7 +25,6 @@ public class RenderSystem extends IteratingSystem {
 	private PerspectiveCamera camera;
 
 	private boolean modelRendering;
-	private float dotRadius;
 
 	/**
 	 * Creates a new render system to place dots on screen (to represent people)
@@ -46,7 +45,6 @@ public class RenderSystem extends IteratingSystem {
 	@Override
 	public void beginProcessing() {
 		modelRendering = Config.getBoolean(ConfigKey.RENDER_AGENT_MODELS);
-		dotRadius = Config.getFloat(ConfigKey.ENTITY_DIAMETER) / 2f;
 
 		if (!modelRendering) {
 			shapeRenderer.setProjectionMatrix(camera.combined);
@@ -86,7 +84,7 @@ public class RenderSystem extends IteratingSystem {
 			shapeRenderer.translate(pos.x, pos.y, 0f);
 			shapeRenderer.rotate(0, 0, 1, degrees + 45f);
 			shapeRenderer.setColor(render.dotColour);
-			shapeRenderer.circle(0, 0, dotRadius, CIRCLE_SEGMENTS);
+			shapeRenderer.circle(0, 0, render.radius, CIRCLE_SEGMENTS);
 		}
 
 	}
