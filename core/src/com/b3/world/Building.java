@@ -1,10 +1,7 @@
 package com.b3.world;
 
-import com.b3.event.EventType;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -28,8 +25,6 @@ public class Building {
 
 	private BuildingType type;
 
-	private EventType event;
-
 	/**
 	 * @param tilePosition  The tile to place this building at
 	 * @param dimensions    The (width, length, height) of the building
@@ -50,25 +45,6 @@ public class Building {
 		boundingBox.getCenter(centre);
 		boundingBox.getDimensions(cullingDimensions);
 		this.flattened = false;
-	}
-
-	/**
-	 * Updates the building's model to correspond to its current event
-	 */
-	private void renderEvent() {
-		switch (event) {
-			case FIRE:
-				modelInstance.materials.get(0).set(ColorAttribute.createDiffuse(Color.RED));
-				break;
-
-			case ROBBERY:
-				modelInstance.materials.get(0).set(ColorAttribute.createDiffuse(Color.BLUE));
-				break;
-
-			case DELIVERY:
-				modelInstance.materials.get(0).set(ColorAttribute.createDiffuse(Color.YELLOW));
-				break;
-		}
 	}
 
 	public Vector2 getTilePosition() {
@@ -116,26 +92,6 @@ public class Building {
 		modelInstance.transform.getTranslation(tempCullingPosition);
 		tempCullingPosition.add(centre);
 		return camera.frustum.boundsInFrustum(tempCullingPosition, cullingDimensions);
-	}
-
-	public void removeEvent() {
-		event = null;
-	}
-
-	public EventType getEvent() {
-		return event;
-	}
-
-	/**
-	 * Marks this building as a target of an event
-	 *
-	 * @param event The event happening
-	 */
-	public void setEvent(EventType event, boolean render) {
-		this.event = event;
-
-		if (render)
-			renderEvent();
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
-import com.b3.event.EventGenerator;
 import com.b3.gui.CoordinatePopup;
 import com.b3.gui.ErrorPopup;
 import com.b3.gui.RenderTester;
@@ -76,9 +75,6 @@ public class World implements Disposable {
 	private com.badlogic.gdx.physics.box2d.World physicsWorld;
 	private Body buildingBody; // all buildings will be fixtures on a single body
 
-	private EventGenerator eventGenerator;
-	private WorldObserver worldObserver;
-	private WorldQueryService queryService;
 	private WorldGraph worldGraph;
 
 	private Set<Entity> deadEntities;
@@ -153,9 +149,6 @@ public class World implements Disposable {
 		buildingBodyDef.type = BodyDef.BodyType.StaticBody;
 		buildingBody = physicsWorld.createBody(buildingBodyDef);
 		initEntityBoundaries(1f, Config.getFloat(ConfigKey.ENTITY_CULL_DISTANCE));
-
-		// Query service
-		queryService = new WorldQueryService(this);
 
 		debugRenderer = new DebugRenderer(physicsWorld);
 
@@ -416,20 +409,6 @@ public class World implements Disposable {
 		return new Vector2(x, y);
 	}
 
-	/**
-	 * Creates the event generator thread and starts it
-	 */
-	public void initEventGenerator() {
-		// Uncomment for event generator (not working atm)
-		int minTime = Config.getInt(ConfigKey.EVENT_GENERATION_MIN_TIME);
-		int maxTime = Config.getInt(ConfigKey.EVENT_GENERATION_MAX_TIME);
-
-		worldObserver = new WorldObserver(this);
-		eventGenerator = new EventGenerator(this, minTime, maxTime);
-		eventGenerator.addObserver(worldObserver);
-		new Thread(eventGenerator).start();
-	}
-
 	public ModelManager getModelManager() {
 		return modelManager;
 	}
@@ -440,10 +419,6 @@ public class World implements Disposable {
 
 	public WorldGraph getWorldGraph() {
 		return worldGraph;
-	}
-
-	public WorldQueryService getQueryService() {
-		return queryService;
 	}
 
 	/**
