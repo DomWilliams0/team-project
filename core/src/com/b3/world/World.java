@@ -10,7 +10,7 @@ import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.event.EventGenerator;
 import com.b3.gui.CoordinatePopup;
-import com.b3.gui.ErrorPopups;
+import com.b3.gui.ErrorPopup;
 import com.b3.gui.RenderTester;
 import com.b3.input.InputHandler;
 import com.b3.search.Node;
@@ -104,9 +104,9 @@ public class World implements Disposable {
 
 	private Point currentMousePos;
 
-	private ErrorPopups errorSprite;
-	private ErrorPopups errorSpriteTwo;
-	private ErrorPopups firstPopup;
+	private ErrorPopup errorSprite;
+	private ErrorPopup errorSpriteTwo;
+	private ErrorPopup firstPopup;
 	
 	private Point p;
 	private boolean pseudoCodeEnabled;
@@ -358,11 +358,11 @@ public class World implements Disposable {
 		//load error textures
 		Texture tempTexture = new Texture("core/assets/world/popups/errorBuildings.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		errorSprite = new ErrorPopups(worldCamera, new Sprite(tempTexture));
+		errorSprite = new ErrorPopup(worldCamera, new Sprite(tempTexture));
 
 		tempTexture = new Texture("core/assets/world/popups/errorCode.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		errorSpriteTwo = new ErrorPopups(worldCamera, new Sprite(tempTexture));
+		errorSpriteTwo = new ErrorPopup(worldCamera, new Sprite(tempTexture));
 
 		switch (mode) {
 			case COMPARE: tempTexture = new Texture("core/assets/world/popups/Intro/C.png");
@@ -376,7 +376,7 @@ public class World implements Disposable {
 
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-		firstPopup = new ErrorPopups(worldCamera, new Sprite(tempTexture));
+		firstPopup = new ErrorPopup(worldCamera, new Sprite(tempTexture));
 
 		// debug: test entities
 		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
@@ -731,7 +731,7 @@ public class World implements Disposable {
 		errorSpriteTwo.render();
 
 		BehaviourMultiContinuousPathFind b = (BehaviourMultiContinuousPathFind) worldGraph.getCurrentSearchAgent().getBehaviour();
-		b.getErrorPopups().render();
+		b.getErrorPopup().render();
 
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))

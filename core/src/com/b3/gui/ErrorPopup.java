@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Displayed in middle of the GUI (width / 2; height / 2)
  * Created by Nishanth on 02/03/2016.
  */
-public class ErrorPopups {
+public class ErrorPopup {
 
     public static boolean shouldClose;
     public static boolean justOpen;
@@ -34,7 +34,7 @@ public class ErrorPopups {
      * @param worldCamera the camera that this pop-up will be linked to
      * @param sprite the texture / image file that this pop-up will display.
      */
-    public ErrorPopups(WorldCamera worldCamera, Sprite sprite) {
+    public ErrorPopup(WorldCamera worldCamera, Sprite sprite) {
         justOpen = false;
         shouldClose = false;
         this.worldCamera = worldCamera;

@@ -1,7 +1,7 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
-import com.b3.gui.ErrorPopups;
+import com.b3.gui.ErrorPopup;
 import com.b3.input.SoundController;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -13,7 +13,6 @@ import com.b3.world.WorldCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFind {
 
 	private World world;
-	private ErrorPopups errorPopups;
+	private ErrorPopup errorPopup;
 
 	private Node startNode;
 	private Node endNode;
@@ -40,7 +39,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 
 		Texture tempTexture = new Texture("core/assets/world/popups/errorSearch.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		errorPopups = new ErrorPopups(worldCamera, new Sprite(tempTexture));
+		errorPopup = new ErrorPopup(worldCamera, new Sprite(tempTexture));
 
 		startNode = getNodeFromTile(worldGraph, startTile);
 		endNode = getNodeFromTile(worldGraph, endTile);
@@ -86,7 +85,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			} else {
 				if (getPath().size() == 0) {
 					//Path not completed properly, so show error and start again
-					errorPopups.showPopup(400);
+					errorPopup.showPopup(400);
 					shouldPlayFail = -1;
 					SearchAlgorithm algo = world.getWorldGraph().getLearningModeNext();
 					ticker.reset(algo, startNode, endNode);
@@ -112,8 +111,8 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		hasArrivedThisFrame = hasArrived();
 	}
 
-	public ErrorPopups getErrorPopups() {
-		return errorPopups;
+	public ErrorPopup getErrorPopup() {
+		return errorPopup;
 	}
 
 	private List<Vector2> getPath () {

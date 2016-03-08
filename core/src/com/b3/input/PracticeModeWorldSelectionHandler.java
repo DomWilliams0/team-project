@@ -3,7 +3,7 @@ package com.b3.input;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.gui.CoordinatePopup;
-import com.b3.gui.ErrorPopups;
+import com.b3.gui.ErrorPopup;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -68,8 +68,8 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         // todo selecting an entity
 
-        if (ErrorPopups.justOpen) {
-            ErrorPopups.shouldClose = true;
+        if (ErrorPopup.justOpen) {
+            ErrorPopup.shouldClose = true;
             return false;
         }
 

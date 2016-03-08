@@ -3,7 +3,7 @@ package com.b3.input;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.gui.CoordinatePopup;
-import com.b3.gui.ErrorPopups;
+import com.b3.gui.ErrorPopup;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -35,8 +35,8 @@ public class WorldSelectionHandler extends InputAdapter {
 		//TODO selecting an entity
 
 		//Close error pop-ups if need
-		if (ErrorPopups.justOpen) {
-			ErrorPopups.shouldClose = true;
+		if (ErrorPopup.justOpen) {
+			ErrorPopup.shouldClose = true;
 			return false;
 		}
 

@@ -1,6 +1,5 @@
 package com.b3.search;
 
-import com.b3.gui.ErrorPopups;
 import com.b3.gui.PseudocodeVisualiser;
 import com.b3.search.util.Function2;
 import com.b3.search.util.SearchAlgorithm;

@@ -1,7 +1,7 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
-import com.b3.gui.ErrorPopups;
+import com.b3.gui.ErrorPopup;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -17,7 +17,7 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	private BehaviourPathFind pathFind;
 	private WorldGraph graph;
 	private SearchAlgorithm algorithm;
-	private ErrorPopups errorPopups;
+	private ErrorPopup errorPopup;
 
 	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph, WorldCamera worldCamera, World world) {
 		super(agent, null);
@@ -43,8 +43,8 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 		}
 	}
 
-	public ErrorPopups getErrorPopup () {
-		return pathFind.getErrorPopups();
+	public ErrorPopup getErrorPopup () {
+		return pathFind.getErrorPopup();
 	}
 
 	private Vector2 generateRandomTile() {
@@ -84,7 +84,4 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 		return pathFind.getTicker();
 	}
 
-	public ErrorPopups getErrorPopups() {
-		return pathFind.getErrorPopups();
-	}
 }
