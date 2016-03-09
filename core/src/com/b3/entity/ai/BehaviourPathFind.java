@@ -8,7 +8,6 @@ import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.world.World;
-import com.b3.world.WorldCamera;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;
@@ -28,8 +27,9 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 	private SearchTicker ticker;
 	protected boolean wasArrivedLastFrame, hasArrivedThisFrame;
 
-	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph, WorldCamera worldCamera, World world) {
+	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, World world) {
 		super(agent, null);
+		WorldGraph worldGraph = world.getWorldGraph();
 		ticker = new SearchTicker(worldGraph);
 		wasArrivedLastFrame = false;
 
@@ -132,7 +132,9 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		return hasArrivedThisFrame && !wasArrivedLastFrame;
 	}
 
-	public SearchTicker getTicker() {
+
+	@Override
+	public SearchTicker getSearchTicker() {
 		return ticker;
 	}
 

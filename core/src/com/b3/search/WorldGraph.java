@@ -6,6 +6,7 @@ import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.world.World;
 import com.b3.world.building.Building;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -25,7 +26,7 @@ public class WorldGraph implements Serializable {
 	private static final Color EDGE_COLOUR = Color.BLACK;
 	private static final Color NODE_COLOUR = Color.DARK_GRAY;
 	public static final Color FRONTIER_COLOUR = Color.LIME;
-	public static final Color NEW_FRONTIER_COLOUR = Color.CYAN;
+	public static final Color LAST_FRONTIER_COLOUR = Color.CYAN;
 	public static final Color JUST_EXPANDED_COLOUR = Color.PINK;
 	public static final Color VISITED_COLOUR = Color.LIGHT_GRAY;
 	private static final Color SEARCH_EDGE_COLOUR = Color.YELLOW;
@@ -43,8 +44,9 @@ public class WorldGraph implements Serializable {
 	private World world;
 	private ShapeRenderer shapeRenderer;
 
-	private SearchTicker currentSearch;
-	private Agent currentSearchAgent;
+	private SearchTicker latestSearchTicker;
+	private Agent latestSearchAgent;
+	private Map<Agent, SearchTicker> searchTickers;
 
 	//current wanted next destination (right click)
 	private int wantedNextDestinationX = -5;
@@ -74,26 +76,13 @@ public class WorldGraph implements Serializable {
 		this.height = height;
 		this.world = null;
 		this.shapeRenderer = null; // must be initialised with initRenderer()
-		this.currentSearch = null;
-		this.currentSearchAgent = null;
+		this.searchTickers = new LinkedHashMap<>();
 
 		colPath = SEARCH_EDGE_COLOUR;
 
 		generateEmptyGraph(width, height);
 	}
 
-	/**
-	 * Contructs a new world graph, then loads an existing WorldGraph from file.
-	 *
-	 * @param fileName the name of the WorldGraph to loads from file.
-	 */
-	public WorldGraph(String fileName) {
-		this.nodes = new LinkedHashMap<>();
-		width = -1;
-		height = -1;
-
-		loadFromFile(fileName);
-	}
 
 	public WorldGraph(World world) {
 		this((int) world.getTileSize().x, (int) world.getTileSize().y);
@@ -253,10 +242,10 @@ public class WorldGraph implements Serializable {
 //				 Entry point check.
 //				if (point.equals(entryPoint))
 //					continue;
-				Node node = nodes.get(new Point(x,y));
+				Node node = nodes.get(new Point(x, y));
 				if (node != null)
 					removeNode(node);
-					//node.clearNeighbours();
+				//node.clearNeighbours();
 			}
 		}
 	}
@@ -301,20 +290,264 @@ public class WorldGraph implements Serializable {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Renders the world graph with pretty node and edge colours, as well as the current search.
-	 * @param camera The {@link Camera} to render on.
-	 * @param counter The current step in the animation.
+	 * Renders the world graph with pretty node and edge colours, as well as all current searches
+	 *
+	 * @param camera     The {@link Camera} to render on.
+	 * @param counter    The current step in the animation.
 	 * @param zoomScalar How zoomed the {@code Camera} is.
 	 */
 	public void render(Camera camera, float counter, float zoomScalar) {
 		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
 
-		if (zoomScalar<1) zoomScalar = 1;
+		if (zoomScalar < 1) zoomScalar = 1;
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
-		// render lines
+
+		renderEdges();
+		renderNodes(counter, zoomScalar);
+
+		//if scaled back so much that nodes collapse in on each other, then show white lines on top
+		if (zoomScalar > 2) {
+			renderZoomedOutGraph(zoomScalar, showPaths);
+			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+			searchTickers
+					.values()
+					.stream()
+					.forEach(this::renderZoomedOutSearch);
+			shapeRenderer.end();
+		}
+		else {
+			final float finalZoomScalar = zoomScalar;
+			searchTickers
+					.values()
+					.stream()
+					.forEach(s -> renderSearchTicker(camera, counter, finalZoomScalar, s));
+		}
+
+	}
+
+	/**
+	 * @param camera     The {@link Camera} to render on.
+	 * @param counter    The current step in the animation.
+	 * @param zoomScalar How zoomed the {@code Camera} is.
+	 */
+	private void renderSearchTicker(Camera camera, float counter, float zoomScalar, SearchTicker searchTicker) {
+		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
+
+		renderPath(showPaths, searchTicker);
+
+		//if scaled back so much that nodes collapse in on each other, then show white lines on top
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+		// render the current search
+		if (showPaths && searchTicker != null && !searchTicker.isPathComplete()) {
+			if (searchTicker.isRenderProgress()) {
+				Set<Node> visited = searchTicker.getVisited();
+				Collection<Node> frontier = searchTicker.getFrontier();
+				Collection<Node> lastFront = searchTicker.getLastFrontier();
+				Node justExpanded = searchTicker.getMostRecentlyExpanded();
+				List<Node> currentNeighbours = searchTicker.getCurrentNeighbours();
+
+
+				float zoomScalarInside = zoomScalar / 5;
+				if (zoomScalarInside < 1)
+					zoomScalarInside = 1;
+
+				// visited nodes
+				renderSearchNodes(Color.BLACK, visited, zoomScalarInside);
+
+				// visited nodes
+				renderSearchNodes(VISITED_COLOUR, visited, zoomScalarInside);
+
+				// frontier
+				renderSearchNodes(FRONTIER_COLOUR, frontier, zoomScalarInside);
+
+				// last frontier
+				renderSearchNodes(LAST_FRONTIER_COLOUR, lastFront, zoomScalarInside);
+
+				//just expanded
+				if (justExpanded != null) {
+					shapeRenderer.setColor(JUST_EXPANDED_COLOUR);
+					renderSingleSearchNode(justExpanded, zoomScalarInside);
+				}
+
+				// current neighbours
+				if (searchTicker.isInspectingSearch() && currentNeighbours != null)
+					renderSearchNodes(CURRENT_NEIGHBOURS_COLOUR, currentNeighbours, zoomScalarInside);
+
+				// current neighbour (to be analysed)
+				Node currentNeighbour = searchTicker.getCurrentNeighbour();
+				if (searchTicker.isInspectingSearch() && currentNeighbour != null)
+					renderSingleSearchNode(currentNeighbour, zoomScalarInside);
+			}
+
+
+			// TODO - Should send a message to World! (for now here)
+			// TODO - Better failing system for SearchTicker.
+			// just completed this tick: send the path to an agent
+			if (searchTicker.isPathComplete())
+				spawnAgentWithPath(searchTicker);
+		}
+
+		// render start and end over the top of search
+		if (showPaths && searchTicker != null) {
+			Point start = searchTicker.getStart().getPoint();
+			Point end = searchTicker.getEnd().getPoint();
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.circle(start.x, start.y, (float) (NODE_RADIUS + 0.25), NODE_EDGES);
+			shapeRenderer.circle(end.x, end.y, (float) (NODE_RADIUS + 0.25), NODE_EDGES);
+		}
+
+		shapeRenderer.end();
+
+		if (currentHighlightTimer > 0)
+			renderHighlightedNode();
+	}
+
+	private void renderHighlightedNode() {
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+		shapeRenderer.setColor(currentHighlightColor);
+		currentHighlightTimer = currentHighlightTimer - 5;
+		shapeRenderer.ellipse((float) (currentHighlightPoint.x - ((currentHighlightTimer / 75.0) / 2.0)), (float) ((float) currentHighlightPoint.y - ((currentHighlightTimer / 75.0) / 2.0)), (float) (currentHighlightTimer / 75.0), (float) (currentHighlightTimer / 75.0));
+		shapeRenderer.end();
+	}
+
+	private void spawnAgentWithPath(SearchTicker searchTicker) {
+		List<Node> path = searchTicker.getPath();
+		if (path.isEmpty())
+			return;
+
+		List<Vector2> points = path
+				.stream()
+				.map(pointNode -> new Vector2(pointNode.getPoint().x, pointNode.getPoint().y))
+				.collect(Collectors.toList());
+
+		world.spawnAgentWithPath(points.get(0), points);
+	}
+
+	private void renderSearchNodes(Color colour, Collection<Node> nodes, float zoomScalarInside) {
+		shapeRenderer.setColor(colour);
+		nodes.stream()
+				.forEach(n -> renderSingleSearchNode(n, zoomScalarInside));
+	}
+
+	private void renderSingleSearchNode(Node node, float zoomScalarInside) {
+		shapeRenderer.circle(
+				node.getPoint().getX(),
+				node.getPoint().getY(),
+				(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
+				NODE_EDGES
+		);
+	}
+
+	private void renderZoomedOutGraph(float zoomScalar, boolean showPaths) {
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+		for (Node node1 : nodes.values()) {
+			Map<Node, Float> neighbours = node1.getEdges();
+			for (Map.Entry<Node, Float> neighbour : neighbours.entrySet()) {
+				if (neighbour.getKey().hashCode() < node1.hashCode())
+					continue;
+
+				Float colouringRedValue = neighbour.getValue() - 1;
+
+				if (colouringRedValue == 0) {
+					float tempColRGBVal = (float) ((zoomScalar - 8) * 7.5);
+					tempColRGBVal = tempColRGBVal / 100;
+					shapeRenderer.setColor(tempColRGBVal, tempColRGBVal, tempColRGBVal, tempColRGBVal);
+					if (zoomScalar > 8)
+						shapeRenderer.line(
+								node1.getPoint().x, node1.getPoint().y,
+								neighbour.getKey().getPoint().x, neighbour.getKey().getPoint().y
+						);
+				} else {
+					Color col = new Color(((colouringRedValue + 1) * 25) / 100, 0, 0, 0);
+					shapeRenderer.setColor(col);
+					shapeRenderer.line(
+							node1.getPoint().x, node1.getPoint().y,
+							neighbour.getKey().getPoint().x, neighbour.getKey().getPoint().y
+					);
+				}
+			}
+		}
+
+		shapeRenderer.end();
+	}
+
+	private void renderZoomedOutSearch(SearchTicker searchTicker) {
+		shapeRenderer.setColor(SEARCH_EDGE_COLOUR);
+
+		List<Node> path = searchTicker.getPath();
+		for (int i = 0, pathSize = path.size(); i < pathSize - 1; i++) {
+			Node pathNodeA = path.get(i);
+			Node pathNodeB = path.get(i + 1);
+
+			shapeRenderer.line(
+					pathNodeA.getPoint().x, pathNodeA.getPoint().y,
+					pathNodeB.getPoint().x, pathNodeB.getPoint().y
+			);
+		}
+	}
+
+	private void renderNodes(float counter, float zoomScalar) {
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+		Color nodeColour = zoomScalar > 2 ? Color.BLACK : NODE_COLOUR;
+
+		// border
+		shapeRenderer.setColor(BORDER_COLOUR);
+		final float finalZoomScalar = zoomScalar;
+		nodes.keySet()
+				.stream()
+				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * finalZoomScalar, NODE_EDGES));
+		shapeRenderer.setColor(nodeColour);
+
+		// node body
+		final float finalZoomScalar1 = zoomScalar;
+		nodes.keySet()
+				.stream()
+				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES));
+
+		shapeRenderer.end();
+	}
+
+	private void renderPath(boolean showPaths, SearchTicker searchTicker) {
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+//		// render the path
+		if (showPaths && searchTicker != null) {// && searchTicker.isPathComplete()) {
+			colPath.add((float) -0.025, (float) -0.025, (float) 0.025, 0);
+			colPath.a = 1;
+
+			shapeRenderer.setColor(colPath);
+
+			List<Node> path = searchTicker.getPath();
+			for (int i = 0, pathSize = path.size(); i < pathSize - 1; i++) {
+				Node pathNodeA = path.get(i);
+				Node pathNodeB = path.get(i + 1);
+
+				float size = (1 - (colPath.r)) / 7;
+				if (size < 0.025) size = (float) 0.025;
+
+				shapeRenderer.rectLine(
+						pathNodeA.getPoint().x, pathNodeA.getPoint().y,
+						pathNodeB.getPoint().x, pathNodeB.getPoint().y,
+						size
+				);
+
+//				shapeRenderer.line(
+//						pathNodeA.getPoint().x, pathNodeA.getPoint().y,
+//						pathNodeB.getPoint().x, pathNodeB.getPoint().y
+//				);
+			}
+		}
+
+		shapeRenderer.end();
+	}
+
+	private void renderEdges() {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
 		for (Node node1 : nodes.values()) {
@@ -339,271 +572,6 @@ public class WorldGraph implements Serializable {
 		}
 
 		shapeRenderer.end();
-
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-
-//		// render the path
-		if (showPaths && currentSearch != null) {// && currentSearch.isPathComplete()) {
-			colPath.add((float)-0.025,(float)-0.025,(float)0.025,0);
-			colPath.a = 1;
-
-			shapeRenderer.setColor(colPath);
-
-			List<Node> path = currentSearch.getPath();
-			for (int i = 0, pathSize = path.size(); i < pathSize - 1; i++) {
-				Node pathNodeA = path.get(i);
-				Node pathNodeB = path.get(i + 1);
-
-				float size = (1 - (colPath.r)) / 7;
-				if (size < 0.025) size = (float) 0.025;
-
-				shapeRenderer.rectLine(
-						pathNodeA.getPoint().x, pathNodeA.getPoint().y,
-						pathNodeB.getPoint().x, pathNodeB.getPoint().y,
-						size
-				);
-
-//				shapeRenderer.line(
-//						pathNodeA.getPoint().x, pathNodeA.getPoint().y,
-//						pathNodeB.getPoint().x, pathNodeB.getPoint().y
-//				);
-			}
-		}
-
-		shapeRenderer.end();
-
-		// render nodes
-		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-		Color tempCol;
-//		if (counter < 1)
-		if (zoomScalar > 2)
-			tempCol = Color.BLACK;
-		else
-			tempCol = NODE_COLOUR;
-//		else
-//			tempCol = new Color(counter / 10, counter / 10, counter / 10, counter / 10);
-
-		// border
-		shapeRenderer.setColor(BORDER_COLOUR);
-		final float finalZoomScalar = zoomScalar;
-		nodes.keySet()
-				.stream()
-				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * finalZoomScalar, NODE_EDGES));
-		shapeRenderer.setColor(tempCol);
-
-		// node body
-		final float finalZoomScalar1 = zoomScalar;
-		nodes.keySet()
-				.stream()
-				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES));
-
-		shapeRenderer.end();
-
-		//if scaled back so much that nodes collapse in on each other, then show white lines on top
-		if (zoomScalar > 2) {
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-
-			for (Node node1 : nodes.values()) {
-				Map<Node, Float> neighbours = node1.getEdges();
-				for (Map.Entry<Node, Float> neighbour : neighbours.entrySet()) {
-					if (neighbour.getKey().hashCode() < node1.hashCode())
-						continue;
-
-					Float colouringRedValue = neighbour.getValue() - 1;
-
-					if (colouringRedValue == 0) {
-						float tempColRGBVal = (float) ((zoomScalar - 8) * 7.5);
-						tempColRGBVal = tempColRGBVal / 100;
-						shapeRenderer.setColor(tempColRGBVal, tempColRGBVal, tempColRGBVal, tempColRGBVal);
-						if (zoomScalar > 8)
-							shapeRenderer.line(
-									node1.getPoint().x, node1.getPoint().y,
-									neighbour.getKey().getPoint().x, neighbour.getKey().getPoint().y
-							);
-					} else {
-						Color col = new Color(((colouringRedValue + 1) * 25) / 100, 0, 0, 0);
-						shapeRenderer.setColor(col);
-						shapeRenderer.line(
-								node1.getPoint().x, node1.getPoint().y,
-								neighbour.getKey().getPoint().x, neighbour.getKey().getPoint().y
-						);
-					}
-				}
-			}
-
-			// render the path
-			if (showPaths && currentSearch != null) {// && currentSearch.isPathComplete()) {
-				shapeRenderer.setColor(SEARCH_EDGE_COLOUR);
-
-				List<Node> path = currentSearch.getPath();
-				for (int i = 0, pathSize = path.size(); i < pathSize - 1; i++) {
-					Node pathNodeA = path.get(i);
-					Node pathNodeB = path.get(i + 1);
-
-					shapeRenderer.line(
-							pathNodeA.getPoint().x, pathNodeA.getPoint().y,
-							pathNodeB.getPoint().x, pathNodeB.getPoint().y
-					);
-				}
-			}
-
-			shapeRenderer.end();
-		}
-
-		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-		// render the current search
-		if (showPaths && currentSearch != null && !currentSearch.isPathComplete()) {
-			if (currentSearch.isRenderProgress()) {
-				Set<Node> visited = currentSearch.getVisited();
-				Collection<Node> frontier = currentSearch.getFrontier();
-				Collection<Node> lastFront = currentSearch.getLastFrontier();
-				Node justExpanded = currentSearch.getMostRecentlyExpanded();
-				List<Node> currentNeighbours = currentSearch.getCurrentNeighbours();
-				// todo last frontier
-
-
-				float zoomScalarInside = zoomScalar / 5;
-				if (zoomScalarInside < 1)
-					zoomScalarInside = 1;
-
-				// draw visited nodes
-				shapeRenderer.setColor(Color.BLACK);
-				for (Node visitedNode : visited) {
-					shapeRenderer.circle(
-							visitedNode.getPoint().getX(),
-							visitedNode.getPoint().getY(),
-							(float) ((NODE_RADIUS * zoomScalarInside) + 0.1),
-							NODE_EDGES
-					);
-				}
-
-
-				// draw visited nodes
-				shapeRenderer.setColor(VISITED_COLOUR);
-				for (Node visitedNode : visited) {
-					shapeRenderer.circle(
-							visitedNode.getPoint().getX(),
-							visitedNode.getPoint().getY(),
-							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
-							NODE_EDGES
-					);
-				}
-
-				// draw frontier
-				shapeRenderer.setColor(Color.BLACK);
-				for (Node frontierNode : frontier) {
-					shapeRenderer.circle(
-							frontierNode.getPoint().getX(),
-							frontierNode.getPoint().getY(),
-							(float) ((NODE_RADIUS * zoomScalarInside) + 0.1),
-							NODE_EDGES
-					);
-				}
-
-				// draw frontier
-				shapeRenderer.setColor(FRONTIER_COLOUR);
-				for (Node frontierNode : frontier) {
-					shapeRenderer.circle(
-							frontierNode.getPoint().getX(),
-							frontierNode.getPoint().getY(),
-							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
-							NODE_EDGES
-					);
-				}
-
-				// draw last frontier
-				shapeRenderer.setColor(NEW_FRONTIER_COLOUR);
-				for (Node newFront : lastFront) {
-					shapeRenderer.circle(
-							newFront.getPoint().getX(),
-							newFront.getPoint().getY(),
-							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
-							NODE_EDGES
-					);
-				}
-
-				//draw just expanded
-				if(justExpanded != null) {
-					shapeRenderer.setColor(JUST_EXPANDED_COLOUR);
-					shapeRenderer.circle(
-							justExpanded.getPoint().getX(),
-							justExpanded.getPoint().getY(),
-							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
-							NODE_EDGES
-					);
-				}
-
-				// draw current neighbours
-				if (currentSearch.isInspectingSearch() && currentNeighbours != null) {
-					shapeRenderer.setColor(CURRENT_NEIGHBOURS_COLOUR);
-					for (Node currentNeighbour : currentNeighbours) {
-						shapeRenderer.circle(
-								currentNeighbour.getPoint().getX(),
-								currentNeighbour.getPoint().getY(),
-								(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
-								NODE_EDGES
-						);
-					}
-				}
-
-				// draw current neighbour (to be analysed)
-				Node currentNeighbour = currentSearch.getCurrentNeighbour();
-				if (currentSearch.isInspectingSearch() && currentNeighbour != null) {
-					shapeRenderer.setColor(CURRENT_NEIGHBOUR_COLOUR);
-					shapeRenderer.circle(
-							currentNeighbour.getPoint().getX(),
-							currentNeighbour.getPoint().getY(),
-							(float) ((NODE_RADIUS * zoomScalarInside) + 0.05),
-							NODE_EDGES
-					);
-				}
-			}
-
-
-			// now complete this tick: send the path to an agent
-			if (currentSearch.isPathComplete()) {
-				// TODO - Should send a message to World! (for now here)
-				// TODO - Better failing system for SearchTicker.
-
-				List<Node> path = currentSearch.getPath();
-				if (path.isEmpty())
-					return;
-
-				List<Vector2> points = path
-						.stream()
-						.map(pointNode -> new Vector2(pointNode.getPoint().x, pointNode.getPoint().y))
-						.collect(Collectors.toList());
-
-				world.spawnAgentWithPath(points.get(0), points);
-			}
-
-		}
-
-		// render start and end over the top of search
-		if (showPaths && currentSearch != null) {
-			Point start = currentSearch.getStart().getPoint();
-			Point end = currentSearch.getEnd().getPoint();
-			shapeRenderer.setColor(Color.BLUE);
-			shapeRenderer.circle(start.x, start.y, (float) (NODE_RADIUS + 0.25), NODE_EDGES);
-			shapeRenderer.circle(end.x, end.y, (float) (NODE_RADIUS + 0.25), NODE_EDGES);
-		}
-
-		shapeRenderer.end();
-
-		if (currentHighlightTimer > 0) {
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-			shapeRenderer.setColor(currentHighlightColor);
-			currentHighlightTimer = currentHighlightTimer - 5;
-			shapeRenderer.ellipse((float) (currentHighlightPoint.x - ((currentHighlightTimer / 75.0) / 2.0)), (float) ((float) currentHighlightPoint.y - ((currentHighlightTimer / 75.0) / 2.0)), (float) (currentHighlightTimer/75.0), (float) (currentHighlightTimer/75.0));
-			shapeRenderer.end();
-		}
-
 	}
 
 	@Override
@@ -658,47 +626,61 @@ public class WorldGraph implements Serializable {
 		height = -1;
 		nodes.clear();
 	}
-	
+
 	/**
 	 * Sets the current search to display and the agent responsible.
-	 * @param agent The agent who will use the path generated.
+	 *
+	 * @param agent         The agent who will use the path generated.
 	 * @param currentSearch The {@link SearchTicker} doing the path generation.
 	 */
 	public void setCurrentSearch(Agent agent, SearchTicker currentSearch) {
-		this.currentSearch = currentSearch;
-		this.currentSearchAgent = agent;
+		latestSearchAgent = agent;
+		latestSearchTicker = currentSearch;
+		searchTickers.put(agent, currentSearch);
 	}
-	
+
 	/**
 	 * @return The {@link SearchTicker} that is currently being displayed.
 	 */
 	public SearchTicker getCurrentSearch() {
-		return currentSearch;
+		return latestSearchTicker;
 	}
-	
+
 	/**
 	 * @return The agent that will follow {@link #getCurrentSearch()}.
 	 */
 	public Agent getCurrentSearchAgent() {
-		return currentSearchAgent;
+		return latestSearchAgent;
+	}
+
+	public boolean isAgentSearching(Entity entity) {
+		return entity instanceof Agent && searchTickers.containsKey(entity);
 	}
 
 	public void clearCurrentSearch() {
 		// todo just for prototype
-		currentSearch.reset(true);
+		latestSearchTicker.reset(true);
 	}
-	
+
+	public void clearSearch(Agent searchingAgent) {
+		SearchTicker searchTicker = searchTickers.remove(searchingAgent);
+		if (searchTicker != null)
+			searchTicker.reset(true);
+	}
+
 	/**
 	 * Whether there is a search currently being displayed.
+	 *
 	 * @return <code>true</code> if there is a search being displayed;
-	 *         <code>false</code> otherwise.
+	 * <code>false</code> otherwise.
 	 */
 	public boolean hasSearchInProgress() {
-		return currentSearch != null;
+		return !searchTickers.isEmpty();
 	}
-	
+
 	/**
 	 * Sets the next destination for the {@link SearchTicker}.
+	 *
 	 * @param x The x coordinate to request.
 	 * @param y The y coordinate to request.
 	 */
@@ -706,7 +688,7 @@ public class WorldGraph implements Serializable {
 		wantedNextDestinationX = x;
 		wantedNextDestinationY = y;
 	}
-	
+
 	/**
 	 * @return The next destination the {@link SearchTicker} will try reach.
 	 */
@@ -727,10 +709,11 @@ public class WorldGraph implements Serializable {
 		colPath.g = 255;
 		colPath.b = 0;
 	}
-	
+
 	/**
 	 * Removed a building from the WorldGraph,
-	 * the {@link Node Nodes} and edges that were covered will be restored. 
+	 * the {@link Node Nodes} and edges that were covered will be restored.
+	 *
 	 * @param positionDeletion The bottom left hand corner of the building to delete.
 	 */
 	public void removeBuilding(Vector2 positionDeletion) {
@@ -744,14 +727,14 @@ public class WorldGraph implements Serializable {
 		for (int i = (int) positionDeletion.x; i < positionDeletion.x + 4; i++) {
 			for (int j = (int) positionDeletion.y; j < positionDeletion.y + 4; j++) {
 				Point currentPoint = new Point(i, j);
-				if (nodes.containsKey(new Point(i+1, j)))
-					addEdge(currentPoint, new Point(i+1,j), 1);
-				if (nodes.containsKey(new Point(i-1, j)))
-					addEdge(currentPoint, new Point(i-1,j), 1);
-				if (nodes.containsKey(new Point(i, j+1)))
-					addEdge(currentPoint, new Point(i,j+1), 1);
-				if (nodes.containsKey(new Point(i, j-1)))
-					addEdge(currentPoint, new Point(i,j-1), 1);
+				if (nodes.containsKey(new Point(i + 1, j)))
+					addEdge(currentPoint, new Point(i + 1, j), 1);
+				if (nodes.containsKey(new Point(i - 1, j)))
+					addEdge(currentPoint, new Point(i - 1, j), 1);
+				if (nodes.containsKey(new Point(i, j + 1)))
+					addEdge(currentPoint, new Point(i, j + 1), 1);
+				if (nodes.containsKey(new Point(i, j - 1)))
+					addEdge(currentPoint, new Point(i, j - 1), 1);
 			}
 		}
 

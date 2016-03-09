@@ -17,13 +17,12 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	private BehaviourPathFind pathFind;
 	private WorldGraph graph;
 	private SearchAlgorithm algorithm;
-	private Popup errorPopup;
 
 	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph, WorldCamera worldCamera, World world) {
 		super(agent, null);
 		graph = worldGraph;
 		algorithm = searchAlgorithm;
-		pathFind = new BehaviourPathFind(agent, agent.getPhysicsComponent().getPosition(), generateRandomTile(), searchAlgorithm, worldGraph, worldCamera, world);
+		pathFind = new BehaviourPathFind(agent, agent.getPhysicsComponent().getPosition(), generateRandomTile(), searchAlgorithm, world);
 	}
 
 	@Override
@@ -76,8 +75,9 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 		return pathFind.hasArrivedForTheFirstTime();
 	}
 
-	public SearchTicker getTicker() {
-		return pathFind.getTicker();
+	@Override
+	public SearchTicker getSearchTicker() {
+		return pathFind.getSearchTicker();
 	}
 
 }

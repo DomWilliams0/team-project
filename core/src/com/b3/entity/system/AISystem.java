@@ -1,5 +1,6 @@
 package com.b3.entity.system;
 
+import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourType;
 import com.b3.entity.ai.BehaviourWithPathFind;
 import com.b3.entity.component.AIComponent;
@@ -37,9 +38,10 @@ public class AISystem extends IteratingSystem {
 	/**
 	 * Process an entity, depending on its behaviour and the current progress of the search in the world,
 	 * will update the linear acceleration and velocity according to their steering rate.
+	 *
 	 * @param entity    The current Entity being processed
 	 * @param deltaTime The delta time between the last and current frame
-     */
+	 */
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		PhysicsComponent phys = physicsComponents.get(entity);
@@ -57,11 +59,11 @@ public class AISystem extends IteratingSystem {
 
 
 		if (worldGraph.hasSearchInProgress() &&
-				worldGraph.getCurrentSearchAgent() == entity &&
+				worldGraph.isAgentSearching(entity) &&
 				ai.behaviour.getType() == BehaviourType.FOLLOW_PATH) {
 			BehaviourWithPathFind behaviour = (BehaviourWithPathFind) ai.behaviour;
 			if (behaviour.hasArrivedForTheFirstTime())
-				worldGraph.clearCurrentSearch();
+				worldGraph.clearSearch((Agent) entity);
 		}
 	}
 }

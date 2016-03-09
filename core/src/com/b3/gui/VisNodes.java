@@ -351,7 +351,7 @@ public class VisNodes extends Table {
 			if (cellmap.get(n).getParent().equals(vt)) c = WorldGraph.VISITED_COLOUR;
 			if (cellmap.get(n).getParent().equals(ft)) c = WorldGraph.FRONTIER_COLOUR;
 		}
-		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.NEW_FRONTIER_COLOUR;
+		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.LAST_FRONTIER_COLOUR;
 		if (justExpanded!=null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
 		//store the given colour
 		colours.put(n, c);
@@ -365,7 +365,7 @@ public class VisNodes extends Table {
 			if (cellmap.get(n).getParent().equals(vt)) c = WorldGraph.VISITED_COLOUR;
 			if (cellmap.get(n).getParent().equals(ft)) c = WorldGraph.FRONTIER_COLOUR;
 		}
-		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.NEW_FRONTIER_COLOUR;
+		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.LAST_FRONTIER_COLOUR;
 		if (justExpanded!=null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
 		return c;
 	}

@@ -191,7 +191,7 @@ public class RenderTester {
      * @param currentNodeClickX the x position (on the nodes graph / worldGraph) that the user last clicked one
      * @param currentNodeClickY the y position (on the nodes graph / worldGraph) that the user last clicked one
      */
-    public void render(int currentNodeClickX, int currentNodeClickY) {
+    public void render(int currentNodeClickX, int currentNodeClickY, SearchTicker currentSearch) {
         counterAnimationFade++;
         popupShowing = false;
         float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
@@ -200,7 +200,6 @@ public class RenderTester {
         spriteBatch.setProjectionMatrix(worldCamera.combined);
         spriteBatch.begin();
 		
-		SearchTicker currentSearch = worldGraph.getCurrentSearch();
 		Node mostRecentExpand = currentSearch.getMostRecentlyExpanded();
 		
 		if (stickyCurrentNode && currentSearch.isPaused()) {
@@ -240,7 +239,7 @@ public class RenderTester {
 
 				spriteBatch.end();
 				//draw lines
-				drawHeuristic(cost, currentNodeClickX, currentNodeClickY, scalingZoom);
+				drawHeuristic(currentSearch);
 				spriteBatch.begin();
 				spriteBatch.setProjectionMatrix(worldCamera.combined);
 				//draw actual g(x)
@@ -440,24 +439,20 @@ public class RenderTester {
 
     /**
      * Draws the heuristic, including how it was worked out. IE a division triangle with cost numbers
-     * @param gcost the actual cost of the heuristic, rounded to the nearest integer.
-     * @param currentNodeClickX the x position (on the nodes graph / worldGraph) that the user last clicked one
-     * @param currentNodeClickY the y position (on the nodes graph / worldGraph) that the user last clicked one
-     * @param scalingZoom
      */
-    private void drawHeuristic(float gcost, int currentNodeClickX, int currentNodeClickY, float scalingZoom) {
+    private void drawHeuristic(SearchTicker searchTicker) {
 
         float x1;
         float y1;
-        if (worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
-            x1 = (float) (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getX() + 0.5);
-            y1 = (float) (worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint().getY() + 0.5);
+	    if (searchTicker.getMostRecentlyExpanded() != null) {
+            x1 = (float) (searchTicker.getMostRecentlyExpanded().getPoint().getX() + 0.5);
+            y1 = (float) (searchTicker.getMostRecentlyExpanded().getPoint().getY() + 0.5);
         } else {
-            x1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getX() + 0.5);
-            y1 = (float) (worldGraph.getCurrentSearch().getStart().getPoint().getY() + 0.5);
+            x1 = (float) (searchTicker.getStart().getPoint().getX() + 0.5);
+            y1 = (float) (searchTicker.getStart().getPoint().getY() + 0.5);
         }
-        float x2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getX() + 0.5);
-        float y2 = (float) (worldGraph.getCurrentSearch().getEnd().getPoint().getY() + 0.5);
+        float x2 = (float) (searchTicker.getEnd().getPoint().getX() + 0.5);
+        float y2 = (float) (searchTicker.getEnd().getPoint().getY() + 0.5);
 
         shapeRenderer.setProjectionMatrix(worldCamera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

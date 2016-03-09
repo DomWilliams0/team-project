@@ -23,7 +23,7 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 	public BehaviourMultiPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph, WorldCamera worldCamera, World world) {
 		super(agent, null);
 		originalAlgorithm = algorithm;
-		pathFind = new BehaviourPathFind(agent, startTile, endTile, algorithm, worldGraph, worldCamera, world);
+		pathFind = new BehaviourPathFind(agent, startTile, endTile, algorithm, world);
 		goals = new ArrayDeque<>();
 		graph = worldGraph;
 	}
@@ -66,14 +66,11 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 		return pathFind.getType();
 	}
 
-	public SearchTicker getTicker() {
-		return pathFind.getTicker();
-	}
-
 	@Override
 	public boolean hasArrivedForTheFirstTime() {
 		return pathFind.hasArrivedForTheFirstTime();
 	}
+
 
 	/**
 	 * A helper class to contain a goal and a search algorithm
@@ -86,5 +83,10 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 			this.algorithm = algorithm;
 			this.goal = goal;
 		}
+	}
+
+	@Override
+	public SearchTicker getSearchTicker() {
+		return pathFind.getSearchTicker();
 	}
 }

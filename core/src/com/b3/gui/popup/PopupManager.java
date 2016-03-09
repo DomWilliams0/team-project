@@ -1,6 +1,6 @@
 package com.b3.gui.popup;
 
-import com.b3.mode.Mode;
+import com.b3.mode.ModeType;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,7 +12,7 @@ public class PopupManager {
 	private final Popup behaviourError;
 	private final Popup introPopup;
 	
-	public PopupManager(WorldCamera worldCamera, Mode mode) {
+	public PopupManager(WorldCamera worldCamera, ModeType mode) {
 		//load error textures
 		Texture tempTexture = new Texture("core/assets/world/popups/errorBuildings.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

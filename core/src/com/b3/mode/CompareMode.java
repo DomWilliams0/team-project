@@ -1,147 +1,69 @@
 package com.b3.mode;
 
 import com.b3.MainGame;
+import com.b3.entity.Agent;
+import com.b3.entity.ai.BehaviourPathFind;
 import com.b3.gui.sidebars.SideBarCompareMode;
-import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
-import com.b3.input.KeyboardController;
 import com.b3.input.WorldSelectionHandler;
-import com.b3.util.Config;
-import com.b3.util.ConfigKey;
-import com.b3.util.Utils;
-import com.b3.world.World;
-import com.b3.world.WorldCamera;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
+import com.b3.search.SearchTicker;
+import com.b3.search.util.SearchAlgorithm;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-/**
- * Mainly edited (ordered by no. of lines) by firstly and significantly, oxe410 then secondly, nbg481
- * Commits:
- * 9  nbg481
- * 2  oxe410
- */
-public class CompareMode implements Screen {
+public class CompareMode extends Mode {
+	private SideBarCompareMode sideBar;
 
-    private World world;
-    private WorldCamera camera;
-    private Stage sideBarStage;
-    private SideBarCompareMode sideBar;
-//    private SideBarNodes sideBarNodes;
-    private HelpBox helpBox;
-    private KeyboardController keyboardController;
+	public CompareMode(MainGame game) {
+		super(ModeType.COMPARE, game, "core/assets/world/world-compare.tmx", 29.7f);
+	}
 
-    public CompareMode(MainGame game) {
-        // init database
-        //Database.init();
+	@Override
+	protected void initSidebar() {
+		super.initSidebar();
+		sideBar = new SideBarCompareMode(sideBarStage, world);
+		sideBarStage.addActor(sideBar);
+	}
 
-        // create world
-        world = new World("core/assets/world/world.tmx", Mode.COMPARE, game.inputHandler);
+	@Override
+	protected void registerFurtherInputProcessors(InputHandler inputHandler) {
+		// world clicking
+		inputHandler.addProcessor(new WorldSelectionHandler(world));
+	}
 
-        // init gui
-        setupSidebar();
+	@Override
+	protected void tick(float delta) {
+	}
 
-        // register input handlers
-        initInputHandlers(game.inputHandler);
+	@Override
+	protected void spawnInitialEntities() {
 
-        // init camera
-        Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
-        camera = new WorldCamera(1, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM));
-        camera.near = 1f;
-        camera.far = 300f;
-        camera.lookAt(cameraPos.x, cameraPos.y, 0);
-        camera.rotate((float) 29.75, 1, 0, 0);
-        camera.update();
+		SearchAlgorithm[] algorithms = {SearchAlgorithm.A_STAR, SearchAlgorithm.DEPTH_FIRST, SearchAlgorithm.BREADTH_FIRST};
+		for (int i = 0; i < 3; i++) {
+			int xOffset = i * 18;
+			spawnAgent(
+					new Vector2(12 + xOffset, 1),
+					new Vector2(2 + xOffset, 29),
+					algorithms[i]
+			);
+		}
+	}
 
-        camera.setWorld(world);
-        world.initEngine(camera);
-//        world.initEventGenerator();
-    }
+	private void spawnAgent(Vector2 startPos, Vector2 goalPos, SearchAlgorithm algorithm) {
+		Agent agent = world.spawnAgent(startPos);
+		BehaviourPathFind behaviour = new BehaviourPathFind(
+				agent, startPos, goalPos, algorithm,
+				world);
+		agent.setBehaviour(behaviour);
 
-    private void initInputHandlers(InputHandler inputHandler) {
-        // keyboard control has top priority
-        keyboardController = new KeyboardController();
-        inputHandler.addProcessor(keyboardController);
+		SearchTicker ticker = behaviour.getSearchTicker();
+		world.getWorldGraph().setCurrentSearch(agent, ticker);
+		// todo add to list of rendered tickers
+	}
 
-        // world clicking
-        inputHandler.addProcessor(sideBarStage);
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		sideBar.resize(width, height);
+	}
 
-        // world clicking
-        inputHandler.addProcessor(new WorldSelectionHandler(world));
-    }
-
-    private void setupSidebar() {
-        sideBarStage = new Stage(new ScreenViewport());
-
-        sideBar = new SideBarCompareMode(sideBarStage, world);
-        sideBarStage.addActor(sideBar);
-
-//        sideBarNodes = new SideBarNodes(sideBarStage, world);
-//        sideBarNodes.setStepthrough(true);
-//        sideBarStage.addActor(sideBarNodes);
-
-        helpBox = new HelpBox(sideBarStage, world);
-        sideBarStage.addActor(helpBox);
-    }
-
-    @Override
-    public void show() {}
-
-    @Override
-    public void render(float delta) {
-        // delta time
-        float rawDeltaTime = Gdx.graphics.getRawDeltaTime();
-        Utils.TRUE_DELTA_TIME = rawDeltaTime;
-        Utils.DELTA_TIME = rawDeltaTime * Config.getFloat(ConfigKey.GAME_SPEED);
-
-        // clear screen
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
-        // camera movement
-        camera.move(keyboardController);
-        camera.update();
-
-        // world rendering
-        world.render();
-
-        // sidebar rendering
-        sideBarStage.act(Gdx.graphics.getDeltaTime());
-//        sideBarNodes.render();
-        sideBarStage.draw();
-
-        if (keyboardController.shouldExit())
-            Gdx.app.exit();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        sideBarStage.getViewport().update(width, height, true);
-        sideBar.resize(width, height);
-//        sideBarNodes.resize(width, height);
-        helpBox.resize(width, height);
-        world.getCoordinatePopup().resize();
-
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
-    }
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void hide() {}
-
-    @Override
-    public void dispose() {
-        world.dispose();
-    }
 }

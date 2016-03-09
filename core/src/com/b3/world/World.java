@@ -11,7 +11,7 @@ import com.b3.gui.CoordinatePopup;
 import com.b3.gui.RenderTester;
 import com.b3.gui.popup.PopupManager;
 import com.b3.input.InputHandler;
-import com.b3.mode.Mode;
+import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -48,7 +48,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 import java.util.*;
 
-import static com.b3.mode.Mode.*;
+import static com.b3.mode.ModeType.*;
 import static com.b3.world.building.BuildingType.HOUSE;
 
 public class World implements Disposable {
@@ -88,7 +88,7 @@ public class World implements Disposable {
 	private int counterScaler = 0;
 	private double pos = 1;
 
-	private Mode mode;
+	private ModeType mode;
 	//private boolean compareMode;
 	//current node user has clicked on
 	private int currentNodeClickX;
@@ -102,14 +102,14 @@ public class World implements Disposable {
 	private int xNextDestination;
 
 	private Point currentMousePos;
-	
+
 	private boolean pseudoCodeEnabled;
-	
+
 	public World() {
 
 	}
 
-	public World(String fileName, Mode mode, InputHandler inputHandler) {
+	public World(String fileName, ModeType mode, InputHandler inputHandler) {
 		pseudoCodeEnabled = true;
 
 		this.inputHandler = inputHandler;
@@ -159,15 +159,15 @@ public class World implements Disposable {
 
 		// model manager
 		modelManager = new ModelManager(environment, map);
-		
+
 		//GUI overlay
 		coordinatePopup = new CoordinatePopup();
 	}
-	
+
 	private void processMapTileTypes(TiledMap map) {
 		processMapTileTypes(map, true);
 	}
-	
+
 	private void processMapTileTypes(TiledMap map, boolean renderBoxes) {
 		FixtureDef objectDef = null;
 		if (renderBoxes) { // renderBoxes is needed so as to be compatible with the tests.
@@ -226,7 +226,7 @@ public class World implements Disposable {
 				}
 			}
 		}
-		
+
 		if (renderBoxes) {
 			objectDef.shape.dispose();
 		}
@@ -298,7 +298,7 @@ public class World implements Disposable {
 					return;
 
 				// searching
-				if (entity == worldGraph.getCurrentSearchAgent())
+				if (worldGraph.isAgentSearching(entity))
 					return;
 
 				// teleport to other side of the world
@@ -347,33 +347,8 @@ public class World implements Disposable {
 		//set up these after the camera has been setup
 		rt = new RenderTester(this);
 
-		// debug: test entities
-		Integer debugCount = Config.getInt(ConfigKey.ENTITY_SPAWN_COUNT);
-		for (int i = 0; i < debugCount; i++)
-			spawnAgent(new Vector2(Utils.RANDOM.nextInt((int) tileSize.x), Utils.RANDOM.nextInt((int) tileSize.y)));
-
-		Agent agent = spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
-
-		//IF IS COMPAREMODE (compareMode = true) DO ALL THREE BEHAVIOURS
-		Behaviour behaviour = mode == TRY_YOURSELF ?
-				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.DEPTH_FIRST, worldGraph, worldCamera, this) :
-				new BehaviourMultiContinuousPathFind(agent, SearchAlgorithm.A_STAR, worldGraph, worldCamera, this);
-		agent.setBehaviour(behaviour);
-
-		if (mode != TRY_YOURSELF) {
-			worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
-		}
-		worldGraph.setCurrentSearch(agent, ((BehaviourMultiContinuousPathFind) behaviour).getTicker());
-
-		if (mode == COMPARE) {// && Config.getBoolean(ConfigKey.FLOCKING_ENABLED)) { <-NO, no other chance to spawn all of the agents
-			for (int i = 0; i < 250; i++) {
-				Agent a = spawnAgent(generateRandomTile());
-				a.setBehaviour(new BehaviourFlocking(a, physicsWorld));
-			}
-		}
-		
 		popupManager = new PopupManager(worldCamera, mode);
-		getPopupManager().showIntro();
+		popupManager.showIntro();
 	}
 
 	private Vector2 generateRandomTile() {
@@ -388,7 +363,7 @@ public class World implements Disposable {
 	public ModelManager getModelManager() {
 		return modelManager;
 	}
-	
+
 	public PopupManager getPopupManager() {
 		return popupManager;
 	}
@@ -470,7 +445,7 @@ public class World implements Disposable {
 
 		agent.setBehaviour(behaviour);
 		if (visualise)
-			worldGraph.setCurrentSearch(agent, behaviour.getTicker());
+			worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
 		return agent;
 	}
 
@@ -485,10 +460,10 @@ public class World implements Disposable {
 	 */
 	private Agent spawnAgentWithPathFinding(Vector2 tilePos, Vector2 endNode, SearchAlgorithm algorithm, boolean visualise) {
 		Agent agent = spawnAgent(tilePos);
-		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, worldGraph, worldCamera, this);
+		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, this);
 		agent.setBehaviour(behaviour);
 		if (visualise)
-			worldGraph.setCurrentSearch(agent, behaviour.getTicker());
+			worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
 		return agent;
 	}
 
@@ -562,6 +537,47 @@ public class World implements Disposable {
 	 */
 	public void render() {
 		// remove dead entities
+		cleanseDeadEntities();
+
+		// teleport entities
+		processPendingTeleports();
+
+		// render tiled world
+		worldCamera.positionMapRenderer(renderer);
+		renderer.render();
+
+		renderGUI();
+
+		// tick entities and physics
+		engine.update(Utils.DELTA_TIME);
+
+		buildingBatch.begin(worldCamera);
+		buildings.stream()
+				.filter(building -> building.isVisible(worldCamera))
+				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
+		buildingBatch.end();
+
+		// render models
+		modelManager.render(worldCamera);
+
+		//pop-ups on nodes
+		if (mode == LEARNING) rt.render(currentNodeClickX, currentNodeClickY, worldGraph.getCurrentSearch());
+
+		//pop-ups to show current coordinate
+		coordinatePopup.render();
+
+		//render big pop-ups
+		popupManager.render();
+
+		// physics debug rendering
+		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
+			debugRenderer.render(worldCamera);
+	}
+
+	/**
+	 * Removes entities marked as dead since the last tick
+	 */
+	private void cleanseDeadEntities() {
 		deadEntities.forEach(e -> {
 
 			PhysicsComponent phys = e.getComponent(PhysicsComponent.class);
@@ -573,8 +589,12 @@ public class World implements Disposable {
 			engine.removeEntity(e);
 		});
 		deadEntities.clear();
+	}
 
-		// teleport entities
+	/**
+	 * Teleports entities who crossed the world's borders in the last frame to the other side
+	 */
+	private void processPendingTeleports() {
 		pendingTeleports.forEach(pendingTeleport -> {
 			Vector2 position = pendingTeleport.body.getPosition();
 			switch (pendingTeleport.teleportType) {
@@ -595,13 +615,14 @@ public class World implements Disposable {
 			pendingTeleport.body.setTransform(position, pendingTeleport.body.getAngle());
 		});
 		pendingTeleports.clear();
+	}
 
-		// render tiled world
-		worldCamera.positionMapRenderer(renderer);
-		renderer.render();
-
+	/**
+	 * Renders graph, building placement overlay and animations
+	 */
+	private void renderGUI() {
 		float zoomScalar = getZoomScalar();
-		
+
 		int fovNumber = mode == COMPARE ? 67 : 40; // Todo - Nish, what is this?
 		if (worldCamera.getFOV() < fovNumber) {
 			Vector2 cameraPos = getTileSize().scl(0.5f);
@@ -629,54 +650,20 @@ public class World implements Disposable {
 		}
 
 		//render add building overlay if needed
-		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)) {
+		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE) || Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)) {
+			boolean adding = Config.getBoolean(ConfigKey.ADD_BUILDING_MODE);
 			float x = currentMousePos.getX();
 			float y = currentMousePos.getY();
 
-			if (isValidBuildingPos(x, y))
+			if (adding && isValidBuildingPos(x, y))
 				shapeRenderer.setColor(Color.LIGHT_GRAY);
 			else
 				shapeRenderer.setColor(Color.FIREBRICK);
 
-			shapeRenderer.box(x, y, 0, (float) 4, (float) 4, (float) 1);
-		}
-
-		//render remove building overlay if needed
-		if (Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)) {
-			float x = currentMousePos.getX();
-			float y = currentMousePos.getY();
-
-			shapeRenderer.setColor(Color.RED);
-
-			shapeRenderer.box(x, y, 0, (float) 4, (float) 4, (float) 1);
+			shapeRenderer.box(x, y, 0, 4f, 4f, 1f);
 		}
 
 		shapeRenderer.end();
-
-		// tick entities and physics
-		engine.update(Utils.DELTA_TIME);
-
-		buildingBatch.begin(worldCamera);
-		buildings.stream()
-				.filter(building -> building.isVisible(worldCamera))
-				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
-		buildingBatch.end();
-
-		// render models
-		modelManager.render(worldCamera);
-
-		//pop-ups on nodes
-		if (mode == LEARNING) rt.render(currentNodeClickX, currentNodeClickY);
-
-		//pop-ups to show current coordinate
-		coordinatePopup.render();
-
-		//render big pop-ups
-		getPopupManager().render();
-
-		// physics debug rendering
-		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
-			debugRenderer.render(worldCamera);
 	}
 
 	public boolean isValidBuildingPos(float x, float y) {
@@ -729,6 +716,7 @@ public class World implements Disposable {
 
 	/**
 	 * Flatten buildings and models.
+	 *
 	 * @param flatten whether they should be flat or not.
 	 */
 	public void flattenBuildings(boolean flatten) {
@@ -798,7 +786,7 @@ public class World implements Disposable {
 		return compareMode;
 	}*/
 
-	public Mode getMode() {
+	public ModeType getMode() {
 		return mode;
 	}
 
@@ -859,5 +847,5 @@ public class World implements Disposable {
 	public CoordinatePopup getCoordinatePopup() {
 		return coordinatePopup;
 	}
-	
+
 }

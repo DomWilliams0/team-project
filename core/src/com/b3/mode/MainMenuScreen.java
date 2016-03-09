@@ -1,5 +1,6 @@
-package com.b3;
+package com.b3.mode;
 
+import com.b3.MainGame;
 import com.b3.gui.components.ImageButtonComponent;
 import com.b3.mode.CompareMode;
 import com.b3.mode.LearningMode;
@@ -39,7 +40,7 @@ public class MainMenuScreen implements Screen {
         this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.mainMenuStage = new Stage(new ScreenViewport());
 
-        game.inputHandler.addProcessor(mainMenuStage);
+        game.getInputHandler().addProcessor(mainMenuStage);
 
         // Compare mode button
         // --------------------

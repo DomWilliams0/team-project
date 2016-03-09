@@ -1,7 +1,7 @@
 package com.b3.gui.sidebars.tabs;
 
 import com.b3.MainGame;
-import com.b3.MainMenuScreen;
+import com.b3.mode.MainMenuScreen;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.LabelComponent;
 import com.b3.gui.components.SelectBoxComponent;
