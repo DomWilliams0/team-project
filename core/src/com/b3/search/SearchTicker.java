@@ -132,7 +132,7 @@ public class SearchTicker extends Observable {
 		renderProgress = false;
 	}
 
-	private void setAllCompleted(boolean completed) {
+	public void setAllCompleted(boolean completed) {
 
 		tickedOnce = false;
 
@@ -299,9 +299,9 @@ public class SearchTicker extends Observable {
 			currentNeighbours = null;
 			currentNeighbour = null;
 		}
-		// A*
-		// --
-		else if (algorithm == SearchAlgorithm.A_STAR) {
+		// A* and Dijkstra
+		// ---------------
+		else {
 			if (line == 4) {
 				pseudocode.highlight(6);
 				currentNeighbours = mostRecentlyExpanded.getNeighbours().stream().collect(Collectors.toList());
@@ -477,8 +477,16 @@ public class SearchTicker extends Observable {
 		setUpdated(true);
 	}
 
+	public void addToCameFrom(Node node1, Node node2) {
+		cameFrom.put(node1, node2);
+	}
+
 	public List<Node> getPath() {
 		return path;
+	}
+
+	public void generatePath(Node end) {
+		path = constructPath(cameFrom, start, end);
 	}
 
 	public boolean isPathComplete() {

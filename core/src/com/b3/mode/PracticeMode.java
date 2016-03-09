@@ -6,6 +6,7 @@ import com.b3.gui.sidebars.tabs.PracticeModeSettingsTab;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
 import com.b3.input.PracticeModeWorldSelectionHandler;
+import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -60,6 +61,7 @@ public class PracticeMode implements Screen {
         camera.setWorld(world);
         world.initEngine(camera);
 
+        world.getWorldGraph().setLearningModeNext(SearchAlgorithm.DEPTH_FIRST);
         world.getWorldGraph().getCurrentSearch().pause(1);
         world.getWorldGraph().getCurrentSearch().setUpdated(true);
 

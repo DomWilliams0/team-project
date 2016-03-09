@@ -1,7 +1,5 @@
 package com.b3.input;
 
-import com.b3.entity.ai.Behaviour;
-import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.gui.CoordinatePopup;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.gui.popup.Popup;
@@ -67,8 +65,6 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // todo selecting an entity
-
         if (Popup.justOpen) {
             Popup.shouldClose = true;
             return false;
@@ -125,6 +121,9 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
                         currentStage = Stage.ADD_TO_FRONTIER_SELECTION;
 
                         if (currentSearch.getEnd().equals(node)) {
+                            currentSearch.generatePath(node);
+                            currentSearch.setAllCompleted(true);
+
                             descriptionPopup.setText("Great! You reached the target");
                             if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
                             descriptionPopup.show();
@@ -134,6 +133,8 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
                             if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
                             descriptionPopup.show();
                         }
+
+                        currentSearch.setUpdated(true);
                     }
                     break;
 
@@ -150,6 +151,7 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
                     }
                     else {
                         currentSearch.addToFrontier(node);
+                        currentSearch.addToCameFrom(node, currentSearch.getMostRecentlyExpanded());
 
                         // Recalculate frontier to see if it's empty
                         actualFrontier = currentSearch.getMostRecentlyExpanded().getNeighbours()
@@ -168,23 +170,13 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
                                 firstTime = !firstTime;
                             }
                         }
+
+                        currentSearch.setUpdated(true);
                     }
 
                     break;
             }
         }
-
-        // no search
-        if (!worldGraph.hasSearchInProgress())
-            return false;
-
-        // add to goals
-        Behaviour behaviour = worldGraph.getCurrentSearchAgent().getBehaviour();
-        if (!(behaviour instanceof BehaviourMultiPathFind))
-            return false;
-
-        BehaviourMultiPathFind multiPathFind = (BehaviourMultiPathFind) behaviour;
-        multiPathFind.addNextGoal(node.getPoint().toVector2());
 
         return true;
     }

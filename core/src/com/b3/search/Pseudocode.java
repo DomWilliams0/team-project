@@ -42,6 +42,7 @@ public class Pseudocode extends Observable {
                 break;
 
             case A_STAR:
+            case DIJKSTRA:
                 lines = new ArrayList<Tuple<String, Tuple<Boolean, Integer>>>() {{
                     add(new Tuple<>("while frontier is not empty:",             new Tuple<>(false, 0)));
                     add(new Tuple<>("n = frontier.take()\n",                    new Tuple<>(false, 1)));
@@ -55,11 +56,6 @@ public class Pseudocode extends Observable {
                     add(new Tuple<>("if m not in visited and not in frontier:", new Tuple<>(false, 3)));
                     add(new Tuple<>("frontier.add(m)\n",                        new Tuple<>(false, 4)));
                 }};
-
-                break;
-
-            case DIJKSTRA:
-
                 break;
         }
     }

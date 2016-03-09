@@ -49,7 +49,11 @@ public class PracticeModeSettingsTab {
         // === WHAT SEARCH ALGO ===
         // ========================
 
-        Object[] searches = SearchAlgorithm.allNames().toArray(); // TODO - Not badly done with Object[].
+        Object[] searches = SearchAlgorithm
+                .allNames()
+                .stream()
+                .filter(name -> SearchAlgorithm.fromName(name) == SearchAlgorithm.DEPTH_FIRST || SearchAlgorithm.fromName(name) == SearchAlgorithm.BREADTH_FIRST)
+                .toArray(); // TODO - Not badly done with Object[].
         SelectBoxComponent searchSelectBox = new SelectBoxComponent(skin, font, new Array(searches));
         if (learningMode) searchSelectBox.setSelected(searches[1]); else searchSelectBox.setSelected(searches[0]);
 
