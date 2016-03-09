@@ -110,6 +110,7 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
             switch (currentStage) {
                 case CURRENT_NODE_SELECTION:
                     Node actualNode = frontier.peek();
+                    System.out.println(actualNode);
                     if (!actualNode.equals(node)) {
                         descriptionPopup.setText("Attention! This node is not the one to be selected for expansion.");
                         if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
@@ -123,6 +124,7 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
                         if (currentSearch.getEnd().equals(node)) {
                             currentSearch.generatePath(node);
                             currentSearch.setAllCompleted(true);
+                            currentStage = Stage.CURRENT_NODE_SELECTION;
 
                             descriptionPopup.setText("Great! You reached the target");
                             if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
