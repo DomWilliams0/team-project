@@ -25,7 +25,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  * A small scale world with step by step views and pop-ups to allow for uneducated 2nd year CS university students to learn about algorithms they should've learnt in year 1.
  * Sets up small world, camera, input handler and launches the world paused (forcing / implying step-by-step)
  */
-
 public class LearningMode extends Mode {
 	private SideBarIntensiveLearningMode sideBar;
 	private HelpBox helpBox;
@@ -61,7 +60,7 @@ public class LearningMode extends Mode {
 		sideBarStage.addActor(sideBar);
 
 
-		helpBox = new HelpBox(sideBarStage, world);
+		helpBox = new HelpBox(sideBarStage, world.getMode());
 		sideBarStage.addActor(helpBox);
 	}
 

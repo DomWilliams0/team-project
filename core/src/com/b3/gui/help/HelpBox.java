@@ -1,8 +1,13 @@
 package com.b3.gui.help;
 
 import com.b3.gui.components.ButtonComponent;
-import com.b3.world.World;
+import com.b3.mode.Mode;
+import com.b3.mode.ModeType;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
+import com.b3.util.Utils;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -19,22 +25,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class HelpBox extends Table {
 
     private Stage stage;
-    private World world;
+    private ModeType mode;
     private ButtonComponent triggerBtn;
     private boolean isOpen;
     private float preferredHeight;
+	private final String padding = "   ";
 
-    public HelpBox(Stage stage, World world) {
-        this(stage, world, 400);
+    public HelpBox(Stage stage, ModeType mode) {
+        this(stage, mode, 400);
     }
 
-    public HelpBox(Stage stage, World world, float preferredHeight) {
+    public HelpBox(Stage stage, ModeType mode, float preferredHeight) {
         this.stage = stage;
-        this.world = world;
+        this.mode = mode;
         this.isOpen = false;
         this.preferredHeight = preferredHeight;
 
         initComponents();
+		bottom();
 		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
@@ -54,20 +62,30 @@ public class HelpBox extends Table {
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
         Skin skin = new Skin(atlas);
-        BitmapFont font = new BitmapFont(Gdx.files.internal("core/assets/gui/default.fnt"),
-                Gdx.files.internal("core/assets/gui/default.png"), false);
+        BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+		Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
+		skin.add("default", style);
+
+		this.setSkin(skin);
 
 		// =================
 		// === HELP TEXT ===
 		// =================
 
-		// TODO - Implement - is this even needed anymore
+		switch(mode) {
+			case LEARNING : 	setupLM(); break;
+			case COMPARE : 		setupCM(); break;
+			case TRY_YOURSELF :	setupTY(); break;
+		}
+
+		row();
+		row();
 
 		// ==============
 		// === LEGEND ===
 		// ==============
 
-
+		add(new Legend(this.getSkin())).left();
 
         // ======================
         // === TRIGGER BUTTON ===
@@ -110,6 +128,36 @@ public class HelpBox extends Table {
 			_triggerBtn.setText("HELP");
 			_triggerBtn.setY(height - 34);
 		}
+	}
+
+	private void setupLM() {
+		add("Interacting with the world:");
+		add(padding);
+		add("Visualisation sidebar (right):");
+		add(padding);
+		add("Settings sidebar (left):");
+
+		row();
+
+		add("Click nodes to view details and highlight\nit in the Visualisation sidebar.\n" +
+				"Click again to view more details about it.\n" +
+				"Hover over a node to display its coordinates.\n" +
+				"Right click a node to set\nit as the next destination.");
+		add(padding);
+		add("Click nodes to display details over it in the world.\n" +
+				"Hover over a node to highlight it briefly in the world.\n" +
+				"You can step through the algorithm\nwith the Next Step button when paused.");
+		add(padding);
+		add("");
+
+	}
+
+	private void setupCM() {
+
+	}
+
+	private void setupTY() {
+
 	}
 
 }

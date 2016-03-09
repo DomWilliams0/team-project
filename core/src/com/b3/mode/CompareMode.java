@@ -66,5 +66,4 @@ public class CompareMode extends Mode {
 		super.resize(width, height);
 		sideBar.resize(width, height);
 	}
-
 }
