@@ -27,6 +27,8 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -105,6 +107,11 @@ public class World implements Disposable {
 
 	private boolean pseudoCodeEnabled;
 
+	private Sprite AStarTexture;
+	private Sprite DFSTexture;
+	private Sprite BFSTexture;
+
+
 	public World() {
 
 	}
@@ -162,6 +169,18 @@ public class World implements Disposable {
 
 		//GUI overlay
 		coordinatePopup = new CoordinatePopup();
+
+		Texture tempTexture = new Texture("core/assets/gui/ASTARTEXT.png");
+		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		AStarTexture = new Sprite(tempTexture);
+
+		tempTexture = new Texture("core/assets/gui/DFSTEXT.png");
+		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		DFSTexture = new Sprite(tempTexture);
+
+		tempTexture = new Texture("core/assets/gui/BFSTEXT.png");
+		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		BFSTexture = new Sprite(tempTexture);
 	}
 
 	private void processMapTileTypes(TiledMap map) {
@@ -569,9 +588,24 @@ public class World implements Disposable {
 		//render big pop-ups
 		popupManager.render();
 
+		//if compare mode load text to show what it is all about
+		if (mode == COMPARE) renderTextBelowWorld();
+
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))
 			debugRenderer.render(worldCamera);
+	}
+
+	private void renderTextBelowWorld() {
+		SpriteBatch spriteBatch = new SpriteBatch();
+		spriteBatch.setProjectionMatrix(worldCamera.combined);
+		spriteBatch.begin();
+
+		spriteBatch.draw(AStarTexture, -3, (float) -7.5, AStarTexture.getWidth() / 13, AStarTexture.getHeight() / 13);
+		spriteBatch.draw(DFSTexture, 15, (float) -7.5, AStarTexture.getWidth() / 13, AStarTexture.getHeight() / 13);
+		spriteBatch.draw(BFSTexture, 33, (float) -7.5, AStarTexture.getWidth() / 13, AStarTexture.getHeight() / 13);
+
+		spriteBatch.end();
 	}
 
 	/**

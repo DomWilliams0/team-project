@@ -30,6 +30,9 @@ enum Stage {
 
 public class PracticeModeWorldSelectionHandler extends InputAdapter {
     private static final Vector3 tempRayCast = new Vector3();
+    private boolean firstLoadAlert1;
+    private boolean firstLoadAlert2;
+
     private World world;
     private Stage currentStage;
     private Point currentSelection;
@@ -42,6 +45,8 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
         this.currentSelection = new Point(1,1);
         this.descriptionPopup = new MessageBoxComponent(popupStage, "", "OK");
         this.firstTime = true;
+        this.firstLoadAlert1 = true;
+        this.firstLoadAlert2 = true;
     }
 
     @Override
@@ -112,9 +117,14 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
                     Node actualNode = frontier.peek();
                     System.out.println(actualNode);
                     if (!actualNode.equals(node)) {
-                        descriptionPopup.setText("Attention! This node is not the one to be selected for expansion.");
-                        if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
-                        descriptionPopup.show();
+                        if (firstLoadAlert1) {
+                            descriptionPopup.setText("Attention! This node is not the one to be selected for expansion.");
+                            if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true);
+                            else descriptionPopup.transposeLeft(false);
+                            descriptionPopup.show();
+                            firstLoadAlert1 = false;
+                        }
+                        worldGraph.setRed(node.getPoint().getX(), node.getPoint().getY(), 50);
                     }
                     else {
                         frontier.take();
@@ -147,9 +157,14 @@ public class PracticeModeWorldSelectionHandler extends InputAdapter {
                             .collect(Collectors.toList());
 
                     if (!actualFrontier.contains(node)) {
-                        descriptionPopup.setText("Attention! This node can't be added to the frontier.");
-                        if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
-                        descriptionPopup.show();
+                        if (firstLoadAlert2) {
+                            descriptionPopup.setText("Attention! This node can't be added to the frontier.");
+                            if (SideBarNodes.isOpen) descriptionPopup.transposeLeft(true);
+                            else descriptionPopup.transposeLeft(false);
+                            descriptionPopup.show();
+                            firstLoadAlert2 = false;
+                        }
+                        worldGraph.setRed(node.getPoint().getX(), node.getPoint().getY(), 50);
                     }
                     else {
                         currentSearch.addToFrontier(node);

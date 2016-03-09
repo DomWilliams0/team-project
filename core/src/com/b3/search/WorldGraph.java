@@ -61,6 +61,8 @@ public class WorldGraph implements Serializable {
 	private Point currentHighlightPoint;
 	private Color currentHighlightColor;
 
+	private PointTimer setRedNode;
+
 	/**
 	 * Constructs a new world graph with the following x and y dimensions.
 	 * Graph has all successors, no missing edges nor non-default edge costs
@@ -317,8 +319,7 @@ public class WorldGraph implements Serializable {
 					.stream()
 					.forEach(this::renderZoomedOutSearch);
 			shapeRenderer.end();
-		}
-		else {
+		} else {
 			final float finalZoomScalar = zoomScalar;
 			searchTickers
 					.values()
@@ -328,6 +329,16 @@ public class WorldGraph implements Serializable {
 
 	}
 
+	private void setRenderRed(float zoomScalar) {
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+		float zoomScalarInside = (float) (zoomScalar * 2.5);
+		shapeRenderer.setColor(Color.RED);
+		renderSingleSearchNode(new Node(setRedNode.getPoint()), zoomScalarInside);
+		shapeRenderer.end();
+
+		setRedNode.decrementTimer();
+	}
+
 	/**
 	 * @param camera     The {@link Camera} to render on.
 	 * @param counter    The current step in the animation.
@@ -335,6 +346,11 @@ public class WorldGraph implements Serializable {
 	 */
 	private void renderSearchTicker(Camera camera, float counter, float zoomScalar, SearchTicker searchTicker) {
 		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
+
+		if (setRedNode != null)
+			if (!setRedNode.finishedTiming()) {
+				setRenderRed(zoomScalar);
+			}
 
 		renderPath(showPaths, searchTicker);
 
@@ -744,6 +760,10 @@ public class WorldGraph implements Serializable {
 		currentHighlightTimer = 100;
 		currentHighlightPoint = highlightingPoint;
 		currentHighlightColor = colors;
+	}
+
+	public void setRed(int x, int y, int time) {
+		setRedNode = new PointTimer(x, y, time);
 	}
 
 //	public boolean checkEveryEdge() {

@@ -18,6 +18,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public abstract class Mode extends ScreenAdapter {
 
+	private final ModeType modeType;
+
 	protected World world;
 	protected WorldCamera camera;
 
@@ -31,6 +33,8 @@ public abstract class Mode extends ScreenAdapter {
 
 		game = mainGame;
 		InputHandler inputHandler = game.getInputHandler();
+
+		this.modeType = modeType;
 
 		// load world
 		world = new World(worldPath, modeType, inputHandler);
@@ -66,12 +70,14 @@ public abstract class Mode extends ScreenAdapter {
 
 	protected void initSidebar() {
 		sideBarStage = new Stage(new ScreenViewport());
-		sideBarNodes = new SideBarNodes(sideBarStage, world);
 
-		sideBarNodes.setStepthrough(true);
-		sideBarStage.addActor(sideBarNodes);
+		if (modeType != ModeType.COMPARE) {
+			sideBarNodes = new SideBarNodes(sideBarStage, world);
+			sideBarNodes.setStepthrough(true);
+			sideBarStage.addActor(sideBarNodes);
+		}
+
 	}
-
 
 	@Override
 	public void render(float delta) {
@@ -93,15 +99,17 @@ public abstract class Mode extends ScreenAdapter {
 
 		// sidebar rendering
 		sideBarStage.act(Utils.TRUE_DELTA_TIME);
-		sideBarNodes.render();
-		if (!world.getPseudoCode()) {
-			sideBarNodes.resetPseudoCode();
-			world.setPseudoCode(true);
+		if (sideBarNodes != null) {
+			sideBarNodes.render();
+			if (!world.getPseudoCode()) {
+				sideBarNodes.resetPseudoCode();
+				world.setPseudoCode(true);
+			}
+			if (world.hasNewClick()) sideBarNodes.highlightNode(world.getCurrentClick(), true);
+			if (sideBarNodes.hasNewClick())
+				world.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
 		}
-		if (world.hasNewClick()) sideBarNodes.highlightNode(world.getCurrentClick(), true);
-		if (sideBarNodes.hasNewClick()) world.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
 		sideBarStage.draw();
-
 
 		tick(delta);
 
@@ -116,7 +124,9 @@ public abstract class Mode extends ScreenAdapter {
 		camera.update();
 
 		sideBarStage.getViewport().update(width, height, true);
-		sideBarNodes.resize(width, height);
+
+		if (sideBarNodes != null)
+			sideBarNodes.resize(width, height);
 
 		world.getCoordinatePopup().resize();
 	}

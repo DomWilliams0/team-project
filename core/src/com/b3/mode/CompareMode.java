@@ -11,6 +11,7 @@ import com.b3.search.util.SearchAlgorithm;
 import com.badlogic.gdx.math.Vector2;
 
 public class CompareMode extends Mode {
+
 	private SideBarCompareMode sideBar;
 
 	public CompareMode(MainGame game) {

@@ -179,7 +179,7 @@ public class SearchTicker extends Observable {
 			return;
 
 		if (!isPaused())
-			worldGraph.setColFlicker();
+				worldGraph.setColFlicker();
 
 		if(timer > 2*timeBetweenTicks)
 			//it has been a long time since last tick so reset it instead of decrementing it
@@ -203,6 +203,7 @@ public class SearchTicker extends Observable {
 		tickedOnce = true;
 
 		worldGraph.setColFlicker();
+
 		if(override)
 			//override current status
 			tickFinal();
