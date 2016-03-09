@@ -5,6 +5,7 @@ import com.b3.gui.TabbedPane;
 import com.b3.gui.VisNodes;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.MessageBoxComponent;
+import com.b3.input.SoundController;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -162,6 +163,7 @@ public class SideBarNodes extends SideBar implements Disposable {
                         isOpen = false;
                     }
 
+                    SoundController.playSounds(2);
                     world.getPopupManager().showPseudocodeError();
                 }
             }
