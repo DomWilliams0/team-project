@@ -31,7 +31,7 @@ import java.util.*;
  * A table which will display the frontier and visited nodes
  * in a useful way to inspect what is happening internally with the algorithm.
  *
- * Created by lewis on 08/02/16.
+ * Created by Lewis, worked on mostly by Lewis but refactored a lot by whole group.
  */
 public class VisNodes extends Table {
 
@@ -55,7 +55,7 @@ public class VisNodes extends Table {
 	 * giving instructions of how the nodes are managed.
 	 *
 	 * todo should this be short / concise, or long / descriptive?
-	 * todo
+	 * todo should this even exist any more
 	 */
 	private final String description = "How it works:\n" +
 			"Starting at the start node, its \n" +
@@ -71,6 +71,7 @@ public class VisNodes extends Table {
 			"as visited (using a hash set),\n" +
 			"to ensure we do not expand it again.";
 
+	//todo remove this since it is in the help box
 	private final String explaination =
 			"\n\nClick on a coordinate to highlight it on \n" +
 			"the world and see an explanation of it. \n";
@@ -224,9 +225,9 @@ public class VisNodes extends Table {
 		//if we need to render a data collection
 		if(rendermore) {
 			//make the arraylist be ordered based on take-order of the collection
-			//todo perhaps change what is shown for A*. Could do with describing distance (unless it is shown in tooltips??), and the nodes move more with A* so is less useful
-
 			ArrayList<Node> frontier = sortFront(front,alg);
+
+			//get the highest priority node
 			if (frontier.size() > 0)
 				highestNode = frontier.get(0);
 
@@ -271,7 +272,6 @@ public class VisNodes extends Table {
 	 * @param i The priority of the node, or -1 if not applicable.
      */
     private void addToTable(Table t, Node n, int i) {
-//		if (world.getWorldGraph().getCurrentSearch().isPaused()) {
 		//create the wrapping table
 		Table row = new Table(this.getSkin());
 		String prefix = "";
@@ -292,30 +292,29 @@ public class VisNodes extends Table {
 				clickedNodeUpdated = false;
 				return true;
 			}
-				@Override
-				public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-					//we have received an end-of-touch event
-					//ensure the scrollpanes aren't being used before saying the clicked node can be accessed
-					if (clickedNode.equals(n) && !scrollpanesBeingUsed()) clickedNodeUpdated = true;
-				}
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				//we have received an end-of-touch event
+				//ensure the scrollpanes aren't being used before saying the clicked node can be accessed
+				if (clickedNode.equals(n) && !scrollpanesBeingUsed()) clickedNodeUpdated = true;
+			}
 
-				@Override
-				public boolean mouseMoved(InputEvent event, float x, float y) {
-					world.getWorldGraph().highlightOver(n.getPoint(), getColors(n));
-					return super.mouseMoved(event, x, y);
-				}
-			});		//add the wrapping table to the overall table
+			@Override
+			public boolean mouseMoved(InputEvent event, float x, float y) {
+				//the mouse is over a node.
+				//highlight it in the world.
+				world.getWorldGraph().highlightOver(n.getPoint(), getColors(n));
+				return super.mouseMoved(event, x, y);
+			}
+		});
+
+		//add the wrapping table to the overall table
 		t.add(row);
 		t.row();
-			//store the wrapping table in the hashmap, keyed by its node
-			cellmap.put(n, row);
-			//apply the highlight colour of the node, if applicable.
-			applyColour(n);
-//			applyBackgroundColour();
-//		} else {
-//			t.add(n.toString());
-//			t.row();
-//		}
+		//store the wrapping table in the hashmap, keyed by its node
+		cellmap.put(n, row);
+		//apply the highlight colour of the node, if applicable.
+		applyColour(n);
 	}
 
 
@@ -349,13 +348,21 @@ public class VisNodes extends Table {
         //singleHighlight tells us if this is the only node to be highlighted,
         //so remove all other colours if this is true\
 		if (singleHighlight) colours.clear();
+		//default colour in case something goes very wrong
 		Color c = Color.YELLOW;
+
+		//check whether the ndde is in the tables
 		if (cellmap.get(n) != null) {
+			//it is, so check if the node is in frontier or visited.
 			if (cellmap.get(n).getParent().equals(vt)) c = WorldGraph.VISITED_COLOUR;
 			if (cellmap.get(n).getParent().equals(ft)) c = WorldGraph.FRONTIER_COLOUR;
 		}
+		
+		//check whether the node is actually a new frontier or just expanded
+		//done after table-check so that these colours take precedence.
 		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.LAST_FRONTIER_COLOUR;
 		if (justExpanded!=null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
+
 		//store the given colour
 		colours.put(n, c);
 		//apply all node colours, since we may have deleted other colours by using this method.

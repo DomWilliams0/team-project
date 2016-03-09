@@ -22,6 +22,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+/**
+ * Provides help for the user based on the mode of the simulation.
+ * Gives instructions on how the mode can be used and interacted with
+ * And a legend to explain meaning of colours.
+ *
+ * Created by Ben, worked on mostly by Lewis
+ */
 public class HelpBox extends Table {
 
     private Stage stage;
@@ -62,7 +69,8 @@ public class HelpBox extends Table {
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
         Skin skin = new Skin(atlas);
-        BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+		BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+		skin.add("default", font, BitmapFont.class);
 		Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
 		skin.add("default", style);
 
@@ -78,6 +86,7 @@ public class HelpBox extends Table {
 			case TRY_YOURSELF :	setupTY(); break;
 		}
 
+		row();
 		row();
 		row();
 
