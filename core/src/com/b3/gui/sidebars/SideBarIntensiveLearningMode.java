@@ -242,6 +242,8 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
         // === WHAT SEARCH ALGO ===
         // ========================
 
+        LabelComponent labelNextSearch = new LabelComponent(skin, "The next search will use:", Color.BLACK);
+
         Object[] searches = SearchAlgorithm.allNames().toArray(); // TODO - Not badly done with Object[].
         SelectBoxComponent searchSelectBox = new SelectBoxComponent(skin, font, new Array(searches));
         searchSelectBox.setSelected(searches[0]);
@@ -305,10 +307,15 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
                 .spaceTop(5);
         settingsTab.row();
 
+        settingsTab.add(labelNextSearch.getComponent())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(90);
+        settingsTab.row();
 
         settingsTab.add(searchSelectBox.getSelectBox())
                 .maxWidth(preferredWidth)
-                .spaceTop(100)
+                .spaceTop(10)
                 .spaceBottom(30);
         settingsTab.row();
 

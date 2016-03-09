@@ -39,6 +39,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
         instance.setSkin(skin);
         instance.font = Utils.getFont("monaco.ttf", 14);
+        instance.font.getData().markupEnabled = true;
         instance.pixmap = new Pixmap(1, 1, Pixmap.Format.RGB565);
         instance.pixmap.setColor(Color.LIME);
         instance.pixmap.fill();
@@ -53,7 +54,8 @@ public class PseudocodeVisualiser extends Table implements Observer {
         clear();
         for (Tuple<String, Tuple<Boolean, Integer>> line : pseudocode.getLines()) {
             // Set label
-            Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.font = font;
             labelStyle.background = line.getSecond().getFirst() ?
                     new TextureRegionDrawable(new TextureRegion(new Texture(pixmap))) :
                     null;
@@ -61,7 +63,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
             // Add line to table
             Label actor = new Label(line.getFirst(), labelStyle);
             add(actor).align(Align.left).padLeft(line.getSecond().getSecond() * 20);
-            row();
+            row().align(Align.left).fill();
         }
     }
 }

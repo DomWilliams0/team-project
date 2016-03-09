@@ -2,6 +2,7 @@ package com.b3.search;
 
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Tuple;
+import com.badlogic.gdx.graphics.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +31,14 @@ public class Pseudocode extends Observable {
             case BREADTH_FIRST:
             case DEPTH_FIRST:
                 lines = new ArrayList<Tuple<String, Tuple<Boolean, Integer>>>() {{
-                    add(new Tuple<>("while frontier is not empty:",                 new Tuple<>(false, 0)));
-                    add(new Tuple<>("n <- frontier.take()\n",                 new Tuple<>(false, 1)));
-                    add(new Tuple<>("visited.add(n)\n",                       new Tuple<>(false, 1)));
-                    add(new Tuple<>("if n is target:",                        new Tuple<>(false, 1)));
-                    add(new Tuple<>("return constructed path\n",                    new Tuple<>(false, 2)));
-                    add(new Tuple<>("for each node m that is adjacent to n:", new Tuple<>(false, 1)));
-                    add(new Tuple<>("if m not in visited and not in frontier:",     new Tuple<>(false, 2)));
-                    add(new Tuple<>("frontier.add(m)\n",                            new Tuple<>(false, 3)));
+                    add(new Tuple<>("while [GREEN]frontier[] is not empty:",                                        new Tuple<>(false, 0)));
+                    add(new Tuple<>("[PINK]n[] <- [GREEN]frontier[].take()\n",                                      new Tuple<>(false, 1)));
+                    add(new Tuple<>("[LIGHT_GRAY]visited[].add(n)\n",                                               new Tuple<>(false, 1)));
+                    add(new Tuple<>("if [PINK]n[] is target:",                                                      new Tuple<>(false, 1)));
+                    add(new Tuple<>("return constructed path\n",                                                    new Tuple<>(false, 2)));
+                    add(new Tuple<>("for each node [FIREBRICK]m[] that is adjacent to [PINK]n[]:",                  new Tuple<>(false, 1)));
+                    add(new Tuple<>("if [FIREBRICK]m[] not in [LIGHT_GRAY]visited[] and not in [GREEN]frontier[]:", new Tuple<>(false, 2)));
+                    add(new Tuple<>("[GREEN]frontier[].add(m)\n",                                                   new Tuple<>(false, 3)));
                 }};
                 break;
 
