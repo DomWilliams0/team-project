@@ -35,9 +35,12 @@ public class WorldSelectionHandler extends InputAdapter {
 		//TODO selecting an entity
 
 		//Close error pop-ups if need
-		if (Popup.justOpen) {
-			Popup.shouldClose = true;
-			return false;
+		for (int i = 0; i < world.getPopupManager().length(); i++) {
+			Popup popup = world.getPopupManager().getPopup(i);
+			if (popup.justOpen) {
+				popup.shouldClose = true;
+				return false;
+			}
 		}
 
 		//if near bottom of screen hitting the intensive learning mode button so ignore

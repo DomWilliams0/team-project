@@ -11,7 +11,8 @@ public class PopupManager {
 	private final Popup pseudocodeError;
 	private final Popup behaviourError;
 	private final Popup introPopup;
-	
+	private Popup popup;
+
 	public PopupManager(WorldCamera worldCamera, ModeType mode) {
 		//load error textures
 		Texture tempTexture = new Texture("core/assets/world/popups/errorBuildings.png");
@@ -62,5 +63,18 @@ public class PopupManager {
 		behaviourError.render();
 		pseudocodeError.render();
 	}
-	
+
+	public int length() {
+		return 4;
+	}
+
+	public Popup getPopup(int i) {
+		switch (i) {
+			case 0: return introPopup;
+			case 1: return buildingErrorPopup;
+			case 2: return behaviourError;
+			case 3: return pseudocodeError;
+		}
+		return null;
+	}
 }
