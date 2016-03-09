@@ -98,7 +98,7 @@ public class VisNodes extends Table {
 	 * Create a new data visualisation table
 	 *  @param stage The stage with which to render
 	 * @param skin The skin of the table and scrollpanes (background of scrollpane is removed)
-	 * @param world
+	 * @param world The world of the simulation
 	 */
 	public VisNodes(Stage stage, Skin skin, World world) {
 		super(skin);
@@ -127,12 +127,6 @@ public class VisNodes extends Table {
 		fp = new ScrollPane(ft, style);
 		fp.setFadeScrollBars(false);
 		fp.setScrollingDisabled(true, false);
-
-		//setup style of scrollpane - remove the grey background
-		//from the style generated automatically
-		// ScrollPane.ScrollPaneStyle style = fp.getStyle();
-//        style.background = null;
-//        fp.setStyle(style);
 
 		//visited table, encapsulated in a scrollpane
 		vt = new Table(getSkin());
@@ -268,7 +262,6 @@ public class VisNodes extends Table {
      */
     private void addToTable(Table t, Node n) {
 		if (world.getWorldGraph().getCurrentSearch().isPaused()) {
-			// TODO I THINK THIS IS THE CULPRIT CODE
 			//create the wrapping table
 			Table row = new Table(this.getSkin());
 			//add the node text to the wrapping table
@@ -464,6 +457,20 @@ public class VisNodes extends Table {
 
 		//we need to render the data collections
 		if(rendermore) {
+
+			//get what type the frontier is using
+			String frontierDesc = "";
+			switch(alg) {
+				case DEPTH_FIRST: frontierDesc = "LIFO (stack)"; break;
+				case BREADTH_FIRST: frontierDesc = "FIFO (queue)"; break;
+				case A_STAR: frontierDesc = "Priority Queue"; break;
+				case DIJKSTRA: frontierDesc = "Priority Queue"; break;
+			}
+			//full title;
+			String title = "Running search using " + alg.getName();
+			add(title).colspan(3);
+			row();
+
 			//row 1 - titles
 			add("Frontier");
 			add("   ");
