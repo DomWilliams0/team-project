@@ -47,6 +47,9 @@ public class VisNodes extends Table {
 	private Node clickedNode;
 	private boolean clickedNodeUpdated = false;
 
+	private TextureRegionDrawable defaultTexture;
+	private Pixmap pm;
+
 	/**
 	 * Provides a description of how the search algorithms work,
 	 * giving instructions of how the nodes are managed.
@@ -110,6 +113,11 @@ public class VisNodes extends Table {
 		formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
 		cellmap = new HashMap<>();
 		colours = new HashMap<>();
+
+		pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
+		pm.setColor(new Color(0.56f, 0.69f, 0.83f, 1));
+		pm.fill();
+		defaultTexture = new TextureRegionDrawable(new TextureRegion(new Texture(pm)));
 
 		//anchor the table to the top-left position
 		left().top();
@@ -232,11 +240,12 @@ public class VisNodes extends Table {
 			});
 
 			//populate the list tables
+			int index = 0;
 			for (Node n : frontier) {
-				addToTable(ft, n);
+				addToTable(ft, n, index++);
 			}
 			for (Node n : visitedSorted) {
-				addToTable(vt, n);
+				addToTable(vt, n, -1);
 			}
 		}
 		setupDescription();
@@ -259,27 +268,30 @@ public class VisNodes extends Table {
      * Will apply any known colour to the node immediately.
      * @param t The table to add the node to
      * @param n The node to display in the table.
+	 * @param i The priority of the node, or -1 if not applicable.
      */
-    private void addToTable(Table t, Node n) {
-		if (world.getWorldGraph().getCurrentSearch().isPaused()) {
-			//create the wrapping table
-			Table row = new Table(this.getSkin());
-			//add the node text to the wrapping table
-			//edit here if you want to use adapted string
-			row.add(n.toString());
+    private void addToTable(Table t, Node n, int i) {
+//		if (world.getWorldGraph().getCurrentSearch().isPaused()) {
+		//create the wrapping table
+		Table row = new Table(this.getSkin());
+		String prefix = "";
+		if (i>=0) prefix = ++i + ". ";
 
-			//add a touch listener to the wrapping table in order to detect a click on the given node.
-			row.addListener(new ClickListener() {
-				@Override
-				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					//we have received a start-of-touch event
-					//note the clicked node
-					clickedNode = n;
-					//don't yet say that this is ready to be accessed; the user might be scrolling the pane.
-					clickedNodeUpdated = false;
-					return true;
-				}
+		//add the node text to the wrapping table
+		//edit here if you want to use adapted string
+		row.add(prefix + n.toString());
 
+		//add a touch listener to the wrapping table in order to detect a click on the given node.
+		row.addListener(new ClickListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				//we have received a start-of-touch event
+				//note the clicked node
+				clickedNode = n;
+				//don't yet say that this is ready to be accessed; the user might be scrolling the pane.
+				clickedNodeUpdated = false;
+				return true;
+			}
 				@Override
 				public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 					//we have received an end-of-touch event
@@ -292,20 +304,18 @@ public class VisNodes extends Table {
 					world.getWorldGraph().highlightOver(n.getPoint(), getColors(n));
 					return super.mouseMoved(event, x, y);
 				}
-			});
-
-			//add the wrapping table to the overall table
-			t.add(row);
-			t.row();
+			});		//add the wrapping table to the overall table
+		t.add(row);
+		t.row();
 			//store the wrapping table in the hashmap, keyed by its node
 			cellmap.put(n, row);
 			//apply the highlight colour of the node, if applicable.
 			applyColour(n);
 //			applyBackgroundColour();
-		} else {
-			t.add(n.toString());
-			t.row();
-		}
+//		} else {
+//			t.add(n.toString());
+//			t.row();
+//		}
 	}
 
 
@@ -490,7 +500,7 @@ public class VisNodes extends Table {
 
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
-			float sh = h / 3;
+			float sh = h / 4;
 
 			//row 4 - display the scroll panes holding the collection tables
 			add(fp).fill().height(sh).maxHeight(sh);
