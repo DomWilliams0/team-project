@@ -319,7 +319,6 @@ public class WorldGraph implements Serializable {
                     .stream()
                     .forEach(this::renderZoomedOutSearch);
             shapeRenderer.end();
-
         }
         final float finalZoomScalar = zoomScalar;
         searchTickers
@@ -353,7 +352,7 @@ public class WorldGraph implements Serializable {
                 setRenderRed(zoomScalar);
             }
 
-        renderPath(showPaths, searchTicker);
+        renderPath(showPaths, searchTicker, zoomScalar);
 
         //if scaled back so much that nodes collapse in on each other, then show white lines on top
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -368,7 +367,7 @@ public class WorldGraph implements Serializable {
                 List<Node> currentNeighbours = searchTicker.getCurrentNeighbours();
 
 
-                float zoomScalarInside = zoomScalar / 5;
+                float zoomScalarInside = (zoomScalar / 5);
                 if (zoomScalarInside < 1)
                     zoomScalarInside = 1;
 
@@ -539,12 +538,12 @@ public class WorldGraph implements Serializable {
         shapeRenderer.end();
     }
 
-    private void renderPath(boolean showPaths, SearchTicker searchTicker) {
+    private void renderPath(boolean showPaths, SearchTicker searchTicker, float zoomScalar) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
 //		// render the path
         if (showPaths && searchTicker != null) {// && searchTicker.isPathComplete()) {
-            colPath.add((float) -0.025, (float) -0.025, (float) 0.025, 0);
+            colPath.add((float) -0.015, (float) 0.025, (float) 0.010, 0);
             colPath.a = 1;
 
             shapeRenderer.setColor(colPath);
@@ -554,19 +553,14 @@ public class WorldGraph implements Serializable {
                 Node pathNodeA = path.get(i);
                 Node pathNodeB = path.get(i + 1);
 
-                float size = (1 - (colPath.r)) / 7;
-                if (size < 0.025) size = (float) 0.025;
+                float size = colPath.r / 7; //(1 - (colPath.r)) / 7;
+                if (size < 0.05) size = (float) 0.05;
 
                 shapeRenderer.rectLine(
                         pathNodeA.getPoint().x, pathNodeA.getPoint().y,
                         pathNodeB.getPoint().x, pathNodeB.getPoint().y,
                         size
                 );
-
-//				shapeRenderer.line(
-//						pathNodeA.getPoint().x, pathNodeA.getPoint().y,
-//						pathNodeB.getPoint().x, pathNodeB.getPoint().y
-//				);
             }
         }
 
