@@ -32,7 +32,7 @@ public class MessageBoxComponent {
         // Get atlas, skin and font
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
         Skin skin = new Skin(atlas);
-        BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+        BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 20);
 
         // Setup styles
         Window.WindowStyle windowStyle = new Window.WindowStyle(font, Color.BLACK, skin.getDrawable("window_03"));
