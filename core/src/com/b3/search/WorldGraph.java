@@ -333,7 +333,7 @@ public class WorldGraph implements Serializable {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 		float zoomScalarInside = (float) (zoomScalar * 2.5);
 		shapeRenderer.setColor(Color.RED);
-		renderSingleSearchNode(new Node(setRedNode.getPoint()), zoomScalarInside);
+		renderSingleSearchNode(Color.RED, new Node(setRedNode.getPoint()), zoomScalarInside);
 		shapeRenderer.end();
 
 		setRedNode.decrementTimer();
@@ -347,6 +347,7 @@ public class WorldGraph implements Serializable {
 	private void renderSearchTicker(Camera camera, float counter, float zoomScalar, SearchTicker searchTicker) {
 		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
 
+		//red node for wrong node clicked in practice mode
 		if (setRedNode != null)
 			if (!setRedNode.finishedTiming()) {
 				setRenderRed(zoomScalar);
@@ -386,7 +387,7 @@ public class WorldGraph implements Serializable {
 				//just expanded
 				if (justExpanded != null) {
 					shapeRenderer.setColor(JUST_EXPANDED_COLOUR);
-					renderSingleSearchNode(justExpanded, zoomScalarInside);
+					renderSingleSearchNode(JUST_EXPANDED_COLOUR, justExpanded, zoomScalarInside);
 				}
 
 				// current neighbours
@@ -396,7 +397,7 @@ public class WorldGraph implements Serializable {
 				// current neighbour (to be analysed)
 				Node currentNeighbour = searchTicker.getCurrentNeighbour();
 				if (searchTicker.isInspectingSearch() && currentNeighbour != null)
-					renderSingleSearchNode(currentNeighbour, zoomScalarInside);
+					renderSingleSearchNode(CURRENT_NEIGHBOURS_COLOUR, currentNeighbour, zoomScalarInside);
 			}
 
 
@@ -439,17 +440,26 @@ public class WorldGraph implements Serializable {
 				.stream()
 				.map(pointNode -> new Vector2(pointNode.getPoint().x, pointNode.getPoint().y))
 				.collect(Collectors.toList());
-
+ 
 		world.spawnAgentWithPath(points.get(0), points);
 	}
 
 	private void renderSearchNodes(Color colour, Collection<Node> nodes, float zoomScalarInside) {
 		shapeRenderer.setColor(colour);
 		nodes.stream()
-				.forEach(n -> renderSingleSearchNode(n, zoomScalarInside));
+				.forEach(n -> renderSingleSearchNode(colour, n, zoomScalarInside));
 	}
 
-	private void renderSingleSearchNode(Node node, float zoomScalarInside) {
+	private void renderSingleSearchNode(Color color, Node node, float zoomScalarInside) {
+		shapeRenderer.setColor(Color.BLACK);
+		shapeRenderer.circle(
+				node.getPoint().getX(),
+				node.getPoint().getY(),
+				(float) ((NODE_RADIUS * zoomScalarInside) + 0.1),
+				NODE_EDGES
+		);
+
+		shapeRenderer.setColor(color);
 		shapeRenderer.circle(
 				node.getPoint().getX(),
 				node.getPoint().getY(),
