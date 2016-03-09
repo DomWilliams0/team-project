@@ -37,6 +37,9 @@ public class HelpBox extends Table {
     private boolean isOpen;
     private float preferredHeight;
 	private final String padding = "   ";
+	private Table worldT;
+	private Table worldNodesT;
+	private Table sidebarsT;
 
     public HelpBox(Stage stage, ModeType mode) {
         this(stage, mode, 400);
@@ -86,6 +89,8 @@ public class HelpBox extends Table {
 			case TRY_YOURSELF :	setupTY(); break;
 		}
 
+		fillThis();
+
 		row();
 
         // ======================
@@ -105,7 +110,19 @@ public class HelpBox extends Table {
         this.stage.addActor(triggerBtn.getComponent());
     }
 
-    /**
+	private void fillThis() {
+		add(sidebarsT);
+		add(padding);
+		add(worldNodesT);
+
+		row();
+
+		add(new Legend(getSkin())).left();
+		add(padding);
+		add(worldT);
+	}
+
+	/**
      * Resize this menu
      * Should be called whenever the window is resized.
      *
@@ -138,27 +155,27 @@ public class HelpBox extends Table {
 
 		row();
 
-		Table world = new Table(getSkin());
-		world.add("Interacting with the world:");
-		world.row();
-		world.add("Move around the world using the arrow keys.\n" +
+		worldT = new Table(getSkin());
+		worldT.add("Interacting with the world:");
+		worldT.row().row();
+		worldT.add("Move around the world using the arrow keys.\n" +
 				"Zoom in and out using the mouse wheel or +,-\n" +
 				"Zoom out far to enter a modified, more focused view.\n" +
 				"Open left sidebar for settings,\n" +
 				"Open right sidebar for visualisation.");
 
-		Table worldNodes = new Table(getSkin());
-		worldNodes.add("Interacting with the world nodes:");
-		worldNodes.row();
-		worldNodes.add("Click nodes to view details and highlight\nit in the Visualisation sidebar.\n" +
+		worldNodesT = new Table(getSkin());
+		worldNodesT.add("Interacting with the world nodes:");
+		worldNodesT.row().row();
+		worldNodesT.add("Click nodes to view details and highlight\nit in the Visualisation sidebar.\n" +
 				"Click again to view more details about it.\n" +
 				"Hover over a node to display its coordinates.\n" +
 				"Right click a node to set\nit as the next destination.");
 
-		Table sidebars = new Table (getSkin());
-		sidebars.add("The sidebars:");
-		sidebars.row();
-		sidebars.add("In the visualisation sidebar (right),\n" +
+		sidebarsT = new Table (getSkin());
+		sidebarsT.add("The sidebars:");
+		sidebarsT.row().row();
+		sidebarsT.add("In the visualisation sidebar (right),\n" +
 						"Click nodes to display details over it in the world.\n" +
 						"Hover over a node to highlight it briefly in the world.\n" +
 						"Press Next Step to stepthrough the algorithm while paused.\n" +
@@ -166,22 +183,67 @@ public class HelpBox extends Table {
 						"such as simulation speed and search speed.\n" +
 						"You can also play/pause the search here.");
 
-		add(sidebars);
-		add(padding);
-		add(worldNodes);
-
-		row();
-
-		add(new Legend(getSkin())).left();
-		add(padding);
-		add(world);
 	}
 
 	private void setupCM() {
+		//todo part of this is incorrect ie interacting with world nodes
+		//todo not to worry atm though since help box inactive in this mode currently
+		add("This mode is to compare algorithms side-by-side in a large, lively world.").colspan(5);
 
+		row();
+
+		worldT = new Table(getSkin());
+		worldT.add("Interacting with the world:");
+		worldT.row().row();
+		worldT.add("Move around the world using the arrow keys.\n" +
+				"Zoom in and out using the mouse wheel or +,-\n" +
+				"Zoom out far to enter a modified, more focused view.\n" +
+				"Open left sidebar for settings");
+
+		worldNodesT = new Table(getSkin());
+		worldNodesT.add("Interacting with the world nodes:");
+		worldNodesT.row().row();
+		worldNodesT.add("Click a node to view details about it.\n" +
+				"Click again to view more details about it.\n" +
+				"Hover over a node to display its coordinates.\n" +
+				"Right click a node to set\nit as the next destination.");
+
+		sidebarsT = new Table (getSkin());
+		sidebarsT.add("The sidebar:");
+		sidebarsT.row().row();
+		sidebarsT.add("In the sidebar, you can edit settings\n" +
+				"such as simulation speed and search speed.\n" +
+				"You can also play/pause the search here.");
 	}
 
 	private void setupTY() {
+		//todo part of this is incorrect ie interacting with world nodes
+		//todo not to worry atm though since help box inactive in this mode currently
+		add("This mode is to practice your knowledge in a small, focused world").colspan(5);
+
+		row();
+
+		worldT = new Table(getSkin());
+		worldT.add("Interacting with the world:");
+		worldT.row().row();
+		worldT.add("Move around the world using the arrow keys.\n" +
+				"Zoom in and out using the mouse wheel or +,-\n" +
+				"Zoom out far to enter a modified, more focused view.\n" +
+				"Open left sidebar for settings");
+
+		worldNodesT = new Table(getSkin());
+		worldNodesT.add("Interacting with the world nodes:");
+		worldNodesT.row().row();
+		worldNodesT.add("Click a node to expand it,\nor add it to the frontier.\n" +
+				"Hover over a node to display its coordinates.\n" +
+				"Right click a node to set\nit as the next destination.");
+
+		sidebarsT = new Table (getSkin());
+//		sidebarsT.add("The sidebar:");
+//		sidebarsT.row().row();
+//		sidebarsT.add("In the sidebar, you can edit settings\n" +
+//				"such as simulation speed and search speed.\n" +
+//				"You can also play/pause the search here.");
 
 	}
 
