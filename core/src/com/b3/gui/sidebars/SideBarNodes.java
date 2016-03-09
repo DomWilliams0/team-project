@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * Provides a table to display the frontier and visited nodes
  * As part of the gui.
  *
- * Created by lewis on 15/02/16.
+ * Created by Lewis adapted from Ossama's code, worked on mostly by Lewis but added to and converted to SideBar by whole group.
  */
 public class SideBarNodes extends SideBar implements Disposable {
 

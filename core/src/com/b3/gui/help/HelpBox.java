@@ -49,7 +49,7 @@ public class HelpBox extends Table {
         this.preferredHeight = preferredHeight;
 
         initComponents();
-		bottom();
+
 		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
@@ -76,9 +76,9 @@ public class HelpBox extends Table {
 
 		this.setSkin(skin);
 
-		// =================
-		// === HELP TEXT ===
-		// =================
+		// ==========================
+		// === HELP TEXT & LEGEND ===
+		// ==========================
 
 		switch(mode) {
 			case LEARNING : 	setupLM(); break;
@@ -87,14 +87,6 @@ public class HelpBox extends Table {
 		}
 
 		row();
-		row();
-		row();
-
-		// ==============
-		// === LEGEND ===
-		// ==============
-
-		add(new Legend(this.getSkin())).left();
 
         // ======================
         // === TRIGGER BUTTON ===
@@ -140,25 +132,49 @@ public class HelpBox extends Table {
 	}
 
 	private void setupLM() {
-		add("Interacting with the world:");
-		add(padding);
-		add("Visualisation sidebar (right):");
-		add(padding);
-		add("Settings sidebar (left):");
+		//todo this could probably be improved design-wise...
+
+		add("This mode is to learn about a specific search algorithm in depth, in a small focused world.").colspan(5);
 
 		row();
 
-		add("Click nodes to view details and highlight\nit in the Visualisation sidebar.\n" +
+		Table world = new Table(getSkin());
+		world.add("Interacting with the world:");
+		world.row();
+		world.add("Move around the world using the arrow keys.\n" +
+				"Zoom in and out using the mouse wheel or +,-\n" +
+				"Zoom out far to enter a modified, more focused view.\n" +
+				"Open left sidebar for settings,\n" +
+				"Open right sidebar for visualisation.");
+
+		Table worldNodes = new Table(getSkin());
+		worldNodes.add("Interacting with the world nodes:");
+		worldNodes.row();
+		worldNodes.add("Click nodes to view details and highlight\nit in the Visualisation sidebar.\n" +
 				"Click again to view more details about it.\n" +
 				"Hover over a node to display its coordinates.\n" +
 				"Right click a node to set\nit as the next destination.");
-		add(padding);
-		add("Click nodes to display details over it in the world.\n" +
-				"Hover over a node to highlight it briefly in the world.\n" +
-				"You can step through the algorithm\nwith the Next Step button when paused.");
-		add(padding);
-		add("");
 
+		Table sidebars = new Table (getSkin());
+		sidebars.add("The sidebars:");
+		sidebars.row();
+		sidebars.add("In the visualisation sidebar (right),\n" +
+						"Click nodes to display details over it in the world.\n" +
+						"Hover over a node to highlight it briefly in the world.\n" +
+						"Press Next Step to stepthrough the algorithm while paused.\n" +
+						"The settings sidebar (left) allows you to edit settings\n" +
+						"such as simulation speed and search speed.\n" +
+						"You can also play/pause the search here.");
+
+		add(sidebars);
+		add(padding);
+		add(worldNodes);
+
+		row();
+
+		add(new Legend(getSkin())).left();
+		add(padding);
+		add(world);
 	}
 
 	private void setupCM() {
