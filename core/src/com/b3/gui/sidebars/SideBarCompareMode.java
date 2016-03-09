@@ -175,7 +175,7 @@ public class SideBarCompareMode extends SideBar implements Disposable {
                 (flatBuildings) -> world.flattenBuildings(flatBuildings));
 
         // Render static models checkbox
-        createCheckbox(skin, font, settingsTab, "Render static models", ConfigKey.RENDER_STATIC_MODELS,
+        createCheckbox(skin, font, settingsTab, "Static 3D objects", ConfigKey.RENDER_STATIC_MODELS,
                 (visible) -> world.getModelManager().setStaticsVisible(visible));
 
         // im removing this toggle for now, as it requires a complex design decision
@@ -202,7 +202,7 @@ public class SideBarCompareMode extends SideBar implements Disposable {
 //        settingsTab.row();
 
         // Agent model rendering toggle
-        createCheckbox(skin, font, settingsTab, "Render agent models", ConfigKey.RENDER_AGENT_MODELS);
+        createCheckbox(skin, font, settingsTab, "3D agents", ConfigKey.RENDER_AGENT_MODELS);
 
         // Show paths checkbox
         createCheckbox(skin, font, settingsTab, "Show paths", ConfigKey.SHOW_PATHS);
