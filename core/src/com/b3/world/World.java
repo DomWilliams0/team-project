@@ -828,7 +828,7 @@ public class World implements Disposable {
 		return inputHandler;
 	}
 
-	public RenderTester getrt() {
+	public RenderTester getRenderTester() {
 		return rt;
 	}
 
