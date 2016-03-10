@@ -9,7 +9,6 @@ import com.b3.search.util.takeable.Takeable;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
-import com.sun.istack.internal.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -571,7 +570,6 @@ public class SearchTicker extends Observable {
 	 * @return The {@link Node} that the search has just expanded.
 	 *         May be <code>null</code>!
 	 */
-	@Nullable
 	public Node getMostRecentlyExpanded() {
 		return mostRecentlyExpanded;
 	}
@@ -580,7 +578,6 @@ public class SearchTicker extends Observable {
 	 * @return The neighbours of the most recently expanded {@link Node} of the search.
 	 *         May be <code>null</code>!
 	 */
-	@Nullable
 	public List<Node> getCurrentNeighbours() {
 		return currentNeighbours;
 	}
@@ -589,7 +586,6 @@ public class SearchTicker extends Observable {
 	 * @return The neighbour of the most recently expanded {@link Node} that is currently being evaluated.
 	 *         May be <code>null</code>!
 	 */
-	@Nullable
 	public Node getCurrentNeighbour() {
 		return currentNeighbour;
 	}
