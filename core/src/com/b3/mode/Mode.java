@@ -3,6 +3,7 @@ import com.b3.MainGame;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
+import com.b3.search.Point;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public abstract class Mode extends ScreenAdapter {
 
 	private final ModeType modeType;
+	private Point currentSelection;
 
 	protected World world;
 	protected WorldCamera camera;
@@ -59,6 +61,8 @@ public abstract class Mode extends ScreenAdapter {
 		inputHandler.addProcessor(keyboardController);
 		inputHandler.addProcessor(sideBarStage);
 		registerFurtherInputProcessors(inputHandler);
+
+		this.currentSelection = new Point(0,0);
 	}
 
 	protected abstract void registerFurtherInputProcessors(InputHandler inputHandler);
@@ -105,8 +109,25 @@ public abstract class Mode extends ScreenAdapter {
 				world.setPseudoCode(true);
 			}
 			if (world.hasNewClick()) sideBarNodes.highlightNode(world.getCurrentClick(), true);
-			if (sideBarNodes.hasNewClick())
+			if (sideBarNodes.hasNewClick()) {
 				world.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
+				//check if need to change page
+				// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
+				if (currentSelection.x == sideBarNodes.getNewClick().getX() && currentSelection.y == sideBarNodes.getNewClick().getY()) {
+					//old node so change page number
+					if (world.getrt().getPopupShowing())
+						//if popup showing
+						world.getrt().resetCounterAnimation();
+					world.getrt().flipPageRight();
+				} else {
+					//new node so reset page number
+					if (world.getrt().getPopupShowing())
+						//if popup showing
+						world.getrt().resetPage();
+				}
+
+				currentSelection = new Point(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
+			}
 		}
 		sideBarStage.draw();
 
