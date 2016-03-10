@@ -120,7 +120,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 
             // Inspect search button (start/stop)
             // ----------------------------------
-            inspectSearchBtn = new ButtonComponent(skin, font, "Activate");
+            inspectSearchBtn = new ButtonComponent(skin, font, "Begin");
             inspectSearchBtn.setData(false);
             inspectSearchBtn.addListener(new ChangeListener() {
                 @Override
@@ -291,12 +291,14 @@ public class SideBarNodes extends SideBar implements Disposable {
     public void resetPseudoCode() {
 
         SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-            ticker.setInspectSearch(false);
-            //ticker.resume(1);
+        ticker.setInspectSearch(false);
+        //ticker.resume(1);
 
+        if (world.getMode() == ModeType.LEARNING) {
             manualAutoBtn.getComponent().setVisible(false);
             inspectSearchBtn.setData(false);
-            inspectSearchBtn.setText("Activate");
+            inspectSearchBtn.setText("Begin");
+        }
     }
 
     /**

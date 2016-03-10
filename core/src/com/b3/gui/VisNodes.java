@@ -87,13 +87,13 @@ public class VisNodes extends Table {
 	private String newFrontierStr = "<NOTHING>";
 	private String highestNodeStr = "<NOTHING>";
 
-	private final String expandedNode = "[BLACK]I have just expanded the node:\n" +
+	private final String expandedNode = "I have just expanded the node:\n" +
 			"[PINK]%s[], which is now\n" +
 			"added to the visited set.\n";
 	private final String addedToFrontier = "I have added the following\n" +
 			"nodes to the frontier:\n" +
-			"[GREEN]%s[]\n";
-	private final String nextNode = "[BLACK]My next node to expand is\n"+
+			"%s\n";
+	private final String nextNode = "My next node to expand is\n"+
 			"%s";
 
 	private StringBuilder stepString;
@@ -552,7 +552,7 @@ public class VisNodes extends Table {
 							nextNode,
 					newVisitedStr, newFrontierStr, highestNodeStr);
 
-			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, stepString + explaination, true);
+			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, stepString + explaination, Color.BLACK);
 			add(lbl.getComponent()).colspan(3).spaceTop(15);
 		} else {
 			//final row - describe the algorithm in words

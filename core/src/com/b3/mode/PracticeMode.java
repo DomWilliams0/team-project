@@ -37,9 +37,11 @@ public class PracticeMode extends Mode {
 		// create world
 		super(ModeType.TRY_YOURSELF, game, "core/assets/world/world_smaller_test_tiym.tmx", 26f);
 
-        world.getWorldGraph().setLearningModeNext(SearchAlgorithm.DEPTH_FIRST);
-		world.getWorldGraph().getCurrentSearch().pause(1);
-		world.getWorldGraph().getCurrentSearch().setUpdated(true);
+		world.setPseudoCode(false);
+		WorldGraph worldGraph = world.getWorldGraph();
+		worldGraph.setLearningModeNext(SearchAlgorithm.DEPTH_FIRST);
+		worldGraph.getCurrentSearch().pause(1);
+		worldGraph.getCurrentSearch().setUpdated(true);
 
 		// Display first popup
 //        MessageBoxComponent descriptionPopup = new MessageBoxComponent(popupStage,

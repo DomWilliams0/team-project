@@ -1,5 +1,6 @@
 package com.b3.gui;
 
+import com.b3.gui.components.LabelComponent;
 import com.b3.search.Pseudocode;
 import com.b3.util.Tuple;
 import com.b3.util.Utils;
@@ -27,13 +28,14 @@ public class PseudocodeVisualiser extends Table implements Observer {
     private PseudocodeVisualiser() {
 
         // Add title label
-        BitmapFont font = Utils.getFont("aller/Aller_Bd.ttf", 18);
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = font;
-        labelStyle.fontColor = Color.BLACK;
-        Label titleLbl = new Label("Click on 'Activate' to visualise the pseudocode\nwhile the search is running", labelStyle);
+        LabelComponent titleLbl = new LabelComponent("aller/Aller_Bd.ttf", 18, getDescription(), Color.BLACK);
+        add(titleLbl.getComponent()).spaceBottom(50);
+    }
 
-        add(titleLbl).spaceBottom(50);
+    private String getDescription() {
+        return "Click on 'Begin' to visualise the pseudocode.\n" +
+                "Lines will be highlighted at each tick\n" +
+                "according to the algorithm";
     }
 
     public static PseudocodeVisualiser getInstance() {

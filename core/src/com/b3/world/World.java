@@ -91,7 +91,7 @@ public class World implements Disposable {
 	private double pos = 1;
 
 	private ModeType mode;
-	//private boolean compareMode;
+
 	//current node user has clicked on
 	private int currentNodeClickX;
 	private int currentNodeClickY;
@@ -117,7 +117,7 @@ public class World implements Disposable {
 	}
 
 	public World(String fileName, ModeType mode, InputHandler inputHandler) {
-		pseudoCodeEnabled = true;
+		pseudoCodeEnabled = mode == LEARNING;
 
 		this.inputHandler = inputHandler;
 		this.mode = mode;
