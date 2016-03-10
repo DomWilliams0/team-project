@@ -38,7 +38,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
         }
 
         instance.setSkin(skin);
-        instance.font = Utils.getFont("monaco.ttf", 14);
+        instance.font = Utils.getFont("monaco.ttf", 15);
         instance.font.getData().markupEnabled = true;
         instance.pixmap = new Pixmap(1, 1, Pixmap.Format.RGB565);
         instance.pixmap.setColor(Color.LIME);

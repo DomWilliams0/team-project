@@ -396,7 +396,7 @@ public class WorldGraph implements Serializable {
                 // current neighbour (to be analysed)
                 Node currentNeighbour = searchTicker.getCurrentNeighbour();
                 if (searchTicker.isInspectingSearch() && currentNeighbour != null)
-                    renderSingleSearchNode(CURRENT_NEIGHBOURS_COLOUR, currentNeighbour, zoomScalarInside);
+                    renderSingleSearchNode(CURRENT_NEIGHBOUR_COLOUR, currentNeighbour, zoomScalarInside);
             }
 
 

@@ -62,7 +62,7 @@ public class SideBarNodes extends SideBar implements Disposable {
      * @param stage The stage on which to act and draw.
      */
     public SideBarNodes(Stage stage, World world) {
-        this(stage, world, 420, new ArrayList<>());
+        this(stage, world, 460, new ArrayList<>());
 
         if (world.getMode() == ModeType.LEARNING) {
             // Add default pseudocode
