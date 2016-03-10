@@ -135,14 +135,14 @@ public class SideBarNodes extends SideBar implements Disposable {
 
                         manualAutoBtn.getComponent().setVisible(!currentlyStarted);
                         inspectSearchBtn.setData(!currentlyStarted);
-                        inspectSearchBtn.setText(currentlyStarted ? "Activate" : "Stop");
+                        inspectSearchBtn.setText(currentlyStarted ? "Begin" : "Stop");
 
                         // Clear pseudocode information
                         if (currentlyStarted) {
-                            pseudocodeVisualiser.clear();
                             nextBtn.getComponent().setVisible(false);
                             manualAutoBtn.setData(true);
                             manualAutoBtn.setText("Manual inspect");
+                            world.setPseudoCode(false);
                             ticker.clearPseudocodeInfo();
                         }
                     } else {

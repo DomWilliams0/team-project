@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -24,18 +25,50 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
     private BitmapFont font;
     private Pixmap pixmap;
+    private Table descriptionTable;
+    private Table pseudocodeTable;
 
     private PseudocodeVisualiser() {
+        font = Utils.getFont("monaco.ttf", 15);
+        font.getData().markupEnabled = true;
+        pixmap = new Pixmap(1, 1, Pixmap.Format.RGB565);
+        pixmap.setColor(0.35f, 0.35f, 0.35f, 0.8f);
+        pixmap.fill();
 
-        // Add title label
-        LabelComponent titleLbl = new LabelComponent("aller/Aller_Bd.ttf", 18, getDescription(), Color.BLACK);
-        add(titleLbl.getComponent()).spaceBottom(50);
+        descriptionTable = new Table();
+        pseudocodeTable = new Table();
+        PseudocodeVisualiser.setBackgroundColor(pseudocodeTable, 0.2f, 0.2f, 0.2f, 0.6f);
+
+        // Add description labels
+        LabelComponent descLbl1 = new LabelComponent("aller/Aller_Bd.ttf", 18, getDescription(0), Color.BLACK);
+        descriptionTable.add(descLbl1.getComponent());
+        descriptionTable.row();
+
+        LabelComponent descLbl2 = new LabelComponent("aller/Aller_Bd.ttf", 18, getDescription(1), Color.BLACK);
+        descriptionTable.add(descLbl2.getComponent()).padTop(15);
+
+        add(descriptionTable);
+        row();
+        add(pseudocodeTable).padTop(60);
     }
 
-    private String getDescription() {
-        return "Click on 'Begin' to visualise the pseudocode.\n" +
-                "Lines will be highlighted at each tick\n" +
-                "according to the algorithm";
+    private static void setBackgroundColor(Table table, float r, float g, float b, float a) {
+        Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
+        pm1.setColor(r, g, b, a);
+        pm1.fill();
+        table.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
+    }
+
+    private String getDescription(int index) {
+        ArrayList<String> desc = new ArrayList<String>() {{
+            add("Click on 'Begin' to visualise the pseudocode.\n" +
+                    "Lines will be highlighted at each tick\n" +
+                    "according to the algorithm.");
+
+            add("Click on 'Manual inspect' to\nmanually control the search.");
+        }};
+
+        return desc.get(index);
     }
 
     public static PseudocodeVisualiser getInstance() {
@@ -50,12 +83,6 @@ public class PseudocodeVisualiser extends Table implements Observer {
         }
 
         instance.setSkin(skin);
-        instance.font = Utils.getFont("monaco.ttf", 15);
-        instance.font.getData().markupEnabled = true;
-        instance.pixmap = new Pixmap(1, 1, Pixmap.Format.RGB565);
-        instance.pixmap.setColor(Color.LIME);
-        instance.pixmap.fill();
-
         return instance;
     }
 
@@ -63,7 +90,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
     public void update(Observable o, Object arg) {
         Pseudocode pseudocode = (Pseudocode)o;
 
-        clear();
+        pseudocodeTable.clear();
         for (Tuple<String, Tuple<Boolean, Integer>> line : pseudocode.getLines()) {
             // Set label
             Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -74,8 +101,8 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
             // Add line to table
             Label label = new Label(line.getFirst(), labelStyle);
-            add(label).align(Align.left).padLeft(line.getSecond().getSecond() * 20);
-            row().align(Align.left).fill();
+            pseudocodeTable.add(label).align(Align.left).padLeft(line.getSecond().getSecond() * 20);
+            pseudocodeTable.row().align(Align.left).fill();
         }
     }
 }

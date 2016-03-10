@@ -81,6 +81,7 @@ public class SearchTicker extends Observable {
 
 		pseudocode = new Pseudocode(algorithm);
 		pseudocode.addObserver(PseudocodeVisualiser.getInstance());
+		pseudocode.highlight(0);
 
 		SearchParameters parameters = new SearchParameters(algorithm);
 		Function2<Node, Node, Float> heuristic = parameters.getHeuristic();
