@@ -1,6 +1,8 @@
 package com.b3.gui.components;
 
+import com.b3.util.Utils;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,6 +19,25 @@ public class LabelComponent {
         Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("default"), color);
         skin.add("default", labelStyle);
 
+        label = new Label(text, labelStyle);
+    }
+
+    public LabelComponent(String fontLocation, int fontSize, String text, Color color) {
+        BitmapFont font = Utils.getFont(fontLocation, fontSize);
+        font.getData().markupEnabled = true;
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        labelStyle.fontColor = color;
+        label = new Label(text, labelStyle);
+    }
+
+    public LabelComponent(String fontLocation, int fontSize, String text, boolean markupEnabled) {
+        BitmapFont font = Utils.getFont(fontLocation, fontSize);
+        font.getData().markupEnabled = markupEnabled;
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
         label = new Label(text, labelStyle);
     }
 

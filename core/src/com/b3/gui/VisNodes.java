@@ -1,5 +1,6 @@
 package com.b3.gui;
 
+import com.b3.gui.components.LabelComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -86,13 +87,13 @@ public class VisNodes extends Table {
 	private String newFrontierStr = "<NOTHING>";
 	private String highestNodeStr = "<NOTHING>";
 
-	private final String expandedNode = "I have just expanded the node:\n" +
-			"%s, which is now\n" +
+	private final String expandedNode = "[BLACK]I have just expanded the node:\n" +
+			"[PINK]%s[], which is now\n" +
 			"added to the visited set.\n";
 	private final String addedToFrontier = "I have added the following\n" +
 			"nodes to the frontier:\n" +
-			"%s\n";
-	private final String nextNode = "My next node to expand is\n"+
+			"[GREEN]%s[]\n";
+	private final String nextNode = "[BLACK]My next node to expand is\n"+
 			"%s";
 
 	private StringBuilder stepString;
@@ -309,8 +310,8 @@ public class VisNodes extends Table {
 		});
 
 		//add the wrapping table to the overall table
-		t.add(row);
-		t.row();
+		t.add(row).width(120);
+		t.row().spaceBottom(1);
 		//store the wrapping table in the hashmap, keyed by its node
 		cellmap.put(n, row);
 		//apply the highlight colour of the node, if applicable.
@@ -484,15 +485,17 @@ public class VisNodes extends Table {
 				case DIJKSTRA: frontierDesc = "Priority Queue"; break;
 			}
 			//full title;
-			String title = "Running search using " + alg.getName();
-			add(title).colspan(3);
+			LabelComponent titleLbl = new LabelComponent("aller/Aller_Bd.ttf", 18, "Running search using " + alg.getName(), Color.BLACK);
+			add(titleLbl.getComponent()).colspan(3).spaceBottom(25);
 			row();
 
 			//row 1 - titles
-			add("Frontier");
+			LabelComponent frontierLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "Frontier" + alg.getName(), Color.BLACK);
+			LabelComponent visitedLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "Visited nodes", Color.BLACK);
+			add(frontierLbl.getComponent());
 			add("   ");
-			add("Visited nodes");
-			row();
+			add(visitedLbl.getComponent());
+			row().padBottom(25);
 
 			//row 2 - description of data collections
 			add(alg.getFrontierDescription());
@@ -500,7 +503,8 @@ public class VisNodes extends Table {
 			add("Using Hash Set");
 			row();
 			//row 3 - note that highest frontier node is highest priority
-			add("--Highest Priority--");
+			LabelComponent highestPriorityLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "Highest Priority\n--------------------", Color.BLACK);
+			add(highestPriorityLbl.getComponent());
 			add("   ");
 			add("");
 			row();
@@ -516,8 +520,11 @@ public class VisNodes extends Table {
 			row();
 
 			//row 5 - note that lowest frontier node is lowest priority
-			add("--Lowest Priority--");
+			LabelComponent lowestPriorityLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "--------------------\nLowest Priority", Color.BLACK);
+			add(lowestPriorityLbl.getComponent());
 			add("");
+			row();
+			add("_________________________________________").colspan(3).padTop(10);
 			row();
 
 		} else {
@@ -536,7 +543,7 @@ public class VisNodes extends Table {
 	 * or a generic description.
 	 */
 	private void setupDescription() {
-		if(stepthrough) {
+		if (stepthrough) {
 			convertNodeReps();
 			stepString = new StringBuilder();
 			formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
@@ -544,10 +551,13 @@ public class VisNodes extends Table {
 							addedToFrontier + "\n" +
 							nextNode,
 					newVisitedStr, newFrontierStr, highestNodeStr);
-			add(stepString + explaination).colspan(3);
+
+			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, stepString + explaination, true);
+			add(lbl.getComponent()).colspan(3).spaceTop(15);
 		} else {
 			//final row - describe the algorithm in words
-			add(description).colspan(3);
+			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, description, Color.BLACK);
+			add(lbl.getComponent()).colspan(3).spaceTop(15);
 		}
 	}
 

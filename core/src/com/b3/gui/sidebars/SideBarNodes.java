@@ -129,9 +129,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 
                     SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
 
-                    if (ticker.getAlgorithm() == SearchAlgorithm.DIJKSTRA) {
-                        MessageBoxComponent.show("Dijkstra not yet implemented", "Warning");
-                    } else if (ticker.isTickedOnce()) {
+                    if (ticker.isTickedOnce()) {
                         ticker.setInspectSearch(!currentlyStarted);
                         ticker.resume(1);
 
@@ -141,6 +139,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 
                         // Clear pseudocode information
                         if (currentlyStarted) {
+                            pseudocodeVisualiser.clear();
                             nextBtn.getComponent().setVisible(false);
                             manualAutoBtn.setData(true);
                             manualAutoBtn.setText("Manual inspect");

@@ -24,7 +24,17 @@ public class PseudocodeVisualiser extends Table implements Observer {
     private BitmapFont font;
     private Pixmap pixmap;
 
-    private PseudocodeVisualiser() {}
+    private PseudocodeVisualiser() {
+
+        // Add title label
+        BitmapFont font = Utils.getFont("aller/Aller_Bd.ttf", 18);
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        labelStyle.fontColor = Color.BLACK;
+        Label titleLbl = new Label("Click on 'Activate' to visualise the pseudocode\nwhile the search is running", labelStyle);
+
+        add(titleLbl).spaceBottom(50);
+    }
 
     public static PseudocodeVisualiser getInstance() {
         if (instance == null)
@@ -61,8 +71,8 @@ public class PseudocodeVisualiser extends Table implements Observer {
                     null;
 
             // Add line to table
-            Label actor = new Label(line.getFirst(), labelStyle);
-            add(actor).align(Align.left).padLeft(line.getSecond().getSecond() * 20);
+            Label label = new Label(line.getFirst(), labelStyle);
+            add(label).align(Align.left).padLeft(line.getSecond().getSecond() * 20);
             row().align(Align.left).fill();
         }
     }
