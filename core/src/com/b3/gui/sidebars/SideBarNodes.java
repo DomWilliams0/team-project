@@ -459,7 +459,6 @@ public class SideBarNodes extends SideBar implements Disposable {
             setStepthrough(false);
         }
         ui.render(currentSearch);
-        //ui.setCellColour(new Node(new Point(11,11)), Color.GREEN, true);
     }
 
     /**

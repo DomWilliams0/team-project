@@ -71,11 +71,6 @@ public class VisNodes extends Table {
 			"With each expansion we mark the node \n" +
 			"as visited (using a hash set),\n" +
 			"to ensure we do not expand it again.";
-
-	//todo remove this since it is in the help box
-	private final String explaination =
-			"\n\nClick on a coordinate to highlight it on \n" +
-			"the world and see an explanation of it. \n";
 	private static final Color defaultBackground = new Color(0.56f, 0.69f, 0.83f, 1);
 
 	private Node newVisited;
@@ -490,7 +485,7 @@ public class VisNodes extends Table {
 			row();
 
 			//row 1 - titles
-			LabelComponent frontierLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "Frontier" + alg.getName(), Color.BLACK);
+			LabelComponent frontierLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "Frontier", Color.BLACK);
 			LabelComponent visitedLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "Visited nodes", Color.BLACK);
 			add(frontierLbl.getComponent());
 			add("   ");
@@ -551,8 +546,7 @@ public class VisNodes extends Table {
 							addedToFrontier + "\n" +
 							nextNode,
 					newVisitedStr, newFrontierStr, highestNodeStr);
-
-			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, stepString + explaination, Color.BLACK);
+			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, stepString.toString(), true);
 			add(lbl.getComponent()).colspan(3).spaceTop(15);
 		} else {
 			//final row - describe the algorithm in words
