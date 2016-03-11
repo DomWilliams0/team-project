@@ -471,4 +471,7 @@ public class SideBarNodes extends SideBar implements Disposable {
     }
 
 
+    public Boolean getPseudocodeBegin() {
+        return inspectSearchBtn.getText().toString().equals("Begin");
+    }
 }

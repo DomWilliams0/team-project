@@ -74,7 +74,7 @@ public class TutorialMode extends Mode {
 
 		tutorialCounter = 0;
 
-		tutorialText = new String[11];
+		tutorialText = new String[12];
 		tutorialText[0] = "Zoom out fully with + and - or scrolling to see contrast mode"
 				+ '\n' + "Use the arrow keys to move around the world"
 				+ '\n' + "Complete these two tasks to continue";
@@ -110,7 +110,11 @@ public class TutorialMode extends Mode {
 		tutorialText[9] = "Click on the end node and change the page until"
 				+ '\n' + "the heuristic is shown";
 		tutorialText[10] = "Open the right hand menu"
-				+ '\n' + "and click";
+				+ '\n' + "and click on the pseudocode tab"
+				+ '\n' + "then click activate and watch how the search works behind the scenes";
+		tutorialText[11] = "And that's it! You now know how to use this program"
+				+ '\n' + "but if you ever get stuck you can click on a help tab at the top"
+				+ '\n' + "You can go back to the main menu using the left hand side settings menu";
 	}
 
 	@Override
@@ -205,7 +209,9 @@ public class TutorialMode extends Mode {
 				}
 				break;
 			case 10:
-
+				if (!sideBarNodes.getPseudocodeBegin()) {
+					tutorialCounter++;
+				}
 				break;
 			default:
 				break;
