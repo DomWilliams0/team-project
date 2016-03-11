@@ -83,7 +83,7 @@ public class VisNodes extends Table {
 	private String highestNodeStr = "<NOTHING>";
 
 	private final String expandedNode = "I have just expanded the node:\n" +
-			"[PINK]%s[], which is now\n" +
+			"%s, which is now\n" +
 			"added to the visited set.\n";
 	private final String addedToFrontier = "I have added the following\n" +
 			"nodes to the frontier:\n" +
@@ -546,7 +546,7 @@ public class VisNodes extends Table {
 							addedToFrontier + "\n" +
 							nextNode,
 					newVisitedStr, newFrontierStr, highestNodeStr);
-			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, stepString.toString(), true);
+			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, stepString.toString(), Color.BLACK);
 			add(lbl.getComponent()).colspan(3).spaceTop(15);
 		} else {
 			//final row - describe the algorithm in words
