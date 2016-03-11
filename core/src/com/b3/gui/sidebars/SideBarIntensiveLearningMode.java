@@ -429,4 +429,11 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
     public void dispose() {
         stage.dispose();
     }
+
+    /**
+     * @return true if the sidebar is currently open
+     */
+    public static boolean isOpen() {
+        return isOpen;
+    }
 }

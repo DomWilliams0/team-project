@@ -623,4 +623,8 @@ public class RenderTester {
     public void resetCounterAnimation() {
         counterAnimationFade = 0;
     }
+
+    public int getPageNo() {
+        return pageNo;
+    }
 }

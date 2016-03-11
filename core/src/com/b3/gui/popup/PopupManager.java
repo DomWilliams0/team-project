@@ -10,7 +10,7 @@ public class PopupManager {
 	private final Popup buildingErrorPopup;
 	private final Popup pseudocodeError;
 	private final Popup behaviourError;
-	private final Popup introPopup;
+	private Popup introPopup;
 	private Popup popup;
 
 	public PopupManager(WorldCamera worldCamera, ModeType mode) {
@@ -36,13 +36,16 @@ public class PopupManager {
 				break;
 			default: tempTexture = null; break;
 		}
-		
-		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		introPopup = new Popup(worldCamera, new Sprite(tempTexture));
+
+		if (tempTexture != null) {
+			tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+			introPopup = new Popup(worldCamera, new Sprite(tempTexture));
+		}
 	}
 	
 	public void showIntro() {
-		introPopup.showPopup(2000);
+		if (introPopup != null)
+			introPopup.showPopup(2000);
 	}
 	
 	public void showBuildingError() {
@@ -58,7 +61,8 @@ public class PopupManager {
 	}
 	
 	public void render() {
-		introPopup.render();
+		if (introPopup != null)
+			introPopup.render();
 		buildingErrorPopup.render();
 		behaviourError.render();
 		pseudocodeError.render();

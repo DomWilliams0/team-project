@@ -59,7 +59,6 @@ public class LearningMode extends Mode {
 		sideBar.setController(game);
 		sideBarStage.addActor(sideBar);
 
-
 		helpBox = new HelpBox(sideBarStage, world.getMode());
 		sideBarStage.addActor(helpBox);
 	}

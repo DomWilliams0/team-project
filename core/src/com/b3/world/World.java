@@ -580,7 +580,7 @@ public class World implements Disposable {
 		modelManager.render(worldCamera);
 
 		//pop-ups on nodes
-		if (mode == LEARNING) rt.render(currentNodeClickX, currentNodeClickY, worldGraph.getCurrentSearch());
+		if (mode == LEARNING || mode == TUTORIAL) rt.render(currentNodeClickX, currentNodeClickY, worldGraph.getCurrentSearch());
 
 		//pop-ups to show current coordinate
 		coordinatePopup.render();

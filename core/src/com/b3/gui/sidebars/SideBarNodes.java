@@ -6,6 +6,7 @@ import com.b3.gui.VisNodes;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.input.SoundController;
+import com.b3.mode.Mode;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -64,7 +65,7 @@ public class SideBarNodes extends SideBar implements Disposable {
     public SideBarNodes(Stage stage, World world) {
         this(stage, world, 460, new ArrayList<>());
 
-        if (world.getMode() == ModeType.LEARNING) {
+        if ((world.getMode() == ModeType.LEARNING) || (world.getMode() == ModeType.TUTORIAL)) {
             // Add default pseudocode
             // ----------------------
             Table pseudocodeTab = new Table();

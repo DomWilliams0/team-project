@@ -8,5 +8,6 @@ package com.b3.mode;
 public enum ModeType {
 	LEARNING,
 	COMPARE,
-	TRY_YOURSELF
+	TRY_YOURSELF,
+	TUTORIAL
 }

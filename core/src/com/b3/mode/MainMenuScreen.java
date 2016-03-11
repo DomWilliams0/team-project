@@ -75,15 +75,29 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        // Tutorial mode button
+        // --------------------
+        ImageButtonComponent tutorialModeBtn = new ImageButtonComponent("tutorial_mode_primary.png", "tutorial_mode_mouseover.png", "tutorial_mode_mouseover.png");
+        tutorialModeBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new TutorialMode(game));
+                dispose();
+            }
+        });
+
         wrapper = new Table();
         wrapper.setWidth(Gdx.graphics.getWidth());
         wrapper.setHeight(Gdx.graphics.getHeight());
+        wrapper.setY(-50);
 
         wrapper.add(learningModeBtn.getComponent());
         wrapper.row().padTop(30);
         wrapper.add(practiceModeBtn.getComponent());
         wrapper.row().padTop(30);
         wrapper.add(compareModeBtn.getComponent());
+        wrapper.row().padTop(30);
+        wrapper.add(tutorialModeBtn.getComponent());
 
         mainMenuStage.addActor(wrapper);
 
