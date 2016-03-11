@@ -5,7 +5,6 @@ import com.b3.gui.TabbedPane;
 import com.b3.gui.VisNodes;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.input.SoundController;
-import com.b3.mode.Mode;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;

@@ -115,7 +115,7 @@ public abstract class Mode extends ScreenAdapter {
 				sideBarNodes.resetPseudoCode();
 				world.setPseudoCode(true);
 			}
-			if (world.hasNewClick()) sideBarNodes.highlightNode(world.getCurrentClick(), true);
+			if(world.getCurrentClick()!=null) sideBarNodes.highlightNode(world.getCurrentClick(), true);
 			if (sideBarNodes.hasNewClick()) {
 				world.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
 				//check if need to change page

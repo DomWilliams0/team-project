@@ -2,25 +2,14 @@ package com.b3.mode;
 
 import com.b3.MainGame;
 import com.b3.entity.Agent;
-import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
-import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
-import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.gui.help.HelpBox;
+import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
 import com.b3.input.InputHandler;
-import com.b3.input.KeyboardController;
 import com.b3.input.WorldSelectionHandler;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
-import com.b3.util.Config;
-import com.b3.util.ConfigKey;
-import com.b3.util.Utils;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
  * A small scale world with step by step views and pop-ups to allow for uneducated 2nd year CS university students to learn about algorithms they should've learnt in year 1.

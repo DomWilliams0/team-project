@@ -200,19 +200,6 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
                 .spaceTop(20);
         settingsTab.row();
 
-        // ======================
-        // === LABELS AND STU ===
-        // ======================
-
-        LabelComponent labelOne = new LabelComponent(skin, "Left click the nodes to see more information", Color.BLACK);
-        labelOne.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
-
-        LabelComponent labelOneUnderneath = new LabelComponent(skin, "Click again on the same node to see more info", Color.BLACK);
-        labelOneUnderneath.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
-
-        LabelComponent labelTwo = new LabelComponent(skin, "Right click a node to set the next destination", Color.BLACK);
-        labelTwo.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
-
         //Play and Pause button
         ButtonComponent playPause = new ButtonComponent(skin, font, "Play");
         SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
@@ -319,24 +306,6 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
         settingsTab.row();
 
         settingsTab.add(playPause.getComponent())
-                .align(Align.center)
-                .maxWidth(preferredWidth)
-                .spaceTop(5);
-        settingsTab.row();
-
-        settingsTab.add(labelOne.getComponent())
-                .align(Align.center)
-                .maxWidth(preferredWidth)
-                .spaceTop(5);
-        settingsTab.row();
-
-        settingsTab.add(labelOneUnderneath.getComponent())
-                .align(Align.center)
-                .maxWidth(preferredWidth)
-                .spaceTop(5);
-        settingsTab.row();
-
-        settingsTab.add(labelTwo.getComponent())
                 .align(Align.center)
                 .maxWidth(preferredWidth)
                 .spaceTop(5);
