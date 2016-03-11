@@ -10,6 +10,7 @@ import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
 import com.b3.input.WorldSelectionHandler;
+import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
@@ -38,8 +39,9 @@ public class LearningMode extends Mode {
 		super(ModeType.LEARNING, game,
 				"core/assets/world/world_smaller_test.tmx", 26);
 
-		world.getWorldGraph().getCurrentSearch().pause(1);
-		world.getWorldGraph().getCurrentSearch().setUpdated(true);
+		SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
+		currentSearch.pause(1);
+		currentSearch.setUpdated(true);
 	}
 
 	@Override
@@ -47,7 +49,6 @@ public class LearningMode extends Mode {
 		// world clicking
 		inputHandler.addProcessor(new WorldSelectionHandler(world));
 	}
-
 
 	/**
 	 * Sets up the sidebars (one with options on the left; one with nodes and step-by-step buttons on right; and help box on top)

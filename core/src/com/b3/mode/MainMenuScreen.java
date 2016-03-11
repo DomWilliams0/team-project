@@ -30,17 +30,19 @@ public class MainMenuScreen implements Screen {
     private final SpriteBatch spriteBatch;
     private final Sprite sprite;
     private final Sprite spriteTwoText;
+    private final MainGame controller;
 
     /**
      * Constructs the (static / final) main menu camera and the two buttons, and sets up events for each respective button.
-     * @param game used to set up the world, contains directories to config files
+     * @param controller used to set up the world, contains directories to config files
      */
-    public MainMenuScreen(MainGame game) {
+    public MainMenuScreen(MainGame controller) {
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.mainMenuStage = new Stage(new ScreenViewport());
+        this.controller = controller;
 
-        game.getInputHandler().addProcessor(mainMenuStage);
+        controller.getInputHandler().addProcessor(mainMenuStage);
 
         // Compare mode button
         // --------------------
@@ -48,7 +50,7 @@ public class MainMenuScreen implements Screen {
         compareModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new CompareMode(game));
+                controller.setScreen(new CompareMode(controller));
                 dispose();
             }
         });
@@ -59,8 +61,8 @@ public class MainMenuScreen implements Screen {
         practiceModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PracticeMode(game));
                 dispose();
+                controller.setScreen(new PracticeMode(controller));
             }
         });
 
@@ -70,8 +72,8 @@ public class MainMenuScreen implements Screen {
         learningModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new LearningMode(game));
                 dispose();
+                controller.setScreen(new LearningMode(controller));
             }
         });
 
@@ -81,7 +83,7 @@ public class MainMenuScreen implements Screen {
         tutorialModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new TutorialMode(game));
+                controller.setScreen(new TutorialMode(controller));
                 dispose();
             }
         });
@@ -164,6 +166,8 @@ public class MainMenuScreen implements Screen {
      */
     @Override
     public void dispose() {
+        //controller.getInputHandler().removeProcessor(mainMenuStage);
+        controller.getInputHandler().clear();
         mainMenuStage.dispose();
     }
 }

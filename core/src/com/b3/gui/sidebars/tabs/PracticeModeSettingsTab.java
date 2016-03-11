@@ -122,6 +122,7 @@ public class PracticeModeSettingsTab {
         backToMenuBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                controller.getInputHandler().clear();
                 controller.setScreen(new MainMenuScreen(controller));
             }
         });

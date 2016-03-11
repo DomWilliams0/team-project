@@ -30,7 +30,7 @@ public class PopupManager {
 		switch (mode) {
 			case COMPARE: tempTexture = new Texture("core/assets/world/popups/Intro/C.png");
 				break;
-			case TRY_YOURSELF: tempTexture = new Texture("core/assets/world/popups/Intro/TY.png");
+			case PRACTICE: tempTexture = new Texture("core/assets/world/popups/Intro/TY.png");
 				break;
 			case LEARNING: tempTexture = new Texture("core/assets/world/popups/Intro/ILM.png");
 				break;

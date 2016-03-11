@@ -4,14 +4,12 @@ import com.b3.gui.PseudocodeVisualiser;
 import com.b3.gui.TabbedPane;
 import com.b3.gui.VisNodes;
 import com.b3.gui.components.ButtonComponent;
-import com.b3.gui.components.MessageBoxComponent;
 import com.b3.input.SoundController;
 import com.b3.mode.Mode;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
-import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -278,7 +276,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 
     public void setStepthrough(boolean stepthrough) {
         ui.setStepthrough(stepthrough);
-        next.getComponent().setVisible(stepthrough && (world.getMode() != ModeType.TRY_YOURSELF));
+        next.getComponent().setVisible(stepthrough && (world.getMode() != ModeType.PRACTICE));
     }
 
     public boolean hasNewClick() {
@@ -347,7 +345,7 @@ public class SideBarNodes extends SideBar implements Disposable {
             }
         });
 
-        next.getComponent().setVisible(world.getMode() != ModeType.TRY_YOURSELF);
+        next.getComponent().setVisible(world.getMode() != ModeType.PRACTICE);
         System.out.println(next.getComponent().isVisible());
 
         //put the nodes ui onto this

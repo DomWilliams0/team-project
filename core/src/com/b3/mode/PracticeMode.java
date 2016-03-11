@@ -3,21 +3,15 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
-import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.gui.sidebars.tabs.PracticeModeSettingsTab;
 import com.b3.input.InputHandler;
-import com.b3.input.KeyboardController;
 import com.b3.input.PracticeModeWorldSelectionHandler;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
-import com.b3.world.World;
-import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -25,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +28,7 @@ public class PracticeMode extends Mode {
 
 	public PracticeMode(MainGame game) {
 		// create world
-		super(ModeType.TRY_YOURSELF, game, "core/assets/world/world_smaller_test_tiym.tmx", 26f);
+		super(ModeType.PRACTICE, game, "core/assets/world/world_smaller_test_tiym.tmx", 26f);
 
 		world.setPseudoCode(false);
 		WorldGraph worldGraph = world.getWorldGraph();

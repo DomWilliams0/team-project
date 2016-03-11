@@ -1,7 +1,6 @@
 package com.b3.gui.help;
 
 import com.b3.gui.components.ButtonComponent;
-import com.b3.mode.Mode;
 import com.b3.mode.ModeType;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -86,7 +85,7 @@ public class HelpBox extends Table {
 		switch(mode) {
 			case LEARNING : 	setupLM(); break;
 			case COMPARE : 		setupCM(); break;
-			case TRY_YOURSELF :	setupTY(); break;
+			case PRACTICE:	setupTY(); break;
 		}
 
 		fillThis();

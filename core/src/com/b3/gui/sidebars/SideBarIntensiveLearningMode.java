@@ -300,7 +300,6 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
             }
         });
 
-
         settingsTab.add(gameSpeedSlider.getSlider())
                 .align(Align.center)
                 .maxWidth(preferredWidth)
@@ -351,6 +350,7 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
         backToMenuBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                dispose();
                 controller.setScreen(new MainMenuScreen(controller));
             }
         });
@@ -427,6 +427,8 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
 
     @Override
     public void dispose() {
+        //controller.getInputHandler().removeProcessor(stage);
+        controller.getInputHandler().clear();
         stage.dispose();
     }
 
