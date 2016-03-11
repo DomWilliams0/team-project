@@ -34,48 +34,40 @@ public class TutorialPopups {
 
         font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 20);
 
-
         tutorialText = new String[12];
-        tutorialText[0] = "Zoom out fully with + and - or scrolling to see contrast mode"
-                + '\n' + "Use the arrow keys to move around the world"
-                + '\n' + "Complete these two tasks to continue";
-        tutorialText[1] = "A node is represented by a black diamond"
-                + '\n' + "A low cost edge is represented by a black or white line,"
-                + '\n' + "a high cost one by a red line" + '\n'
-                + "The end node is represented by a blue diamond" + '\n'
-                + "The start node is the blue node with a orange circle around it,"
-                + '\n' + "click on this to continue";
-        tutorialText[2] = "Open the left hand sidebar by clicking the arrow to the left";
-        tutorialText[3] = "Press play to start A* search"
-                + '\n' + "You can adjust the search and game speed as well"
-                + '\n' + "Use the arrow keys to move around the world"
-                + '\n' + "Complete these two tasks to continue";
-        tutorialText[1] = "A node is represented by a black diamond"
-                + '\n' + "A low cost edge is represented by a black or white line,"
-                + '\n' + "a high cost one by a red line" + '\n'
-                + "The end node is represented by a blue diamond" + '\n'
-                + "The start node is the blue node with a orange circle around it,"
-                + '\n' + "click on this to continue";
-        tutorialText[2] = "Open the left hand sidebar by clicking the arrow to the left";
-        tutorialText[3] = "Press play to start A* search"
+        tutorialText[0] = "Zoom out fully with [RED]+[] and [RED]-[] or [RED]scrolling[] to see contrast mode"
+                + '\n' + "Use the [RED]arrow keys[] to move around the world"
+                + '\n' + "[LIGHT_GRAY]Complete these two tasks to continue[]";
+        tutorialText[1] = "A node is represented by a [DARK_GRAY]black diamond[]"
+                + '\n' + "A low cost edge is represented by a [DARK_GRAY]black or white line[],"
+                + '\n' + "a high cost one by a [RED]red line[]" + '\n'
+                + "The end node is represented by a [BLUE]blue diamond[]" + '\n'
+                + "The start node is the [BLUE]blue node[] with a [ORANGE]orange circle[] around it,"
+                + '\n' + "[LIGHT_GRAY]click on this to continue[]";
+        tutorialText[2] = "Open the left hand sidebar by"
+                + '\n' + "[LIGHT_GRAY]clicking the arrow to the left[]";
+        tutorialText[3] = "[LIGHT_GRAY]Press play[] to start A* search"
                 + '\n' + "You can adjust the search and game speed as well";
         tutorialText[4] = "Now that the search has finished"
-                + '\n' + "pause the search and close the sidebar on the left";
-        tutorialText[5] = "Open the right hand sidebar by clicking the arrow to the right";
-        tutorialText[6] = "Step through the search a couple of steps by clicking the next button"
-                + '\n' + "and watch the data structure update"
-                + '\n' + "hover over the coordinates in the sidebar to highlight them on the world";
-        tutorialText[7] = "Click on the current node (pink) to see more information";
-        tutorialText[8] = "Click on the current node again (pink) to change the page"
+                + '\n' + "[LIGHT_GRAY]pause the search[] and"
+                + '\n' + "[LIGHT_GRAY]close the sidebar on the left[]";
+        tutorialText[5] = "Open the right hand sidebar by "
+                + '\n' + "[LIGHT_GRAY]clicking the arrow to the right[]";
+        tutorialText[6] = "Step through the search a couple of steps by " +
+                '\n' +  "[LIGHT_GRAY]clicking the next button[]" +
+                '\n' + "hover over the coordinates in the sidebar +" + '\n' + "to highlight them on the world";
+        tutorialText[7] = "[LIGHT_GRAY] Click[] on the [PINK]current node[] to see more information";
+        tutorialText[8] = "[LIGHT_GRAY]Click[] on the [PINK]current node[] again to change the page"
                 + '\n' + "until all the previous costs are shown ";
-        tutorialText[9] = "Click on the end node and change the page until"
+        tutorialText[9] = "[LIGHT_GRAY]Click[] on the [BLUE]end node[] and change the page until"
                 + '\n' + "the heuristic is shown";
         tutorialText[10] = "Open the right hand menu"
-                + '\n' + "and click on the pseudocode tab"
-                + '\n' + "then click activate and watch how the search works behind the scenes";
+                + '\n' + "and [LIGHT_GRAY]click on the pseudocode tab[]"
+                + '\n' + "then [LIGHT_GRAY]click activate[] and"
+                + '\n' + "watch how the search works behind the scenes";
         tutorialText[11] = "And that's it! You now know how to use this program"
                 + '\n' + "but if you ever get stuck you can click on a help tab at the top"
-                + '\n' + "You can go back to the main menu using the left hand side settings menu";
+                + '\n' + "You can go back to the main menu using the left side menu";
 
         currentPos = new Point(1, 1);
 
@@ -85,6 +77,8 @@ public class TutorialPopups {
     public void render() {
         float xGraphic = Gdx.graphics.getWidth() / 2 - backgroundTexture.getWidth() / 2;
         float yGraphic = 0;
+
+        font.getData().markupEnabled = true;
 
         SpriteBatch spriteBatch = new SpriteBatch();
 
@@ -141,8 +135,6 @@ public class TutorialPopups {
                 }
                 break;
             case 8:
-                System.out.println(currentPage);
-
                 if (currentPage == 3) {
                     stepCounter++;
                 }
