@@ -83,8 +83,8 @@ public class MainMenuScreen implements Screen {
         tutorialModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                controller.setScreen(new TutorialMode(controller));
                 dispose();
+                controller.setScreen(new TutorialMode(controller));
             }
         });
 

@@ -1,5 +1,6 @@
 package com.b3.mode;
 import com.b3.MainGame;
+import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
@@ -54,7 +55,9 @@ public abstract class Mode extends ScreenAdapter {
 		world.initEngine(camera);
 		spawnInitialEntities();
 
+		// initialise sidebars and back button
 		initSidebar();
+		createBackButton();
 
 		// init input handlers
 		keyboardController = new KeyboardController();
@@ -79,6 +82,10 @@ public abstract class Mode extends ScreenAdapter {
 			sideBarNodes.setStepthrough(true);
 			sideBarStage.addActor(sideBarNodes);
 		}
+
+	}
+
+	protected void createBackButton() {
 
 	}
 
