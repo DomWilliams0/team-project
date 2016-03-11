@@ -21,9 +21,9 @@ import com.badlogic.gdx.math.collision.Ray;
 
 public class WorldSelectionHandler extends InputAdapter {
 
-	private static final Vector3 tempRayCast = new Vector3();
-	private World world;
-	private Point currentSelection;
+	protected static final Vector3 tempRayCast = new Vector3();
+	protected World world;
+	protected Point currentSelection;
 
 	public WorldSelectionHandler(World world) {
 		this.world = world;

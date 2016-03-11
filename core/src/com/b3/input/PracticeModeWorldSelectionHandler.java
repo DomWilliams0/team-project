@@ -1,6 +1,5 @@
 package com.b3.input;
 
-import com.b3.gui.CoordinatePopup;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.gui.popup.Popup;
 import com.b3.gui.sidebars.SideBarNodes;
@@ -13,8 +12,6 @@ import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
 import java.util.List;
@@ -28,44 +25,21 @@ enum Stage {
     ADD_TO_EXPLORED_SELECTION
 }
 
-public class PracticeModeWorldSelectionHandler extends InputAdapter {
-    private static final Vector3 tempRayCast = new Vector3();
+public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
     private boolean firstLoadAlert1;
     private boolean firstLoadAlert2;
 
-    private World world;
     private Stage currentStage;
-    private Point currentSelection;
     private MessageBoxComponent descriptionPopup;
     private boolean firstTime;
 
     public PracticeModeWorldSelectionHandler(World world, com.badlogic.gdx.scenes.scene2d.Stage popupStage) {
-        this.world = world;
+        super(world);
         this.currentStage = Stage.CURRENT_NODE_SELECTION;
-        this.currentSelection = new Point(1,1);
         this.descriptionPopup = new MessageBoxComponent(popupStage, "", "OK");
         this.firstTime = true;
         this.firstLoadAlert1 = true;
         this.firstLoadAlert2 = true;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        // selecting a tile
-        WorldCamera worldCamera = world.getWorldCamera();
-        Ray ray = worldCamera.getPickRay(screenX, screenY);
-        ray.getEndPoint(tempRayCast, worldCamera.position.z);
-
-        // convert to node
-        WorldGraph worldGraph = world.getWorldGraph();
-        Node node = worldGraph.getNode(new Point((int) tempRayCast.x, (int) tempRayCast.y));
-
-        if (node != null) {
-            CoordinatePopup.visibility = true;
-            CoordinatePopup.setCoordinate(node.getPoint().getX(), node.getPoint().getY());
-        } else CoordinatePopup.visibility = false;
-
-        return true;
     }
 
     @Override
