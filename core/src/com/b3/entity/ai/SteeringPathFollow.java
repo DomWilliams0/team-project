@@ -24,11 +24,7 @@ public class SteeringPathFollow extends Steering {
 	public SteeringPathFollow(PhysicsComponent entity, double nodeArrivalThreshold, List<Vector2> path) {
 		super(entity);
 
-		// invalid path
-		if (path.size() < 2)
-			throw new IllegalArgumentException("Path must be at least 2 nodes long in SteeringPathFollow");
-
-		this.arrived = false;
+		this.arrived = path.isEmpty();
 		this.nodeArrivalThreshold = nodeArrivalThreshold * nodeArrivalThreshold;
 		this.path = new ArrayDeque<>(path.stream().map((p) -> p.add(0.5f, 0.5f)).collect(Collectors.toList()));
 		this.originalPath = Collections.unmodifiableList(path);
