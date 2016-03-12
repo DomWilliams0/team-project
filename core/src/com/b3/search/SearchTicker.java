@@ -2,6 +2,8 @@ package com.b3.search;
 
 import com.b3.gui.PseudocodeVisualiser;
 import com.b3.input.SoundController;
+import com.b3.mode.Mode;
+import com.b3.mode.ModeType;
 import com.b3.search.util.Function2;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.search.util.SearchParameters;
@@ -49,11 +51,14 @@ public class SearchTicker extends Observable {
 	// Pseudocode (inspect search)
 	private Pseudocode pseudocode;
 	private boolean inspectSearch;
+	private ModeType mode;
 
-	public SearchTicker(WorldGraph worldGraph) {
+	public SearchTicker(WorldGraph worldGraph, ModeType mode) {
 		this.worldGraph = worldGraph;
 		inspectSearch = false;
 		tickedOnce = false;
+
+		this.mode = mode;
 
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
@@ -435,32 +440,36 @@ public class SearchTicker extends Observable {
 
 		setUpdated(true);
 
-		//TODO this is the sound 'wave' pings that sounds cool. Needs to be refactored out of here though.
-		if (worldGraph.getCurrentSearch().getStart() != null && worldGraph.getCurrentSearch().getEnd() != null && worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
-			Point currentNode = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint();
-			Point startNode = worldGraph.getCurrentSearch().getStart().getPoint();
-			Point end = worldGraph.getCurrentSearch().getEnd().getPoint();
+		if (Config.getBoolean(ConfigKey.SOUNDS_ON) && mode == ModeType.LEARNING) {
+			//TODO this is the sound 'wave' pings that sounds cool. Needs to be refactored out of here though.
+			if (worldGraph.getCurrentSearch().getStart() != null && worldGraph.getCurrentSearch().getEnd() != null && worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
+				Point currentNode = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint();
+				Point startNode = worldGraph.getCurrentSearch().getStart().getPoint();
+				Point end = worldGraph.getCurrentSearch().getEnd().getPoint();
 
-			int changeInX = currentNode.getX() - end.getX();
-			int changeInY = currentNode.getY() - end.getY();
+				int changeInX = currentNode.getX() - end.getX();
+				int changeInY = currentNode.getY() - end.getY();
 
-			int changeInX2 = changeInX * changeInX;
-			int changeInY2 = changeInY * changeInY;
+				int changeInX2 = changeInX * changeInX;
+				int changeInY2 = changeInY * changeInY;
 
-			float finalEuclid = (float) Math.sqrt(changeInX2 + changeInY2);
+				float finalEuclid = (float) Math.sqrt(changeInX2 + changeInY2);
 
-			changeInX = startNode.getX() - end.getX();
-			changeInY = startNode.getY() - end.getY();
+				changeInX = startNode.getX() - end.getX();
+				changeInY = startNode.getY() - end.getY();
 
-			changeInX2 = changeInX * changeInX;
-			changeInY2 = changeInY * changeInY;
+				changeInX2 = changeInX * changeInX;
+				changeInY2 = changeInY * changeInY;
 
-//			float maxValue = (float) Math.sqrt(changeInX2 + changeInY2);
-			float maxValue = 10;
+				float maxValue = (float) Math.sqrt(changeInX2 + changeInY2);
+//			float maxValue = 10;
 
-			float convertedFinalEuclid = (float) ((finalEuclid / maxValue) * 2 - 0.5);
+				float convertedFinalEuclid = (float) ((finalEuclid / maxValue) * 2);
 
-			SoundController.playSounds(3, convertedFinalEuclid);
+				SoundController.playSounds(3, convertedFinalEuclid);
+			}
+		} else {
+			SoundController.stopSound(3);
 		}
 
 	}

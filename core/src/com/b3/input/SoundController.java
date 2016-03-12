@@ -59,4 +59,12 @@ public class SoundController {
         sounds[soundIndex].setPitch(id, pitch);
         return true;
     }
+
+    public static void stopSound(int soundIndex) {
+        if (id != -1) {
+            sounds[soundIndex].stop();
+            id = -1;
+        }
+
+    }
 }

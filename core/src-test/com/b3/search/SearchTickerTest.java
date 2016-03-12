@@ -1,6 +1,7 @@
 package com.b3.search;
 
 import com.b3.gui.PseudocodeVisualiser;
+import com.b3.mode.ModeType;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.Utils;
@@ -43,7 +44,7 @@ public class SearchTickerTest {
 		if (graph == null)
 			throw new Exception("Can't start tests. Graph is null.");
 		this.graph = graph;
-		this.searchTicker = new SearchTicker(graph);
+		this.searchTicker = new SearchTicker(graph, ModeType.LEARNING);
 	}
 
 	/**

@@ -27,7 +27,7 @@ public class MainGame extends Game {
 				"core/assets/sounds/sad_failure.wav",
 				"core/assets/sounds/search_complete.mp3",
 				"core/assets/sounds/error_buildings.mp3",
-				"core/assets/sounds/ping.wav"
+				"core/assets/sounds/ping.mp3"
 		});
 
 		// load config

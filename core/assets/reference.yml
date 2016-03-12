@@ -20,6 +20,7 @@ flocking-enabled: false
 add-building-mode: false
 remove-building-mode: false
 game-speed: 1
+sound-on: false
 
 time-between-ticks-min: 0.05
 time-between-ticks: 0.5

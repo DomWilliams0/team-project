@@ -50,8 +50,8 @@ public class MainMenuScreen implements Screen {
         compareModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                controller.setScreen(new CompareMode(controller));
                 dispose();
+                controller.setScreen(new CompareMode(controller));
             }
         });
 

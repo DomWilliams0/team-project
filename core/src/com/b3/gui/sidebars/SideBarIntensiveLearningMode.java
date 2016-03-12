@@ -99,7 +99,6 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
         settingsTab.setFillParent(true);
         settingsTab.pad(20);
 
-
         // Flat buildings checkbox
         CheckBoxComponent showLabelsCheckBox = new CheckBoxComponent(skin, font, "Flat buildings");
         showLabelsCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS));
@@ -113,6 +112,23 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
         });
 
         settingsTab.add(showLabelsCheckBox.getComponent())
+                .align(Align.left)
+                .maxWidth(preferredWidth)
+                .spaceBottom(10);
+        settingsTab.row();
+
+        // Flat buildings checkbox
+        CheckBoxComponent soundsOn = new CheckBoxComponent(skin, font, "Search Sounds");
+        soundsOn.getComponent().setChecked(Config.getBoolean(ConfigKey.SOUNDS_ON));
+        soundsOn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                boolean soundsOn = Config.getBoolean(ConfigKey.SOUNDS_ON);
+                Config.set(ConfigKey.SOUNDS_ON, !soundsOn);
+            }
+        });
+
+        settingsTab.add(soundsOn.getComponent())
                 .align(Align.left)
                 .maxWidth(preferredWidth)
                 .spaceBottom(10);

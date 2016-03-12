@@ -29,6 +29,8 @@ public enum ConfigKey {
 	ADD_BUILDING_MODE("add-building-mode"),
 	REMOVE_BUILDING_MODE("remove-building-mode"),
 	GAME_SPEED("game-speed"),
+	SOUNDS_ON("sound-on"),
+
 
 	TIME_BETWEEN_TICKS("time-between-ticks"),
 	TIME_BETWEEN_TICKS_MIN("time-between-ticks-min"),
