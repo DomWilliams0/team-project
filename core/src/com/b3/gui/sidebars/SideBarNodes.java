@@ -4,6 +4,8 @@ import com.b3.gui.PseudocodeVisualiser;
 import com.b3.gui.TabbedPane;
 import com.b3.gui.VisNodes;
 import com.b3.gui.components.ButtonComponent;
+import com.b3.gui.sidebars.tabs.PseudocodeTab;
+import com.b3.gui.sidebars.tabs.Tab;
 import com.b3.input.SoundController;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
@@ -31,6 +33,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Provides a table to display the frontier and visited nodes
@@ -53,6 +57,7 @@ public class SideBarNodes extends SideBar implements Disposable {
     private ButtonComponent inspectSearchBtn;
     private ButtonComponent manualAutoBtn;
     private ButtonComponent nextBtn;
+    private Map<String, Tab> additionalTabs;
 
     /**
      * Create a new gui element with a default preferred size and a default pseudocode tab
@@ -60,119 +65,11 @@ public class SideBarNodes extends SideBar implements Disposable {
      * @param stage The stage on which to act and draw.
      */
     public SideBarNodes(Stage stage, World world) {
-        this(stage, world, 460, new ArrayList<>());
+        this(stage, world, 460, new HashMap<>());
 
-        if ((world.getMode() == ModeType.LEARNING) || (world.getMode() == ModeType.TUTORIAL)) {
-            // Add default pseudocode
-            // ----------------------
-            Table pseudocodeTab = new Table();
-            pseudocodeTab.setFillParent(true);
-
-            // Pseudocode visualiser
-            // ---------------------
-            PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
-            pseudocodeTab.add(pseudocodeVisualiser).spaceBottom(30).row();
-
-            // Next button
-            // -----------
-            nextBtn = new ButtonComponent(skin, font, "Next");
-            nextBtn.getComponent().setVisible(false);
-            nextBtn.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                    ticker.setInspectSearch(true);
-                    ticker.tick(true);
-                }
-            });
-
-            // Manual/Automatic inspection
-            // ---------------------------
-            manualAutoBtn = new ButtonComponent(skin, font, "Manual inspect");
-            manualAutoBtn.setData(true);
-            manualAutoBtn.getComponent().setVisible(false);
-            manualAutoBtn.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    if ((Boolean) manualAutoBtn.getData()) {
-                        // Currently automatic -> manual
-                        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                        ticker.pause(1);
-                        ticker.setUpdated(true);
-                        ticker.setInspectSearch(true);
-
-                        nextBtn.getComponent().setVisible(true);
-                        manualAutoBtn.setData(false);
-                        manualAutoBtn.setText("Automatic inspect");
-                    } else {
-                        // Currently manual -> automatic
-                        SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                        ticker.resume(1);
-
-                        nextBtn.getComponent().setVisible(false);
-                        manualAutoBtn.setData(true);
-                        manualAutoBtn.setText("Manual inspect");
-                    }
-                }
-            });
-
-            // Inspect search button (start/stop)
-            // ----------------------------------
-            inspectSearchBtn = new ButtonComponent(skin, font, "Begin");
-            inspectSearchBtn.setData(false);
-            inspectSearchBtn.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    boolean currentlyStarted = (Boolean) inspectSearchBtn.getData();
-
-                    SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-
-                    if (ticker.isTickedOnce()) {
-                        ticker.setInspectSearch(!currentlyStarted);
-                        ticker.resume(1);
-
-                        manualAutoBtn.getComponent().setVisible(!currentlyStarted);
-                        inspectSearchBtn.setData(!currentlyStarted);
-                        inspectSearchBtn.setText(currentlyStarted ? "Begin" : "Stop");
-
-                        // Clear pseudocode information
-                        if (currentlyStarted) {
-                            nextBtn.getComponent().setVisible(false);
-                            manualAutoBtn.setData(true);
-                            manualAutoBtn.setText("Manual inspect");
-                            world.setPseudoCode(false);
-                            ticker.clearPseudocodeInfo();
-                        }
-                    } else {
-                        //Close Sidebar
-                        TextButton _triggerBtn = triggerBtn.getComponent();
-
-                        if (!isOpen) {
-                            setX(0);
-                            setY(0);
-                            _triggerBtn.setText(">");
-                            _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
-
-                            isOpen = true;
-                        } else {
-                            setX(-preferredWidth);
-                            _triggerBtn.setText("<");
-                            _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
-
-                            isOpen = false;
-                        }
-
-                        SoundController.playSounds(2);
-                        world.getPopupManager().showPseudocodeError();
-                    }
-                }
-            });
-
-            pseudocodeTab.add(inspectSearchBtn.getComponent()).spaceBottom(10).row();
-            pseudocodeTab.add(manualAutoBtn.getComponent()).spaceBottom(10).row();
-            pseudocodeTab.add(nextBtn.getComponent());
-            tabbedPane.addTab("Pseudocode", pseudocodeTab);
-        }
+        /*if ((world.getMode() == ModeType.LEARNING) || (world.getMode() == ModeType.TUTORIAL)) {
+            initPseudocode();
+        }*/
     }
 
     /**
@@ -181,7 +78,7 @@ public class SideBarNodes extends SideBar implements Disposable {
      * @param stage The stage on which to act and draw
      * @param preferredWidth The preferred width of the gui table
      */
-    public SideBarNodes(Stage stage, World world, float preferredWidth, ArrayList<Table> additionalTabs) {
+    public SideBarNodes(Stage stage, World world, float preferredWidth, Map<String, Tab> additionalTabs) {
         this.stage = stage;
         this.isOpen = false;
         this.preferredWidth = preferredWidth;
@@ -195,10 +92,18 @@ public class SideBarNodes extends SideBar implements Disposable {
         setPosition(Gdx.graphics.getWidth(), 0);
         setSize(preferredWidth, Gdx.graphics.getHeight());
 
-        initComponents(additionalTabs);
+        if (additionalTabs != null && ((world.getMode() == ModeType.LEARNING) || (world.getMode() == ModeType.TUTORIAL))) {
+            Map<String, Object> data = new HashMap<String, Object>() {{
+                put("world", world);
+            }};
+            additionalTabs.put("Pseudocode", new PseudocodeTab(skin, font, data));
+        }
+
+        this.additionalTabs = additionalTabs;
+        initComponents();
     }
 
-    public SideBarNodes(Stage stage, World world, ArrayList<Table> additionalTabs) {
+    public SideBarNodes(Stage stage, World world, HashMap<String, Tab> additionalTabs) {
         this(stage, world, 420, additionalTabs);
     }
 
@@ -293,18 +198,16 @@ public class SideBarNodes extends SideBar implements Disposable {
         //ticker.resume(1);
 
         if (world.getMode() == ModeType.LEARNING) {
-            manualAutoBtn.getComponent().setVisible(false);
-            inspectSearchBtn.setData(false);
-            inspectSearchBtn.setText("Begin");
+            PseudocodeTab pseudocodeTab = (PseudocodeTab) additionalTabs.get("Pseudocode");
+
+            pseudocodeTab.getManualAutoBtn().getComponent().setVisible(false);
+            pseudocodeTab.getInspectSearchBtn().setData(false);
+            pseudocodeTab.getInspectSearchBtn().setText("Begin");
         }
     }
 
-    /**
-     * Initialise the components used by this object
-     * @param additionalTabs Additional tabs
-     */
     @Override
-    protected void initComponents(ArrayList<Table> additionalTabs) {
+    protected void initComponents() {
         //set a default background colour
         setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
@@ -359,8 +262,8 @@ public class SideBarNodes extends SideBar implements Disposable {
         // =======================
 
         if (additionalTabs != null) {
-            for (Table tab : additionalTabs) {
-                tabbedPane.addTab(tab.getName(), tab);
+            for (String tabName : additionalTabs.keySet()) {
+                tabbedPane.addTab(tabName, additionalTabs.get(tabName).getTab());
             }
         }
 
@@ -411,11 +314,7 @@ public class SideBarNodes extends SideBar implements Disposable {
         add(tabbedPane).maxWidth(preferredWidth);
         background(skin.getDrawable("window_02"));
         this.stage.addActor(triggerBtn.getComponent());
-
     }
-
-    @Override
-    protected void initComponents() {}
 
     @Override
     public float getPreferredWidth() {

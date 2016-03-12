@@ -226,7 +226,7 @@ public class SearchTicker extends Observable {
 		if (pathComplete)
 			return;
 
-		if (frontier.isEmpty()) {
+		if (line == 0 && frontier.isEmpty()) {
 			setAllCompleted(true);
 			return;
 		}

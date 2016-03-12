@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Map;
 
-public class PracticeModeSettingsTab {
+public class PracticeModeSettingsTab implements Tab {
 
     private Table settingsTab;
 
@@ -138,6 +138,7 @@ public class PracticeModeSettingsTab {
         settingsTab.setName(name);
     }
 
+    @Override
     public Table getTab() {
         return settingsTab;
     }
