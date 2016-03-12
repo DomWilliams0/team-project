@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Sound;
 public class SoundController {
 
     private static Sound[] sounds;
+    private static long id;
 
     /**
      * Loads the sounds controller and loads all the potential sounds in to memory, should be called once at program launch.
@@ -16,6 +17,8 @@ public class SoundController {
      */
     public SoundController(String[] soundList) {
         sounds = new Sound[soundList.length];
+
+        id = -1;
 
         for (int i = 0; i < soundList.length; i++) {
             sounds[i] = Gdx.audio.newSound(Gdx.files.internal(soundList[i]));
@@ -42,4 +45,18 @@ public class SoundController {
         }
     }
 
+    /**
+     * Plays a specific sounds at a specific pitch
+     * @param soundIndex the number of the sounds to be played (ie the position it was in, when this object was created
+     * @param pitch the pitch of the sound to be played. From 0.5 -> 2, with 0 is normal pitch, 0.5 is lower and 2 is highest
+     * @return true if played successfully; false if cannot find sounds or cannot be played
+     */
+    public static boolean playSounds(int soundIndex, float pitch) {
+        System.out.println("Playing sound at " + pitch);
+//        if (soundIndex >= sounds.length) return false;
+        if (id == -1) id = sounds[soundIndex].play(1.0f, pitch, 0);
+        sounds[soundIndex].setLooping(id, true);
+        sounds[soundIndex].setPitch(id, pitch);
+        return true;
+    }
 }

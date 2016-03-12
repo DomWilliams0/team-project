@@ -1,6 +1,7 @@
 package com.b3.search;
 
 import com.b3.gui.PseudocodeVisualiser;
+import com.b3.input.SoundController;
 import com.b3.search.util.Function2;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.search.util.SearchParameters;
@@ -370,7 +371,6 @@ public class SearchTicker extends Observable {
 	 * This being called will progress the search one step regardless of status of timer or pause.
 	 */
 	private void tickFinal() {
-
 		tickedOnce = true;
 
 		if (inspectSearch) {
@@ -434,6 +434,35 @@ public class SearchTicker extends Observable {
 		}
 
 		setUpdated(true);
+
+		//TODO this is the sound 'wave' pings that sounds cool. Needs to be refactored out of here though.
+		if (worldGraph.getCurrentSearch().getStart() != null && worldGraph.getCurrentSearch().getEnd() != null && worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
+			Point currentNode = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint();
+			Point startNode = worldGraph.getCurrentSearch().getStart().getPoint();
+			Point end = worldGraph.getCurrentSearch().getEnd().getPoint();
+
+			int changeInX = currentNode.getX() - end.getX();
+			int changeInY = currentNode.getY() - end.getY();
+
+			int changeInX2 = changeInX * changeInX;
+			int changeInY2 = changeInY * changeInY;
+
+			float finalEuclid = (float) Math.sqrt(changeInX2 + changeInY2);
+
+			changeInX = startNode.getX() - end.getX();
+			changeInY = startNode.getY() - end.getY();
+
+			changeInX2 = changeInX * changeInX;
+			changeInY2 = changeInY * changeInY;
+
+//			float maxValue = (float) Math.sqrt(changeInX2 + changeInY2);
+			float maxValue = 10;
+
+			float convertedFinalEuclid = (float) ((finalEuclid / maxValue) * 2 - 0.5);
+
+			SoundController.playSounds(3, convertedFinalEuclid);
+		}
+
 	}
 
 	private List<Node> constructPath(Map<Node, Node> map, Node start, Node end) {

@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 public class MainGame extends Game {
 
 	private InputHandler inputHandler;
+	private SoundController sc;
 
 	/**
 	 * On first launch of program
@@ -22,10 +23,11 @@ public class MainGame extends Game {
 	 */
 	@Override
 	public void create() {
-		new SoundController(new String[]{
+		sc = new SoundController(new String[]{
 				"core/assets/sounds/sad_failure.wav",
 				"core/assets/sounds/search_complete.mp3",
 				"core/assets/sounds/error_buildings.mp3",
+				"core/assets/sounds/ping.wav"
 		});
 
 		// load config
@@ -40,5 +42,11 @@ public class MainGame extends Game {
 
 	public InputHandler getInputHandler() {
 		return inputHandler;
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		sc.dispose();
 	}
 }
