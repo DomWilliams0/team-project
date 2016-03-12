@@ -22,6 +22,7 @@ public class CompareMode extends Mode {
 	protected void initSidebar() {
 		super.initSidebar();
 		sideBar = new SideBarCompareMode(sideBarStage, world);
+		sideBar.setController(game);
 		sideBarStage.addActor(sideBar);
 	}
 

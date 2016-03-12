@@ -1,5 +1,6 @@
 package com.b3.gui.sidebars;
 
+import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
@@ -7,6 +8,7 @@ import com.b3.entity.ai.BehaviourType;
 import com.b3.gui.TabbedPane;
 import com.b3.gui.components.*;
 import com.b3.input.SoundController;
+import com.b3.mode.MainMenuScreen;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -47,6 +49,7 @@ public class SideBarCompareMode extends SideBar implements Disposable {
     private float preferredWidth;
 
     private ButtonComponent playPause;
+    private MainGame controller;
 
     public SideBarCompareMode(Stage stage, World world) {
         this(stage, world, 230);
@@ -63,6 +66,11 @@ public class SideBarCompareMode extends SideBar implements Disposable {
 
         initComponents();
     }
+
+    public void setController(MainGame controller) {
+        this.controller = controller;
+    }
+
 
     private void setBackgroundColor(float r, float g, float b, float a) {
         Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
@@ -380,6 +388,21 @@ public class SideBarCompareMode extends SideBar implements Disposable {
                 .spaceTop(5);
         settingsTab.row();
 
+        ButtonComponent backToMenuBtn = new ButtonComponent(skin, font, "Main menu");
+        backToMenuBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dispose();
+                controller.setScreen(new MainMenuScreen(controller));
+            }
+        });
+
+        settingsTab.add(backToMenuBtn.getComponent())
+                .align(Align.center)
+                .maxWidth(preferredWidth)
+                .spaceTop(25);
+        settingsTab.row();
+
         tabbedPane.addTab("Settings", settingsTab);
 
         // ==================
@@ -523,6 +546,7 @@ public class SideBarCompareMode extends SideBar implements Disposable {
 
     @Override
     public void dispose() {
+        controller.getInputHandler().clear();
         stage.dispose();
     }
 }
