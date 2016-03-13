@@ -1,18 +1,14 @@
 package com.b3.gui.sidebars;
 
 import com.b3.MainGame;
-import com.b3.entity.Agent;
-import com.b3.entity.ai.Behaviour;
-import com.b3.entity.ai.BehaviourMultiPathFind;
-import com.b3.entity.ai.BehaviourType;
 import com.b3.gui.TabbedPane;
-import com.b3.gui.components.*;
+import com.b3.gui.components.ButtonComponent;
+import com.b3.gui.components.CheckBoxComponent;
+import com.b3.gui.components.LabelComponent;
+import com.b3.gui.components.SliderComponent;
 import com.b3.input.SoundController;
 import com.b3.mode.MainMenuScreen;
-import com.b3.search.Node;
-import com.b3.search.Point;
 import com.b3.search.SearchTicker;
-import com.b3.search.WorldGraph;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -24,7 +20,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -33,12 +28,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class SideBarCompareMode extends SideBar implements Disposable {
 
@@ -141,40 +133,6 @@ public class SideBarCompareMode extends SideBar implements Disposable {
         settingsTab.setFillParent(true);
         settingsTab.pad(20);
 
-        // Entity selectbox
-        String[] entities = {"Civilian", "Police officer", "Firefighter", "Delivery guy"};
-        SelectBoxComponent entitySelectBox = new SelectBoxComponent(skin, font, new Array(entities));
-        entitySelectBox.setSelected("Civilian");
-
-        entitySelectBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("sfdf");
-            }
-        });
-
-        settingsTab.add(entitySelectBox.getSelectBox())
-                .maxWidth(preferredWidth)
-                .spaceBottom(10);
-        settingsTab.row();
-
-        // Building selectbox
-        String[] buildings = {"House", "Police station", "Fire stations", "Restaurant"};
-        SelectBoxComponent buildingSelectBox = new SelectBoxComponent(skin, font, new Array(buildings));
-        buildingSelectBox.setSelected("House");
-
-        buildingSelectBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("hello");
-            }
-        });
-
-        settingsTab.add(buildingSelectBox.getSelectBox())
-                .maxWidth(preferredWidth)
-                .spaceBottom(30);
-        settingsTab.row();
-
         // Show grid checkbox
         createCheckbox(skin, font, settingsTab, "Show grid", ConfigKey.SHOW_GRID);
 
@@ -216,7 +174,7 @@ public class SideBarCompareMode extends SideBar implements Disposable {
         createCheckbox(skin, font, settingsTab, "Show paths", ConfigKey.SHOW_PATHS);
 
         // Search speed slider
-        LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.WHITE);
+        LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
         settingsTab.add(searchSpeedLabel.getLabel())
                 .align(Align.left)
                 .maxWidth(preferredWidth)
@@ -242,7 +200,7 @@ public class SideBarCompareMode extends SideBar implements Disposable {
         settingsTab.row();
 
         // Game speed slider
-        LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.WHITE);
+        LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
         settingsTab.add(gameSpeedLabel.getLabel())
                 .align(Align.left)
                 .maxWidth(preferredWidth)
@@ -347,21 +305,6 @@ public class SideBarCompareMode extends SideBar implements Disposable {
                 .spaceTop(20);
         settingsTab.row();
 
-        // Start button
-        ButtonComponent startButton = new ButtonComponent(skin, font, "Start Event");
-        startButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Started the event system");
-            }
-        });
-
-        settingsTab.add(startButton.getComponent())
-                .align(Align.center)
-                .maxWidth(preferredWidth)
-                .spaceTop(20);
-        settingsTab.row();
-
         //Play and Pause button
         //String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
         playPause = new ButtonComponent(skin, font, "Pause");
@@ -404,98 +347,6 @@ public class SideBarCompareMode extends SideBar implements Disposable {
         settingsTab.row();
 
         tabbedPane.addTab("Settings", settingsTab);
-
-        // ==================
-        // === EVENTS TAB ===
-        // ==================
-
-        Table eventsTab = new Table();
-        eventsTab.setFillParent(true);
-        eventsTab.pad(20);
-
-        tabbedPane.addTab("Events", eventsTab);
-
-        // Get x and y coordinates
-        WorldGraph worldGraph = world.getWorldGraph();
-        List<Integer> xs = Utils.range(0, worldGraph.getMaxXValue());
-        List<Integer> ys = Utils.range(0, worldGraph.getMaxYValue());
-
-        Object[] xsStr = xs.stream().map(Object::toString).collect(Collectors.toList()).toArray();
-        Object[] ysStr = ys.stream().map(Object::toString).collect(Collectors.toList()).toArray();
-
-        // X coordinates
-        SelectBoxComponent xCoordSelectBox = new SelectBoxComponent(skin, font, new Array(xsStr));
-
-        xCoordSelectBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("hello");
-            }
-        });
-
-        eventsTab.add(xCoordSelectBox.getSelectBox())
-                .maxWidth(preferredWidth)
-                .spaceBottom(30);
-        eventsTab.row();
-
-        // Y coordinates
-        SelectBoxComponent yCoordSelectBox = new SelectBoxComponent(skin, font, new Array(ysStr));
-
-        yCoordSelectBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("hello");
-            }
-        });
-
-        eventsTab.add(yCoordSelectBox.getSelectBox())
-                .maxWidth(preferredWidth)
-                .spaceBottom(30);
-        eventsTab.row();
-
-        // Queue goal button
-        ButtonComponent queueGoalButton = new ButtonComponent(skin, font, "Add to queue");
-        queueGoalButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                String xStr = (String)xCoordSelectBox.getSelected();
-                int x = Integer.parseInt(xStr);
-
-                String yStr = (String)yCoordSelectBox.getSelected();
-                int y = Integer.parseInt(yStr);
-
-                Node node = worldGraph.getNode(new Point(x, y));
-
-                if (node == null) {
-                    System.out.println("nooooooooo");
-                }
-                else {
-                    Agent currentSearchAgent = worldGraph.getCurrentSearchAgent();
-                    Behaviour behaviour = currentSearchAgent.getBehaviour();
-
-                    if (behaviour.getType() == BehaviourType.FOLLOW_PATH) {
-                        BehaviourMultiPathFind multiPathFind = (BehaviourMultiPathFind)behaviour;
-                        multiPathFind.addNextGoal(new Vector2(x, y));
-                    }
-                }
-            }
-        });
-
-        eventsTab.add(queueGoalButton.getComponent())
-                .align(Align.center)
-                .maxWidth(preferredWidth);
-        eventsTab.row();
-
-
-        // =================
-        // === STATS TAB ===
-        // =================
-
-        Table statsTab = new Table();
-        statsTab.setFillParent(true);
-        statsTab.pad(20);
-
-        tabbedPane.addTab("Stats", statsTab);
 
         // ======================
         // === TRIGGER BUTTON ===
