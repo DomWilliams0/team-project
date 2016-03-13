@@ -67,7 +67,7 @@ public class PracticeModeSettingsTab implements Tab {
         });
 
         // Game speed slider
-        LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.WHITE);
+        LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
         settingsTab.add(gameSpeedLabel.getLabel())
                 .align(Align.left)
                 .maxWidth(preferredWidth)

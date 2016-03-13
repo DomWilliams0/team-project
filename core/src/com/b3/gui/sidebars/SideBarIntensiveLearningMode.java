@@ -40,7 +40,7 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
     private MainGame controller;
 
     public SideBarIntensiveLearningMode(Stage stage, World world) {
-        this(stage, world, 400);
+        this(stage, world, 320);
     }
 
     public SideBarIntensiveLearningMode(Stage stage, World world, float preferredWidth) {
@@ -261,7 +261,7 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
         });
 
         // Search speed slider
-        LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.WHITE);
+        LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
         settingsTab.add(searchSpeedLabel.getLabel())
                 .align(Align.left)
                 .maxWidth(preferredWidth)
@@ -287,7 +287,7 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
         settingsTab.row();
 
         // Game speed slider
-        LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.WHITE);
+        LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
         settingsTab.add(gameSpeedLabel.getLabel())
                 .align(Align.left)
                 .maxWidth(preferredWidth)

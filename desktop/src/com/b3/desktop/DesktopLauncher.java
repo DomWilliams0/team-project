@@ -1,15 +1,14 @@
 package com.b3.desktop;
 
-import com.badlogic.gdx.Files;
+import com.b3.MainGame;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.b3.MainGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 1024;
-		config.height = 768;
+		config.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
+		config.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
 		config.title = "Cop Chase";
 		new LwjglApplication(new MainGame(), config);
 	}

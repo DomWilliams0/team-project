@@ -1,5 +1,6 @@
 package com.b3.gui.components;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -19,9 +20,13 @@ public class CheckBoxComponent extends Component {
      * @param text The text beside the checkbox
      */
     public CheckBoxComponent(Skin skin, BitmapFont font, String text) {
+        this(skin, font, text, Color.BLACK);
+    }
+
+    public CheckBoxComponent(Skin skin, BitmapFont font, String text, Color fontColor) {
         CheckBox.CheckBoxStyle cbs = new CheckBox.CheckBoxStyle();
-        skin.add("default", font, BitmapFont.class);
-        cbs.font = skin.getFont("default");
+        cbs.font = font; // skin.getFont("default");
+        cbs.fontColor = fontColor;
         cbs.checkboxOff = skin.getDrawable( "checkbox_off");
         cbs.checkboxOn = skin.getDrawable( "checkbox_on");
         skin.add("default", cbs);
