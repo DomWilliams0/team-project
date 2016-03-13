@@ -242,6 +242,7 @@ public class SearchTicker extends Observable {
 
 		if (line == 1) {
 			mostRecentlyExpanded = frontier.take();
+			setUpdated(true);
 			pseudocode.highlight(line + 1);
 			return;
 		}
@@ -253,6 +254,7 @@ public class SearchTicker extends Observable {
 
 		if (line == 3) {
 			visited.add(mostRecentlyExpanded);
+			setUpdated(true);
 			pseudocode.highlight(line + 1);
 			return;
 		}
@@ -291,6 +293,7 @@ public class SearchTicker extends Observable {
 					cameFrom.put(currentNeighbour, mostRecentlyExpanded);
 					frontier.add(currentNeighbour);
 					lastFrontier.add(currentNeighbour);
+					setUpdated(true);
 					return;
 				}
 
@@ -348,6 +351,7 @@ public class SearchTicker extends Observable {
 						pseudocode.highlight(line + 1);
 						frontier.add(currentNeighbour);
 						lastFrontier.add(currentNeighbour);
+						setUpdated(true);
 
 						return;
 					}
