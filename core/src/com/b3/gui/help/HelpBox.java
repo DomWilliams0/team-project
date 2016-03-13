@@ -1,6 +1,7 @@
 package com.b3.gui.help;
 
 import com.b3.gui.components.ButtonComponent;
+import com.b3.gui.components.LabelComponent;
 import com.b3.mode.ModeType;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -14,12 +15,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import java.util.Formatter;
+import java.util.Locale;
 
 /**
  * Provides help for the user based on the mode of the simulation.
@@ -40,18 +41,29 @@ public class HelpBox extends Table {
 	private Table worldNodesT;
 	private Table sidebarsT;
 
+	private final String controls = "Move around the world using the arrow keys.\n" +
+			"Zoom in and out using the mouse wheel or +,-\n" +
+			"Zoom out far to enter a modified, more focused view.\n";
+	private final String visbarhelp = "In the visualisation sidebar (right),\n" +
+			"Click nodes to display details over it in the world.\n" +
+			"Hover over a node to highlight it briefly in the world.\n" +
+			"Press Next Step to stepthrough the algorithm while paused.";
+	private final String setbarhelp = "The settings sidebar (left) allows you to edit settings\n" +
+			"such as simulation speed and search speed.\n" +
+			"You can also play/pause the search here.";
+
     public HelpBox(Stage stage, ModeType mode) {
-        this(stage, mode, 400);
-    }
+		this.stage = stage;
+		this.mode = mode;
+		this.isOpen = false;
+		switch(mode) {
+			case LEARNING:preferredHeight = 390;break;
+			case PRACTICE:preferredHeight = 340;break;
+			case COMPARE: preferredHeight = 400;break;
+		};
 
-    public HelpBox(Stage stage, ModeType mode, float preferredHeight) {
-        this.stage = stage;
-        this.mode = mode;
-        this.isOpen = false;
-        this.preferredHeight = preferredHeight;
-
-        initComponents();
-
+		initComponents();
+		bottom();
 		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
@@ -83,8 +95,8 @@ public class HelpBox extends Table {
 		// ==========================
 
 		switch(mode) {
-			case LEARNING : 	setupLM(); break;
-			case COMPARE : 		setupCM(); break;
+			case LEARNING:	setupLM(); break;
+			case COMPARE :	setupCM(); break;
 			case PRACTICE:	setupTY(); break;
 		}
 
@@ -110,12 +122,14 @@ public class HelpBox extends Table {
     }
 
 	private void fillThis() {
+		//top row for sidebar info then interacting with the nodes in the world
 		add(sidebarsT);
 		add(padding);
 		add(worldNodesT);
 
 		row();
 
+		//bottom row for legend & controls for the world
 		add(new Legend(getSkin())).left();
 		add(padding);
 		add(worldT);
@@ -147,103 +161,125 @@ public class HelpBox extends Table {
 		}
 	}
 
+	/**
+	 * Setup the help box for Learning mode
+	 */
 	private void setupLM() {
 		//todo this could probably be improved design-wise...
 
-		add("This mode is to learn about a specific search algorithm in depth, in a small focused world.").colspan(5);
+		addHelp(this, true,
+				"This mode is to learn about a specific search algorithm in depth, in a small, focused world.")
+				.colspan(5);
 
 		row();
 
 		worldT = new Table(getSkin());
-		worldT.add("Interacting with the world:");
+		addHelp(worldT, true, "Interacting with the world:");
 		worldT.row().row();
-		worldT.add("Move around the world using the arrow keys.\n" +
-				"Zoom in and out using the mouse wheel or +,-\n" +
-				"Zoom out far to enter a modified, more focused view.\n" +
+		addHelp(worldT, false,
+				controls +
 				"Open left sidebar for settings,\n" +
-				"Open right sidebar for visualisation.");
+				"Open right sidebar for data collections.");
 
 		worldNodesT = new Table(getSkin());
-		worldNodesT.add("Interacting with the world nodes:");
+		addHelp(worldNodesT, true, "Interacting with the world nodes:");
 		worldNodesT.row().row();
-		worldNodesT.add("Click nodes to view details and highlight\nit in the Visualisation sidebar.\n" +
+		addHelp(worldNodesT, false,
+				"Click nodes to view details and highlight\nit in the Visualisation sidebar.\n" +
 				"Click again to view more details about it.\n" +
 				"Hover over a node to display its coordinates.\n" +
 				"Right click a node to set\nit as the next destination.");
 
 		sidebarsT = new Table (getSkin());
-		sidebarsT.add("The sidebars:");
+		addHelp(sidebarsT, true, "The sidebars:");
 		sidebarsT.row().row();
-		sidebarsT.add("In the visualisation sidebar (right),\n" +
-						"Click nodes to display details over it in the world.\n" +
-						"Hover over a node to highlight it briefly in the world.\n" +
-						"Press Next Step to stepthrough the algorithm while paused.\n" +
-						"The settings sidebar (left) allows you to edit settings\n" +
-						"such as simulation speed and search speed.\n" +
-						"You can also play/pause the search here.");
+		addHelp(sidebarsT, false,
+				visbarhelp + "\n" +
+				setbarhelp);
 
 	}
 
+	/**
+	 * Setup the help box for Compare mode
+	 */
 	private void setupCM() {
 		//todo part of this is incorrect ie interacting with world nodes
-		//todo not to worry atm though since help box inactive in this mode currently
-		add("This mode is to compare algorithms side-by-side in a large, lively world.").colspan(5);
+		addHelp(this,true,
+				"This mode is to compare algorithms side-by-side in a large, lively world.")
+				.colspan(5);
 
 		row();
 
 		worldT = new Table(getSkin());
-		worldT.add("Interacting with the world:");
+		addHelp(worldT, true, "Interacting with the world:");
 		worldT.row().row();
-		worldT.add("Move around the world using the arrow keys.\n" +
-				"Zoom in and out using the mouse wheel or +,-\n" +
-				"Zoom out far to enter a modified, more focused view.\n" +
+		addHelp(worldT, false,
+				controls +
 				"Open left sidebar for settings");
 
 		worldNodesT = new Table(getSkin());
-		worldNodesT.add("Interacting with the world nodes:");
+		addHelp(worldNodesT, true, "Interacting with the world nodes:");
 		worldNodesT.row().row();
-		worldNodesT.add("Click a node to view details about it.\n" +
+		addHelp(worldNodesT, false,
+				"Click a node to view details about it.\n" +
 				"Click again to view more details about it.\n" +
 				"Hover over a node to display its coordinates.\n" +
 				"Right click a node to set\nit as the next destination.");
 
 		sidebarsT = new Table (getSkin());
-		sidebarsT.add("The sidebar:");
+		addHelp(sidebarsT, true, "The sidebar:");
 		sidebarsT.row().row();
-		sidebarsT.add("In the sidebar, you can edit settings\n" +
-				"such as simulation speed and search speed.\n" +
-				"You can also play/pause the search here.");
+		addHelp(sidebarsT, false, setbarhelp);
 	}
 
+	/**
+	 * Setup the help box for Try Yourself mode
+	 */
 	private void setupTY() {
 		//todo part of this is incorrect ie interacting with world nodes
 		//todo not to worry atm though since help box inactive in this mode currently
-		add("This mode is to practice your knowledge in a small, focused world").colspan(5);
+		addHelp(this, true,
+				"This mode is to practice your knowledge in a small, focused world")
+				.colspan(5);
 
 		row();
 
 		worldT = new Table(getSkin());
-		worldT.add("Interacting with the world:");
+		addHelp(worldT, true, "Interacting with the world:");
 		worldT.row().row();
-		worldT.add("Move around the world using the arrow keys.\n" +
-				"Zoom in and out using the mouse wheel or +,-\n" +
-				"Zoom out far to enter a modified, more focused view.\n" +
-				"Open left sidebar for settings");
+		addHelp(worldT, false,
+				controls +
+				"Open right sidebar for data collections");
 
 		worldNodesT = new Table(getSkin());
-		worldNodesT.add("Interacting with the world nodes:");
+		addHelp(worldNodesT, true, "Interacting with the world nodes:");
 		worldNodesT.row().row();
-		worldNodesT.add("Click a node to expand it,\nor add it to the frontier.\n" +
+		addHelp(worldNodesT, false,
+				"Click a node to expand it, or add it to the frontier.\n" +
 				"Hover over a node to display its coordinates.\n" +
 				"Right click a node to set\nit as the next destination.");
 
 		sidebarsT = new Table (getSkin());
-//		sidebarsT.add("The sidebar:");
-//		sidebarsT.row().row();
-//		sidebarsT.add("In the sidebar, you can edit settings\n" +
-//				"such as simulation speed and search speed.\n" +
-//				"You can also play/pause the search here.");
+		addHelp(sidebarsT, true, "The sidebar:");
+		sidebarsT.row().row();
+		addHelp(sidebarsT, false,
+				visbarhelp + "\n" +
+				"You can also edit game speed and next\nsearch algorithm in the sidebar.");
 
+	}
+
+	/**
+	 * Adds some help text to the given table, in a label component formatted in the appropriate way
+	 * @param t The table to add the text to
+	 * @param isTitle Whether this is a title
+	 * @param s The string to put in
+	 * @return The cell created in the table
+	 */
+	private Cell addHelp(Table t, boolean isTitle, String s) {
+		Color c = isTitle ? new Color(0xa0a0ffff) : Color.BLACK;
+		int size = isTitle? 20 : 16;
+		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", size, s, c);
+		return t.add(lbl.getComponent());
 	}
 
 }

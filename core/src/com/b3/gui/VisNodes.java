@@ -445,7 +445,7 @@ public class VisNodes extends Table {
 			case DEPTH_FIRST:
 				Collections.reverse(list);
 				break;
-			// A* will utilise a temporary pq which will take all its items in order and add to list.
+			// A* asks the pq to give a sorted list of its elements
 			case DIJKSTRA:
 			case A_STAR:
 				list = ((PriorityQueueT<Node>) front).sortedOrder();
@@ -560,32 +560,17 @@ public class VisNodes extends Table {
 		newVisitedStr = newVisited==null?"<NOTHING>":newVisited.toString();
 		newFrontierStr = newFrontier==null?"<NOTHING>":convertNewFrontier(newFrontier);
 		highestNodeStr = highestNode==null?"<NOTHING>":highestNode.toString();
-
-		// =====================
-		// TO USE ADAPTED STRING
-		// =====================
-		/*
-		newVisitedStr = newVisited==null?"<NOTHING>":newVisited.toAdaptedString();
-		newFrontierStr = "[ ";
-		if(newFrontier!=null && newFrontier.size()>0) {
-			for (int i = 0; i < newFrontier.size(); i++) {
-				newFrontierStr += newFrontier.get(i).toAdaptedString();
-				if(i<newFrontier.size()-1) newFrontierStr += ", ";
-			}
-		} else {
-			newFrontierStr += "NOTHING";
-		}
-		newFrontierStr += " ]";
-		highestNodeStr = highestNode==null?"<NOTHING>":highestNode.toAdaptedString();
-		*/
 	}
 
 	private String convertNewFrontier(List<Node> front) {
 		if (alg == SearchAlgorithm.A_STAR) {
 			String s = "";
+			int i=0;
 			for(Node node: front) {
-				s+= node.toString() + ", at position " + (frontier.indexOf(node)+1) + "\n";
+				s+= "#" + (frontier.indexOf(node)+1) + ": " + node.toString() + "  ";
+				if (++i==2) s+= "\n";
 			}
+			if(i<2) s+= "\n";
 			return s;
 		} else {
 			return front.toString();

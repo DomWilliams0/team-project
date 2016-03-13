@@ -1,5 +1,6 @@
 package com.b3.gui.help;
 
+import com.b3.gui.components.LabelComponent;
 import com.b3.search.WorldGraph;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -41,7 +42,8 @@ public class Legend extends Table {
 	 * Populate it with data.
 	 */
 	private void initComponents() {
-		add("Legend:");
+		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 20, "Legend:", new Color(0xa0a0ffff));
+		add(lbl.getComponent());
 		row();
 
 		//Visited
@@ -65,7 +67,8 @@ public class Legend extends Table {
 		trd = new TextureRegionDrawable(new TextureRegion(new Texture(new PixmapTextureData(pm, null, false, false))));
 		Table t = new Table(skin);
 		t.setBackground(trd);
-		t.add(text).left();
+		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, text, Color.BLACK);
+		t.add(lbl.getComponent()).left();
 		add(t).left();
 		row();
 	}
