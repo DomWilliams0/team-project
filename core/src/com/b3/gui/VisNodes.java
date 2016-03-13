@@ -94,6 +94,9 @@ public class VisNodes extends Table {
 	private StringBuilder stepString;
 	private Formatter formatter;
 
+	private SearchAlgorithm alg;
+	private ArrayList<Node> frontier;
+
 	/**
 	 * Create a new data visualisation table
 	 *  @param stage The stage with which to render
@@ -185,7 +188,7 @@ public class VisNodes extends Table {
 	 *
 	 * @param front the frontier to display
 	 * @param visited the visited set to display
-	 * @param alg the algorithm currently being used by the search
+	 * @param alg the current algorithm being used by the search
 	 *
 	 * @return the state of the render  - 0: Not yet time to render
 	 *                                  - 1: Rendered as normal
@@ -196,6 +199,8 @@ public class VisNodes extends Table {
 		if(scrollpanesBeingUsed()) {
 			return 2;
 		}
+
+		this.alg = alg;
 
 		//stop it rendering every frame unless we're stepping through
 		if(!stepthrough) {
@@ -221,7 +226,7 @@ public class VisNodes extends Table {
 		//if we need to render a data collection
 		if(rendermore) {
 			//make the arraylist be ordered based on take-order of the collection
-			ArrayList<Node> frontier = sortFront(front,alg);
+			frontier = sortFront(front);
 
 			//get the highest priority node
 			if (frontier.size() > 0)
@@ -430,10 +435,9 @@ public class VisNodes extends Table {
      * Importantly, leaves given frontier untouched.
      *
 	 * @param front The frontier to sort
-	 * @param alg The algorithm with which to adapt the frontier
 	 * @return The frontier, in the current intended order of node expansion
 	 */
-	private ArrayList<Node> sortFront(Collection<Node> front, SearchAlgorithm alg) {
+	private ArrayList<Node> sortFront(Collection<Node> front) {
 		ArrayList<Node> list = new ArrayList<>(front);
 		// BFS is already sorted correctly.
 		switch(alg) {
@@ -470,18 +474,9 @@ public class VisNodes extends Table {
 
 		//we need to render the data collections
 		if(rendermore) {
-
-			//get what type the frontier is using
-			String frontierDesc = "";
-			switch(alg) {
-				case DEPTH_FIRST: frontierDesc = "LIFO (stack)"; break;
-				case BREADTH_FIRST: frontierDesc = "FIFO (queue)"; break;
-				case A_STAR: frontierDesc = "Priority Queue"; break;
-				case DIJKSTRA: frontierDesc = "Priority Queue"; break;
-			}
 			//full title;
 			LabelComponent titleLbl = new LabelComponent("aller/Aller_Bd.ttf", 18, "Running search using " + alg.getName(), Color.BLACK);
-			add(titleLbl.getComponent()).colspan(3).spaceBottom(25);
+			add(titleLbl.getComponent()).colspan(3).spaceBottom(5);
 			row();
 
 			//row 1 - titles
@@ -490,7 +485,7 @@ public class VisNodes extends Table {
 			add(frontierLbl.getComponent());
 			add("   ");
 			add(visitedLbl.getComponent());
-			row().padBottom(25);
+			row().padBottom(10);
 
 			//row 2 - description of data collections
 			add(alg.getFrontierDescription());
@@ -506,7 +501,7 @@ public class VisNodes extends Table {
 
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
-			float sh = h / 4;
+			float sh = h / 5;
 
 			//row 4 - display the scroll panes holding the collection tables
 			add(fp).fill().height(sh).maxHeight(sh);
@@ -519,7 +514,7 @@ public class VisNodes extends Table {
 			add(lowestPriorityLbl.getComponent());
 			add("");
 			row();
-			add("_________________________________________").colspan(3).padTop(10);
+			add("_________________________________________").colspan(3).padTop(5);
 			row();
 
 		} else {
@@ -563,7 +558,7 @@ public class VisNodes extends Table {
 	 */
 	private void convertNodeReps() {
 		newVisitedStr = newVisited==null?"<NOTHING>":newVisited.toString();
-		newFrontierStr = newFrontier==null?"<NOTHING>":newFrontier.toString();
+		newFrontierStr = newFrontier==null?"<NOTHING>":convertNewFrontier(newFrontier);
 		highestNodeStr = highestNode==null?"<NOTHING>":highestNode.toString();
 
 		// =====================
@@ -583,6 +578,18 @@ public class VisNodes extends Table {
 		newFrontierStr += " ]";
 		highestNodeStr = highestNode==null?"<NOTHING>":highestNode.toAdaptedString();
 		*/
+	}
+
+	private String convertNewFrontier(List<Node> front) {
+		if (alg == SearchAlgorithm.A_STAR) {
+			String s = "";
+			for(Node node: front) {
+				s+= node.toString() + ", at position " + (frontier.indexOf(node)+1) + "\n";
+			}
+			return s;
+		} else {
+			return front.toString();
+		}
 	}
 
 	public boolean isClickedUpdated() {

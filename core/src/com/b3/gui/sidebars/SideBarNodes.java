@@ -48,6 +48,9 @@ public class SideBarNodes extends SideBar implements Disposable {
     private ButtonComponent triggerBtn;
     private VisNodes ui;
     private World world;
+	/**
+     * Defines whether the sidebar is open
+     */
     public static boolean isOpen;
     private float preferredWidth;
     private Skin skin;
