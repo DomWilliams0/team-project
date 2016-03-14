@@ -3,12 +3,7 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
-<<<<<<< HEAD
 import com.b3.gui.help.HelpBox;
-=======
-import com.b3.gui.sidebars.SideBarNodes;
-import com.b3.gui.sidebars.SideBarPracticeMode;
->>>>>>> GUI refactoring
 import com.b3.gui.sidebars.tabs.PracticeModeSettingsTab;
 import com.b3.input.InputHandler;
 import com.b3.input.PracticeModeWorldSelectionHandler;
@@ -70,33 +65,9 @@ public class PracticeMode extends Mode {
 	protected void initSidebar() {
 		super.initSidebar();
 		popupStage = new Stage(new ScreenViewport());
-<<<<<<< HEAD
-
-		// INITIALISE SKIN AND FONT
-		// ------------------------
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
-		Skin skin = new Skin(atlas);
-		BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
-
-		// SIDEBAR NODES
-		// -------------
-
-		// Get world and controller (for settings tab)
-		Map<String, Object> data = new HashMap<String, Object>() {{
-			put("world", world);
-			put("controller", game);
-		}};
-
-        // Add settings tab
-        PracticeModeSettingsTab settingsTab = new PracticeModeSettingsTab(skin, font, sideBarNodes.getPreferredWidth(), data);
-        settingsTab.setName("Settings");
-
-		sideBarNodes.addTab(settingsTab.getTab());
 
 		helpBox = new HelpBox(sideBarStage, world.getMode());
 		sideBarStage.addActor(helpBox);
-=======
->>>>>>> GUI refactoring
 	}
 
 	/**
