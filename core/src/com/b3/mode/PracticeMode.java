@@ -4,24 +4,14 @@ import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
 import com.b3.gui.help.HelpBox;
-import com.b3.gui.sidebars.tabs.PracticeModeSettingsTab;
 import com.b3.input.InputHandler;
 import com.b3.input.PracticeModeWorldSelectionHandler;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
-import com.b3.util.Config;
-import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class PracticeMode extends Mode {
 
