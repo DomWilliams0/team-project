@@ -119,7 +119,7 @@ public class TutorialPopups {
                 }
                 break;
             case 5:
-                if (sideBarNodes.isOpen) {
+                if (sideBarNodes.isOpen()) {
                     stepCounter++;
                     currentEndNode = world.getWorldGraph().getCurrentSearch().getEnd();
                 }

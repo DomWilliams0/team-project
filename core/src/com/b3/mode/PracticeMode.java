@@ -3,7 +3,12 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
+<<<<<<< HEAD
 import com.b3.gui.help.HelpBox;
+=======
+import com.b3.gui.sidebars.SideBarNodes;
+import com.b3.gui.sidebars.SideBarPracticeMode;
+>>>>>>> GUI refactoring
 import com.b3.gui.sidebars.tabs.PracticeModeSettingsTab;
 import com.b3.input.InputHandler;
 import com.b3.input.PracticeModeWorldSelectionHandler;
@@ -65,6 +70,7 @@ public class PracticeMode extends Mode {
 	protected void initSidebar() {
 		super.initSidebar();
 		popupStage = new Stage(new ScreenViewport());
+<<<<<<< HEAD
 
 		// INITIALISE SKIN AND FONT
 		// ------------------------
@@ -89,6 +95,8 @@ public class PracticeMode extends Mode {
 
 		helpBox = new HelpBox(sideBarStage, world.getMode());
 		sideBarStage.addActor(helpBox);
+=======
+>>>>>>> GUI refactoring
 	}
 
 	/**
@@ -112,7 +120,6 @@ public class PracticeMode extends Mode {
 
 		worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
 	}
-
 
 	/**
 	 * Updates the position of the sidebars and world and scale when the window has been resized

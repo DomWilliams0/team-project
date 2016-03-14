@@ -1,6 +1,8 @@
 package com.b3.gui.sidebars.tabs;
 
 import com.b3.MainGame;
+import com.b3.gui.sidebars.SideBar;
+import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.mode.MainMenuScreen;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.LabelComponent;
@@ -25,8 +27,11 @@ import java.util.Map;
 public class PracticeModeSettingsTab implements Tab {
 
     private Table settingsTab;
+    private SideBar parent;
 
-    public PracticeModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, Map<String, Object> data) {
+    public PracticeModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
+        this.parent = parent;
+
         settingsTab = new Table();
         settingsTab.setFillParent(true);
         settingsTab.pad(20);
@@ -36,6 +41,7 @@ public class PracticeModeSettingsTab implements Tab {
         // ======================
 
         skin.add("default", font, BitmapFont.class);
+        //new LabelComponent("", 16, "", Color.BLACK)
         LabelComponent labelOne = new LabelComponent(skin, "Left click the nodes to see more information", Color.BLACK);
         labelOne.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
 

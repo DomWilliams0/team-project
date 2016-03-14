@@ -45,17 +45,17 @@ public class Pseudocode extends Observable {
             case A_STAR:
             case DIJKSTRA:
                 lines = new ArrayList<Tuple<String, Tuple<Boolean, Integer>>>() {{
-                    add(new Tuple<>("while [GREEN]frontier[] is not empty:",             new Tuple<>(false, 0)));
-                    add(new Tuple<>("[PINK]n[] = [GREEN]frontier[].take()\n",                    new Tuple<>(false, 1)));
-                    add(new Tuple<>("[LIGHT_GRAY]visited[].add([PINK]n[])\n",                         new Tuple<>(false, 1)));
-                    add(new Tuple<>("if [PINK]n[] is target:",                          new Tuple<>(false, 1)));
-                    add(new Tuple<>("return constructed path\n",                new Tuple<>(false, 2)));
-                    add(new Tuple<>("for each node [FIREBRICK]m[] that is adjacent to [PINK]n[]:",   new Tuple<>(false, 1)));
-                    add(new Tuple<>("tentative_g <- g([PINK]n[]) + edgeCost([PINK]n[], [FIREBRICK]m[])",     new Tuple<>(false, 2)));
-                    add(new Tuple<>("if tentative_g <= g([FIREBRICK]m[]):",                  new Tuple<>(false, 2)));
-                    add(new Tuple<>("cameFrom.put([FIREBRICK]m[], [PINK]n[])",                       new Tuple<>(false, 3)));
+                    add(new Tuple<>("while [GREEN]frontier[] is not empty:",                                        new Tuple<>(false, 0)));
+                    add(new Tuple<>("[PINK]n[] = [GREEN]frontier[].take()\n",                                       new Tuple<>(false, 1)));
+                    add(new Tuple<>("[LIGHT_GRAY]visited[].add([PINK]n[])\n",                                       new Tuple<>(false, 1)));
+                    add(new Tuple<>("if [PINK]n[] is target:",                                                      new Tuple<>(false, 1)));
+                    add(new Tuple<>("return constructed path\n",                                                    new Tuple<>(false, 2)));
+                    add(new Tuple<>("for each node [FIREBRICK]m[] that is adjacent to [PINK]n[]:",                  new Tuple<>(false, 1)));
+                    add(new Tuple<>("tentative_g <- g([PINK]n[]) + edgeCost([PINK]n[], [FIREBRICK]m[])",            new Tuple<>(false, 2)));
+                    add(new Tuple<>("if tentative_g <= g([FIREBRICK]m[]):",                                         new Tuple<>(false, 2)));
+                    add(new Tuple<>("cameFrom.put([FIREBRICK]m[], [PINK]n[])",                                      new Tuple<>(false, 3)));
                     add(new Tuple<>("if [FIREBRICK]m[] not in [LIGHT_GRAY]visited[] and not in [GREEN]frontier[]:", new Tuple<>(false, 3)));
-                    add(new Tuple<>("frontier.add([FIREBRICK]m[])",                          new Tuple<>(false, 4)));
+                    add(new Tuple<>("frontier.add([FIREBRICK]m[])",                                                 new Tuple<>(false, 4)));
                 }};
                 break;
         }

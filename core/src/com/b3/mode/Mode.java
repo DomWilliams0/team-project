@@ -1,7 +1,9 @@
 package com.b3.mode;
 
 import com.b3.MainGame;
+import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarNodes;
+import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
 import com.b3.search.Point;
@@ -77,7 +79,10 @@ public abstract class Mode extends ScreenAdapter {
 		sideBarStage = new Stage(new ScreenViewport());
 
 		if (modeType != ModeType.COMPARE) {
-			sideBarNodes = new SideBarNodes(sideBarStage, world);
+			sideBarNodes = modeType == ModeType.PRACTICE ?
+					new SideBarPracticeMode(sideBarStage, world, game, 460) :
+					new SideBarNodes(sideBarStage, world);
+
 			sideBarNodes.setStepthrough(true);
 			sideBarStage.addActor(sideBarNodes);
 		}

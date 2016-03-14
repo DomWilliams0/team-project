@@ -1,39 +1,19 @@
 package com.b3.gui.sidebars;
 
-import com.b3.gui.PseudocodeVisualiser;
-import com.b3.gui.TabbedPane;
-import com.b3.gui.VisNodes;
-import com.b3.gui.components.ButtonComponent;
+import com.b3.gui.sidebars.tabs.NodesTab;
 import com.b3.gui.sidebars.tabs.PseudocodeTab;
 import com.b3.gui.sidebars.tabs.Tab;
-import com.b3.input.SoundController;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
-import com.b3.util.Config;
-import com.b3.util.ConfigKey;
-import com.b3.util.Utils;
 import com.b3.world.World;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -44,97 +24,48 @@ import java.util.Map;
  */
 public class SideBarNodes extends SideBar implements Disposable {
 
-    private Stage stage;
-    private ButtonComponent triggerBtn;
-    private VisNodes ui;
-    private World world;
-	/**
-     * Defines whether the sidebar is open
-     */
-    public static boolean isOpen;
-    private float preferredWidth;
-    private Skin skin;
-    private BitmapFont font;
-    private TabbedPane tabbedPane;
-    private ButtonComponent next;
-    private ButtonComponent inspectSearchBtn;
-    private ButtonComponent manualAutoBtn;
-    private ButtonComponent nextBtn;
-    private Map<String, Tab> additionalTabs;
+    public static boolean s_isOpen;
 
-    /**
-     * Create a new gui element with a default preferred size and a default pseudocode tab
-     *
-     * @param stage The stage on which to act and draw.
-     */
     public SideBarNodes(Stage stage, World world) {
-        this(stage, world, 460, new HashMap<>());
-
-        /*if ((world.getMode() == ModeType.LEARNING) || (world.getMode() == ModeType.TUTORIAL)) {
-            initPseudocode();
-        }*/
+        this(stage, world, 460);
     }
 
-    /**
-     * Create a new gui element
-     *
-     * @param stage The stage on which to act and draw
-     * @param preferredWidth The preferred width of the gui table
-     */
-    public SideBarNodes(Stage stage, World world, float preferredWidth, Map<String, Tab> additionalTabs) {
-        this.stage = stage;
-        this.isOpen = false;
-        this.preferredWidth = preferredWidth;
-        this.world = world;
-
-        //setup the skin
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
-        this.skin = new Skin(atlas);
-        this.font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
-
-        setPosition(Gdx.graphics.getWidth(), 0);
-        setSize(preferredWidth, Gdx.graphics.getHeight());
-
-        if (additionalTabs != null && ((world.getMode() == ModeType.LEARNING) || (world.getMode() == ModeType.TUTORIAL))) {
-            Map<String, Object> data = new HashMap<String, Object>() {{
-                put("world", world);
-            }};
-            additionalTabs.put("Pseudocode", new PseudocodeTab(skin, font, data));
-        }
-
-        this.additionalTabs = additionalTabs;
+    public SideBarNodes(Stage stage, World world, float preferredWidth) {
+        super(stage, world, false, "window_02", preferredWidth, new LinkedHashMap<>());
+        initTabs();
         initComponents();
     }
 
-    public SideBarNodes(Stage stage, World world, HashMap<String, Tab> additionalTabs) {
-        this(stage, world, 420, additionalTabs);
+    public SideBarNodes(Stage stage, World world, float preferredWidth, boolean left, boolean deferred) {
+        super(stage, world, left, "window_02", preferredWidth, new LinkedHashMap<>());
+        initTabs();
+
+        if (!deferred)
+            initComponents();
     }
 
-    /**
-     * Set the background colour of this menu
-     * @param r Red colour component
-     * @param g Green colour component
-     * @param b Blue colour component
-     * @param a Alpha component
-     */
-    private void setBackgroundColor(float r, float g, float b, float a) {
-        Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
-        pm1.setColor(r, g, b, a);
-        pm1.fill();
-        setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
+    private void initTabs() {
+        // Add pseudocode tab
+        if (tabs != null) {
+            // Add nodes tab
+            Map<String, Object> data = new HashMap<String, Object>() {{
+                put("world", world);
+                put("stage", stage);
+            }};
+            tabs.put("Nodes", new NodesTab(skin, font, preferredWidth, this, data));
+
+            // Add pseudocode tab
+            if ((world.getMode() == ModeType.LEARNING) || (world.getMode() == ModeType.TUTORIAL)) {
+                data = new HashMap<String, Object>() {{
+                    put("world", world);
+                }};
+                tabs.put("Pseudocode", new PseudocodeTab(skin, font, data));
+            }
+        }
     }
 
-    /**
-     * Set the world with which to get the search ticker
-     *
-     * @param world The world being simulated.
-     */
-    public void setWorld(World world) {
-        this.world = world;
-    }
-
-    public void addTab(Table tab) {
-        tabbedPane.addTab(tab.getName(), tab);
+    public void addTabs(Map<String, Tab> additionalTabs) {
+        tabs.putAll(additionalTabs);
     }
 
     /**
@@ -157,7 +88,8 @@ public class SideBarNodes extends SideBar implements Disposable {
      * @return Whether the highlight was successful
      */
     public boolean highlightNode(Node n, Color c, boolean singleHighlight) {
-        return ui.setCellColour(n, c, singleHighlight);
+        NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
+        return nodesTab.getUI().setCellColour(n, c, singleHighlight);
     }
 
     /**
@@ -178,20 +110,21 @@ public class SideBarNodes extends SideBar implements Disposable {
      * @return Whether the highlight was successful
      */
     public boolean highlightNode(Node n, boolean singleHighlight) {
-        return ui.setCellColour(n, singleHighlight);
+        return ((NodesTab)tabs.get("Nodes")).getUI().setCellColour(n, singleHighlight);
     }
 
     public void setStepthrough(boolean stepthrough) {
-        ui.setStepthrough(stepthrough);
-        next.getComponent().setVisible(stepthrough && (world.getMode() != ModeType.PRACTICE));
+        NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
+        nodesTab.getUI().setStepthrough(stepthrough);
+        nodesTab.getNextBtn().getComponent().setVisible(stepthrough && (world.getMode() != ModeType.PRACTICE));
     }
 
     public boolean hasNewClick() {
-        return ui.isClickedUpdated();
+        return ((NodesTab)tabs.get("Nodes")).getUI().isClickedUpdated();
     }
 
     public Point getNewClick() {
-        return ui.getClickedNode();
+        return ((NodesTab)tabs.get("Nodes")).getUI().getClickedNode();
     }
 
     public void resetPseudoCode() {
@@ -201,7 +134,7 @@ public class SideBarNodes extends SideBar implements Disposable {
         //ticker.resume(1);
 
         if (world.getMode() == ModeType.LEARNING) {
-            PseudocodeTab pseudocodeTab = (PseudocodeTab) additionalTabs.get("Pseudocode");
+            PseudocodeTab pseudocodeTab = (PseudocodeTab) tabs.get("Pseudocode");
 
             pseudocodeTab.getManualAutoBtn().getComponent().setVisible(false);
             pseudocodeTab.getInspectSearchBtn().setData(false);
@@ -210,141 +143,9 @@ public class SideBarNodes extends SideBar implements Disposable {
     }
 
     @Override
-    protected void initComponents() {
-        //set a default background colour
-        setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
-
-        Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
-        skin.add("default", style);
-
-        // ===================
-        // === TABBED PANE ===
-        // ===================
-
-        TabbedPane.TabbedPaneStyle tabbedPaneStyle = new TabbedPane.TabbedPaneStyle();
-        skin.add("default", font, BitmapFont.class);
-        tabbedPaneStyle.font = font;
-        tabbedPaneStyle.bodyBackground = skin.getDrawable("knob_06");
-        tabbedPaneStyle.titleButtonSelected = skin.getDrawable("button_02");
-        tabbedPaneStyle.titleButtonUnselected = skin.getDrawable("button_01");
-        skin.add("default", tabbedPaneStyle);
-        tabbedPane = new TabbedPane(skin);
-
-        // ==================
-        // === NODES PANE ===
-        // ==================
-
-        Table nodesTab = new Table();
-        nodesTab.setFillParent(true);
-        //nodesTab.pad(10);
-
-        //create the data table which will display the nodes
-        ui = new VisNodes(stage, skin, world);
-
-        next = new ButtonComponent(skin, font, "Next step");
-        next.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-                ticker.tick(true);
-            }
-        });
-
-        next.getComponent().setVisible(world.getMode() != ModeType.PRACTICE);
-        System.out.println(next.getComponent().isVisible());
-
-        //put the nodes ui onto this
-        nodesTab.add(ui).maxWidth(preferredWidth).top().pad(20);
-        nodesTab.row();
-        nodesTab.add(next.getComponent());
-
-        tabbedPane.addTab("Nodes", nodesTab);
-
-        // =======================
-        // === ADDITIONAL TABS ===
-        // =======================
-
-        if (additionalTabs != null) {
-            for (String tabName : additionalTabs.keySet()) {
-                tabbedPane.addTab(tabName, additionalTabs.get(tabName).getTab());
-            }
-        }
-
-        // ======================
-        // === TRIGGER BUTTON ===
-        // ======================
-
-        triggerBtn = new ButtonComponent(skin, font, "<");
-        triggerBtn.getComponent().setPosition(Gdx.graphics.getWidth() - triggerBtn.getComponent().getWidth() + 20, Gdx.graphics.getHeight() / 2);
-        triggerBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                TextButton _triggerBtn = triggerBtn.getComponent();
-
-                if (!isOpen) {
-                    setX(Gdx.graphics.getWidth()- preferredWidth);
-                    setY(0);
-                    _triggerBtn.setText(">");
-                    _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
-                    isOpen = true;
-
-                    /*if (world.getMode() != Mode.COMPARE) {
-                        float posX = world.getWorldCamera().getPosX();
-                        if (posX < 10) {
-                            world.getWorldCamera().translateSafe(10 - posX, 0, 0);
-                        }
-                    }*/
-                }
-                else {
-                    setX(Gdx.graphics.getWidth());
-                    _triggerBtn.setText("<");
-                    _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
-                    isOpen = false;
-
-                    /*if (world.getMode() != Mode.COMPARE) {
-                        float posX = world.getWorldCamera().getPosX();
-                        if (posX >= 10) {
-                            System.out.println(posX);
-                            world.getWorldCamera().translateSafe(-posX, 0, 0);
-                        }
-                    }*/
-
-                }
-
-            }
-        });
-
-        add(tabbedPane).maxWidth(preferredWidth);
-        background(skin.getDrawable("window_02"));
-        this.stage.addActor(triggerBtn.getComponent());
-    }
-
-    @Override
-    public float getPreferredWidth() {
-        return preferredWidth;
-    }
-
-    /**
-     * Resize this menu
-     * Should be called whenever the window is resized.
-     *
-     * @param width Window width
-     * @param height Window height
-     */
-    @Override
-    public void resize(int width, int height) {
-        setHeight(height);
-        triggerBtn.getComponent().setY(height / 2);
-
-        TextButton _triggerBtn = triggerBtn.getComponent();
-        if (isOpen) {
-            setX(width- preferredWidth);
-            setY(0);
-            _triggerBtn.setX(width - preferredWidth - _triggerBtn.getWidth() + 20);
-        } else {
-            setX(width);
-            _triggerBtn.setX(width - _triggerBtn.getWidth() + 20);
-        }
+    public void setOpen(boolean open) {
+        super.setOpen(open);
+        s_isOpen = open;
     }
 
     /**
@@ -359,7 +160,7 @@ public class SideBarNodes extends SideBar implements Disposable {
         } else {
             setStepthrough(false);
         }
-        ui.render(currentSearch);
+        ((NodesTab)tabs.get("Nodes")).getUI().render(currentSearch);
     }
 
     /**
@@ -370,8 +171,7 @@ public class SideBarNodes extends SideBar implements Disposable {
         stage.dispose();
     }
 
-
     public Boolean getPseudocodeBegin() {
-        return inspectSearchBtn.getText().toString().equals("Begin");
+        return ((PseudocodeTab)tabs.get("Pseudocode")).getInspectSearchBtn().getText().toString().equals("Begin");
     }
 }
