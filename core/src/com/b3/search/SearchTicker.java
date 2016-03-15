@@ -459,6 +459,9 @@ public class SearchTicker extends Observable {
 
 				float finalEuclid = (float) Math.sqrt(changeInX2 + changeInY2);
 
+				startNode = new Point(1,1);
+				end = new Point(worldGraph.getMaxXValue(), worldGraph.getMaxYValue());
+
 				changeInX = startNode.getX() - end.getX();
 				changeInY = startNode.getY() - end.getY();
 
@@ -468,7 +471,7 @@ public class SearchTicker extends Observable {
 				float maxValue = (float) Math.sqrt(changeInX2 + changeInY2);
 //			float maxValue = 10;
 
-				float convertedFinalEuclid = (float) ((finalEuclid / maxValue) * 2);
+				float convertedFinalEuclid =  ((finalEuclid / maxValue) * 2);
 
 				SoundController.playSounds(3, convertedFinalEuclid);
 			}
