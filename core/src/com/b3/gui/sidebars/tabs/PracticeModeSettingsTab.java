@@ -1,13 +1,11 @@
 package com.b3.gui.sidebars.tabs;
 
 import com.b3.MainGame;
-import com.b3.gui.sidebars.SideBar;
-import com.b3.gui.sidebars.SideBarPracticeMode;
-import com.b3.mode.MainMenuScreen;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.LabelComponent;
 import com.b3.gui.components.SelectBoxComponent;
 import com.b3.gui.components.SliderComponent;
+import com.b3.gui.sidebars.SideBar;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -129,7 +127,7 @@ public class PracticeModeSettingsTab implements Tab {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 controller.getInputHandler().clear();
-                controller.setScreen(new MainMenuScreen(controller));
+                controller.goToMainMenu();
             }
         });
 

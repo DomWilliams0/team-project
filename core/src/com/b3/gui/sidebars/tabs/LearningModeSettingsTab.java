@@ -5,7 +5,6 @@ import com.b3.gui.components.*;
 import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
 import com.b3.input.SoundController;
-import com.b3.mode.MainMenuScreen;
 import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
@@ -17,7 +16,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -250,7 +248,7 @@ public class LearningModeSettingsTab implements Tab {
                 MainGame controller = sidebar.getController();
 
                 sidebar.dispose();
-                controller.setScreen(new MainMenuScreen(controller));
+                controller.goToMainMenu();
             }
         });
 

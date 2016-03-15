@@ -8,7 +8,6 @@ import com.b3.gui.components.SliderComponent;
 import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarCompareMode;
 import com.b3.input.SoundController;
-import com.b3.mode.MainMenuScreen;
 import com.b3.search.SearchTicker;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -212,7 +211,7 @@ public class CompareModeSettingsTab implements Tab {
                 MainGame controller = sidebar.getController();
 
                 sidebar.dispose();
-                controller.setScreen(new MainMenuScreen(controller));
+                controller.goToMainMenu();
             }
         });
 

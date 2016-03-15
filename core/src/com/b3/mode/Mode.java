@@ -1,7 +1,6 @@
 package com.b3.mode;
 
 import com.b3.MainGame;
-import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;

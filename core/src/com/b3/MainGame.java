@@ -2,9 +2,10 @@ package com.b3;
 
 import com.b3.input.InputHandler;
 import com.b3.input.SoundController;
-import com.b3.mode.MainMenuScreen;
+import com.b3.mode.*;
 import com.b3.util.Config;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 
 /**
@@ -36,12 +37,12 @@ public class MainGame extends Game {
 		DefaultShader.defaultCullFace = 0;
 
 		inputHandler = InputHandler.getInstance();
-		setScreen(new MainMenuScreen(this));
+		goToMainMenu();
 	}
 
 	/**
 	 * @return the current input handler for this world
-     */
+	 */
 	public InputHandler getInputHandler() {
 		return inputHandler;
 	}
@@ -53,5 +54,44 @@ public class MainGame extends Game {
 	public void dispose() {
 		super.dispose();
 		sc.dispose();
+	}
+
+	@Override
+	public void setScreen(Screen screen) {
+		throw new UnsupportedOperationException("Use MainGame#goToMode or MainGame#goToMainMenu instead");
+	}
+
+	/**
+	 * Destroys the current state and switches to the main menu
+	 */
+	public void goToMainMenu() {
+		super.setScreen(new MainMenuScreen(this));
+	}
+
+	/**
+	 * Switches to the given mode
+	 *
+	 * @param modeType The mode type to switch to
+	 */
+	public void goToMode(ModeType modeType) {
+		Mode m;
+		switch (modeType) {
+			case LEARNING:
+				m = new LearningMode(this);
+				break;
+			case PRACTICE:
+				m = new PracticeMode(this);
+				break;
+			case COMPARE:
+				m = new CompareMode(this);
+				break;
+			case TUTORIAL:
+				m = new TutorialMode(this);
+				break;
+			default:
+				throw new IllegalArgumentException("Cannot switch to unknown mode '" + modeType + "'");
+		}
+
+		super.setScreen(m);
 	}
 }

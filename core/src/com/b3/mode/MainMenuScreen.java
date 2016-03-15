@@ -2,9 +2,6 @@ package com.b3.mode;
 
 import com.b3.MainGame;
 import com.b3.gui.components.ImageButtonComponent;
-import com.b3.mode.CompareMode;
-import com.b3.mode.LearningMode;
-import com.b3.mode.PracticeMode;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -51,7 +48,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 dispose();
-                controller.setScreen(new CompareMode(controller));
+                controller.goToMode(ModeType.COMPARE);
             }
         });
 
@@ -62,7 +59,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 dispose();
-                controller.setScreen(new PracticeMode(controller));
+                controller.goToMode(ModeType.PRACTICE);
             }
         });
 
@@ -73,7 +70,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 dispose();
-                controller.setScreen(new LearningMode(controller));
+                controller.goToMode(ModeType.LEARNING);
             }
         });
 
@@ -84,7 +81,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 dispose();
-                controller.setScreen(new TutorialMode(controller));
+                controller.goToMode(ModeType.TUTORIAL);
             }
         });
 
