@@ -665,6 +665,14 @@ public class WorldGraph implements Serializable {
     public SearchTicker getCurrentSearch() {
         return latestSearchTicker;
     }
+    
+    public Set<Agent> getAllSearchAgents() {
+        return searchTickers.keySet();
+    }
+
+    public Collection<SearchTicker> getAllSearches() {
+        return searchTickers.values();
+    }
 
     /**
      * @return The agent that will follow {@link #getCurrentSearch()}.
@@ -677,9 +685,12 @@ public class WorldGraph implements Serializable {
         return entity instanceof Agent && searchTickers.containsKey(entity);
     }
 
-    public void clearCurrentSearch() {
-        // todo just for prototype
-        latestSearchTicker.reset(true);
+    public void clearAllSearches() {
+        searchTickers.forEach((a,s) -> {
+            s.reset(true);
+        });
+        
+        searchTickers.clear();
     }
 
     public void clearSearch(Agent searchingAgent) {

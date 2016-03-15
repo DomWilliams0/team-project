@@ -7,17 +7,24 @@ import com.b3.gui.help.HelpBox;
 import com.b3.gui.sidebars.SideBarCompareMode;
 import com.b3.input.InputHandler;
 import com.b3.input.WorldSelectionHandler;
+import com.b3.search.Point;
 import com.b3.search.SearchTicker;
+import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CompareMode extends Mode {
 
 	private SideBarCompareMode sideBar;
 	private HelpBox helpBox;
+	private List<Agent> agents;
 
 	public CompareMode(MainGame game) {
 		super(ModeType.COMPARE, game, "core/assets/world/world-compare.tmx", 29.7f);
+		agents = new ArrayList<>(3);
 	}
 
 	@Override
@@ -39,6 +46,40 @@ public class CompareMode extends Mode {
 
 	@Override
 	protected void tick(float delta) {
+		WorldGraph graph = world.getWorldGraph();
+
+		boolean allArrived = graph.getAllSearchAgents()
+				.stream()
+				.allMatch(a -> {
+					BehaviourPathFind behaviour = (BehaviourPathFind) a.getBehaviour();
+					return behaviour.hasArrived();
+				});
+
+
+		if (!allArrived)
+			return;
+
+		// todo user selects with mouse
+		// todo correspond to search agent's segment
+
+		graph.clearAllSearches();
+		for (Agent agent : agents) {
+			BehaviourPathFind oldBehaviour = (BehaviourPathFind) agent.getBehaviour();
+			Point oldEnd = oldBehaviour.getSearchTicker().getEnd().getPoint();
+			Vector2 oldEndVector = new Vector2(oldEnd.x, oldEnd.y);
+			Point oldStart = oldBehaviour.getSearchTicker().getStart().getPoint();
+			Vector2 oldStartVector = new Vector2(oldStart.x, oldStart.y);
+
+			BehaviourPathFind newBehaviour = new BehaviourPathFind(agent,
+					oldEndVector,
+					oldStartVector,
+					oldBehaviour.getSearchTicker().getAlgorithm(),
+					world);
+			agent.setBehaviour(newBehaviour);
+
+			graph.setCurrentSearch(agent, newBehaviour.getSearchTicker());
+		}
+
 	}
 
 	@Override
@@ -68,7 +109,7 @@ public class CompareMode extends Mode {
 
 		SearchTicker ticker = behaviour.getSearchTicker();
 		world.getWorldGraph().setCurrentSearch(agent, ticker);
-		// todo add to list of rendered tickers
+		agents.add(agent);
 	}
 
 	@Override
