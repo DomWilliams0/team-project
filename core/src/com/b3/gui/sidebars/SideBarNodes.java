@@ -48,7 +48,6 @@ public class SideBarNodes extends SideBar implements Disposable {
     }
 
     private void initTabs() {
-        // Add pseudocode tab
         if (tabs != null) {
             // Add nodes tab
             Map<String, Object> data = new HashMap<String, Object>() {{

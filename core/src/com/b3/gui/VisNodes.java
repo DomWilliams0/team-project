@@ -38,7 +38,7 @@ import java.util.*;
 public class VisNodes extends Table {
 
 	private final World world;
-
+	//todo extract these to a separate class?
 	private ScrollPane fp, vp;
 	private Table ft, vt;
 	private float timer;
@@ -59,7 +59,8 @@ public class VisNodes extends Table {
 	 * todo should this be short / concise, or long / descriptive?
 	 * todo should this even exist any more
 	 */
-	private final String description = "How it works:\n" +
+	private final String description =
+			"Description while waiting for next search:\n" +
 			"Starting at the start node, its \n" +
 			"neighbours (successors) are inspected.\n" +
 			"These are inserted into the data \n" +
@@ -303,7 +304,7 @@ public class VisNodes extends Table {
      * Will apply any known colour to the node immediately.
      * @param t The table to add the node to
      * @param n The node to display in the table.
-	 * @param i The priority of the node, or -1 if not applicable.
+	 * @param i The priority of the node, or <code>-1</code> if not applicable.
      */
     private void addToTable(Table t, Node n, int i) {
 		//create the wrapping table
@@ -434,11 +435,9 @@ public class VisNodes extends Table {
      */
     public boolean setCellColour(Node n, boolean singleHighlight) {
         //singleHighlight tells us if this is the only node to be highlighted,
-        //so remove all other colours if this is true\
+        //so remove all other colours if this is true
 		if (singleHighlight) colours.clear();
 		Color c = getColorFromGraph(n);
-
-
 
 		//store the given colour
 		colours.put(n, c);
@@ -518,7 +517,7 @@ public class VisNodes extends Table {
 		//we need to render the data collections
 		if (rendermore) {
 			//full title;
-			addLabel("Running search using ", true)
+			addLabel("Running search using " + alg.getName(), true)
 					.colspan(3).spaceBottom(5);
 			row();
 
@@ -534,7 +533,8 @@ public class VisNodes extends Table {
 			addLabel("Using Hash Set");
 			row();
 			//row 3 - note that highest frontier node is highest priority
-			addLabel("Highest Priority\n--------------------");
+			addLabel("Highest Priority\n" +
+					"--------------------");
 			addLabel("   ");
 			addLabel("");
 			row();
@@ -550,7 +550,8 @@ public class VisNodes extends Table {
 			row();
 
 			//row 5 - note that lowest frontier node is lowest priority
-			addLabel("--------------------\nLowest Priority");
+			addLabel("--------------------\n" +
+					"Lowest Priority");
 			addLabel("");
 			row();
 			addLabel("_________________________________________")
@@ -573,7 +574,7 @@ public class VisNodes extends Table {
 	 * or a generic description.
 	 */
 	private void setupDescription() {
-		if (stepthrough) {
+		if (ft.hasChildren() || vt.hasChildren()) {
 			convertNodeReps();
 			stepString = new StringBuilder();
 			formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
@@ -584,7 +585,7 @@ public class VisNodes extends Table {
 			addLabel(stepString.toString())
 					.colspan(3).spaceTop(15);
 		} else {
-			//final row - describe the algorithm in words
+			//final row
 			addLabel(description)
 					.colspan(3).spaceTop(15);
 		}
@@ -593,26 +594,26 @@ public class VisNodes extends Table {
 	/**
 	 * Add text to this table encapsulated in a label
 	 * Uses default size settings etc based on not being a title in {@link VisNodes#addLabel(String, boolean)}
-	 * @param s The string to encapsulate in a label and add to the table
+	 * @param text The string to encapsulate in a label and add to the table
 	 * @return The cell created by adding the label
 	 */
-	private Cell addLabel(String s) {
-		return addLabel(s, false);
+	private Cell addLabel(String text) {
+		return addLabel(text, false);
 	}
 
 	/**
 	 * Add a text label to this table
 	 * The size is defined by whether this is a title
-	 * @param s The string to encapsulate in a label and add to the table
+	 * @param text The string to encapsulate in a label and add to the table
 	 * @param isTitle whether this string is a title
 	 * @return The cell created by adding the label
 	 */
-	private Cell addLabel(String s, boolean isTitle) {
+	private Cell addLabel(String text, boolean isTitle) {
 		//titles are a bit larger
 		int size = isTitle ? 18 : 16;
 
 		//make the label and add it
-		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", size, s, Color.BLACK);
+		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", size, text, Color.BLACK);
 		return add(lbl.getComponent());
 	}
 
@@ -656,10 +657,19 @@ public class VisNodes extends Table {
 		}
 	}
 
+	/**
+	 * Query whether the user has clicked a different node in the scroll panes
+	 * @return Whether the user has clicked a different node in the scroll panes
+	 */
 	public boolean isClickedUpdated() {
 		return clickedNodeUpdated;
 	}
 
+	/**
+	 * Get the coordinates of the node which has been clicked in the scroll panes
+	 * Marks it as not updated any more.
+	 * @return The clicked nodes coordinates
+	 */
 	public Point getClickedNode() {
 		clickedNodeUpdated = false;
 		return clickedNode.getPoint();

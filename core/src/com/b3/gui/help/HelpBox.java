@@ -40,13 +40,13 @@ public class HelpBox extends Table {
 	private Table sidebarsT;
 
 	private final String controls = "Move around the world using the arrow keys.\n" +
-			"Zoom in and out using the mouse wheel or +,-\n" +
-			"Zoom out far to enter a modified, more focused view.\n";
-	private final String visbarhelp = "In the visualisation sidebar (right),\n" +
+			"Zoom in and out using the mouse wheel or +/-\n" +
+			"Zoom out far to enter contrast view.\n";
+	private final String visbarhelp = "In the visualisation sidebar,\n" +
 			"Click nodes to display details over it in the world.\n" +
 			"Hover over a node to highlight it briefly in the world.\n" +
 			"Press Next Step to stepthrough the algorithm while paused.";
-	private final String setbarhelp = "The settings sidebar (left) allows you to edit settings\n" +
+	private final String setbarhelp = "The settings sidebar allows you to edit settings\n" +
 			"such as simulation speed and search speed.\n" +
 			"You can also play/pause the search here.";
 
