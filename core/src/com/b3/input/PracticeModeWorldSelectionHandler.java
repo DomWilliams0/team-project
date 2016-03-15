@@ -89,7 +89,7 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
             switch (currentStage) {
                 case CURRENT_NODE_SELECTION:
                     Node actualNode = frontier.peek();
-                    System.out.println(actualNode);
+                    System.out.println("Node that is expected to be clicked: " + actualNode);
                     if (!actualNode.equals(node)) {
                         if (firstLoadAlert1) {
                             descriptionPopup.setText("Attention! This node is not the one to be selected for expansion.");

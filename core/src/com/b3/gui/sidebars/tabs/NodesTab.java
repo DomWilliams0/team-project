@@ -55,8 +55,6 @@ public class NodesTab implements Tab {
         nodesTab.add(ui).maxWidth(preferredWidth).top().pad(20);
         nodesTab.row();
         nodesTab.add(nextBtn.getComponent());
-
-        System.out.println(nodesTab.getRows());
     }
 
     public VisNodes getUI() {

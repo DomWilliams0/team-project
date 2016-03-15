@@ -63,7 +63,7 @@ public class TutorialPopups {
                 + '\n' + "the heuristic is shown";
         tutorialText[10] = "Open the right hand menu"
                 + '\n' + "and [LIGHT_GRAY]click on the pseudocode tab[]"
-                + '\n' + "then [LIGHT_GRAY]click activate[] and"
+                + '\n' + "then [LIGHT_GRAY]click begin[] and"
                 + '\n' + "watch how the search works behind the scenes";
         tutorialText[11] = "And that's it! You now know how to use this program"
                 + '\n' + "but if you ever get stuck you can click on a help tab at the top"

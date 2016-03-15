@@ -40,6 +40,17 @@ public class MainMenuScreen implements Screen {
         this.controller = controller;
 
         controller.getInputHandler().addProcessor(mainMenuStage);
+    
+        // Tutorial mode button
+        // --------------------
+        ImageButtonComponent tutorialModeBtn = new ImageButtonComponent("tutorial_mode_primary.png", "tutorial_mode_mouseover.png", "tutorial_mode_mouseover.png");
+        tutorialModeBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dispose();
+                controller.goToMode(ModeType.TUTORIAL);
+            }
+        });
 
         // Compare mode button
         // --------------------
@@ -74,29 +85,18 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        // Tutorial mode button
-        // --------------------
-        ImageButtonComponent tutorialModeBtn = new ImageButtonComponent("tutorial_mode_primary.png", "tutorial_mode_mouseover.png", "tutorial_mode_mouseover.png");
-        tutorialModeBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                dispose();
-                controller.goToMode(ModeType.TUTORIAL);
-            }
-        });
-
         wrapper = new Table();
         wrapper.setWidth(Gdx.graphics.getWidth());
         wrapper.setHeight(Gdx.graphics.getHeight());
         wrapper.setY(-50);
 
+        wrapper.add(tutorialModeBtn.getComponent());
+        wrapper.row().padTop(30);
         wrapper.add(learningModeBtn.getComponent());
         wrapper.row().padTop(30);
         wrapper.add(practiceModeBtn.getComponent());
         wrapper.row().padTop(30);
         wrapper.add(compareModeBtn.getComponent());
-        wrapper.row().padTop(30);
-        wrapper.add(tutorialModeBtn.getComponent());
 
         mainMenuStage.addActor(wrapper);
 
