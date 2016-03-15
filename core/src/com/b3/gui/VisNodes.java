@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -115,9 +116,10 @@ public class VisNodes extends Table {
 		colours = new HashMap<>();
 
 		pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
-		pm.setColor(new Color(0.56f, 0.69f, 0.83f, 1));
+		pm.setColor(defaultBackground);
 		pm.fill();
 		defaultTexture = new TextureRegionDrawable(new TextureRegion(new Texture(pm)));
+		colourTextureCache.put(defaultBackground, defaultTexture);
 
 		//anchor the table to the top-left position
 		left().top();
@@ -154,28 +156,39 @@ public class VisNodes extends Table {
 
 	/**
 	 * Render the table, using a given search ticker
-	 * This method will handle null values appropriately to save this occurring outside the object
+	 * This method will handle null values appropriately to save this occurring outside the object.
 	 *
 	 * @param ticker The search ticker whose values are to be rendered.
 	 */
 	public void render(SearchTicker ticker) {
 		int render;
-		if(ticker==null || ticker.getVisited()==null || ticker.getFrontier()==null) {
-			render =  render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST);
+		//check that the ticker exists; if it does, see if the ticker has data to render
+		if (ticker==null || ticker.getVisited()==null || ticker.getFrontier()==null) {
+			//no data to render, so render this with dummy contents.
+			render = render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST);
 		} else {
+			//we have data to render. get the most recent changes from the ticker
 			newVisited = ticker.getMostRecentlyExpanded();
 			newFrontier = ticker.getLastFrontier();
             justExpanded = ticker.getMostRecentlyExpanded();
-			if(!stepthrough || ticker.isUpdated()) {
+
+			//only update the shown data if we need to
+			if (!stepthrough || ticker.isUpdated()) {
+				//tell the ticker we've used its data
 				ticker.setUpdated(false);
+				//render the data
 				render = render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
 			} else
 				render = 0;
 		}
+		//pause or resume the ticker based on scrollpane usage
 		if (ticker != null) {
-			if(render==2) {
+			if (render==2) {
+				//the scrollpanes are being used, so pause the ticker
 				ticker.pause(0);
-			} else if(render == 1) {
+			} else if (render == 1) {
+				//the scrollpanes are not being used, so release the #0 pause-lock
+				//(if somewhere else has paused it, this will not resume immediately)
 				ticker.resume(0);
 			}
 		}
@@ -196,71 +209,91 @@ public class VisNodes extends Table {
 	 */
 	public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg) {
 		//check if a scrollpane is being used
-		if(scrollpanesBeingUsed()) {
+		if (scrollpanesBeingUsed()) {
 			return 2;
 		}
 
 		this.alg = alg;
 
-		//stop it rendering every frame unless we're stepping through
-		if(!stepthrough) {
-			float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
-			timer += Utils.TRUE_DELTA_TIME;
-			if (timer < timeBetweenTicks)
-				return 0;
-
-			if(timer > 2*timeBetweenTicks)
-				//it has been a long time since last render so reset it instead of decrementing it
-				timer = 0;
-			else
-				// it hasn't been too long since last render so decrement it
-				timer -= timeBetweenTicks;
+		//stop it rendering every frame if we're on play mode
+		//if stepping through, it's safe to update every time the user clicks next
+		if (!stepthrough) {
+			if (updateTimer()) return 0;
 		}
 
 		//check whether we need to render a data collection
 		boolean rendermore = !front.isEmpty() || !visited.isEmpty();
 
 		//setup the table
+		//TOP of the sidebar
 		setupTable(alg, rendermore);
 
 		//if we need to render a data collection
-		if(rendermore) {
-			//make the arraylist be ordered based on take-order of the collection
-			frontier = sortFront(front);
+		if (rendermore) {
+			//put the data in the tables
+			//MIDDLE of the sidebar
+			populateTables(front, visited);
 
-			//get the highest priority node
-			if (frontier.size() > 0)
-				highestNode = frontier.get(0);
-
-			//get the visited set and sort it numerically by x then y
-			LinkedList<Node> visitedSorted = new LinkedList<>(visited);
-			Collections.sort(visitedSorted, (p1, p2) -> {
-				if (p1.getPoint().getX() == p2.getPoint().getX()) {
-					return p1.getPoint().getY() - p2.getPoint().getY();
-				}
-				return p1.getPoint().getX() - p2.getPoint().getX();
-			});
-
-			//populate the list tables
-			int index = 0;
-			for (Node n : frontier) {
-				addToTable(ft, n, index++);
-			}
-			for (Node n : visitedSorted) {
-				addToTable(vt, n, -1);
-			}
 		}
+
+		//put the description on the sidebar
+		//BOTTOM of the sidebar
 		setupDescription();
 		return 1;
 	}
 
 	/**
-     * Check if a scrollpane is being used ie being dragged or is otherwise scrolling
-     * @return Whether a scrollpane is being dragged / scrolled
-     */
-    private boolean scrollpanesBeingUsed() {
-        return vp.isDragging() || vp.isFlinging() || vp.isPanning() || fp.isDragging() || fp.isFlinging() || fp.isPanning();
-    }
+	 * Populate the tables with the given data
+	 * @param front The frontier nodes to display
+	 * @param visited The visited nodes to display
+	 */
+	private void populateTables(Collection<Node> front, Set<Node> visited) {
+		//make the arraylist be ordered based on take-order of the collection
+		frontier = sortFront(front);
+
+		//get the highest priority node
+		if (frontier.size() > 0)
+			highestNode = frontier.get(0);
+
+		//get the visited set and sort it numerically by x then y
+		LinkedList<Node> visitedSorted = new LinkedList<>(visited);
+		Collections.sort(visitedSorted, (p1, p2) -> {
+			if (p1.getPoint().getX() == p2.getPoint().getX()) {
+				return p1.getPoint().getY() - p2.getPoint().getY();
+			}
+			return p1.getPoint().getX() - p2.getPoint().getX();
+		});
+
+		//populate the list tables
+		int index = 0;
+		for (Node n : frontier) {
+			addToTable(ft, n, index++);
+		}
+		for (Node n : visitedSorted) {
+			addToTable(vt, n, -1);
+		}
+	}
+
+	/**
+	 * Update the timer and check if enough time has elapsed
+	 * @return if enough time has elapsed - true indicates the render should go ahead as planned
+	 */
+	private boolean updateTimer() {
+		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
+		timer += Utils.TRUE_DELTA_TIME;
+
+		//not enough time has elapsed since last tick - do nothing
+		if (timer < timeBetweenTicks)
+			return false;
+
+		if (timer > 2*timeBetweenTicks)
+			//it has been a long time since last render so reset it instead of decrementing it
+			timer = 0;
+		else
+			// it hasn't been too long since last render so decrement it
+			timer -= timeBetweenTicks;
+		return true;
+	}
 
 	/**
      * Add a given node to the given table
@@ -275,6 +308,7 @@ public class VisNodes extends Table {
     private void addToTable(Table t, Node n, int i) {
 		//create the wrapping table
 		Table row = new Table(this.getSkin());
+		//put the priority if applicable
 		String prefix = "";
 		if (i>=0) prefix = ++i + ". ";
 
@@ -304,7 +338,7 @@ public class VisNodes extends Table {
 			public boolean mouseMoved(InputEvent event, float x, float y) {
 				//the mouse is over a node.
 				//highlight it in the world.
-				world.getWorldGraph().highlightOver(n.getPoint(), getColors(n));
+				world.getWorldGraph().highlightOver(n.getPoint(), getColorFromGraph(n));
 				return super.mouseMoved(event, x, y);
 			}
 		});
@@ -312,10 +346,63 @@ public class VisNodes extends Table {
 		//add the wrapping table to the overall table
 		t.add(row).width(120);
 		t.row().spaceBottom(1);
-		//store the wrapping table in the hashmap, keyed by its node
+		//store the wrapping table in the cellmap, keyed by its node
 		cellmap.put(n, row);
 		//apply the highlight colour of the node, if applicable.
 		applyColour(n);
+	}
+
+	// CELL COLOURING
+	// -------------------------------------
+
+
+	/**
+	 * Apply the colour known to the hash map to the given node
+	 *
+	 * Adapted from code at http://stackoverflow.com/questions/24250791/make-scene2d-ui-table-with-alternate-row-colours
+	 * @param n The node whose colour to apply
+	 * @return Whether the node was successfully highlighted
+	 */
+	private boolean applyColour(Node n) {
+		//get the wrapping table which is displaying the node
+		Table t = cellmap.get(n);
+		//there is no table
+		if (t == null) return false;
+
+		//get the desired colour, or default to white
+		Color c = colours.getOrDefault(n, defaultBackground);
+
+		TextureRegionDrawable backgroundTexture = colourTextureCache.get(c);
+		if (backgroundTexture == null) {
+			//setup a pixmap with the desired colour
+			Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
+			pm.setColor(c);
+			pm.fill();
+			backgroundTexture = new TextureRegionDrawable(new TextureRegion(new Texture(new PixmapTextureData(pm, null, false, false))));
+			colourTextureCache.put(c, backgroundTexture);
+		}
+
+		//highlight the node text then cleanup
+		t.setBackground(backgroundTexture);
+		//we have reached this point iff the highlight was successful.
+		return true;
+	}
+
+	/**
+	 * Update the colour of all nodes known to this object.
+	 * @return Whether all nodes were correctly highlighted
+	 */
+	private boolean applyColourAll() {
+		//keeps track of whether all colour applications were successful
+		boolean all = true;
+
+		//iterate over the cellmap keys, i.e. those nodes currently known by the in-progress search
+		for(Node n : cellmap.keySet()) {
+			//apply the colour and update all
+			//ordered this way to avoid short-circuit evaluation; we must apply all node colours regardless.
+			all = applyColour(n) && all;
+		}
+		return all;
 	}
 
 
@@ -325,12 +412,12 @@ public class VisNodes extends Table {
 	 * @param n The node to highlight
 	 * @param c The colour to set
 	 * @param singleHighlight whether this is to be the only highlighted node
-	 * @return whether the cell was coloured
+	 * @return whether the colour was successful
 	 */
 	public boolean setCellColour(Node n, Color c, boolean singleHighlight) {
         //singleHighlight tells us if this is the only node to be highlighted,
         //so remove all other colours if this is true
-		if(singleHighlight) colours.clear();
+		if (singleHighlight) colours.clear();
         //store the given colour
 		colours.put(n,c);
         //apply all node colours, since we may have deleted other colours by using this method.
@@ -349,20 +436,9 @@ public class VisNodes extends Table {
         //singleHighlight tells us if this is the only node to be highlighted,
         //so remove all other colours if this is true\
 		if (singleHighlight) colours.clear();
-		//default colour in case something goes very wrong
-		Color c = Color.YELLOW;
+		Color c = getColorFromGraph(n);
 
-		//check whether the ndde is in the tables
-		if (cellmap.get(n) != null) {
-			//it is, so check if the node is in frontier or visited.
-			if (cellmap.get(n).getParent().equals(vt)) c = WorldGraph.VISITED_COLOUR;
-			if (cellmap.get(n).getParent().equals(ft)) c = WorldGraph.FRONTIER_COLOUR;
-		}
-		
-		//check whether the node is actually a new frontier or just expanded
-		//done after table-check so that these colours take precedence.
-		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.LAST_FRONTIER_COLOUR;
-		if (justExpanded!=null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
+
 
 		//store the given colour
 		colours.put(n, c);
@@ -370,63 +446,30 @@ public class VisNodes extends Table {
 		return applyColourAll();
 	}
 
-	public Color getColors(Node n) {
-		Color c = Color.YELLOW;
+	/**
+	 * Get the colour of a given node as corresponds with the colours in the world
+	 * @param n The node to query
+	 * @return The colour of the node in the world graph
+	 */
+	public Color getColorFromGraph(Node n) {
+		//default colour in case something goes very wrong
+		Color c = defaultBackground;
+		//check whether the ndde is in the tables
 		if (cellmap.get(n) != null) {
+			//it is, so check if the node is in frontier or visited.
 			if (cellmap.get(n).getParent().equals(vt)) c = WorldGraph.VISITED_COLOUR;
 			if (cellmap.get(n).getParent().equals(ft)) c = WorldGraph.FRONTIER_COLOUR;
 		}
+
+		//check whether the node is actually a new frontier or just expanded
+		//done after table-check so that these colours take precedence.
 		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.LAST_FRONTIER_COLOUR;
 		if (justExpanded!=null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
 		return c;
 	}
 
-	/**
-	 * Update the colour of all nodes known to this object.
-	 * @return Whether all nodes were correctly highlighted
-	 */
-	private boolean applyColourAll() {
-        //keeps track of whether all colour applications were successful
-		boolean all = true;
-        //iterate over the cellmap keys, i.e. those nodes currently known by the in-progress search
-		for(Node n : cellmap.keySet()) {
-            //apply the colour and update all
-            //ordered this way to avoid short-circuit evaluation; we must apply all node colours regardless.
-			all = applyColour(n) && all;
-		}
-		return all;
-	}
-
-	/**
-	 * Apply the colour known to the hash map to the given node
-	 *
-	 * Adapted from code at http://stackoverflow.com/questions/24250791/make-scene2d-ui-table-with-alternate-row-colours
-	 * @param n The node whose colour to apply
-	 * @return Whether the node was successfully highlighted
-	 */
-	private boolean applyColour(Node n) {
-        //get the wrapping table which is displaying the node
-		Table t = cellmap.get(n);
-		if (t == null) return false;
-
-        //get the desired colour, or default to white
-		Color c = colours.getOrDefault(n, defaultBackground);
-
-		TextureRegionDrawable backgroundTexture = colourTextureCache.get(c);
-		if (backgroundTexture == null) {
-			//setup a pixmap with the desired colour
-			Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
-			pm.setColor(c);
-			pm.fill();
-			backgroundTexture = new TextureRegionDrawable(new TextureRegion(new Texture(new PixmapTextureData(pm, null, false, false))));
-			colourTextureCache.put(c, backgroundTexture);
-		}
-
-		//highlight the node text then cleanup
-		t.setBackground(backgroundTexture);
-		//we have reached this point iff the highlight was successful.
-		return true;
-	}
+	// SETUP METHODS
+	// --------------------------------
 
 	/**
 	 * Converts a data collection to a list,
@@ -473,30 +516,27 @@ public class VisNodes extends Table {
 		vt.clear();
 
 		//we need to render the data collections
-		if(rendermore) {
+		if (rendermore) {
 			//full title;
-			LabelComponent titleLbl = new LabelComponent("aller/Aller_Bd.ttf", 18, "Running search using " + alg.getName(), Color.BLACK);
-			add(titleLbl.getComponent()).colspan(3).spaceBottom(5);
+			addLabel("Running search using ", true)
+					.colspan(3).spaceBottom(5);
 			row();
 
 			//row 1 - titles
-			LabelComponent frontierLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "Frontier", Color.BLACK);
-			LabelComponent visitedLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "Visited nodes", Color.BLACK);
-			add(frontierLbl.getComponent());
-			add("   ");
-			add(visitedLbl.getComponent());
+			addLabel("Frontier");
+			addLabel("   ");
+			addLabel("Visited nodes");
 			row().padBottom(10);
 
 			//row 2 - description of data collections
-			add(alg.getFrontierDescription());
-			add("   ");
-			add("Using Hash Set");
+			addLabel(alg.getFrontierDescription());
+			addLabel("   ");
+			addLabel("Using Hash Set");
 			row();
 			//row 3 - note that highest frontier node is highest priority
-			LabelComponent highestPriorityLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "Highest Priority\n--------------------", Color.BLACK);
-			add(highestPriorityLbl.getComponent());
-			add("   ");
-			add("");
+			addLabel("Highest Priority\n--------------------");
+			addLabel("   ");
+			addLabel("");
 			row();
 
 			//set up height to set for the scroll panes
@@ -505,23 +545,23 @@ public class VisNodes extends Table {
 
 			//row 4 - display the scroll panes holding the collection tables
 			add(fp).fill().height(sh).maxHeight(sh);
-			add("   ");
+			addLabel("   ");
 			add(vp).fill().height(sh).maxHeight(sh);
 			row();
 
 			//row 5 - note that lowest frontier node is lowest priority
-			LabelComponent lowestPriorityLbl = new LabelComponent("aller/Aller_Bd.ttf", 16, "--------------------\nLowest Priority", Color.BLACK);
-			add(lowestPriorityLbl.getComponent());
-			add("");
+			addLabel("--------------------\nLowest Priority");
+			addLabel("");
 			row();
-			add("_________________________________________").colspan(3).padTop(5);
+			addLabel("_________________________________________")
+					.colspan(3).padTop(5);
 			row();
 
 		} else {
-			add("No search in progress...");
+			addLabel("No search in progress...");
 			row();
 
-			add("");
+			addLabel("");
 			row();
 		}
 
@@ -541,13 +581,39 @@ public class VisNodes extends Table {
 							addedToFrontier + "\n" +
 							nextNode,
 					newVisitedStr, newFrontierStr, highestNodeStr);
-			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, stepString.toString(), Color.BLACK);
-			add(lbl.getComponent()).colspan(3).spaceTop(15);
+			addLabel(stepString.toString())
+					.colspan(3).spaceTop(15);
 		} else {
 			//final row - describe the algorithm in words
-			LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, description, Color.BLACK);
-			add(lbl.getComponent()).colspan(3).spaceTop(15);
+			addLabel(description)
+					.colspan(3).spaceTop(15);
 		}
+	}
+
+	/**
+	 * Add text to this table encapsulated in a label
+	 * Uses default size settings etc based on not being a title in {@link VisNodes#addLabel(String, boolean)}
+	 * @param s The string to encapsulate in a label and add to the table
+	 * @return The cell created by adding the label
+	 */
+	private Cell addLabel(String s) {
+		return addLabel(s, false);
+	}
+
+	/**
+	 * Add a text label to this table
+	 * The size is defined by whether this is a title
+	 * @param s The string to encapsulate in a label and add to the table
+	 * @param isTitle whether this string is a title
+	 * @return The cell created by adding the label
+	 */
+	private Cell addLabel(String s, boolean isTitle) {
+		//titles are a bit larger
+		int size = isTitle ? 18 : 16;
+
+		//make the label and add it
+		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", size, s, Color.BLACK);
+		return add(lbl.getComponent());
 	}
 
 	/**
@@ -558,22 +624,35 @@ public class VisNodes extends Table {
 	 */
 	private void convertNodeReps() {
 		newVisitedStr = newVisited==null?"<NOTHING>":newVisited.toString();
-		newFrontierStr = newFrontier==null?"<NOTHING>":convertNewFrontier(newFrontier);
+		newFrontierStr = newFrontier==null?"<NOTHING>":convertNewFrontier();
 		highestNodeStr = highestNode==null?"<NOTHING>":highestNode.toString();
 	}
 
-	private String convertNewFrontier(List<Node> front) {
-		if (alg == SearchAlgorithm.A_STAR) {
+	/**
+	 * Returns a string representation of newFrontier
+	 * Based on current search algorithm being used
+	 * @return The string to display in the description
+	 */
+	private String convertNewFrontier() {
+		if (alg == SearchAlgorithm.A_STAR || alg == SearchAlgorithm.DIJKSTRA) {
+			//the algorithm uses a priority queue
+			//it can be hard to see where insertion occurs, so note this down in the description.
+
 			String s = "";
 			int i=0;
-			for(Node node: front) {
+			for(Node node: newFrontier) {
+				//add "#<priority number>: <node string>" to the string
 				s+= "#" + (frontier.indexOf(node)+1) + ": " + node.toString() + "  ";
+				//limit the string to only have 2 per row
+				//(only works for newFrontier list size < 5, since there should never be more than 4)
 				if (++i==2) s+= "\n";
 			}
-			if(i<2) s+= "\n";
+			//ensure there are always 2 rows here otherwise the sidebar will keep resizing
+			if (i<2) s+= "\n";
 			return s;
 		} else {
-			return front.toString();
+			//DFS or BFS being used - insertion into frontier is easy to see
+			return newFrontier.toString();
 		}
 	}
 
@@ -584,5 +663,13 @@ public class VisNodes extends Table {
 	public Point getClickedNode() {
 		clickedNodeUpdated = false;
 		return clickedNode.getPoint();
+	}
+
+	/**
+	 * Check if a scrollpane is being used ie being dragged or is otherwise scrolling
+	 * @return Whether a scrollpane is being dragged / scrolled
+	 */
+	private boolean scrollpanesBeingUsed() {
+		return vp.isDragging() || vp.isFlinging() || vp.isPanning() || fp.isDragging() || fp.isFlinging() || fp.isPanning();
 	}
 }

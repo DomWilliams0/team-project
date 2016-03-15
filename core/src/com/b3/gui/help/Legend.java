@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * This legend cannot be altered besides changing the colours in WorldGraph
  *
  * Created by Ben, worked on mostly by Lewis.
+ * todo comments
  */
 public class Legend extends Table {
 	private Pixmap pm;

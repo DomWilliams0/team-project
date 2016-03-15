@@ -19,15 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import java.util.Formatter;
-import java.util.Locale;
-
 /**
  * Provides help for the user based on the mode of the simulation.
  * Gives instructions on how the mode can be used and interacted with
  * And a legend to explain meaning of colours.
  *
  * Created by Ben, worked on mostly by Lewis
+ * todo comments
  */
 public class HelpBox extends Table {
 
@@ -167,35 +165,36 @@ public class HelpBox extends Table {
 	private void setupLM() {
 		//todo this could probably be improved design-wise...
 
-		addHelp(this, true,
-				"This mode is to learn about a specific search algorithm in depth, in a small, focused world.")
+		addHelp(this, "This mode is to learn about a specific search algorithm in depth, in a small, focused world.", true)
 				.colspan(5);
 
 		row();
 
 		worldT = new Table(getSkin());
-		addHelp(worldT, true, "Interacting with the world:");
+		addHelp(worldT, "Interacting with the world:", true);
 		worldT.row().row();
-		addHelp(worldT, false,
-				controls +
+		addHelp(worldT, controls +
 				"Open left sidebar for settings,\n" +
-				"Open right sidebar for data collections.");
+				"Open right sidebar for data collections."
+		);
 
 		worldNodesT = new Table(getSkin());
-		addHelp(worldNodesT, true, "Interacting with the world nodes:");
+		addHelp(worldNodesT, "Interacting with the world nodes:", true);
 		worldNodesT.row().row();
-		addHelp(worldNodesT, false,
-				"Click nodes to view details and highlight\nit in the Visualisation sidebar.\n" +
+		addHelp(worldNodesT, "Click nodes to view details and highlight\n" +
+				"it in the Visualisation sidebar.\n" +
 				"Click again to view more details about it.\n" +
 				"Hover over a node to display its coordinates.\n" +
-				"Right click a node to set\nit as the next destination.");
+				"Right click a node to set\n" +
+				"it as the next destination."
+		);
 
 		sidebarsT = new Table (getSkin());
-		addHelp(sidebarsT, true, "The sidebars:");
+		addHelp(sidebarsT, "The sidebars:", true);
 		sidebarsT.row().row();
-		addHelp(sidebarsT, false,
-				visbarhelp + "\n" +
-				setbarhelp);
+		addHelp(sidebarsT, visbarhelp + "\n" +
+				setbarhelp
+		);
 
 	}
 
@@ -204,32 +203,32 @@ public class HelpBox extends Table {
 	 */
 	private void setupCM() {
 		//todo part of this is incorrect ie interacting with world nodes
-		addHelp(this,true,
-				"This mode is to compare algorithms side-by-side in a large, lively world.")
+		addHelp(this, "This mode is to compare algorithms side-by-side in a large, lively world.", true)
 				.colspan(5);
 
 		row();
 
 		worldT = new Table(getSkin());
-		addHelp(worldT, true, "Interacting with the world:");
+		addHelp(worldT, "Interacting with the world:", true);
 		worldT.row().row();
-		addHelp(worldT, false,
-				controls +
-				"Open left sidebar for settings");
+		addHelp(worldT, controls +
+				"Open left sidebar for settings"
+		);
 
 		worldNodesT = new Table(getSkin());
-		addHelp(worldNodesT, true, "Interacting with the world nodes:");
+		addHelp(worldNodesT, "Interacting with the world nodes:", true);
 		worldNodesT.row().row();
-		addHelp(worldNodesT, false,
-				"Click a node to view details about it.\n" +
+		addHelp(worldNodesT, "Click a node to view details about it.\n" +
 				"Click again to view more details about it.\n" +
 				"Hover over a node to display its coordinates.\n" +
-				"Right click a node to set\nit as the next destination.");
+				"Right click a node to set\n" +
+				"it as the next destination."
+		);
 
 		sidebarsT = new Table (getSkin());
-		addHelp(sidebarsT, true, "The sidebar:");
+		addHelp(sidebarsT, "The sidebar:", true);
 		sidebarsT.row().row();
-		addHelp(sidebarsT, false, setbarhelp);
+		addHelp(sidebarsT, setbarhelp);
 	}
 
 	/**
@@ -238,48 +237,52 @@ public class HelpBox extends Table {
 	private void setupTY() {
 		//todo part of this is incorrect ie interacting with world nodes
 		//todo not to worry atm though since help box inactive in this mode currently
-		addHelp(this, true,
-				"This mode is to practice your knowledge in a small, focused world")
+		addHelp(this, "This mode is to practice your knowledge in a small, focused world", true)
 				.colspan(5);
 
 		row();
 
 		worldT = new Table(getSkin());
-		addHelp(worldT, true, "Interacting with the world:");
+		addHelp(worldT, "Interacting with the world:", true);
 		worldT.row().row();
-		addHelp(worldT, false,
-				controls +
-				"Open right sidebar for data collections");
+		addHelp(worldT, controls +
+				"Open right sidebar for data collections"
+		);
 
 		worldNodesT = new Table(getSkin());
-		addHelp(worldNodesT, true, "Interacting with the world nodes:");
+		addHelp(worldNodesT, "Interacting with the world nodes:", true);
 		worldNodesT.row().row();
-		addHelp(worldNodesT, false,
-				"Click a node to expand it, or add it to the frontier.\n" +
+		addHelp(worldNodesT, "Click a node to expand it, or add it to the frontier.\n" +
 				"Hover over a node to display its coordinates.\n" +
-				"Right click a node to set\nit as the next destination.");
+				"Right click a node to set\n" +
+				"it as the next destination."
+		);
 
 		sidebarsT = new Table (getSkin());
-		addHelp(sidebarsT, true, "The sidebar:");
+		addHelp(sidebarsT, "The sidebar:", true);
 		sidebarsT.row().row();
-		addHelp(sidebarsT, false,
-				visbarhelp + "\n" +
-				"You can also edit game speed and next\nsearch algorithm in the sidebar.");
+		addHelp(sidebarsT, visbarhelp + "\n" +
+				"You can also edit game speed and next\n" +
+				"search algorithm in the sidebar."
+		);
 
 	}
 
 	/**
 	 * Adds some help text to the given table, in a label component formatted in the appropriate way
 	 * @param t The table to add the text to
-	 * @param isTitle Whether this is a title
 	 * @param s The string to put in
+	 * @param isTitle Whether this is a title
 	 * @return The cell created in the table
 	 */
-	private Cell addHelp(Table t, boolean isTitle, String s) {
+	private Cell addHelp(Table t, String s, boolean isTitle) {
 		Color c = isTitle ? new Color(0xa0a0ffff) : Color.BLACK;
 		int size = isTitle? 20 : 16;
 		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", size, s, c);
 		return t.add(lbl.getComponent());
 	}
 
+	private Cell addHelp(Table t, String s) {
+		return addHelp(t, s, false);
+	}
 }
