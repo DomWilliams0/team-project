@@ -312,7 +312,7 @@ public class WorldGraph implements Serializable {
 
 		//if scaled back so much that nodes collapse in on each other, then show white lines on top
 		if (zoomScalar > 2) {
-			renderZoomedOutGraph(zoomScalar, showPaths);
+			renderZoomedOutGraph(zoomScalar);
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 			searchTickers
 					.values()
@@ -324,7 +324,7 @@ public class WorldGraph implements Serializable {
 		searchTickers
 				.values()
 				.stream()
-				.forEach(s -> renderSearchTicker(camera, counter, finalZoomScalar, s));
+				.forEach(s -> renderSearchTicker(finalZoomScalar, s));
 
 	}
 
@@ -339,11 +339,9 @@ public class WorldGraph implements Serializable {
 	}
 
 	/**
-	 * @param camera     The {@link Camera} to render on.
-	 * @param counter    The current step in the animation.
 	 * @param zoomScalar How zoomed the {@code Camera} is.
 	 */
-	private void renderSearchTicker(Camera camera, float counter, float zoomScalar, SearchTicker searchTicker) {
+	private void renderSearchTicker(float zoomScalar, SearchTicker searchTicker) {
 		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
 
 		//red node for wrong node clicked in practice mode
@@ -352,7 +350,7 @@ public class WorldGraph implements Serializable {
 				setRenderRed(zoomScalar);
 			}
 
-		renderPath(showPaths, searchTicker, zoomScalar);
+		renderPath(showPaths, searchTicker);
 
 		//if scaled back so much that nodes collapse in on each other, then show white lines on top
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -467,7 +465,7 @@ public class WorldGraph implements Serializable {
 		);
 	}
 
-	private void renderZoomedOutGraph(float zoomScalar, boolean showPaths) {
+	private void renderZoomedOutGraph(float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
 		for (Node node1 : nodes.values()) {
@@ -538,7 +536,7 @@ public class WorldGraph implements Serializable {
 		shapeRenderer.end();
 	}
 
-	private void renderPath(boolean showPaths, SearchTicker searchTicker, float zoomScalar) {
+	private void renderPath(boolean showPaths, SearchTicker searchTicker) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
 //		// render the path

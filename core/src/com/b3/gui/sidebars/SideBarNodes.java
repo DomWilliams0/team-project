@@ -54,7 +54,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 				put("world", world);
 				put("stage", stage);
 			}};
-			tabs.put("Nodes", new NodesTab(skin, font, preferredWidth, this, data));
+			tabs.put("Nodes", new NodesTab(skin, font, preferredWidth, data));
 
 			// Add pseudocode tab
 			if ((world.getMode() == ModeType.LEARNING) || (world.getMode() == ModeType.TUTORIAL)) {

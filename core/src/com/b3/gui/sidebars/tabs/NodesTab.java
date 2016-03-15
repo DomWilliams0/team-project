@@ -2,7 +2,6 @@ package com.b3.gui.sidebars.tabs;
 
 import com.b3.gui.VisNodes;
 import com.b3.gui.components.ButtonComponent;
-import com.b3.gui.sidebars.SideBar;
 import com.b3.mode.ModeType;
 import com.b3.search.SearchTicker;
 import com.b3.world.World;
@@ -23,7 +22,7 @@ public class NodesTab implements Tab {
 	private VisNodes ui;
 	private ButtonComponent nextBtn;
 
-	public NodesTab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
+	public NodesTab(Skin skin, BitmapFont font, float preferredWidth, Map<String, Object> data) {
 
 		// Extract data
 		World world = (World) data.get("world");

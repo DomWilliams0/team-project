@@ -56,10 +56,9 @@ public class LearningMode extends Mode {
 	/**
 	 * Renders the world, the three sidebars and updates the world's position and zoom depending on input from the user via the input listeners.
 	 *
-	 * @param delta Delta time since the last frame
 	 */
 	@Override
-	public void tick(float delta) {
+	public void tick() {
 		if (!world.getPseudoCode()) {
 			sideBarNodes.resetPseudoCode();
 			world.setPseudoCode(true);
@@ -73,7 +72,7 @@ public class LearningMode extends Mode {
 		worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
 		Agent agent = world.spawnAgent(world.getTileSize().scl(0.5f));
 		BehaviourMultiContinuousPathFind behaviour = new BehaviourMultiContinuousPathFind(
-				agent, SearchAlgorithm.A_STAR, worldGraph, camera, world);
+				agent, SearchAlgorithm.A_STAR, worldGraph, world);
 		agent.setBehaviour(behaviour);
 
 		worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());

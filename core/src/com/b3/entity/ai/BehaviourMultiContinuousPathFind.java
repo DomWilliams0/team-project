@@ -8,7 +8,6 @@ import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Utils;
 import com.b3.world.World;
-import com.b3.world.WorldCamera;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -20,7 +19,7 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	private WorldGraph graph;
 	private SearchAlgorithm algorithm;
 
-	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph, WorldCamera worldCamera, World world) {
+	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph, World world) {
 		super(agent, null);
 		graph = worldGraph;
 		algorithm = searchAlgorithm;

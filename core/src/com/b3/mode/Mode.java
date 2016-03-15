@@ -45,7 +45,7 @@ public abstract class Mode extends ScreenAdapter {
 		this.modeType = modeType;
 
 		// load world
-		world = new World(worldPath, modeType, inputHandler);
+		world = new World(worldPath, modeType);
 
 		// position camera
 		Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
@@ -75,7 +75,7 @@ public abstract class Mode extends ScreenAdapter {
 
 	protected abstract void registerFurtherInputProcessors(InputHandler inputHandler);
 
-	protected abstract void tick(float delta);
+	protected abstract void tick();
 
 	protected abstract void initialise();
 
@@ -145,7 +145,7 @@ public abstract class Mode extends ScreenAdapter {
 		}
 		sideBarStage.draw();
 
-		tick(delta);
+		tick();
 
 		if (keyboardController.shouldExit())
 			Gdx.app.exit();

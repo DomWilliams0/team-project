@@ -27,7 +27,7 @@ public class SideBarPracticeMode extends SideBarNodes {
 		}};
 
 		Map<String, Tab> additionalTabs = new LinkedHashMap<>();
-		additionalTabs.put("Settings", new PracticeModeSettingsTab(skin, font, preferredWidth, this, data));
+		additionalTabs.put("Settings", new PracticeModeSettingsTab(skin, font, preferredWidth, data));
 		addTabs(additionalTabs);
 
 		initComponents();

@@ -1,7 +1,6 @@
 package com.b3.world.building;
 
 import com.b3.util.Utils;
-import com.b3.world.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,9 +33,8 @@ public class BuildingModelCache implements Disposable {
 	/**
 	 * creates a new building model cache linked to a world
 	 *
-	 * @param world the world that this cache should be linked to
 	 */
-	public BuildingModelCache(World world) {
+	public BuildingModelCache() {
 		models = new HashMap<>();
 		builder = new ModelBuilder();
 		loadTextures();

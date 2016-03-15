@@ -50,10 +50,9 @@ public class TutorialMode extends Mode {
 	/**
 	 * Renders the world, the three sidebars and updates the world's position and zoom depending on input from the user via the input listeners.
 	 *
-	 * @param delta Delta time since last frame
 	 */
 	@Override
-	protected void tick(float delta) {
+	protected void tick() {
 		if (!world.getPseudoCode()) {
 			sideBarNodes.resetPseudoCode();
 			world.setPseudoCode(true);
@@ -69,7 +68,7 @@ public class TutorialMode extends Mode {
 		WorldGraph worldGraph = world.getWorldGraph();
 		Agent agent = world.spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
 		BehaviourMultiContinuousPathFind behaviour = new BehaviourMultiContinuousPathFind(
-				agent, SearchAlgorithm.A_STAR, worldGraph, camera, world);
+				agent, SearchAlgorithm.A_STAR, worldGraph, world);
 		agent.setBehaviour(behaviour);
 
 		worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());

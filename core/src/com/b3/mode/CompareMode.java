@@ -44,7 +44,7 @@ public class CompareMode extends Mode {
 	}
 
 	@Override
-	protected void tick(float delta) {
+	protected void tick() {
 		WorldGraph graph = world.getWorldGraph();
 
 		boolean allArrived = graph.getAllSearchAgents()

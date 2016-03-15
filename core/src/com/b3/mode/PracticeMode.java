@@ -62,10 +62,9 @@ public class PracticeMode extends Mode {
 	/**
 	 * Renders the world, the three sidebars and updates the world's position and zoom depending on input from the user via the input listeners.
 	 *
-	 * @param delta Delta time since last frame
 	 */
 	@Override
-	protected void tick(float delta) {
+	protected void tick() {
 		popupStage.act(Utils.TRUE_DELTA_TIME);
 		popupStage.draw();
 	}
@@ -75,7 +74,7 @@ public class PracticeMode extends Mode {
 		WorldGraph worldGraph = world.getWorldGraph();
 		Agent agent = world.spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
 		BehaviourMultiContinuousPathFind behaviour = new BehaviourMultiContinuousPathFind(
-				agent, SearchAlgorithm.DEPTH_FIRST, worldGraph, camera, world);
+				agent, SearchAlgorithm.DEPTH_FIRST, worldGraph, world);
 		agent.setBehaviour(behaviour);
 
 		worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());

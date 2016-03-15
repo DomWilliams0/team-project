@@ -10,7 +10,6 @@ import com.b3.entity.system.RenderSystem;
 import com.b3.gui.CoordinatePopup;
 import com.b3.gui.PopupDescriptions;
 import com.b3.gui.popup.PopupManager;
-import com.b3.input.InputHandler;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -116,7 +115,7 @@ public class World implements Disposable {
 
 	}
 
-	public World(String fileName, ModeType mode, InputHandler inputHandler) {
+	public World(String fileName, ModeType mode) {
 		pseudoCodeEnabled = mode == LEARNING;
 
 		this.mode = mode;
@@ -135,7 +134,7 @@ public class World implements Disposable {
 		// buildings and lighting
 		buildingBatch = new ModelBatch();
 		buildings = new ArrayList<>();
-		buildingCache = new BuildingModelCache(this);
+		buildingCache = new BuildingModelCache();
 		shapeRenderer = new ShapeRenderer();
 
 		// todo shadows
@@ -369,7 +368,7 @@ public class World implements Disposable {
 		//set up these after the camera has been setup
 		rt = new PopupDescriptions(this);
 
-		popupManager = new PopupManager(worldCamera, mode);
+		popupManager = new PopupManager(mode);
 		popupManager.showIntro();
 	}
 
