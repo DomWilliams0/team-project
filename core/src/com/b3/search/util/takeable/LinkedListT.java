@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 /**
  * A {@link LinkedList} with a {@link #take()} method.
+ *
  * @param <E> The type of elements held in this {@link java.util.Collection}.
  */
 public class LinkedListT<E> extends LinkedList<E> implements Takeable<E> {

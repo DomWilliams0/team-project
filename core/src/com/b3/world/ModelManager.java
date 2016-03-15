@@ -31,7 +31,7 @@ public class ModelManager {
 	 * The {@link ModelInstance ModelInstances} to render,
 	 */
 	private final ArrayList<Tuple<ModelController, ModelInstance>> models = new ArrayList<>();
-	
+
 	private final ArrayList<ModelController> staticModels = new ArrayList<>();
 
 	/**
@@ -50,14 +50,15 @@ public class ModelManager {
 
 	/**
 	 * creates a new model manager
+	 *
 	 * @param environment the environment to use in managing the models
-	 * @param map the tiled map the buildings will be placed on
-     */
+	 * @param map         the tiled map the buildings will be placed on
+	 */
 	public ModelManager(Environment environment, TiledMap map) {
 		this.environment = environment;
-		
+
 		boolean renderStatics = Config.getBoolean(ConfigKey.RENDER_STATIC_MODELS);
-		
+
 		// Create static models from the models layer.
 		MapLayer modelLayer = map.getLayers().get("models");
 		if (modelLayer != null) {
@@ -68,16 +69,16 @@ public class ModelManager {
 				float x = (props.get("x", Float.class) / Utils.TILESET_RESOLUTION) + 0.5f;
 				float y = (props.get("y", Float.class) / Utils.TILESET_RESOLUTION) + 0.5f;
 				float rotation = Float.parseFloat(props.get("rotation", String.class));
-				
+
 				// Possibly not flipped, should really check.
 				staticModels.add(
 						new ModelController(modelName, this, true)
-						.setPositionAndRotation(x, y, 0f, rotation)
-						.setVisible(renderStatics)
+								.setPositionAndRotation(x, y, 0f, rotation)
+								.setVisible(renderStatics)
 				);
 			}
 		}
-		
+
 		if (map.getLayers().get("objects") != null) {
 			TiledMapTileLayer objectLayer = (TiledMapTileLayer) map.getLayers().get("objects");
 			for (int x = 0; x < objectLayer.getWidth(); x++) {
@@ -89,31 +90,32 @@ public class ModelManager {
 					TileType type = TileType.getFromCell(cell);
 					if (type == TileType.UNKNOWN)
 						continue;
-					
+
 					// Check if the TileType name corresponds to a model.
 					File f = new File(getModelPath(type.name().toLowerCase()));
 					if (!f.exists())
 						continue;
-					
+
 					final int xF = x, yF = y;
 					// Possibly not flipped, should really check.
 					ModelController controller = new ModelController(type.name().toLowerCase(), this, true) {
-						
+
 						@Override
 						public ModelController setVisible(boolean visible) {
 							objectLayer.setCell(xF, yF, visible ? null : cell);
 							return super.setVisible(visible);
 						}
-						
+
 					}.setPosition(x + 0.5f, y + 0.5f, 0f).setVisible(renderStatics);
 					staticModels.add(controller);
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Changes the visibility of all the statically loaded models.
+	 *
 	 * @param visible Whether they should be visible.
 	 */
 	public void setStaticsVisible(boolean visible) {
@@ -180,9 +182,7 @@ public class ModelManager {
 				assetManager.load(getModelPath(modelName), Model.class);
 			}
 		}
-		for (String modelName : toRemoveFromMap) {
-			unloadedPassBacks.remove(modelName);
-		}
+		toRemoveFromMap.forEach(unloadedPassBacks::remove);
 
 		// Queue up the asset loads for the next batch.
 		assetManager.update();
@@ -215,5 +215,5 @@ public class ModelManager {
 			// it will be given back at some point.
 		}
 	}
-	
+
 }

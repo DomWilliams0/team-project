@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class PracticeMode extends Mode {
 
 	private Stage popupStage;
-	private HelpBox helpBox;
 
 	public PracticeMode(MainGame game) {
 		// create world
@@ -56,7 +55,7 @@ public class PracticeMode extends Mode {
 		super.initSidebar();
 		popupStage = new Stage(new ScreenViewport());
 
-		helpBox = new HelpBox(sideBarStage, world.getMode());
+		HelpBox helpBox = new HelpBox(sideBarStage, world.getMode());
 		sideBarStage.addActor(helpBox);
 	}
 

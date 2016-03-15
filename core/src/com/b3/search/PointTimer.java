@@ -1,38 +1,38 @@
 package com.b3.search;
 
 /**
- * Created by Nishanth on 09/03/2016.
+ * @author nbg481
  */
 public class PointTimer {
 
-    private final int x;
-    private final int y;
-    private int timer;
+	private final int x;
+	private final int y;
+	private int timer;
 
-    public PointTimer (int x, int y, int timer) {
-        this.x = x;
-        this.y = y;
-        this.timer = timer;
-    }
+	public PointTimer(int x, int y, int timer) {
+		this.x = x;
+		this.y = y;
+		this.timer = timer;
+	}
 
-    public Point getPoint() {
-        return new Point(x, y);
-    }
+	public Point getPoint() {
+		return new Point(x, y);
+	}
 
-    public int getTimer () {
-        return timer;
-    }
+	public int getTimer() {
+		return timer;
+	}
 
-    public void decrementTimer() {
-        timer--;
-    }
+	public void decrementTimer() {
+		timer--;
+	}
 
-    public void decrementTimer(int change) {
-        timer = timer - change;
-    }
+	public void decrementTimer(int change) {
+		timer = timer - change;
+	}
 
-    public Boolean finishedTiming() {
-        return (timer==0);
-    }
+	public Boolean finishedTiming() {
+		return (timer == 0);
+	}
 
 }

@@ -26,10 +26,10 @@ public class SearchTicker extends Observable {
 	private final WorldGraph worldGraph;
 	private Takeable<Node> frontier;
 	private List<Node> lastFrontier = new ArrayList<>();
-	private Node mostRecentlyExpanded;						// Current node (expanded)
-	private List<Node> currentNeighbours;					// Current neighbours to be expanded
-	private Node currentNeighbour; 							// Current neighbour being analyzed
-	private int neighboursSoFar;							// Neighbours visited so far
+	private Node mostRecentlyExpanded;                        // Current node (expanded)
+	private List<Node> currentNeighbours;                    // Current neighbours to be expanded
+	private Node currentNeighbour;                            // Current neighbour being analyzed
+	private int neighboursSoFar;                            // Neighbours visited so far
 
 	private Set<Node> visited = new HashSet<>();
 	private Map<Node, Node> cameFrom = new HashMap<>();
@@ -68,7 +68,7 @@ public class SearchTicker extends Observable {
 		this.frontier = new StackT<>(); // placeholder
 		//setup pause status and ensure it is unpaused.
 		paused = new boolean[5];
-		for(int i=0;i<paused.length;i++) paused[i]=false;
+		for (int i = 0; i < paused.length; i++) paused[i] = false;
 	}
 
 	public boolean isRenderProgress() {
@@ -189,9 +189,9 @@ public class SearchTicker extends Observable {
 			return;
 
 		if (!isPaused())
-				worldGraph.setColFlicker();
+			worldGraph.setColFlicker();
 
-		if(timer > 2*timeBetweenTicks)
+		if (timer > 2 * timeBetweenTicks)
 			//it has been a long time since last tick so reset it instead of decrementing it
 			timer = 0;
 		else
@@ -199,7 +199,9 @@ public class SearchTicker extends Observable {
 			timer -= timeBetweenTicks;
 
 		//check if we're supposed to be paused
-		if (isPaused()) {return;}
+		if (isPaused()) {
+			return;
+		}
 
 		tickFinal();
 	}
@@ -207,14 +209,15 @@ public class SearchTicker extends Observable {
 	/**
 	 * tick one step in the current search
 	 * with option to override time settings and pause status
+	 *
 	 * @param override Whether to force a tick to occur regardless of time or pause status
-     */
+	 */
 	public void tick(boolean override) {
 		tickedOnce = true;
 
 		worldGraph.setColFlicker();
 
-		if(override)
+		if (override)
 			//override current status
 			tickFinal();
 		else
@@ -224,8 +227,9 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * Performs a search tick for a specific line in the pseudocode
+	 *
 	 * @param line The line to execute
-     */
+	 */
 	private void tickPseudocode(int line) {
 		if (pathComplete)
 			return;
@@ -463,7 +467,7 @@ public class SearchTicker extends Observable {
 
 				float finalEuclid = (float) Math.sqrt(changeInX2 + changeInY2);
 
-				startNode = new Point(1,1);
+				startNode = new Point(1, 1);
 				end = new Point(worldGraph.getMaxXValue(), worldGraph.getMaxYValue());
 
 				changeInX = startNode.getX() - end.getX();
@@ -475,7 +479,7 @@ public class SearchTicker extends Observable {
 				float maxValue = (float) Math.sqrt(changeInX2 + changeInY2);
 //			float maxValue = 10;
 
-				float convertedFinalEuclid =  ((finalEuclid / maxValue) * 2);
+				float convertedFinalEuclid = ((finalEuclid / maxValue) * 2);
 
 				SoundController.playSounds(3, convertedFinalEuclid);
 			}
@@ -545,8 +549,9 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * Tell the ticker to pause
+	 *
 	 * @param index your identifier, to know when you tell it to resume
-     */
+	 */
 	public void pause(int index) {
 		paused[index] = true;
 
@@ -556,89 +561,94 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * Tell the ticker to resume
+	 *
 	 * @param index your identifier, to know if everyone has told it to resume.
-     */
+	 */
 	public void resume(int index) {
 		paused[index] = false;
 
 		setChanged();
 		notifyObservers();
 	}
-	
+
 	/**
 	 * Whether the search is paused by any of the pause controllers.
+	 *
 	 * @return <code>true</code> if the search is paused.
 	 */
 	public boolean isPaused() {
-		for(boolean pause : paused) if(pause) return true;
+		for (boolean pause : paused) if (pause) return true;
 		return false;
 	}
 
 	/**
 	 * query an individual index of paused as to whether it is paused.
+	 *
 	 * @param index the index to query
 	 * @return wither paused[index] is true
-     */
+	 */
 	public boolean isPaused(int index) {
 		return paused[index];
 	}
-	
+
 	/**
 	 * @return The {@link Node} that the search is starting from.
 	 */
 	public Node getStart() {
 		return start;
 	}
-	
+
 	/**
 	 * Sets the {@link Node} that the search will start expanding from.
+	 *
 	 * @param start The new start {@link Node}.
 	 */
 	public void setStart(Node start) {
 		this.start = start;
 	}
-	
+
 	/**
 	 * @return The {@link Node} that the search is trying to reach (the goal).
 	 */
 	public Node getEnd() {
 		return end;
 	}
-	
+
 	/**
 	 * Sets the {@link Node} that the search is looking for.
+	 *
 	 * @param end The new goal {@link Node}.
 	 */
 	public void setEnd(Node end) {
 		this.end = end;
 	}
-	
+
 	/**
 	 * @return The algorithm being used for this search.
 	 */
 	public SearchAlgorithm getAlgorithm() {
 		return algorithm;
 	}
-	
+
 	/**
 	 * @return The {@link Node} that the search has just expanded.
-	 *         May be <code>null</code>!
+	 * May be <code>null</code>!
 	 */
 	public Node getMostRecentlyExpanded() {
 		return mostRecentlyExpanded;
 	}
-	
+
 	/**
 	 * @return The neighbours of the most recently expanded {@link Node} of the search.
-	 *         May be <code>null</code>!
+	 * May be <code>null</code>!
 	 */
 	public List<Node> getCurrentNeighbours() {
 		return currentNeighbours;
 	}
-	
+
 	/**
 	 * @return The neighbour of the most recently expanded {@link Node} that is currently being evaluated.
-	 *         May be <code>null</code>!
+	 * May be <code>null</code>!
 	 */
 	public Node getCurrentNeighbour() {
 		return currentNeighbour;
@@ -661,22 +671,21 @@ public class SearchTicker extends Observable {
 	}
 
 	public float getG(Node node, Node child) {
-		float g = costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
-		return g;
+		return costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
 	}
-	
+
 	/**
 	 * Gets the cost so far that is needed to reach a {@link Node}.
 	 * Value may decrease after successive calls of {@link #tick()}.
+	 *
 	 * @param node The {@link Node} to get the current cost it takes to reach.
 	 * @return A positive cost that the search has currently achieved to reach {@code node}.
 	 */
 	public float getG(Node node) {
-		float g = costSoFarFunction.apply(node);
-		return g;
+		return costSoFarFunction.apply(node);
 	}
 
-	public boolean isTickedOnce () {
+	public boolean isTickedOnce() {
 		return tickedOnce;
 	}
 

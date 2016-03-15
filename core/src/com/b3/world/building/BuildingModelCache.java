@@ -20,6 +20,7 @@ import java.util.Map;
 
 /**
  * Maintains a set of building Models for reuse
+ *
  * @author dxw405
  */
 public class BuildingModelCache implements Disposable {
@@ -32,8 +33,9 @@ public class BuildingModelCache implements Disposable {
 
 	/**
 	 * creates a new building model cache linked to a world
+	 *
 	 * @param world the world that this cache should be linked to
-     */
+	 */
 	public BuildingModelCache(World world) {
 		models = new HashMap<>();
 		builder = new ModelBuilder();
@@ -52,8 +54,9 @@ public class BuildingModelCache implements Disposable {
 	/**
 	 * Creates a building with the given position and dimensions
 	 * If a model already exists for the given dimensions, it is reused,
-	 *  otherwise a new model is created and cached for future use.
-	 * @param pos The tile position
+	 * otherwise a new model is created and cached for future use.
+	 *
+	 * @param pos        The tile position
 	 * @param dimensions (width, length, height) of the building
 	 * @return The newly created building model instance
 	 */
@@ -82,13 +85,13 @@ public class BuildingModelCache implements Disposable {
 						.rect(2f, -2f, -changer, 2f, 2f, -changer, 2f, 2f, 2f, 2f, -2f, 2f, 1, 0, 0);
 				model = modelBuilder.end();
 			} else {
-			//otherwise just a plain box - good for effeciency as users won't actually see the buidlings textures when they are flat
+				//otherwise just a plain box - good for effeciency as users won't actually see the buidlings textures when they are flat
 				model = builder.createBox(dimensions.x, dimensions.y, dimensions.z,
 						new Material(), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 			}
 			models.put(dimensions, model);
 		}
-		
+
 		return new ModelInstance(model, pos.x + dimensions.x / 2, pos.y + dimensions.y / 2, dimensions.z / 2);
 	}
 

@@ -21,12 +21,13 @@ public class Config {
 	 * unset using {@link Config#unset(ConfigKey)}
 	 */
 	private static Map<ConfigKey, Object> gameConfig = new EnumMap<>(ConfigKey.class);
-	
+
 	/**
 	 * Prevent instantiation.
 	 * Everything should be <code>static</code>.
 	 */
-	private Config() {}
+	private Config() {
+	}
 
 	/**
 	 * Loads the given config(s)
@@ -88,10 +89,11 @@ public class Config {
 		gameConfig.put(key, value);
 		return value;
 	}
-	
+
 	/**
 	 * Gets a value from the game config, or loaded config file(s) if not found.
 	 * Casts the value to a {@link String}.
+	 *
 	 * @param key Key for the desired value.
 	 * @return The config value as a {@link String}. Never <code>null</code>.
 	 * @throws NoSuchElementException   When the provided {@code key} doesn't have a corresponding config value.
@@ -102,10 +104,11 @@ public class Config {
 	public static String getString(ConfigKey key) {
 		return get(key, String.class);
 	}
-	
+
 	/**
 	 * Gets a value from the game config, or loaded config file(s) if not found.
 	 * Casts the value to an {@link Integer}.
+	 *
 	 * @param key Key for the desired value.
 	 * @return The config value as an {@link Integer}. Never <code>null</code>.
 	 * @throws NoSuchElementException   When the provided {@code key} doesn't have a corresponding config value.
@@ -116,10 +119,11 @@ public class Config {
 	public static Integer getInt(ConfigKey key) {
 		return get(key, Integer.class);
 	}
-	
+
 	/**
 	 * Gets a value from the game config, or loaded config file(s) if not found.
 	 * Casts the value to a {@link Boolean}.
+	 *
 	 * @param key Key for the desired value.
 	 * @return The config value as a {@link Boolean}. Never <code>null</code>.
 	 * @throws NoSuchElementException   When the provided {@code key} doesn't have a corresponding config value.
@@ -130,10 +134,11 @@ public class Config {
 	public static Boolean getBoolean(ConfigKey key) {
 		return get(key, Boolean.class);
 	}
-	
+
 	/**
 	 * Gets a value from the game config, or loaded config file(s) if not found.
 	 * Casts the value to a {@link Float}.
+	 *
 	 * @param key Key for the desired value.
 	 * @return The config value as a {@link Float}. Never <code>null</code>.
 	 * @throws NoSuchElementException   When the provided {@code key} doesn't have a corresponding config value.
@@ -144,5 +149,5 @@ public class Config {
 	public static Float getFloat(ConfigKey key) {
 		return get(key, Float.class);
 	}
-	
+
 }

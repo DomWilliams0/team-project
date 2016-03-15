@@ -7,6 +7,7 @@ import java.util.function.Function;
 /**
  * A {@link java.util.PriorityQueue} <b>like</b> structure with a {@link #peek()} and {@link #take()} method.
  * This is actually an {@link ArrayList} with prioritisation.
+ *
  * @param <E> The type of elements held in this {@link java.util.Collection}.
  */
 public class PriorityQueueT<E> extends ArrayList<E> implements Takeable<E> {
@@ -16,8 +17,9 @@ public class PriorityQueueT<E> extends ArrayList<E> implements Takeable<E> {
 	/**
 	 * Construct a new, empty, priority queue
 	 * Utilising a given priority function
+	 *
 	 * @param priorityFunction The function to base take order on.
-     */
+	 */
 	public PriorityQueueT(Function<E, Float> priorityFunction) {
 		this.priorityFunction = priorityFunction;
 	}
@@ -45,7 +47,7 @@ public class PriorityQueueT<E> extends ArrayList<E> implements Takeable<E> {
 	public E take() {
 		return remove(peekIndex());
 	}
-	
+
 	/**
 	 * @return A new {@link ArrayList} with all the elements, but in order.
 	 */

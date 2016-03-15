@@ -23,17 +23,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * Provides help for the user based on the mode of the simulation.
  * Gives instructions on how the mode can be used and interacted with
  * And a legend to explain meaning of colours.
- *
+ * <p>
  * Created by Ben, worked on mostly by Lewis
- * todo comments
  */
 public class HelpBox extends Table {
 
-    private Stage stage;
-    private ModeType mode;
-    private ButtonComponent triggerBtn;
-    private boolean isOpen;
-    private float preferredHeight;
+	private Stage stage;
+	private ModeType mode;
+	private ButtonComponent triggerBtn;
+	private boolean isOpen;
+	private float preferredHeight;
 	private final String padding = "   ";
 	private Table worldT;
 	private Table worldNodesT;
@@ -50,37 +49,43 @@ public class HelpBox extends Table {
 			"such as simulation speed and search speed.\n" +
 			"You can also play/pause the search here.";
 
-    public HelpBox(Stage stage, ModeType mode) {
+	public HelpBox(Stage stage, ModeType mode) {
 		this.stage = stage;
 		this.mode = mode;
 		this.isOpen = false;
-		switch(mode) {
-			case LEARNING:preferredHeight = 390;break;
-			case PRACTICE:preferredHeight = 340;break;
-			case COMPARE: preferredHeight = 300;break;
-		};
+		switch (mode) {
+			case LEARNING:
+				preferredHeight = 390;
+				break;
+			case PRACTICE:
+				preferredHeight = 340;
+				break;
+			case COMPARE:
+				preferredHeight = 300;
+				break;
+		}
 
 		initComponents();
 		bottom();
 		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    }
+	}
 
-    private void setBackgroundColor(float r, float g, float b, float a) {
-        Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
-        pm1.setColor(r, g, b, a);
-        pm1.fill();
-        setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
-    }
+	private void setBackgroundColor(float r, float g, float b, float a) {
+		Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
+		pm1.setColor(r, g, b, a);
+		pm1.fill();
+		setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
+	}
 
-    private void initComponents() {
+	private void initComponents() {
 		// ===============
 		// === STYLING ===
 		// ===============
 
-        setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
+		setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
-        Skin skin = new Skin(atlas);
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
+		Skin skin = new Skin(atlas);
 		BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
 		skin.add("default", font, BitmapFont.class);
 		Label.LabelStyle style = new Label.LabelStyle(font, Color.BLACK);
@@ -92,32 +97,38 @@ public class HelpBox extends Table {
 		// === HELP TEXT & LEGEND ===
 		// ==========================
 
-		switch(mode) {
-			case LEARNING:	setupLM(); break;
-			case COMPARE :	setupCM(); break;
-			case PRACTICE:	setupTY(); break;
+		switch (mode) {
+			case LEARNING:
+				setupLM();
+				break;
+			case COMPARE:
+				setupCM();
+				break;
+			case PRACTICE:
+				setupTY();
+				break;
 		}
 
 		fillThis();
 
 		row();
 
-        // ======================
-        // === TRIGGER BUTTON ===
-        // ======================
+		// ======================
+		// === TRIGGER BUTTON ===
+		// ======================
 
-        triggerBtn = new ButtonComponent(skin, font, "HELP");
-        triggerBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
+		triggerBtn = new ButtonComponent(skin, font, "HELP");
+		triggerBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
 				isOpen = !isOpen;
-                resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            }
-        });
+				resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			}
+		});
 
-        background(skin.getDrawable("window_03"));
-        this.stage.addActor(triggerBtn.getComponent());
-    }
+		background(skin.getDrawable("window_03"));
+		this.stage.addActor(triggerBtn.getComponent());
+	}
 
 	/**
 	 * Place the help tables onto this help box
@@ -138,17 +149,17 @@ public class HelpBox extends Table {
 	}
 
 	/**
-     * Resize this menu
-     * Should be called whenever the window is resized.
-     *
-     * @param width Window width
-     * @param height Window height
-     */
-    public void resize(int width, int height) {
+	 * Resize this menu
+	 * Should be called whenever the window is resized.
+	 *
+	 * @param width  Window width
+	 * @param height Window height
+	 */
+	public void resize(int width, int height) {
 		setX(0);
 		setSize(width, preferredHeight);
 
-        TextButton _triggerBtn = triggerBtn.getComponent();
+		TextButton _triggerBtn = triggerBtn.getComponent();
 
 		triggerBtn.getComponent().setX((width / 2) - 31);
 
@@ -193,7 +204,7 @@ public class HelpBox extends Table {
 				"it as the next destination."
 		);
 
-		sidebarsT = new Table (getSkin());
+		sidebarsT = new Table(getSkin());
 		addHelp(sidebarsT, "The sidebars:", true);
 		sidebarsT.row().row();
 		addHelp(sidebarsT, visbarhelp + "\n" +
@@ -226,7 +237,7 @@ public class HelpBox extends Table {
 				//todo anything more??
 		);
 
-		sidebarsT = new Table (getSkin());
+		sidebarsT = new Table(getSkin());
 		addHelp(sidebarsT, "The sidebar:", true);
 		sidebarsT.row().row();
 		addHelp(sidebarsT, setbarhelp);
@@ -259,7 +270,7 @@ public class HelpBox extends Table {
 				"it as the next destination."
 		);
 
-		sidebarsT = new Table (getSkin());
+		sidebarsT = new Table(getSkin());
 		addHelp(sidebarsT, "The sidebar:", true);
 		sidebarsT.row().row();
 		addHelp(sidebarsT, visbarhelp + "\n" +
@@ -271,14 +282,15 @@ public class HelpBox extends Table {
 
 	/**
 	 * Adds some help text to the given table, in a label component formatted in the appropriate way
-	 * @param t The table to add the text to
-	 * @param s The string to put in
+	 *
+	 * @param t       The table to add the text to
+	 * @param s       The string to put in
 	 * @param isTitle Whether this is a title
 	 * @return The cell created in the table
 	 */
 	private Cell addHelp(Table t, String s, boolean isTitle) {
 		Color c = isTitle ? new Color(0xa0a0ffff) : Color.BLACK;
-		int size = isTitle? 20 : 16;
+		int size = isTitle ? 20 : 16;
 		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", size, s, c);
 		return t.add(lbl.getComponent());
 	}

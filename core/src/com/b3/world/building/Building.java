@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 
 /**
  * Represents a building in the world, containing its dimensions, position and cache
+ *
  * @author dxw405
  */
 public class Building {
@@ -49,21 +50,21 @@ public class Building {
 
 	/**
 	 * @return the tile position that this building is placed at (bottom left corner)
-     */
+	 */
 	public Vector2 getTilePosition() {
 		return tilePosition;
 	}
 
 	/**
 	 * @return the dimensions of the current building
-     */
+	 */
 	public Vector3 getDimensions() {
 		return dimensions;
 	}
 
 	/**
 	 * @param flatten iff true then the building will be flat, otherwise not
-     */
+	 */
 	public void setFlattened(boolean flatten) {
 		flattened = flatten;
 	}
@@ -77,7 +78,7 @@ public class Building {
 
 	/**
 	 * @return the instance of the building, if flattened then no textures - just a black box; if not then contains textures too
-     */
+	 */
 	public ModelInstance getModelInstance() {
 		if (flattened) {
 			return modelInstanceFlat;
@@ -100,9 +101,10 @@ public class Building {
 
 	/**
 	 * checks if one building is equal to o
+	 *
 	 * @param o the building to be compared to
 	 * @return true if equal
-     */
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -116,7 +118,7 @@ public class Building {
 
 	/**
 	 * @return the hash code of the current building
-     */
+	 */
 	@Override
 	public int hashCode() {
 		int result = tilePosition.hashCode();

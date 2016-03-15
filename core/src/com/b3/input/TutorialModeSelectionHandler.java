@@ -23,22 +23,24 @@ public class TutorialModeSelectionHandler extends InputAdapter {
 
 	/**
 	 * initialises the input listeners for the tutorial mode
-	 * @param world the world that this listener is linked to
+	 *
+	 * @param world        the world that this listener is linked to
 	 * @param tutorialMode the instance of tutorialMode that this listener is linked to
-     */
+	 */
 	public TutorialModeSelectionHandler(World world, TutorialMode tutorialMode) {
 		this.world = world;
-		this.currentSelection = new Point(1,1);
+		this.currentSelection = new Point(1, 1);
 		this.tutorialMode = tutorialMode;
 	}
 
 	/**
 	 * Defines what happens on touch down: firstly close errors, then show pop-ups
+	 *
 	 * @param screenX the x position of the mouse
 	 * @param screenY the y position of the mouse
-	 * @param button left or right click
-     * @return true if clicked
-     */
+	 * @param button  left or right click
+	 * @return true if clicked
+	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// selecting a tile

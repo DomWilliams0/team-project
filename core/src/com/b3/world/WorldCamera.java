@@ -35,11 +35,11 @@ public class WorldCamera extends PerspectiveCamera {
 	private float FOV;
 
 	// todo redo camera restriction
-	
+
 	/**
-	 * @param fieldOfViewY The field of view of the height, in degrees, the field of view for
-	 *                     the width will be calculated according to the aspect ratio.
-	 * @param viewportWidth The viewport width.
+	 * @param fieldOfViewY   The field of view of the height, in degrees, the field of view for
+	 *                       the width will be calculated according to the aspect ratio.
+	 * @param viewportWidth  The viewport width.
 	 * @param viewportHeight The viewport height.
 	 */
 	public WorldCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
@@ -51,11 +51,14 @@ public class WorldCamera extends PerspectiveCamera {
 		inputDelta = new Vector2();
 		followedAgent = null;
 
-		posX = 0; posY = 0; posZ = 0;
+		posX = 0;
+		posY = 0;
+		posZ = 0;
 	}
-	
+
 	/**
 	 * Changes the field of view.
+	 *
 	 * @param fov The new field of view.
 	 */
 	public void setFieldOfViewY(float fov) {
@@ -154,10 +157,11 @@ public class WorldCamera extends PerspectiveCamera {
 
 		zoomAmount = newZ;
 	}
-	
+
 	/**
 	 * Sets the current zoom level with a smooth animation.
 	 * Obeys the max and min config limits.
+	 *
 	 * @param zoom The new zoom level.
 	 */
 	public void setCurrentZoom(float zoom) {
@@ -169,17 +173,17 @@ public class WorldCamera extends PerspectiveCamera {
 
 		zoomAmount = zoom;
 	}
-	
+
 	public float getActualZoom() {
 		return zoomAmount;
 	}
-	
+
 	public float getCurrentZoom() {
 		if (zoomAmount > 30) {
 			return zoomAmount - 30;
 		} else return 1;
 	}
-	
+
 	/**
 	 * Updates the camera to the new position of the tracked entity.
 	 */
@@ -187,9 +191,10 @@ public class WorldCamera extends PerspectiveCamera {
 		position.set(followedAgent.getPosition(), position.z);
 		update();
 	}
-	
+
 	/**
 	 * Makes the camera follow an entity.
+	 *
 	 * @param agent The agent to follow.
 	 */
 	public void setFollowedAgent(Agent agent) {
@@ -198,14 +203,14 @@ public class WorldCamera extends PerspectiveCamera {
 
 	/**
 	 * @return the x position
-     */
+	 */
 	public float getPosX() {
 		return posX;
 	}
 
 	/**
 	 * @return the y position
-     */
+	 */
 	public float getPosY() {
 		return posY;
 	}
@@ -217,5 +222,5 @@ public class WorldCamera extends PerspectiveCamera {
 	public float getFOV() {
 		return FOV;
 	}
-	
+
 }

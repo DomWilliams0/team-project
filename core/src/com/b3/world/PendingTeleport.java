@@ -14,7 +14,7 @@ public class PendingTeleport {
 		this.body = body;
 		this.teleportType = teleportType;
 	}
-	
+
 	/**
 	 * Where to teleport to.
 	 */
@@ -24,5 +24,5 @@ public class PendingTeleport {
 		TO_RIGHT,
 		TO_BOTTOM
 	}
-	
+
 }

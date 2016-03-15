@@ -60,6 +60,7 @@ public class KeyboardController extends InputAdapter {
 		zoomDelta = amount;
 		return false;
 	}
+
 	/**
 	 * Polls the movement keys for 2D delta movement
 	 *

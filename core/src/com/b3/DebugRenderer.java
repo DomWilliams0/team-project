@@ -17,8 +17,9 @@ public class DebugRenderer {
 
 	/**
 	 * Creates a new debug renderer using the current world
+	 *
 	 * @param world the world that this debug renderer is using
-     */
+	 */
 	public DebugRenderer(World world) {
 		this.world = world;
 		spriteBatch = new SpriteBatch();
@@ -28,8 +29,9 @@ public class DebugRenderer {
 
 	/**
 	 * Renders the world using the current camera
+	 *
 	 * @param camera the PerspectiveCamera used to render the world using the spriteBatch
-     */
+	 */
 	public void render(PerspectiveCamera camera) {
 		spriteBatch.begin();
 		renderer.render(world, camera.combined);

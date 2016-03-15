@@ -15,16 +15,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * Provides an explanation of what colours in the software mean
  * i.e. the colours used to display the nodes or highlight in the sidebar.
  * This legend cannot be altered besides changing the colours in WorldGraph
- *
+ * <p>
  * Created by Ben, worked on mostly by Lewis.
  */
 public class Legend extends Table {
 	private Pixmap pm;
-	private TextureRegionDrawable trd;
 	private Skin skin;
 
 	/**
 	 * Create a new legend, using a given skin
+	 *
 	 * @param skin The skin with which to render this legend.
 	 */
 	public Legend(Skin skin) {
@@ -65,15 +65,16 @@ public class Legend extends Table {
 	/**
 	 * Add text to this table, highlighted in a given colour.
 	 * Also adds a row to the table.
+	 *
 	 * @param text The text to display
-	 * @param c The colour to highlight the text in
+	 * @param c    The colour to highlight the text in
 	 */
 	private void addLegend(String text, Color c) {
 		//set the colour
 		pm.setColor(c);
 		pm.fill();
 		//setup the colour in a drawable
-		trd = new TextureRegionDrawable(new TextureRegion(new Texture(new PixmapTextureData(pm, null, false, false))));
+		TextureRegionDrawable trd = new TextureRegionDrawable(new TextureRegion(new Texture(new PixmapTextureData(pm, null, false, false))));
 
 		//setup the wrapping table
 		Table t = new Table(skin);

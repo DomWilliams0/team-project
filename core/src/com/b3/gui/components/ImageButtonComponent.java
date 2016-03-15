@@ -14,50 +14,51 @@ import java.text.MessageFormat;
  */
 public class ImageButtonComponent extends Component {
 
-    private ImageButton imageButton;
-    private Object data;
+	private ImageButton imageButton;
+	private Object data;
 
-    /**
-     * Creates an instance of an ImageButtonComponent
-     * @param imageUpPath The path to the image for the UP state
-     * @param imageDownPath The path to the image for the DOWN state
-     * @param imageOverPath The path to the image for the OVER state
-     */
-    public ImageButtonComponent(String imageUpPath, String imageDownPath, String imageOverPath) {
-        Texture textureUp = new Texture(Gdx.files.internal(MessageFormat.format("core/assets/gui/buttons/{0}", imageUpPath)));
-        Texture textureDown = new Texture(Gdx.files.internal(MessageFormat.format("core/assets/gui/buttons/{0}", imageDownPath)));
-        Texture textureOver = new Texture(Gdx.files.internal(MessageFormat.format("core/assets/gui/buttons/{0}", imageOverPath)));
-        TextureRegion imageUp = new TextureRegion(textureUp);
-        TextureRegion imageDown = new TextureRegion(textureDown);
-        TextureRegion imageOver = new TextureRegion(textureOver);
+	/**
+	 * Creates an instance of an ImageButtonComponent
+	 *
+	 * @param imageUpPath   The path to the image for the UP state
+	 * @param imageDownPath The path to the image for the DOWN state
+	 * @param imageOverPath The path to the image for the OVER state
+	 */
+	public ImageButtonComponent(String imageUpPath, String imageDownPath, String imageOverPath) {
+		Texture textureUp = new Texture(Gdx.files.internal(MessageFormat.format("core/assets/gui/buttons/{0}", imageUpPath)));
+		Texture textureDown = new Texture(Gdx.files.internal(MessageFormat.format("core/assets/gui/buttons/{0}", imageDownPath)));
+		Texture textureOver = new Texture(Gdx.files.internal(MessageFormat.format("core/assets/gui/buttons/{0}", imageOverPath)));
+		TextureRegion imageUp = new TextureRegion(textureUp);
+		TextureRegion imageDown = new TextureRegion(textureDown);
+		TextureRegion imageOver = new TextureRegion(textureOver);
 
-        ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
-        imageButtonStyle.imageUp = new TextureRegionDrawable(imageUp);
-        imageButtonStyle.imageDown = new TextureRegionDrawable(imageDown);
-        imageButtonStyle.imageOver = new TextureRegionDrawable(imageOver);
+		ImageButton.ImageButtonStyle imageButtonStyle = new ImageButton.ImageButtonStyle();
+		imageButtonStyle.imageUp = new TextureRegionDrawable(imageUp);
+		imageButtonStyle.imageDown = new TextureRegionDrawable(imageDown);
+		imageButtonStyle.imageOver = new TextureRegionDrawable(imageOver);
 
-        imageButton = new ImageButton(imageButtonStyle);
-    }
+		imageButton = new ImageButton(imageButtonStyle);
+	}
 
-    /**
-     * @return The inner button representation
-     */
-    public ImageButton getComponent() {
-        return imageButton;
-    }
+	/**
+	 * @return The inner button representation
+	 */
+	public ImageButton getComponent() {
+		return imageButton;
+	}
 
-    public Object getData() {
-        return data;
-    }
+	public Object getData() {
+		return data;
+	}
 
-    public void setData(Object data) {
-        this.data = data;
-    }
+	public void setData(Object data) {
+		this.data = data;
+	}
 
-    @Override
-    public void addListener(ChangeListener listener) {
-        imageButton.addListener(listener);
-    }
+	@Override
+	public void addListener(ChangeListener listener) {
+		imageButton.addListener(listener);
+	}
 
 
 }

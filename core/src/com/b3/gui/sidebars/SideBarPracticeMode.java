@@ -12,33 +12,33 @@ import java.util.Map;
 
 public class SideBarPracticeMode extends SideBarNodes {
 
-    private MainGame controller;
+	private MainGame controller;
 
-    public SideBarPracticeMode(Stage stage, World world, MainGame controller, float preferredWidth) {
-        super(stage, world, preferredWidth, true, true);
-        //super(stage, world, true, "window_03", preferredWidth, new LinkedHashMap<>());
+	public SideBarPracticeMode(Stage stage, World world, MainGame controller, float preferredWidth) {
+		super(stage, world, preferredWidth, true, true);
+		//super(stage, world, true, "window_03", preferredWidth, new LinkedHashMap<>());
 
-        this.controller = controller;
+		this.controller = controller;
 
-        // Add settings tab
-        Map<String, Object> data = new HashMap<String, Object>() {{
-            put("world", world);
-            put("controller", controller);
-        }};
+		// Add settings tab
+		Map<String, Object> data = new HashMap<String, Object>() {{
+			put("world", world);
+			put("controller", controller);
+		}};
 
-        Map<String, Tab> additionalTabs = new LinkedHashMap<>();
-        additionalTabs.put("Settings", new PracticeModeSettingsTab(skin, font, preferredWidth, this, data));
-        addTabs(additionalTabs);
+		Map<String, Tab> additionalTabs = new LinkedHashMap<>();
+		additionalTabs.put("Settings", new PracticeModeSettingsTab(skin, font, preferredWidth, this, data));
+		addTabs(additionalTabs);
 
-        initComponents();
-    }
+		initComponents();
+	}
 
-    public MainGame getController() {
-        return controller;
-    }
+	public MainGame getController() {
+		return controller;
+	}
 
-    public void setController(MainGame controller) {
-        this.controller = controller;
-    }
+	public void setController(MainGame controller) {
+		this.controller = controller;
+	}
 
 }

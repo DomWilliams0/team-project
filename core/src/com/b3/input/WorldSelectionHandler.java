@@ -26,7 +26,7 @@ public class WorldSelectionHandler extends InputAdapter {
 
 	public WorldSelectionHandler(World world) {
 		this.world = world;
-		this.currentSelection = new Point(1,1);
+		this.currentSelection = new Point(1, 1);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class WorldSelectionHandler extends InputAdapter {
 		}
 
 		//if near bottom of screen hitting the intensive learning mode button so ignore
-		if (screenX < 100 && screenY > Gdx.graphics.getHeight()-100) {
+		if (screenX < 100 && screenY > Gdx.graphics.getHeight() - 100) {
 			return false;
 		}
 
@@ -57,9 +57,9 @@ public class WorldSelectionHandler extends InputAdapter {
 		Node node = worldGraph.getNode(new Point((int) tempRayCast.x, (int) tempRayCast.y));
 
 		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)) {
-			System.out.println("Add building @ "+(int)tempRayCast.x+"|"+(int)tempRayCast.y);
-			if (world.isValidBuildingPos((int)tempRayCast.x, (int)tempRayCast.y))
-				world.addBuilding(new Vector2((int)tempRayCast.x, (int)tempRayCast.y), new Vector3(4, 4, 10));
+			System.out.println("Add building @ " + (int) tempRayCast.x + "|" + (int) tempRayCast.y);
+			if (world.isValidBuildingPos((int) tempRayCast.x, (int) tempRayCast.y))
+				world.addBuilding(new Vector2((int) tempRayCast.x, (int) tempRayCast.y), new Vector3(4, 4, 10));
 			Config.set(ConfigKey.ADD_BUILDING_MODE, !(Config.getBoolean(ConfigKey.ADD_BUILDING_MODE)));
 
 			boolean flatBuildings = Config.getBoolean(ConfigKey.FLATTEN_BUILDINGS);
@@ -67,7 +67,7 @@ public class WorldSelectionHandler extends InputAdapter {
 		}
 
 		if (Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)) {
-			System.out.println("Remove building @ "+(int)tempRayCast.x+"|"+(int)tempRayCast.y);
+			System.out.println("Remove building @ " + (int) tempRayCast.x + "|" + (int) tempRayCast.y);
 			world.removeBuilding(new Vector2((int) tempRayCast.x, (int) tempRayCast.y));
 			Config.set(ConfigKey.REMOVE_BUILDING_MODE, !(Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)));
 
@@ -126,7 +126,7 @@ public class WorldSelectionHandler extends InputAdapter {
 		Ray ray = worldCamera.getPickRay(screenX, screenY);
 		ray.getEndPoint(tempRayCast, worldCamera.position.z);
 
-		world.setCurrentMousePos((int)tempRayCast.x, (int) tempRayCast.y);
+		world.setCurrentMousePos((int) tempRayCast.x, (int) tempRayCast.y);
 
 		WorldGraph worldGraph = world.getWorldGraph();
 		Node node = worldGraph.getNode(new Point((int) tempRayCast.x, (int) tempRayCast.y));

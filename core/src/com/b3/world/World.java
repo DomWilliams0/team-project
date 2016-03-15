@@ -60,9 +60,8 @@ public class World implements Disposable {
 	private CoordinatePopup coordinatePopup;
 
 	private TiledMap map;
-	private InputHandler inputHandler;
 
-	private Vector2 tileSize, pixelSize;
+	private Vector2 tileSize;
 
 	private ShapeRenderer shapeRenderer;
 	private DebugRenderer debugRenderer;
@@ -120,7 +119,6 @@ public class World implements Disposable {
 	public World(String fileName, ModeType mode, InputHandler inputHandler) {
 		pseudoCodeEnabled = mode == LEARNING;
 
-		this.inputHandler = inputHandler;
 		this.mode = mode;
 
 		animationNextDestination = 0;
@@ -132,7 +130,6 @@ public class World implements Disposable {
 				(int) map.getProperties().get("width"),
 				(int) map.getProperties().get("height")
 		);
-		pixelSize = new Vector2(tileSize).scl(Utils.WORLD_SCALE);
 		renderer = new OrthogonalTiledMapRenderer(map, 1f / Utils.TILESET_RESOLUTION);
 
 		// buildings and lighting
@@ -183,9 +180,10 @@ public class World implements Disposable {
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		BFSTexture = new Sprite(tempTexture);
 	}
-	
+
 	/**
 	 * Takes a tile map and removes nodes and changes edge costs accordingly.
+	 *
 	 * @param map The tile map to process and change the {@link #worldGraph} accordingly to.
 	 */
 	private void processMapTileTypes(TiledMap map) {
@@ -597,7 +595,8 @@ public class World implements Disposable {
 		modelManager.render(worldCamera);
 
 		//pop-ups on nodes
-		if (mode == LEARNING || mode == TUTORIAL) rt.render(currentNodeClickX, currentNodeClickY, worldGraph.getCurrentSearch());
+		if (mode == LEARNING || mode == TUTORIAL)
+			rt.render(currentNodeClickX, currentNodeClickY, worldGraph.getCurrentSearch());
 
 		//pop-ups to show current coordinate
 		coordinatePopup.render();

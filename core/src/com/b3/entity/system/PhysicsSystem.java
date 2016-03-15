@@ -35,9 +35,10 @@ public class PhysicsSystem extends IteratingSystem {
 
 	/**
 	 * For each entitiy in the world, updates the velocity according the friction rules
+	 *
 	 * @param entity    The current Entity being processed
 	 * @param deltaTime The delta time between the last and current frame
-     */
+	 */
 	public void processEntity(Entity entity, float deltaTime) {
 		Body body = physics.get(entity).body;
 

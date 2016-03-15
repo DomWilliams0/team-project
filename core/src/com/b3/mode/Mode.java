@@ -70,7 +70,7 @@ public abstract class Mode extends ScreenAdapter {
 		inputHandler.addProcessor(sideBarStage);
 		registerFurtherInputProcessors(inputHandler);
 
-		this.currentSelection = new Point(0,0);
+		this.currentSelection = new Point(0, 0);
 	}
 
 	protected abstract void registerFurtherInputProcessors(InputHandler inputHandler);
@@ -78,7 +78,7 @@ public abstract class Mode extends ScreenAdapter {
 	protected abstract void tick(float delta);
 
 	protected abstract void initialise();
-	
+
 	public void finishInitialisation() {
 	}
 
@@ -122,7 +122,7 @@ public abstract class Mode extends ScreenAdapter {
 				sideBarNodes.resetPseudoCode();
 				world.setPseudoCode(true);
 			}
-			if(world.getCurrentClick()!=null) sideBarNodes.highlightNode(world.getCurrentClick(), true);
+			if (world.getCurrentClick() != null) sideBarNodes.highlightNode(world.getCurrentClick(), true);
 			if (sideBarNodes.hasNewClick()) {
 				world.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
 				//check if need to change page

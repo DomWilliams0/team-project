@@ -18,10 +18,11 @@ public class SearchParameters {
 		EUCLIDEAN = SearchParameters::calculateEuclidean;
 		NOTHING = (a, b) -> 0f;
 	}
-	
+
 	/**
 	 * Calculated the Euclidean distance between two {@link Node Nodes}.
 	 * IE SQRT((x2-x1)^2 + (y2-y1)^2)
+	 *
 	 * @param n1 first node
 	 * @param n2 second node
 	 * @return The calculated Euclidean distance.
@@ -31,7 +32,7 @@ public class SearchParameters {
 		Point p2 = n2.getPoint();
 		int x = p1.getX() - p2.getX();
 		int y = p1.getY() - p2.getY();
-		
+
 		return (float) Math.sqrt(x * x + y * y);
 	}
 
@@ -78,7 +79,6 @@ public class SearchParameters {
 				throw new IllegalArgumentException("Invalid search algorithm: " + algorithm);
 		}
 	}
-
 
 
 	/**

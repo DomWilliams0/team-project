@@ -12,43 +12,43 @@ import java.util.Map;
 
 public class SideBarIntensiveLearningMode extends SideBar implements Disposable {
 
-    private MainGame controller;
+	private MainGame controller;
 
-    public SideBarIntensiveLearningMode(Stage stage, World world) {
-        super(stage, world, true, "window_03", 320, new LinkedHashMap<>());
+	public SideBarIntensiveLearningMode(Stage stage, World world) {
+		super(stage, world, true, "window_03", 320, new LinkedHashMap<>());
 
-        if (tabs != null) {
-            // Add settings tab
-            Map<String, Object> data = new HashMap<String, Object>() {{
-                put("world", world);
-            }};
-            tabs.put("Settings", new LearningModeSettingsTab(skin, font, preferredWidth, this, data));
-        }
+		if (tabs != null) {
+			// Add settings tab
+			Map<String, Object> data = new HashMap<String, Object>() {{
+				put("world", world);
+			}};
+			tabs.put("Settings", new LearningModeSettingsTab(skin, font, preferredWidth, this, data));
+		}
 
-        initComponents();
-    }
+		initComponents();
+	}
 
-    public void setWorld(World world) {
-        this.world = world;
-    }
+	public void setWorld(World world) {
+		this.world = world;
+	}
 
-    public MainGame getController() {
-        return controller;
-    }
+	public MainGame getController() {
+		return controller;
+	}
 
-    public void setController(MainGame controller) {
-        this.controller = controller;
-    }
+	public void setController(MainGame controller) {
+		this.controller = controller;
+	}
 
-    @Override
-    public float getPreferredWidth() {
-        return preferredWidth;
-    }
+	@Override
+	public float getPreferredWidth() {
+		return preferredWidth;
+	}
 
-    @Override
-    public void dispose() {
-        controller.getInputHandler().clear();
-        stage.dispose();
-    }
+	@Override
+	public void dispose() {
+		controller.getInputHandler().clear();
+		stage.dispose();
+	}
 
 }

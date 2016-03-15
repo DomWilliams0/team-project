@@ -23,27 +23,27 @@ import java.util.function.Consumer;
 
 public class SideBarCompareMode extends SideBar implements Disposable {
 
-    private ButtonComponent playPause;
-    private MainGame controller;
+	private ButtonComponent playPause;
+	private MainGame controller;
 
-    public SideBarCompareMode(Stage stage, World world) {
-        super(stage, world, true, "window_03", 230, new LinkedHashMap<>());
+	public SideBarCompareMode(Stage stage, World world) {
+		super(stage, world, true, "window_03", 230, new LinkedHashMap<>());
 
-        if (tabs != null) {
-            // Add nodes tab
-            Map<String, Object> data = new HashMap<String, Object>() {{
-                put("world", world);
-            }};
-            tabs.put("Settings", new CompareModeSettingsTab(skin, font, preferredWidth, this, data));
-        }
+		if (tabs != null) {
+			// Add nodes tab
+			Map<String, Object> data = new HashMap<String, Object>() {{
+				put("world", world);
+			}};
+			tabs.put("Settings", new CompareModeSettingsTab(skin, font, preferredWidth, this, data));
+		}
 
-        initComponents();
-    }
+		initComponents();
+	}
 
 	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey) {
 		createCheckbox(skin, font, table, label, configKey, null);
 	}
-	
+
 	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey,
 								Consumer<Boolean> checkedListener) {
 		CheckBoxComponent checkBox = new CheckBoxComponent(skin, font, label);
@@ -57,7 +57,7 @@ public class SideBarCompareMode extends SideBar implements Disposable {
 					checkedListener.accept(checked);
 			}
 		});
-		
+
 		table.add(checkBox.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
@@ -65,25 +65,25 @@ public class SideBarCompareMode extends SideBar implements Disposable {
 		table.row();
 	}
 
-    public void setWorld(World world) {
-        this.world = world;
-    }
+	public void setWorld(World world) {
+		this.world = world;
+	}
 
-    public void updatePlayPauseButton() {
-        playPause.setText("Play");
-    }
+	public void updatePlayPauseButton() {
+		playPause.setText("Play");
+	}
 
-    public MainGame getController() {
-        return controller;
-    }
+	public MainGame getController() {
+		return controller;
+	}
 
-    public void setController(MainGame controller) {
-        this.controller = controller;
-    }
+	public void setController(MainGame controller) {
+		this.controller = controller;
+	}
 
-    @Override
-    public void dispose() {
-        controller.getInputHandler().clear();
-        stage.dispose();
-    }
+	@Override
+	public void dispose() {
+		controller.getInputHandler().clear();
+		stage.dispose();
+	}
 }

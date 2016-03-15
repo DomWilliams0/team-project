@@ -29,238 +29,235 @@ import java.util.Map;
  */
 public abstract class SideBar extends Table {
 
-    protected Stage stage;
-    protected World world;
+	protected Stage stage;
+	protected World world;
 
-    protected TabbedPane tabbedPane;
-    protected ButtonComponent triggerBtn;
-    protected Map<String, Tab> tabs;
+	protected TabbedPane tabbedPane;
+	protected ButtonComponent triggerBtn;
+	protected Map<String, Tab> tabs;
 
-    protected Skin skin;
-    protected BitmapFont font;
-    protected String background;
+	protected Skin skin;
+	protected BitmapFont font;
+	protected String background;
 
-    protected float preferredWidth;
-    protected boolean left;
-    protected boolean isOpen;
-	
-    public SideBar(Stage stage,
-                   World world,
-                   boolean left,
-                   String background,
-                   float preferredWidth,
-                   Map<String, Tab> tabs) {
+	protected float preferredWidth;
+	protected boolean left;
+	protected boolean isOpen;
 
-        this.stage = stage;
-        this.preferredWidth = preferredWidth;
-        this.world = world;
-        this.tabs = tabs;
-        this.left = left;
-        this.background = background;
-        isOpen = false;
+	public SideBar(Stage stage,
+				   World world,
+				   boolean left,
+				   String background,
+				   float preferredWidth,
+				   Map<String, Tab> tabs) {
 
-        // Setup the skin
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
-        this.skin = new Skin(atlas);
-        this.font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
-        //this.skin.add("default", font, BitmapFont.class);
+		this.stage = stage;
+		this.preferredWidth = preferredWidth;
+		this.world = world;
+		this.tabs = tabs;
+		this.left = left;
+		this.background = background;
+		isOpen = false;
 
-        // Set position and size
-        setPosition(left ? -preferredWidth : Gdx.graphics.getWidth(), 0);
-        setSize(preferredWidth, Gdx.graphics.getHeight());
-    }
+		// Setup the skin
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
+		this.skin = new Skin(atlas);
+		this.font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+		//this.skin.add("default", font, BitmapFont.class);
 
-    /**
-     * Set the background colour of this menu
-     * @param r Red colour component
-     * @param g Green colour component
-     * @param b Blue colour component
-     * @param a Alpha component
-     */
-    protected void setBackgroundColor(float r, float g, float b, float a) {
-        Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
-        pm1.setColor(r, g, b, a);
-        pm1.fill();
-        setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
-    }
-	
+		// Set position and size
+		setPosition(left ? -preferredWidth : Gdx.graphics.getWidth(), 0);
+		setSize(preferredWidth, Gdx.graphics.getHeight());
+	}
+
+	/**
+	 * Set the background colour of this menu
+	 *
+	 * @param r Red colour component
+	 * @param g Green colour component
+	 * @param b Blue colour component
+	 * @param a Alpha component
+	 */
+	protected void setBackgroundColor(float r, float g, float b, float a) {
+		Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
+		pm1.setColor(r, g, b, a);
+		pm1.fill();
+		setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
+	}
+
 	/**
 	 * Create the basic components of the sidebar.
 	 * E.g.
 	 * <ol>
-	 *     <li>The background</li>
-	 *     <li>{@link #tabs}, if there are any.</li>
-	 *     <li>The button to open and close the sidebar.</li>
+	 * <li>The background</li>
+	 * <li>{@link #tabs}, if there are any.</li>
+	 * <li>The button to open and close the sidebar.</li>
 	 * </ol>
 	 */
-    public void initComponents() {
-        // Set a default background colour
-        setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
+	public void initComponents() {
+		// Set a default background colour
+		setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
-        // ===================
-        // === TABBED PANE ===
-        // ===================
+		// ===================
+		// === TABBED PANE ===
+		// ===================
 
-        TabbedPane.TabbedPaneStyle tabbedPaneStyle = new TabbedPane.TabbedPaneStyle();
-        skin.add("default", font, BitmapFont.class);
-        tabbedPaneStyle.font = font;
-        tabbedPaneStyle.bodyBackground = skin.getDrawable("knob_06");
-        tabbedPaneStyle.titleButtonSelected = skin.getDrawable("button_02");
-        tabbedPaneStyle.titleButtonUnselected = skin.getDrawable("button_01");
-        skin.add("default", tabbedPaneStyle);
-        tabbedPane = new TabbedPane(skin);
+		TabbedPane.TabbedPaneStyle tabbedPaneStyle = new TabbedPane.TabbedPaneStyle();
+		skin.add("default", font, BitmapFont.class);
+		tabbedPaneStyle.font = font;
+		tabbedPaneStyle.bodyBackground = skin.getDrawable("knob_06");
+		tabbedPaneStyle.titleButtonSelected = skin.getDrawable("button_02");
+		tabbedPaneStyle.titleButtonUnselected = skin.getDrawable("button_01");
+		skin.add("default", tabbedPaneStyle);
+		tabbedPane = new TabbedPane(skin);
 
-        // ============
-        // === TABS ===
-        // ============
+		// ============
+		// === TABS ===
+		// ============
 
-        if (tabs != null) {
-            for (String tabName : tabs.keySet()) {
-                tabbedPane.addTab(tabName, tabs.get(tabName).getTab());
-            }
-        }
+		if (tabs != null) {
+			for (String tabName : tabs.keySet()) {
+				tabbedPane.addTab(tabName, tabs.get(tabName).getTab());
+			}
+		}
 
-        // ======================
-        // === TRIGGER BUTTON ===
-        // ======================
+		// ======================
+		// === TRIGGER BUTTON ===
+		// ======================
 
-        triggerBtn = new ButtonComponent(skin, font, left ? ">" : "<");
-        triggerBtn.getComponent().setPosition(left ? -20 : Gdx.graphics.getWidth() - triggerBtn.getComponent().getWidth() + 20, Gdx.graphics.getHeight() / 2);
-        triggerBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (!isOpen) {
-                    open();
-                }
-                else {
-                    close();
-                }
+		triggerBtn = new ButtonComponent(skin, font, left ? ">" : "<");
+		triggerBtn.getComponent().setPosition(left ? -20 : Gdx.graphics.getWidth() - triggerBtn.getComponent().getWidth() + 20, Gdx.graphics.getHeight() / 2);
+		triggerBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (!isOpen) {
+					open();
+				} else {
+					close();
+				}
 
-            }
-        });
+			}
+		});
 
-        add(tabbedPane).maxWidth(preferredWidth);
-        background(skin.getDrawable(background));
-        this.stage.addActor(triggerBtn.getComponent());
-    }
-	
+		add(tabbedPane).maxWidth(preferredWidth);
+		background(skin.getDrawable(background));
+		this.stage.addActor(triggerBtn.getComponent());
+	}
+
 	/**
 	 * Opens the sidebar and shows its content.
 	 */
-    public void open() {
-        TextButton _triggerBtn = triggerBtn.getComponent();
+	public void open() {
+		TextButton _triggerBtn = triggerBtn.getComponent();
 
-        if (left) {
-            setX(0);
-            setY(0);
-            _triggerBtn.setText("<");
-            _triggerBtn.setX(preferredWidth - 20);
-        }
-        else {
-            setX(Gdx.graphics.getWidth()- preferredWidth);
-            setY(0);
-            _triggerBtn.setText(">");
-            _triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
-        }
+		if (left) {
+			setX(0);
+			setY(0);
+			_triggerBtn.setText("<");
+			_triggerBtn.setX(preferredWidth - 20);
+		} else {
+			setX(Gdx.graphics.getWidth() - preferredWidth);
+			setY(0);
+			_triggerBtn.setText(">");
+			_triggerBtn.setX(Gdx.graphics.getWidth() - preferredWidth - _triggerBtn.getWidth() + 20);
+		}
 
-        isOpen = true;
-    }
-	
+		isOpen = true;
+	}
+
 	/**
 	 * Closes the sidebar and hides the content.
 	 */
-    public void close() {
-        TextButton _triggerBtn = triggerBtn.getComponent();
+	public void close() {
+		TextButton _triggerBtn = triggerBtn.getComponent();
 
-        if (left) {
-            setX(-preferredWidth);
-            _triggerBtn.setText(">");
-            _triggerBtn.setX(-20);
-        }
-        else {
-            setX(Gdx.graphics.getWidth());
-            _triggerBtn.setText("<");
-            _triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
-        }
+		if (left) {
+			setX(-preferredWidth);
+			_triggerBtn.setText(">");
+			_triggerBtn.setX(-20);
+		} else {
+			setX(Gdx.graphics.getWidth());
+			_triggerBtn.setText("<");
+			_triggerBtn.setX(Gdx.graphics.getWidth() - _triggerBtn.getWidth() + 20);
+		}
 
-        isOpen = false;
-    }
-	
+		isOpen = false;
+	}
+
 	/**
 	 * Toggles the sidebar {@link #open() open} or {@link #close() closed}.
 	 */
-    public void toggle() {
-        if (isOpen) {
-            close();
-        }
-        else {
-            open();
-        }
-    }
+	public void toggle() {
+		if (isOpen) {
+			close();
+		} else {
+			open();
+		}
+	}
 
-    public float getPreferredWidth() {
-        return preferredWidth;
-    }
+	public float getPreferredWidth() {
+		return preferredWidth;
+	}
 
-    public World getWorld() {
-        return world;
-    }
+	public World getWorld() {
+		return world;
+	}
 
-    public void setWorld(World world) {
-        this.world = world;
-    }
+	public void setWorld(World world) {
+		this.world = world;
+	}
 
-    public ButtonComponent getTriggerBtn() {
-        return triggerBtn;
-    }
-	
+	public ButtonComponent getTriggerBtn() {
+		return triggerBtn;
+	}
+
 	/**
 	 * Whether the sidebar is open.
+	 *
 	 * @return <code>true</code> if the sidebar is open;
-	 *         <code>false</code> otherwise.
+	 * <code>false</code> otherwise.
 	 */
-    public boolean isOpen() {
-        return isOpen;
-    }
+	public boolean isOpen() {
+		return isOpen;
+	}
 
-    public void addTab(Table tab) {
-        tabbedPane.addTab(tab.getName(), tab);
-    }
-	
+	public void addTab(Table tab) {
+		tabbedPane.addTab(tab.getName(), tab);
+	}
+
 	/**
 	 * Should be called whenever the window resizes.
+	 *
 	 * @param width  The new width of the window.
 	 * @param height The new height of the window.
 	 */
-    public void resize(int width, int height) {
-        setHeight(height);
-        triggerBtn.getComponent().setY(height / 2);
+	public void resize(int width, int height) {
+		setHeight(height);
+		triggerBtn.getComponent().setY(height / 2);
 
-        TextButton _triggerBtn = triggerBtn.getComponent();
-        if (isOpen) {
-            if (left) {
-                setX(0);
-                setY(0);
-                _triggerBtn.setX(preferredWidth - 20);
-            }
-            else {
-                setX(width - preferredWidth);
-                setY(0);
-                _triggerBtn.setX(width - preferredWidth - _triggerBtn.getWidth() + 20);
-            }
-        }
-        else {
-            if (left) {
-                setX(-preferredWidth);
-                _triggerBtn.setX(-20);
-            }
-            else {
-                setX(width);
-                _triggerBtn.setX(width - _triggerBtn.getWidth() + 20);
-            }
-        }
-    }
+		TextButton _triggerBtn = triggerBtn.getComponent();
+		if (isOpen) {
+			if (left) {
+				setX(0);
+				setY(0);
+				_triggerBtn.setX(preferredWidth - 20);
+			} else {
+				setX(width - preferredWidth);
+				setY(0);
+				_triggerBtn.setX(width - preferredWidth - _triggerBtn.getWidth() + 20);
+			}
+		} else {
+			if (left) {
+				setX(-preferredWidth);
+				_triggerBtn.setX(-20);
+			} else {
+				setX(width);
+				_triggerBtn.setX(width - _triggerBtn.getWidth() + 20);
+			}
+		}
+	}
 
-    public void render() {}
+	public void render() {
+	}
 
 }

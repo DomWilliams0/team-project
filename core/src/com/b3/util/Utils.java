@@ -35,15 +35,17 @@ public abstract class Utils {
 	 * The time elapsed since the last render, untouched by game speed.
 	 */
 	public static float TRUE_DELTA_TIME = 0;
-	
+
 	/**
 	 * Prevent instantiation.
 	 * Everything should be <code>static</code>.
 	 */
-	private Utils() {}
-	
+	private Utils() {
+	}
+
 	/**
 	 * Generates a random number between a range.
+	 *
 	 * @param min The minimum number that may be returned.
 	 * @param max The maximum number that may be returned.
 	 * @return A randomly generated number between a range.
@@ -51,18 +53,20 @@ public abstract class Utils {
 	public static float randomRange(float min, float max) {
 		return RANDOM.nextFloat() * (max - min) + min;
 	}
-	
+
 	/**
 	 * Converts a {@link Vector2} to a {@link Point} rounding the values.
+	 *
 	 * @param vector2 The {@link Vector2} to convert.
 	 * @return A new {@link Point} which has the same coordinates as {@code vector2} but rounded.
 	 */
 	public static Point vector2ToPoint(Vector2 vector2) {
 		return new Point(Math.round(vector2.x), Math.round(vector2.y));
 	}
-	
+
 	/**
 	 * Generates a {@link List} of {@link Integer Integers} from one value to another.
+	 *
 	 * @param min The number to start at. (Inclusive in the list)
 	 * @param max The number to stop at. (Exclusive in the list)
 	 * @return A new {@link List} of {@link Integer Integers} from {@code min} (inclusive) to {@code max} (exclusive).
@@ -76,15 +80,17 @@ public abstract class Utils {
 
 		return list;
 	}
-	
+
 	/**
 	 * A font cache from name and size to {@link BitmapFont}
-.	 */
+	 * .
+	 */
 	private static final HashMap<Tuple<String, Integer>, BitmapFont> fontCache = new HashMap<>();
-	
+
 	/**
 	 * Generates a {@link BitmapFont} with a specified name and size.
 	 * Uses caching.
+	 *
 	 * @param name The name of the font with file extension.
 	 * @param size The size to generate.
 	 * @return The cached or newly generated {@link BitmapFont} using the arguments specified.
@@ -94,15 +100,15 @@ public abstract class Utils {
 		BitmapFont font = fontCache.get(tuple);
 		if (font != null)
 			return font;
-		
+
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("core/assets/fonts/" + name));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = size;
 		font = generator.generateFont(parameter);
 		generator.dispose();
-		
+
 		fontCache.put(tuple, font);
-		
+
 		return font;
 	}
 

@@ -32,7 +32,7 @@ import java.util.*;
 /**
  * A table which will display the frontier and visited nodes
  * in a useful way to inspect what is happening internally with the algorithm.
- *
+ * <p>
  * Created by Lewis, worked on mostly by Lewis but refactored a lot by whole group.
  */
 public class VisNodes extends Table {
@@ -55,30 +55,30 @@ public class VisNodes extends Table {
 	/**
 	 * Provides a description of how the search algorithms work,
 	 * giving instructions of how the nodes are managed.
-	 *
+	 * <p>
 	 * todo should this be short / concise, or long / descriptive?
 	 * todo should this even exist any more
 	 */
 	private final String description =
 			"Description while waiting for next search:\n" +
-			"Starting at the start node, its \n" +
-			"neighbours (successors) are inspected.\n" +
-			"These are inserted into the data \n" +
-			"collection, which depends on the search.\n" +
-			"This collection forms the frontier, \n" +
-			"which we expand in the order defined\n" +
-			"by the collection (e.g. a stack \n" +
-			"being First In, First Out).\n" +
-			"\n" +
-			"With each expansion we mark the node \n" +
-			"as visited (using a hash set),\n" +
-			"to ensure we do not expand it again.";
+					"Starting at the start node, its \n" +
+					"neighbours (successors) are inspected.\n" +
+					"These are inserted into the data \n" +
+					"collection, which depends on the search.\n" +
+					"This collection forms the frontier, \n" +
+					"which we expand in the order defined\n" +
+					"by the collection (e.g. a stack \n" +
+					"being First In, First Out).\n" +
+					"\n" +
+					"With each expansion we mark the node \n" +
+					"as visited (using a hash set),\n" +
+					"to ensure we do not expand it again.";
 	private static final Color defaultBackground = new Color(0.56f, 0.69f, 0.83f, 1);
 
 	private Node newVisited;
 	private List<Node> newFrontier;
 	private Node highestNode;
-    private Node justExpanded;
+	private Node justExpanded;
 
 	private String newVisitedStr = "<NOTHING>";
 	private String newFrontierStr = "<NOTHING>";
@@ -90,7 +90,7 @@ public class VisNodes extends Table {
 	private final String addedToFrontier = "I have added the following\n" +
 			"nodes to the frontier:\n" +
 			"%s\n";
-	private final String nextNode = "My next node to expand is\n"+
+	private final String nextNode = "My next node to expand is\n" +
 			"%s";
 
 	private StringBuilder stepString;
@@ -101,8 +101,9 @@ public class VisNodes extends Table {
 
 	/**
 	 * Create a new data visualisation table
-	 *  @param stage The stage with which to render
-	 * @param skin The skin of the table and scrollpanes (background of scrollpane is removed)
+	 *
+	 * @param stage The stage with which to render
+	 * @param skin  The skin of the table and scrollpanes (background of scrollpane is removed)
 	 * @param world The world of the simulation
 	 */
 	public VisNodes(Stage stage, Skin skin, World world) {
@@ -164,14 +165,14 @@ public class VisNodes extends Table {
 	public void render(SearchTicker ticker) {
 		int render;
 		//check that the ticker exists; if it does, see if the ticker has data to render
-		if (ticker==null || ticker.getVisited()==null || ticker.getFrontier()==null) {
+		if (ticker == null || ticker.getVisited() == null || ticker.getFrontier() == null) {
 			//no data to render, so render this with dummy contents.
 			render = render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST);
 		} else {
 			//we have data to render. get the most recent changes from the ticker
 			newVisited = ticker.getMostRecentlyExpanded();
 			newFrontier = ticker.getLastFrontier();
-            justExpanded = ticker.getMostRecentlyExpanded();
+			justExpanded = ticker.getMostRecentlyExpanded();
 
 			//only update the shown data if we need to
 			if (!stepthrough || ticker.isUpdated()) {
@@ -184,7 +185,7 @@ public class VisNodes extends Table {
 		}
 		//pause or resume the ticker based on scrollpane usage
 		if (ticker != null) {
-			if (render==2) {
+			if (render == 2) {
 				//the scrollpanes are being used, so pause the ticker
 				ticker.pause(0);
 			} else if (render == 1) {
@@ -200,13 +201,12 @@ public class VisNodes extends Table {
 	 * If stepthrough mode is active, calling this will force a render regardless;
 	 * the calling function should ensure the search has been updated prior to calling this.
 	 *
-	 * @param front the frontier to display
+	 * @param front   the frontier to display
 	 * @param visited the visited set to display
-	 * @param alg the current algorithm being used by the search
-	 *
+	 * @param alg     the current algorithm being used by the search
 	 * @return the state of the render  - 0: Not yet time to render
-	 *                                  - 1: Rendered as normal
-	 *                                  - 2: The scrollpane(s) are being dragged.
+	 * - 1: Rendered as normal
+	 * - 2: The scrollpane(s) are being dragged.
 	 */
 	public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg) {
 		//check if a scrollpane is being used
@@ -245,7 +245,8 @@ public class VisNodes extends Table {
 
 	/**
 	 * Populate the tables with the given data
-	 * @param front The frontier nodes to display
+	 *
+	 * @param front   The frontier nodes to display
 	 * @param visited The visited nodes to display
 	 */
 	private void populateTables(Collection<Node> front, Set<Node> visited) {
@@ -277,6 +278,7 @@ public class VisNodes extends Table {
 
 	/**
 	 * Update the timer and check if enough time has elapsed
+	 *
 	 * @return if enough time has elapsed - true indicates the render should go ahead as planned
 	 */
 	private boolean updateTimer() {
@@ -287,7 +289,7 @@ public class VisNodes extends Table {
 		if (timer < timeBetweenTicks)
 			return false;
 
-		if (timer > 2*timeBetweenTicks)
+		if (timer > 2 * timeBetweenTicks)
 			//it has been a long time since last render so reset it instead of decrementing it
 			timer = 0;
 		else
@@ -297,21 +299,22 @@ public class VisNodes extends Table {
 	}
 
 	/**
-     * Add a given node to the given table
-     * Wraps the node in its own table, which is stored in the hashmap
-     * So that it can later be highlighted.
-     *
-     * Will apply any known colour to the node immediately.
-     * @param t The table to add the node to
-     * @param n The node to display in the table.
+	 * Add a given node to the given table
+	 * Wraps the node in its own table, which is stored in the hashmap
+	 * So that it can later be highlighted.
+	 * <p>
+	 * Will apply any known colour to the node immediately.
+	 *
+	 * @param t The table to add the node to
+	 * @param n The node to display in the table.
 	 * @param i The priority of the node, or <code>-1</code> if not applicable.
-     */
-    private void addToTable(Table t, Node n, int i) {
+	 */
+	private void addToTable(Table t, Node n, int i) {
 		//create the wrapping table
 		Table row = new Table(this.getSkin());
 		//put the priority if applicable
 		String prefix = "";
-		if (i>=0) prefix = ++i + ". ";
+		if (i >= 0) prefix = ++i + ". ";
 
 		//add the node text to the wrapping table
 		//edit here if you want to use adapted string
@@ -328,6 +331,7 @@ public class VisNodes extends Table {
 				clickedNodeUpdated = false;
 				return true;
 			}
+
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				//we have received an end-of-touch event
@@ -359,8 +363,9 @@ public class VisNodes extends Table {
 
 	/**
 	 * Apply the colour known to the hash map to the given node
-	 *
+	 * <p>
 	 * Adapted from code at http://stackoverflow.com/questions/24250791/make-scene2d-ui-table-with-alternate-row-colours
+	 *
 	 * @param n The node whose colour to apply
 	 * @return Whether the node was successfully highlighted
 	 */
@@ -391,6 +396,7 @@ public class VisNodes extends Table {
 
 	/**
 	 * Update the colour of all nodes known to this object.
+	 *
 	 * @return Whether all nodes were correctly highlighted
 	 */
 	private boolean applyColourAll() {
@@ -398,7 +404,7 @@ public class VisNodes extends Table {
 		boolean all = true;
 
 		//iterate over the cellmap keys, i.e. those nodes currently known by the in-progress search
-		for(Node n : cellmap.keySet()) {
+		for (Node n : cellmap.keySet()) {
 			//apply the colour and update all
 			//ordered this way to avoid short-circuit evaluation; we must apply all node colours regardless.
 			all = applyColour(n) && all;
@@ -410,32 +416,32 @@ public class VisNodes extends Table {
 	/**
 	 * Set a background colour for a cell in the scrollpanes based on the node.
 	 *
-	 * @param n The node to highlight
-	 * @param c The colour to set
+	 * @param n               The node to highlight
+	 * @param c               The colour to set
 	 * @param singleHighlight whether this is to be the only highlighted node
 	 * @return whether the colour was successful
 	 */
 	public boolean setCellColour(Node n, Color c, boolean singleHighlight) {
-        //singleHighlight tells us if this is the only node to be highlighted,
-        //so remove all other colours if this is true
+		//singleHighlight tells us if this is the only node to be highlighted,
+		//so remove all other colours if this is true
 		if (singleHighlight) colours.clear();
-        //store the given colour
-		colours.put(n,c);
-        //apply all node colours, since we may have deleted other colours by using this method.
+		//store the given colour
+		colours.put(n, c);
+		//apply all node colours, since we may have deleted other colours by using this method.
 		return applyColourAll();
 	}
 
-    /**
-     * Set a background colour for a cell in the scrollpanes based on the node.
-     * The colour will match the colour of the node in the world.
-     *
-     * @param n The node to highlight
-     * @param singleHighlight whether this is to be the only highlighted node
-     * @return whether the cell was coloured
-     */
-    public boolean setCellColour(Node n, boolean singleHighlight) {
-        //singleHighlight tells us if this is the only node to be highlighted,
-        //so remove all other colours if this is true
+	/**
+	 * Set a background colour for a cell in the scrollpanes based on the node.
+	 * The colour will match the colour of the node in the world.
+	 *
+	 * @param n               The node to highlight
+	 * @param singleHighlight whether this is to be the only highlighted node
+	 * @return whether the cell was coloured
+	 */
+	public boolean setCellColour(Node n, boolean singleHighlight) {
+		//singleHighlight tells us if this is the only node to be highlighted,
+		//so remove all other colours if this is true
 		if (singleHighlight) colours.clear();
 		Color c = getColorFromGraph(n);
 
@@ -447,6 +453,7 @@ public class VisNodes extends Table {
 
 	/**
 	 * Get the colour of a given node as corresponds with the colours in the world
+	 *
 	 * @param n The node to query
 	 * @return The colour of the node in the world graph
 	 */
@@ -462,8 +469,8 @@ public class VisNodes extends Table {
 
 		//check whether the node is actually a new frontier or just expanded
 		//done after table-check so that these colours take precedence.
-		if (newFrontier!=null && newFrontier.contains(n)) c = WorldGraph.LAST_FRONTIER_COLOUR;
-		if (justExpanded!=null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
+		if (newFrontier != null && newFrontier.contains(n)) c = WorldGraph.LAST_FRONTIER_COLOUR;
+		if (justExpanded != null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
 		return c;
 	}
 
@@ -473,16 +480,16 @@ public class VisNodes extends Table {
 	/**
 	 * Converts a data collection to a list,
 	 * which is of the same order as when taking from the collection
-     *
-     * Importantly, leaves given frontier untouched.
-     *
+	 * <p>
+	 * Importantly, leaves given frontier untouched.
+	 *
 	 * @param front The frontier to sort
 	 * @return The frontier, in the current intended order of node expansion
 	 */
 	private ArrayList<Node> sortFront(Collection<Node> front) {
 		ArrayList<Node> list = new ArrayList<>(front);
 		// BFS is already sorted correctly.
-		switch(alg) {
+		switch (alg) {
 			// DFS requires a reverse due to stack
 			case DEPTH_FIRST:
 				Collections.reverse(list);
@@ -502,7 +509,7 @@ public class VisNodes extends Table {
 	 * Adds the cells and rows required to make the table.
 	 * Nothing further needs be performed after calling this, add data to vt and ft
 	 *
-	 * @param alg The search algorithm being used by the search
+	 * @param alg        The search algorithm being used by the search
 	 * @param rendermore Whether the data collections are being rendered
 	 */
 	private void setupTable(SearchAlgorithm alg, boolean rendermore) {
@@ -594,6 +601,7 @@ public class VisNodes extends Table {
 	/**
 	 * Add text to this table encapsulated in a label
 	 * Uses default size settings etc based on not being a title in {@link VisNodes#addLabel(String, boolean)}
+	 *
 	 * @param text The string to encapsulate in a label and add to the table
 	 * @return The cell created by adding the label
 	 */
@@ -604,7 +612,8 @@ public class VisNodes extends Table {
 	/**
 	 * Add a text label to this table
 	 * The size is defined by whether this is a title
-	 * @param text The string to encapsulate in a label and add to the table
+	 *
+	 * @param text    The string to encapsulate in a label and add to the table
 	 * @param isTitle whether this string is a title
 	 * @return The cell created by adding the label
 	 */
@@ -624,14 +633,15 @@ public class VisNodes extends Table {
 	 * as long as this method returns something desirable.
 	 */
 	private void convertNodeReps() {
-		newVisitedStr = newVisited==null?"<NOTHING>":newVisited.toString();
-		newFrontierStr = newFrontier==null?"<NOTHING>":convertNewFrontier();
-		highestNodeStr = highestNode==null?"<NOTHING>":highestNode.toString();
+		newVisitedStr = newVisited == null ? "<NOTHING>" : newVisited.toString();
+		newFrontierStr = newFrontier == null ? "<NOTHING>" : convertNewFrontier();
+		highestNodeStr = highestNode == null ? "<NOTHING>" : highestNode.toString();
 	}
 
 	/**
 	 * Returns a string representation of newFrontier
 	 * Based on current search algorithm being used
+	 *
 	 * @return The string to display in the description
 	 */
 	private String convertNewFrontier() {
@@ -640,16 +650,16 @@ public class VisNodes extends Table {
 			//it can be hard to see where insertion occurs, so note this down in the description.
 
 			String s = "";
-			int i=0;
-			for(Node node: newFrontier) {
+			int i = 0;
+			for (Node node : newFrontier) {
 				//add "#<priority number>: <node string>" to the string
-				s+= "#" + (frontier.indexOf(node)+1) + ": " + node.toString() + "  ";
+				s += "#" + (frontier.indexOf(node) + 1) + ": " + node.toString() + "  ";
 				//limit the string to only have 2 per row
 				//(only works for newFrontier list size < 5, since there should never be more than 4)
-				if (++i==2) s+= "\n";
+				if (++i == 2) s += "\n";
 			}
 			//ensure there are always 2 rows here otherwise the sidebar will keep resizing
-			if (i<2) s+= "\n";
+			if (i < 2) s += "\n";
 			return s;
 		} else {
 			//DFS or BFS being used - insertion into frontier is easy to see
@@ -659,6 +669,7 @@ public class VisNodes extends Table {
 
 	/**
 	 * Query whether the user has clicked a different node in the scroll panes
+	 *
 	 * @return Whether the user has clicked a different node in the scroll panes
 	 */
 	public boolean isClickedUpdated() {
@@ -668,6 +679,7 @@ public class VisNodes extends Table {
 	/**
 	 * Get the coordinates of the node which has been clicked in the scroll panes
 	 * Marks it as not updated any more.
+	 *
 	 * @return The clicked nodes coordinates
 	 */
 	public Point getClickedNode() {
@@ -677,6 +689,7 @@ public class VisNodes extends Table {
 
 	/**
 	 * Check if a scrollpane is being used ie being dragged or is otherwise scrolling
+	 *
 	 * @return Whether a scrollpane is being dragged / scrolled
 	 */
 	private boolean scrollpanesBeingUsed() {

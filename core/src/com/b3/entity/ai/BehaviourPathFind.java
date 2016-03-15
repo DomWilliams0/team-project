@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * A behaviour that makes an agent find a path, then follow it
+ *
  * @author dxw405
  */
 public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFind {
@@ -104,14 +105,12 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		hasArrivedThisFrame = hasArrived();
 	}
 
-	private List<Vector2> getPath () {
-		List<Vector2> path =
-				ticker.getPath()
-						.stream()
-						.map(p -> new Vector2(p.getPoint().x, p.getPoint().y))
-						.collect(Collectors.toList());
+	private List<Vector2> getPath() {
 
-		return path;
+		return ticker.getPath()
+				.stream()
+				.map(p -> new Vector2(p.getPoint().x, p.getPoint().y))
+				.collect(Collectors.toList());
 	}
 
 	private void updatePathFromTicker() {
@@ -122,7 +121,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 						.collect(Collectors.toList());
 
 		if (path.size() > 0)
-			if (path.get(path.size()-1).x == endNode.getPoint().x && path.get(path.size()-1).y == endNode.getPoint().y) {
+			if (path.get(path.size() - 1).x == endNode.getPoint().x && path.get(path.size() - 1).y == endNode.getPoint().y) {
 				System.out.println("Valid path");
 				steering = new SteeringPathFollow(agent.getPhysicsComponent(), path);
 			}

@@ -9,12 +9,12 @@ import com.badlogic.ashley.core.Component;
  * @author dxw405
  */
 public class AIComponent implements Component {
-	
+
 	/**
 	 * The path following {@link Behaviour} of the agent.
 	 */
 	public Behaviour behaviour;
-	
+
 	/**
 	 * @param behaviour The path following {@link Behaviour} of the agent.
 	 */

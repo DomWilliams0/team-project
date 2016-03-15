@@ -14,74 +14,77 @@ import com.badlogic.gdx.utils.Array;
  */
 public class SelectBoxComponent {
 
-    private Array items;
-    private SelectBox selectBox;
+	private Array items;
+	private SelectBox selectBox;
 
-    public SelectBoxComponent(Skin skin, BitmapFont font, Array items) {
-        this.items = items;
+	public SelectBoxComponent(Skin skin, BitmapFont font, Array items) {
+		this.items = items;
 
-        SelectBox.SelectBoxStyle selectBoxStyle = new SelectBox.SelectBoxStyle();
-        skin.add("default", font, BitmapFont.class);
-        selectBoxStyle.font = skin.getFont("default");
-        selectBoxStyle.fontColor = Color.BLACK;
-        selectBoxStyle.background = skin.getDrawable("selectbox_01");
-        selectBoxStyle.listStyle = new List.ListStyle();
-        selectBoxStyle.listStyle.font = skin.getFont("default");
-        selectBoxStyle.listStyle.fontColorSelected = Color.DARK_GRAY;
-        selectBoxStyle.listStyle.fontColorUnselected = Color.GRAY;
-        selectBoxStyle.listStyle.selection = skin.getDrawable("button_01");
-        selectBoxStyle.listStyle.background = skin.getDrawable("selectbox_01");
-        selectBoxStyle.scrollStyle = new ScrollPane.ScrollPaneStyle();
-        skin.add("default", selectBoxStyle);
+		SelectBox.SelectBoxStyle selectBoxStyle = new SelectBox.SelectBoxStyle();
+		skin.add("default", font, BitmapFont.class);
+		selectBoxStyle.font = skin.getFont("default");
+		selectBoxStyle.fontColor = Color.BLACK;
+		selectBoxStyle.background = skin.getDrawable("selectbox_01");
+		selectBoxStyle.listStyle = new List.ListStyle();
+		selectBoxStyle.listStyle.font = skin.getFont("default");
+		selectBoxStyle.listStyle.fontColorSelected = Color.DARK_GRAY;
+		selectBoxStyle.listStyle.fontColorUnselected = Color.GRAY;
+		selectBoxStyle.listStyle.selection = skin.getDrawable("button_01");
+		selectBoxStyle.listStyle.background = skin.getDrawable("selectbox_01");
+		selectBoxStyle.scrollStyle = new ScrollPane.ScrollPaneStyle();
+		skin.add("default", selectBoxStyle);
 
-        selectBox = new SelectBox(skin);
-        setItems(items);
-    }
-	
+		selectBox = new SelectBox(skin);
+		setItems(items);
+	}
+
 	/**
 	 * @return The actual {@link SelectBox} object this component holds.
 	 */
-    public SelectBox getSelectBox() {
-        return selectBox;
-    }
-	
+	public SelectBox getSelectBox() {
+		return selectBox;
+	}
+
 	/**
 	 * @return An {@link Array} of the selectable items in the drop down list.
 	 */
-    public Array getItems() {
-        return items;
-    }
-	
+	public Array getItems() {
+		return items;
+	}
+
 	/**
 	 * Sets the selectable items in the drop down list.
+	 *
 	 * @param items The new items to appear in the dropdown list.
 	 */
-    public void setItems(Array items) {
-        selectBox.setItems(items);
-    }
-	
+	public void setItems(Array items) {
+		selectBox.setItems(items);
+	}
+
 	/**
 	 * @return The item currently selected by the user from the dropdown list.
 	 */
-    public Object getSelected() {
-        return selectBox.getSelected();
-    }
-	
+	public Object getSelected() {
+		return selectBox.getSelected();
+	}
+
 	/**
 	 * Sets the currently selected item in the dropdown list.
 	 * If it is not an item in the list the first item will be selected.
+	 *
 	 * @param selected The new item.
 	 */
-    public void setSelected(Object selected) {
-        selectBox.setSelected(selected);
-    }
-	
+	public void setSelected(Object selected) {
+		selectBox.setSelected(selected);
+	}
+
 	/**
 	 * Adds a {@link ChangeListener} to the dropdown.
+	 *
 	 * @param listener The {@link ChangeListener} to add.
 	 */
-    public void addListener(ChangeListener listener) {
-        selectBox.addListener(listener);
-    }
-	
+	public void addListener(ChangeListener listener) {
+		selectBox.addListener(listener);
+	}
+
 }

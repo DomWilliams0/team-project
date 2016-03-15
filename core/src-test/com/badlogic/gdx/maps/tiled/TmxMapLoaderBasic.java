@@ -20,14 +20,16 @@ public class TmxMapLoaderBasic extends TmxMapLoader {
 		return new FileHandle(new File(path));
 	}
 
-	/** Loads the {@link TiledMap} from the given file. The file is resolved via the {@link FileHandleResolver} set in the
+	/**
+	 * Loads the {@link TiledMap} from the given file. The file is resolved via the {@link FileHandleResolver} set in the
 	 * constructor of this class. By default it will resolve to an internal file.
-	 * @param fileName the filename
+	 *
+	 * @param fileName   the filename
 	 * @param parameters specifies whether to use y-up, generate mip maps etc.
 	 * @return the TiledMap
 	 */
 	@Override
-	public TiledMap load (String fileName, TmxMapLoader.Parameters parameters) {
+	public TiledMap load(String fileName, TmxMapLoader.Parameters parameters) {
 		try {
 			this.convertObjectToTileSpace = parameters.convertObjectToTileSpace;
 			this.flipY = parameters.flipY;
@@ -46,13 +48,14 @@ public class TmxMapLoaderBasic extends TmxMapLoader {
 		}
 	}
 
-	/** Loads the specified tileset data, adding it to the collection of the specified map, given the XML element, the tmxFile and
+	/**
+	 * Loads the specified tileset data, adding it to the collection of the specified map, given the XML element, the tmxFile and
 	 * an {@link ImageResolver} used to retrieve the tileset Textures.
-	 *
+	 * <p>
 	 * <p>
 	 * Default tileset's property keys that are loaded by default are:
 	 * </p>
-	 *
+	 * <p>
 	 * <ul>
 	 * <li><em>firstgid</em>, (int, defaults to 1) the first valid global id used for tile numbering</li>
 	 * <li><em>imagesource</em>, (String, defaults to empty string) the tileset source image filename</li>
@@ -63,17 +66,18 @@ public class TmxMapLoaderBasic extends TmxMapLoader {
 	 * <li><em>margin</em>, (int, defaults to 0) the tileset margin</li>
 	 * <li><em>spacing</em>, (int, defaults to 0) the tileset spacing</li>
 	 * </ul>
-	 *
+	 * <p>
 	 * <p>
 	 * The values are extracted from the specified Tmx file, if a value can't be found then the default is used.
 	 * </p>
-	 * @param map the Map whose tilesets collection will be populated
-	 * @param element the XML element identifying the tileset to load
-	 * @param tmxFile the Filehandle of the tmx file
+	 *
+	 * @param map           the Map whose tilesets collection will be populated
+	 * @param element       the XML element identifying the tileset to load
+	 * @param tmxFile       the Filehandle of the tmx file
 	 * @param imageResolver the {@link ImageResolver}
 	 */
 	@Override
-	protected void loadTileSet (TiledMap map, XmlReader.Element element, FileHandle tmxFile, ImageResolver imageResolver) {
+	protected void loadTileSet(TiledMap map, XmlReader.Element element, FileHandle tmxFile, ImageResolver imageResolver) {
 		if (element.getName().equals("tileset")) {
 			String name = element.get("name", null);
 			int firstgid = element.getIntAttribute("firstgid", 1);
@@ -189,7 +193,7 @@ public class TmxMapLoaderBasic extends TmxMapLoader {
 
 						Array<StaticTiledMapTile> staticTiles = new Array<StaticTiledMapTile>();
 						IntArray intervals = new IntArray();
-						for (XmlReader.Element frameElement: animationElement.getChildrenByName("frame")) {
+						for (XmlReader.Element frameElement : animationElement.getChildrenByName("frame")) {
 							staticTiles.add((StaticTiledMapTile) tileset.getTile(firstgid + frameElement.getIntAttribute("tileid")));
 							intervals.add(frameElement.getIntAttribute("duration"));
 						}

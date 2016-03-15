@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * A behaviour that makes an agent follow the list of tile positions given as a path
+ *
  * @author dxw405
  */
 public class BehaviourPathFollow extends Behaviour {

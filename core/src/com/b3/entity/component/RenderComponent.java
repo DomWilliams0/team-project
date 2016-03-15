@@ -13,23 +13,23 @@ import com.badlogic.gdx.graphics.Color;
  * @author dxw405
  */
 public class RenderComponent implements Component {
-	
+
 	/**
 	 * The render model of the agent.
 	 * If rendering of models is enabled.
 	 */
 	public final ModelController controller;
-	
+
 	/**
 	 * If the model is not rendered, the colour the dot representative will be.
 	 */
 	public Color dotColour;
-	
+
 	/**
 	 * If the model is not rendered, the radius the dot representative will be.
 	 */
 	public float radius;
-	
+
 	/**
 	 * @param controller The model that the agent will have.
 	 *                   (If rendering of models is enabled)

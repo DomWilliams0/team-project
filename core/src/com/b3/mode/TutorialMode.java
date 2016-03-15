@@ -22,7 +22,7 @@ public class TutorialMode extends Mode {
 		// create world
 		super(ModeType.TUTORIAL, game, "core/assets/world/world_smaller_test_tiym.tmx", 26f);
 
-        world.getWorldGraph().setLearningModeNext(SearchAlgorithm.A_STAR);
+		world.getWorldGraph().setLearningModeNext(SearchAlgorithm.A_STAR);
 		world.getWorldGraph().getCurrentSearch().pause(1);
 		world.getWorldGraph().getCurrentSearch().setUpdated(true);
 

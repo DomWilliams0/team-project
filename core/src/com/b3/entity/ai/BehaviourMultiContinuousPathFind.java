@@ -38,9 +38,9 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 			if (currentPos.equals(new Node(graph.getNextDestination())) || graph.getNextDestination().getY() == 0 && graph.getNextDestination().getX() == 0 || graph.getNextDestination().getX() == -5)
 				pathFind.reset(agent.getPhysicsComponent().getPosition(), generateRandomTile(currentPos), algorithm, graph);
 			else
-				pathFind.reset(agent.getPhysicsComponent().getPosition(), new Vector2(graph.getNextDestination().getX(),graph.getNextDestination().getY()), algorithm, graph);
+				pathFind.reset(agent.getPhysicsComponent().getPosition(), new Vector2(graph.getNextDestination().getX(), graph.getNextDestination().getY()), algorithm, graph);
 
-			graph.setNextDestination(-5,-5);
+			graph.setNextDestination(-5, -5);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 		do {
 			x = Utils.RANDOM.nextInt(graph.getMaxXValue());
 			y = Utils.RANDOM.nextInt(graph.getMaxYValue());
-		} while (!graph.hasNode(new Point(x, y)) && !new Point(x,y).equals(currentPos.getPoint()));
+		} while (!graph.hasNode(new Point(x, y)) && !new Point(x, y).equals(currentPos.getPoint()));
 		return new Vector2(x, y);
 	}
 

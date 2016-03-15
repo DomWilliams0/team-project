@@ -18,6 +18,7 @@ public class WorldGraphTest {
 
 	/**
 	 * Tests the {@link WorldGraph#getNodes()} method.
+	 *
 	 * @throws Exception If the test fails.
 	 */
 	@Test
@@ -29,9 +30,10 @@ public class WorldGraphTest {
 	/**
 	 * Test helper for the {@link WorldGraph#getNodes()}
 	 * method.
+	 *
 	 * @param worldGraph The {@link WorldGraph} to check.
-	 * @param empty Whether the {@code graph} actually is
-	 *              empty.
+	 * @param empty      Whether the {@code graph} actually is
+	 *                   empty.
 	 * @throws Exception If the {@code graph}
 	 *                   {@link List#isEmpty()} when it
 	 *                   shouldn't be or visa-versa.
@@ -44,6 +46,7 @@ public class WorldGraphTest {
 
 	/**
 	 * Tests the {@link WorldGraph#hasNode(Point)} method.
+	 *
 	 * @throws Exception If the test fails.
 	 */
 	@Test
@@ -58,8 +61,9 @@ public class WorldGraphTest {
 	/**
 	 * Test helper for the
 	 * {@link WorldGraph#hasNode(Point)} method.
-	 * @param x The x coordinate of the {@link Node}.
-	 * @param y The y coordinate of the {@link Node}.
+	 *
+	 * @param x     The x coordinate of the {@link Node}.
+	 * @param y     The y coordinate of the {@link Node}.
 	 * @param found Whether the {@link Node} exists or not.
 	 * @throws Exception If the {@link Node} exists when it
 	 *                   shouldn't or visa-versa.
@@ -73,6 +77,7 @@ public class WorldGraphTest {
 
 	/**
 	 * Tests the {@link WorldGraph#getNode(Point)} method.
+	 *
 	 * @throws Exception If the test fails.
 	 */
 	@Test
@@ -83,8 +88,9 @@ public class WorldGraphTest {
 
 	/**
 	 * Tests the {@link WorldGraph#getNode(Point)} method.
-	 * @param x The x coordinate of the {@link Node}.
-	 * @param y The y coordinate of the {@link Node}.
+	 *
+	 * @param x     The x coordinate of the {@link Node}.
+	 * @param y     The y coordinate of the {@link Node}.
 	 * @param found Whether the {@link Node} exists or not.
 	 * @throws Exception If the {@link Node} exists when it
 	 *                   shouldn't or visa-versa.
@@ -98,6 +104,7 @@ public class WorldGraphTest {
 
 	/**
 	 * Tests the {@link WorldGraph#addNode(Point)} method.
+	 *
 	 * @throws Exception If the test fails.
 	 */
 	@Test
@@ -110,6 +117,7 @@ public class WorldGraphTest {
 	 * {@link WorldGraph#addNode(Point)} method.
 	 * First checks that the {@link Node} doesn't already
 	 * exist. Then adds it and checks that it was added.
+	 *
 	 * @param x The x coordinate of the {@link Node} to
 	 *          add.
 	 * @param y The y coordinate of the {@link Node} to
@@ -126,6 +134,7 @@ public class WorldGraphTest {
 	/**
 	 * Tests the {@link WorldGraph#hasEdge(Point, Point)}
 	 * method.
+	 *
 	 * @throws Exception If the test fails.
 	 */
 	@Test
@@ -137,14 +146,15 @@ public class WorldGraphTest {
 	/**
 	 * Test helper for the the
 	 * {@link WorldGraph#hasEdge(Point, Point)} method.
-	 * @param x1 The x coordinate of the first {@link Node}
-	 *           on the edge.
-	 * @param y1 The y coordinate of the first {@link Node}
-	 *           on the edge.
-	 * @param x2 The x coordinate of the second
-	 *           {@link Node} on the edge.
-	 * @param y2 The y coordinate of the second
-	 *           {@link Node} on the edge.
+	 *
+	 * @param x1    The x coordinate of the first {@link Node}
+	 *              on the edge.
+	 * @param y1    The y coordinate of the first {@link Node}
+	 *              on the edge.
+	 * @param x2    The x coordinate of the second
+	 *              {@link Node} on the edge.
+	 * @param y2    The y coordinate of the second
+	 *              {@link Node} on the edge.
 	 * @param found Whether the edge exists or not.
 	 * @throws Exception If the edge exists when it
 	 *                   shouldn't or visa-versa.
@@ -162,6 +172,7 @@ public class WorldGraphTest {
 	 * method.
 	 * First checks that the edge doesn't already exist.
 	 * Then adds it and checks that it was added.
+	 *
 	 * @throws Exception If the test fails.
 	 */
 	@Test
@@ -175,6 +186,7 @@ public class WorldGraphTest {
 	 * method.
 	 * First checks that the edge doesn't already
 	 * exist. Then adds it and checks that it was added.
+	 *
 	 * @param x1 The x coordinate of the first {@link Node}
 	 *           on the edge.
 	 * @param y1 The y coordinate of the first {@link Node}
@@ -195,6 +207,7 @@ public class WorldGraphTest {
 	/**
 	 * Tests the
 	 * {@link WorldGraph#removeEdge(Point, Point)} method.
+	 *
 	 * @throws Exception If the test fails.
 	 */
 	@Test
@@ -208,6 +221,7 @@ public class WorldGraphTest {
 	 * First adds an edge (with checks) see
 	 * {@link #testAddEdge()}. Then removes it and checks
 	 * that it is deleted.
+	 *
 	 * @param x1 The x coordinate of the first {@link Node}
 	 *           on the edge.
 	 * @param y1 The y coordinate of the first {@link Node}

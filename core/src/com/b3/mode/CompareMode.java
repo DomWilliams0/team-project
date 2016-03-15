@@ -19,7 +19,6 @@ import java.util.List;
 public class CompareMode extends Mode {
 
 	private SideBarCompareMode sideBar;
-	private HelpBox helpBox;
 	private List<Agent> agents;
 
 	public CompareMode(MainGame game) {
@@ -34,7 +33,7 @@ public class CompareMode extends Mode {
 		sideBar.setController(game);
 		sideBarStage.addActor(sideBar);
 
-		helpBox = new HelpBox(sideBarStage, world.getMode());
+		HelpBox helpBox = new HelpBox(sideBarStage, world.getMode());
 		sideBarStage.addActor(helpBox);
 	}
 

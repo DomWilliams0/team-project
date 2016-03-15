@@ -8,7 +8,7 @@ import com.badlogic.gdx.Input;
  * @author dxw405
  */
 public enum Key {
-	
+
 	UP(Input.Keys.UP),
 	DOWN(Input.Keys.DOWN),
 	LEFT(Input.Keys.LEFT),
@@ -16,12 +16,12 @@ public enum Key {
 	ZOOM_IN(Input.Keys.PLUS),
 	ZOOM_OUT(Input.Keys.MINUS),
 	EXIT(Input.Keys.ESCAPE);
-	
+
 	/**
 	 * The key binding value.
 	 */
 	public final int binding;
-	
+
 	/**
 	 * @param key The key binding value.
 	 */

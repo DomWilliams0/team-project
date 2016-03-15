@@ -8,64 +8,65 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class LabelComponent {
 
-    private Label label;
+	private Label label;
 
-    public LabelComponent(Skin skin, String text) {
-        this(skin, text, Color.BLACK);
-    }
+	public LabelComponent(Skin skin, String text) {
+		this(skin, text, Color.BLACK);
+	}
 
-    public LabelComponent(Skin skin, String text, Color color) {
-        Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("default"), color);
-        skin.add("default", labelStyle);
+	public LabelComponent(Skin skin, String text, Color color) {
+		Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("default"), color);
+		skin.add("default", labelStyle);
 
-        label = new Label(text, labelStyle);
-    }
+		label = new Label(text, labelStyle);
+	}
 
-    public LabelComponent(String fontLocation, int fontSize, String text, Color color) {
-        BitmapFont font = Utils.getFont(fontLocation, fontSize);
-        font.getData().markupEnabled = true;
+	public LabelComponent(String fontLocation, int fontSize, String text, Color color) {
+		BitmapFont font = Utils.getFont(fontLocation, fontSize);
+		font.getData().markupEnabled = true;
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = font;
-        labelStyle.fontColor = color;
-        label = new Label(text, labelStyle);
-    }
+		Label.LabelStyle labelStyle = new Label.LabelStyle();
+		labelStyle.font = font;
+		labelStyle.fontColor = color;
+		label = new Label(text, labelStyle);
+	}
 
-    public LabelComponent(String fontLocation, int fontSize, String text, boolean markupEnabled) {
-        BitmapFont font = Utils.getFont(fontLocation, fontSize);
-        font.getData().markupEnabled = markupEnabled;
+	public LabelComponent(String fontLocation, int fontSize, String text, boolean markupEnabled) {
+		BitmapFont font = Utils.getFont(fontLocation, fontSize);
+		font.getData().markupEnabled = markupEnabled;
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = font;
-        label = new Label(text, labelStyle);
-    }
-	
+		Label.LabelStyle labelStyle = new Label.LabelStyle();
+		labelStyle.font = font;
+		label = new Label(text, labelStyle);
+	}
+
 	/**
-     * @return The actual {@link Label} object this component holds.
-     */
-    public Label getLabel() {
-        return label;
-    }
-	
+	 * @return The actual {@link Label} object this component holds.
+	 */
+	public Label getLabel() {
+		return label;
+	}
+
 	/**
 	 * @return The text of the {@link Label}.
 	 */
-    public String getText() {
-        return label.getText().toString();
-    }
-	
+	public String getText() {
+		return label.getText().toString();
+	}
+
 	/**
 	 * Changes the text of the {@link Label}.
+	 *
 	 * @param str The new text.
 	 */
-    public void setText(String str) {
-        label.setText(str);
-    }
+	public void setText(String str) {
+		label.setText(str);
+	}
 
-    /**
-     * @return The inner button representation
-     */
-    public Label getComponent() {
-        return label;
-    }
+	/**
+	 * @return The inner button representation
+	 */
+	public Label getComponent() {
+		return label;
+	}
 }

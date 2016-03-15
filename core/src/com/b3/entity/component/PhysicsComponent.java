@@ -10,32 +10,32 @@ import com.badlogic.gdx.physics.box2d.*;
  * @author dxw405
  */
 public class PhysicsComponent implements Component {
-	
+
 	/**
 	 * The physique of the agent.
 	 */
 	public final Body body;
-	
+
 	/**
 	 * The previous position of the agent.
 	 */
 	public final Vector2 lastPosition;
-	
+
 	/**
 	 * The maximum speed the agent may have.
 	 */
 	public final float maxSpeed;
-	
+
 	/**
 	 * The maximum acceliration of the agent.
 	 */
 	public final float maxAcceleration;
-	
+
 	/**
-	 * @param world The world the agent is in.
+	 * @param world   The world the agent is in.
 	 * @param bodyDef The description of the agent's physique.
 	 * @param tilePos The tile to spawn the agent on.
-	 * @param radius The size of the agent's dot.
+	 * @param radius  The size of the agent's dot.
 	 */
 	public PhysicsComponent(World world, BodyDef bodyDef, Vector2 tilePos, float radius) {
 		bodyDef.position.set(tilePos.x + 0.5f, tilePos.y + 0.5f);
@@ -54,7 +54,7 @@ public class PhysicsComponent implements Component {
 		maxAcceleration = 20;
 
 	}
-	
+
 	/**
 	 * @return The position the agent it at.
 	 */
