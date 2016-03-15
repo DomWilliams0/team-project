@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * This legend cannot be altered besides changing the colours in WorldGraph
  *
  * Created by Ben, worked on mostly by Lewis.
- * todo comments
  */
 public class Legend extends Table {
 	private Pixmap pm;
@@ -43,6 +42,7 @@ public class Legend extends Table {
 	 * Populate it with data.
 	 */
 	private void initComponents() {
+		//Encapsulate the title in a label and add it
 		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 20, "Legend:", new Color(0xa0a0ffff));
 		add(lbl.getComponent());
 		row();
@@ -62,13 +62,28 @@ public class Legend extends Table {
 		pm.dispose();
 	}
 
+	/**
+	 * Add text to this table, highlighted in a given colour.
+	 * Also adds a row to the table.
+	 * @param text The text to display
+	 * @param c The colour to highlight the text in
+	 */
 	private void addLegend(String text, Color c) {
+		//set the colour
 		pm.setColor(c);
 		pm.fill();
+		//setup the colour in a drawable
 		trd = new TextureRegionDrawable(new TextureRegion(new Texture(new PixmapTextureData(pm, null, false, false))));
+
+		//setup the wrapping table
 		Table t = new Table(skin);
+		//apply the colour
 		t.setBackground(trd);
+
+		//setup text in wrapping label
 		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, text, Color.BLACK);
+
+		//add the components
 		t.add(lbl.getComponent()).left();
 		add(t).left();
 		row();

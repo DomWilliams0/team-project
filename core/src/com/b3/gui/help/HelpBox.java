@@ -57,7 +57,7 @@ public class HelpBox extends Table {
 		switch(mode) {
 			case LEARNING:preferredHeight = 390;break;
 			case PRACTICE:preferredHeight = 340;break;
-			case COMPARE: preferredHeight = 400;break;
+			case COMPARE: preferredHeight = 300;break;
 		};
 
 		initComponents();
@@ -119,6 +119,10 @@ public class HelpBox extends Table {
         this.stage.addActor(triggerBtn.getComponent());
     }
 
+	/**
+	 * Place the help tables onto this help box
+	 * Formatted in the desired way
+	 */
 	private void fillThis() {
 		//top row for sidebar info then interacting with the nodes in the world
 		add(sidebarsT);
@@ -202,7 +206,6 @@ public class HelpBox extends Table {
 	 * Setup the help box for Compare mode
 	 */
 	private void setupCM() {
-		//todo part of this is incorrect ie interacting with world nodes
 		addHelp(this, "This mode is to compare algorithms side-by-side in a large, lively world.", true)
 				.colspan(5);
 
@@ -218,11 +221,9 @@ public class HelpBox extends Table {
 		worldNodesT = new Table(getSkin());
 		addHelp(worldNodesT, "Interacting with the world nodes:", true);
 		worldNodesT.row().row();
-		addHelp(worldNodesT, "Click a node to view details about it.\n" +
-				"Click again to view more details about it.\n" +
-				"Hover over a node to display its coordinates.\n" +
-				"Right click a node to set\n" +
-				"it as the next destination."
+		addHelp(worldNodesT,
+				"Hover over a node to display its coordinates."
+				//todo anything more??
 		);
 
 		sidebarsT = new Table (getSkin());
