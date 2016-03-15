@@ -25,8 +25,6 @@ public class Building {
 	private final ModelInstance modelInstance;
 	private final ModelInstance modelInstanceFlat;
 
-	private BuildingType type;
-
 	/**
 	 * @param tilePosition  The tile to place this building at
 	 * @param dimensions    The (width, length, height) of the building
@@ -86,20 +84,6 @@ public class Building {
 		} else {
 			return modelInstance;
 		}
-	}
-
-	/**
-	 * @return the type of building: house, fire or poilice
-     */
-	public BuildingType getType() {
-		return type;
-	}
-
-	/**
-	 * @param type the type to set the building to
-     */
-	public void setType(BuildingType type) {
-		this.type = type;
 	}
 
 	/**

@@ -21,7 +21,6 @@ import com.b3.util.Utils;
 import com.b3.world.PendingTeleport.TeleportType;
 import com.b3.world.building.Building;
 import com.b3.world.building.BuildingModelCache;
-import com.b3.world.building.BuildingType;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -54,7 +53,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.b3.mode.ModeType.*;
-import static com.b3.world.building.BuildingType.HOUSE;
 
 public class World implements Disposable {
 
@@ -278,7 +276,7 @@ public class World implements Disposable {
 			Float x = (Float) props.get("x") / Utils.TILESET_RESOLUTION;
 			Float y = (Float) props.get("y") / Utils.TILESET_RESOLUTION;
 
-			addBuilding(new Vector2(x, y), new Vector3(width, length, height), HOUSE);
+			addBuilding(new Vector2(x, y), new Vector3(width, length, height));
 		}
 	}
 
@@ -514,10 +512,9 @@ public class World implements Disposable {
 	 *
 	 * @param pos        Tile position
 	 * @param dimensions Building dimensions, in tiles. z is height
-	 * @param type       Building type
 	 * @return The newly created building
 	 */
-	public Building addBuilding(Vector2 pos, Vector3 dimensions, BuildingType type) {
+	public Building addBuilding(Vector2 pos, Vector3 dimensions) {
 
 		for (int i = (int) pos.x; i < pos.x + dimensions.x; i++) {
 			for (int j = (int) pos.y; j < pos.y + dimensions.y; j++) {
@@ -531,7 +528,6 @@ public class World implements Disposable {
 				dimensions.z));
 
 		Building building = new Building(pos, dimensions, buildingCache);
-		building.setType(type);
 		buildings.add(building);
 
 		// physics
