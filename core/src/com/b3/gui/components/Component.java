@@ -21,7 +21,12 @@ public abstract class Component implements Observer {
      * @param listener The listener
      */
     public void addListener(ChangeListener listener) {}
-
+	
+	/**
+     * Sets a {@link Function} to listen to updates to the component.
+	 * Will override any previous calls to this method.
+     * @param updateListener The {@link Function} that will receive the updates.
+     */
     public void setUpdateListener(Function<Observable, Void> updateListener) {
         this.updateListener = updateListener;
     }

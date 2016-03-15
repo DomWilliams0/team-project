@@ -114,11 +114,23 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
                             if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
                             descriptionPopup.show();
                         }
-                        else if (firstTime) {
-                            descriptionPopup.setText("Good! Now please select the nodes to add to the frontier.");
-                            if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
-                            descriptionPopup.show();
-                        }
+                        else {
+							if (firstTime) {
+								descriptionPopup.setText("Good! Now please select the nodes to add to the frontier.");
+								if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
+								descriptionPopup.show();
+							}
+							
+							// Backtrack check.
+							List<Node> actualFrontier = node.getNeighbours()
+									.stream()
+									.filter(s -> !frontier.contains(s) && !visited.contains(s))
+									.collect(Collectors.toList());
+							if (actualFrontier.isEmpty()) {
+								currentStage = Stage.CURRENT_NODE_SELECTION;
+								currentSearch.addToVisited(node);
+							}
+						}
 
                         currentSearch.setUpdated(true);
                     }
@@ -156,7 +168,7 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 
                             if (firstTime) {
                                 descriptionPopup.setText("Great! Now follow the algorithm steps in order to reach the goal node.");
-                                if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
+								if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true); else descriptionPopup.transposeLeft(false);
                                 descriptionPopup.show();
                                 firstTime = !firstTime;
                             }

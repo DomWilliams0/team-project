@@ -57,15 +57,17 @@ public enum TileType {
 
 	/**
 	 * @param id The tile ID to lookup
-	 * @return The TileType corresponding to this ID, or UNKNOWN if not found
+	 * @return The TileType corresponding to this ID,
+	 *         or {@link #UNKNOWN} if not found.
 	 */
 	public static TileType getByID(int id) {
 		return TILES.getOrDefault(id, UNKNOWN);
 	}
 
 	/**
-	 * @param cell The cell to lookup. Can be null
-	 * @return The TileType corresponding to this cell, or UNKNOWN if not found
+	 * @param cell The cell to lookup. Can be <code>null</code>
+	 * @return The TileType corresponding to this cell,
+	 *         or {@link #UNKNOWN} if not found.
 	 * @see {@link TileType#getByID(int)}
 	 */
 	public static TileType getFromCell(TiledMapTileLayer.Cell cell) {
@@ -82,7 +84,8 @@ public enum TileType {
 	}
 
 	/**
-	 * @return True if this TileType has a positive, non-zero cost, otherwise false
+	 * @return <code>true</code> if this TileType has a positive, non-zero cost;
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean shouldHaveNode() {
 		return cost > 0f;

@@ -2,7 +2,6 @@ package com.b3.gui.components;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -10,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * Represents a dropdown menu.
+ */
 public class SelectBoxComponent {
 
     private Array items;
@@ -35,28 +37,51 @@ public class SelectBoxComponent {
         selectBox = new SelectBox(skin);
         setItems(items);
     }
-
+	
+	/**
+	 * @return The actual {@link SelectBox} object this component holds.
+	 */
     public SelectBox getSelectBox() {
         return selectBox;
     }
-
+	
+	/**
+	 * @return An {@link Array} of the selectable items in the drop down list.
+	 */
     public Array getItems() {
         return items;
     }
-
+	
+	/**
+	 * Sets the selectable items in the drop down list.
+	 * @param items The new items to appear in the dropdown list.
+	 */
     public void setItems(Array items) {
         selectBox.setItems(items);
     }
-
+	
+	/**
+	 * @return The item currently selected by the user from the dropdown list.
+	 */
     public Object getSelected() {
         return selectBox.getSelected();
     }
-
+	
+	/**
+	 * Sets the currently selected item in the dropdown list.
+	 * If it is not an item in the list the first item will be selected.
+	 * @param selected The new item.
+	 */
     public void setSelected(Object selected) {
         selectBox.setSelected(selected);
     }
-
+	
+	/**
+	 * Adds a {@link ChangeListener} to the dropdown.
+	 * @param listener The {@link ChangeListener} to add.
+	 */
     public void addListener(ChangeListener listener) {
         selectBox.addListener(listener);
     }
+	
 }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class LabelComponent {
 
@@ -40,15 +39,25 @@ public class LabelComponent {
         labelStyle.font = font;
         label = new Label(text, labelStyle);
     }
-
+	
+	/**
+     * @return The actual {@link Label} object this component holds.
+     */
     public Label getLabel() {
         return label;
     }
-
+	
+	/**
+	 * @return The text of the {@link Label}.
+	 */
     public String getText() {
         return label.getText().toString();
     }
-
+	
+	/**
+	 * Changes the text of the {@link Label}.
+	 * @param str The new text.
+	 */
     public void setText(String str) {
         label.setText(str);
     }

@@ -23,7 +23,10 @@ import java.util.Map;
  * Created by Lewis adapted from Ossama's code, worked on mostly by Lewis but added to and converted to SideBar by whole group.
  */
 public class SideBarNodes extends SideBar implements Disposable {
-
+	
+	/**
+	 * TODO - Should use non-static {@link #isOpen()}.
+	 */
     public static boolean s_isOpen;
 
     public SideBarNodes(Stage stage, World world) {
@@ -141,11 +144,17 @@ public class SideBarNodes extends SideBar implements Disposable {
             pseudocodeTab.getInspectSearchBtn().setText("Begin");
         }
     }
-
+    
     @Override
-    public void setOpen(boolean open) {
-        super.setOpen(open);
-        s_isOpen = open;
+    public void open() {
+        super.open();
+        s_isOpen = true;
+    }
+    
+    @Override
+    public void close() {
+        super.close();
+        s_isOpen = false;
     }
 
     /**

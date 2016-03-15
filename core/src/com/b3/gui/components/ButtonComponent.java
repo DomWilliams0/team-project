@@ -5,9 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import java.util.Observable;
-import java.util.function.Function;
-
 /**
  * Represents a button component
  */
@@ -33,11 +30,18 @@ public class ButtonComponent extends Component {
 
         textButton = new TextButton(text, skin);
     }
-
+	
+	/**
+     * Changes the text of the {@link TextButton}.
+     * @param text The new text.
+     */
     public void setText(String text) {
         textButton.setText(text);
     }
-
+	
+	/**
+	 * @return The text on the {@link TextButton}.
+	 */
     public CharSequence getText() {
         return textButton.getText();
     }

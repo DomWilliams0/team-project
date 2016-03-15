@@ -15,7 +15,7 @@ import java.util.Random;
  * All the methods and values that are not specific to one class,
  * that may be used by multiple classes.
  */
-public class Utils {
+public abstract class Utils {
 
 	public static final int TILESET_RESOLUTION = 16;
 	public static final float TILE_SIZE = 4f;

@@ -90,10 +90,8 @@ public class BuildingModelCache implements Disposable {
 			}
 			models.put(dimensions, model);
 		}
-
-		ModelInstance tempInstance = new ModelInstance(model, pos.x + dimensions.x / 2, pos.y + dimensions.y / 2, dimensions.z / 2);
-
-		return tempInstance;
+		
+		return new ModelInstance(model, pos.x + dimensions.x / 2, pos.y + dimensions.y / 2, dimensions.z / 2);
 	}
 
 	/**

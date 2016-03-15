@@ -2,7 +2,7 @@ package com.b3.world;
 
 import com.b3.DebugRenderer;
 import com.b3.entity.Agent;
-import com.b3.entity.ai.*;
+import com.b3.entity.ai.BehaviourPathFollow;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
@@ -27,7 +27,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
@@ -47,7 +48,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static com.b3.mode.ModeType.*;
 import static com.b3.world.building.BuildingType.HOUSE;
@@ -181,7 +185,11 @@ public class World implements Disposable {
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		BFSTexture = new Sprite(tempTexture);
 	}
-
+	
+	/**
+	 * Takes a tile map and removes nodes and changes edge costs accordingly.
+	 * @param map The tile map to process and change the {@link #worldGraph} accordingly to.
+	 */
 	private void processMapTileTypes(TiledMap map) {
 		processMapTileTypes(map, true);
 	}

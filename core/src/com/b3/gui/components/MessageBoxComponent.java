@@ -58,7 +58,11 @@ public class MessageBoxComponent {
 
         this.popupStage = popupStage;
     }
-
+    
+    /**
+     * Changes the text that will pop up.
+     * @param text The new text.
+     */
     public void setText(String text) {
         Label lbl = (Label)dialog.getContentTable().getChildren().get(0);
 

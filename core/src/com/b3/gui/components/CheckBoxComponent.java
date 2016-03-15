@@ -33,11 +33,18 @@ public class CheckBoxComponent extends Component {
 
         checkBox = new CheckBox(text, skin);
     }
-
+    
+    /**
+     * Changes the text next to the {@link CheckBox}.
+     * @param text The new text.
+     */
     public void setText(String text) {
         checkBox.setText(text);
     }
-
+	
+	/**
+	 * @return The text next to the {@link CheckBox}.
+	 */
     public CharSequence getText() {
         return checkBox.getText();
     }

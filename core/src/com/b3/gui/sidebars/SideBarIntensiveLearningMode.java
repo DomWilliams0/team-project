@@ -46,9 +46,6 @@ public class SideBarIntensiveLearningMode extends SideBar implements Disposable 
     }
 
     @Override
-    public void render() {}
-
-    @Override
     public void dispose() {
         controller.getInputHandler().clear();
         stage.dispose();

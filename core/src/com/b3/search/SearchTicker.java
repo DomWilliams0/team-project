@@ -2,7 +2,6 @@ package com.b3.search;
 
 import com.b3.gui.PseudocodeVisualiser;
 import com.b3.input.SoundController;
-import com.b3.mode.Mode;
 import com.b3.mode.ModeType;
 import com.b3.search.util.Function2;
 import com.b3.search.util.SearchAlgorithm;
@@ -560,7 +559,11 @@ public class SearchTicker extends Observable {
 		setChanged();
 		notifyObservers();
 	}
-
+	
+	/**
+	 * Whether the search is paused by any of the pause controllers.
+	 * @return <code>true</code> if the search is paused.
+	 */
 	public boolean isPaused() {
 		for(boolean pause : paused) if(pause) return true;
 		return false;

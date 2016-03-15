@@ -131,8 +131,8 @@ public class ModelManager {
 		tryLoadAssets();
 		modelBatch.begin(worldCamera);
 		models.stream()
-				.filter(instances -> instances.getFirst().isVisible())
-				.forEach(instances -> modelBatch.render(instances.getSecond(), environment));
+				.filter(instance -> instance.getFirst().isVisible())
+				.forEach(instance -> modelBatch.render(instance.getSecond(), environment));
 		modelBatch.end();
 	}
 

@@ -1,10 +1,12 @@
 package com.b3.search;
 
 import com.b3.gui.PseudocodeVisualiser;
+import com.b3.input.SoundController;
 import com.b3.mode.ModeType;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.Utils;
+import com.badlogic.gdx.audio.Sound;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,6 +40,30 @@ public class SearchTickerTest {
 		Field fieldInstance = PseudocodeVisualiser.class.getDeclaredField("instance");
 		fieldInstance.setAccessible(true);
 		fieldInstance.set(null, mock(PseudocodeVisualiser.class));
+		
+		// Stop SoundController errors.
+		Sound s = new Sound() {
+			public long play() {return 0;}
+			public long play(float volume) {return 0;}
+			public long play(float volume, float pitch, float pan) {return 0;}
+			public long loop() {return 0;}
+			public long loop(float volume) {return 0;}
+			public long loop(float volume, float pitch, float pan) {return 0;}
+			public void stop() {}
+			public void pause() {}
+			public void resume() {}
+			public void dispose() {}
+			public void stop(long soundId) {}
+			public void pause(long soundId) {}
+			public void resume(long soundId) {}
+			public void setLooping(long soundId, boolean looping) {}
+			public void setPitch(long soundId, float pitch) {}
+			public void setVolume(long soundId, float volume) {}
+			public void setPan(long soundId, float pan, float volume) {}
+		};
+		Field fieldSounds = SoundController.class.getDeclaredField("sounds");
+		fieldSounds.setAccessible(true);
+		fieldSounds.set(null, new Sound[] {s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s});
 	}
 
 	private void setGraph(WorldGraph graph) throws Exception {

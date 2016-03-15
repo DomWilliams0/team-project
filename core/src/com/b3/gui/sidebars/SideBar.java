@@ -2,9 +2,7 @@ package com.b3.gui.sidebars;
 
 import com.b3.gui.TabbedPane;
 import com.b3.gui.components.ButtonComponent;
-import com.b3.gui.sidebars.tabs.PseudocodeTab;
 import com.b3.gui.sidebars.tabs.Tab;
-import com.b3.mode.ModeType;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -23,11 +21,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-public class SideBar extends Table {
+/**
+ * Easy pezy basis of a sidebar.
+ * Ensures consistent styles.
+ */
+public abstract class SideBar extends Table {
 
     protected Stage stage;
     protected World world;
@@ -43,7 +43,7 @@ public class SideBar extends Table {
     protected float preferredWidth;
     protected boolean left;
     protected boolean isOpen;
-
+	
     public SideBar(Stage stage,
                    World world,
                    boolean left,
@@ -83,7 +83,16 @@ public class SideBar extends Table {
         pm1.fill();
         setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
     }
-
+	
+	/**
+	 * Create the basic components of the sidebar.
+	 * E.g.
+	 * <ol>
+	 *     <li>The background</li>
+	 *     <li>{@link #tabs}, if there are any.</li>
+	 *     <li>The button to open and close the sidebar.</li>
+	 * </ol>
+	 */
     public void initComponents() {
         // Set a default background colour
         setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
@@ -134,7 +143,10 @@ public class SideBar extends Table {
         background(skin.getDrawable(background));
         this.stage.addActor(triggerBtn.getComponent());
     }
-
+	
+	/**
+	 * Opens the sidebar and shows its content.
+	 */
     public void open() {
         TextButton _triggerBtn = triggerBtn.getComponent();
 
@@ -153,7 +165,10 @@ public class SideBar extends Table {
 
         isOpen = true;
     }
-
+	
+	/**
+	 * Closes the sidebar and hides the content.
+	 */
     public void close() {
         TextButton _triggerBtn = triggerBtn.getComponent();
 
@@ -170,7 +185,10 @@ public class SideBar extends Table {
 
         isOpen = false;
     }
-
+	
+	/**
+	 * Toggles the sidebar {@link #open() open} or {@link #close() closed}.
+	 */
     public void toggle() {
         if (isOpen) {
             close();
@@ -195,19 +213,25 @@ public class SideBar extends Table {
     public ButtonComponent getTriggerBtn() {
         return triggerBtn;
     }
-
+	
+	/**
+	 * Whether the sidebar is open.
+	 * @return <code>true</code> if the sidebar is open;
+	 *         <code>false</code> otherwise.
+	 */
     public boolean isOpen() {
         return isOpen;
-    }
-
-    public void setOpen(boolean open) {
-        isOpen = open;
     }
 
     public void addTab(Table tab) {
         tabbedPane.addTab(tab.getName(), tab);
     }
-
+	
+	/**
+	 * Should be called whenever the window resizes.
+	 * @param width  The new width of the window.
+	 * @param height The new height of the window.
+	 */
     public void resize(int width, int height) {
         setHeight(height);
         triggerBtn.getComponent().setY(height / 2);
