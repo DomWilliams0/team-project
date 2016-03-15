@@ -42,7 +42,11 @@ public class CompareMode extends Mode {
 	}
 
 	@Override
-	protected void spawnInitialEntities() {
+	protected void initialise() {
+	}
+
+	@Override
+	public void finishInitialisation() {
 
 		SearchAlgorithm[] algorithms = {SearchAlgorithm.A_STAR, SearchAlgorithm.DEPTH_FIRST, SearchAlgorithm.BREADTH_FIRST};
 		for (int i = 0; i < 3; i++) {

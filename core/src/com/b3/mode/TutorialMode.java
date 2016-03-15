@@ -3,35 +3,14 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
-import com.b3.gui.help.HelpBox;
-import com.b3.gui.popup.Popup;
 import com.b3.gui.popup.TutorialPopups;
 import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
-import com.b3.gui.sidebars.tabs.PracticeModeSettingsTab;
 import com.b3.input.InputHandler;
-import com.b3.input.PracticeModeWorldSelectionHandler;
 import com.b3.input.TutorialModeSelectionHandler;
-import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
-import com.b3.util.Config;
-import com.b3.util.ConfigKey;
-import com.b3.util.Utils;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TutorialMode extends Mode {
 
@@ -86,7 +65,7 @@ public class TutorialMode extends Mode {
 	}
 
 	@Override
-	protected void spawnInitialEntities() {
+	public void initialise() {
 		WorldGraph worldGraph = world.getWorldGraph();
 		Agent agent = world.spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
 		BehaviourMultiContinuousPathFind behaviour = new BehaviourMultiContinuousPathFind(

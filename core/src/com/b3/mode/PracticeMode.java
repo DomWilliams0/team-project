@@ -72,7 +72,7 @@ public class PracticeMode extends Mode {
 	}
 
 	@Override
-	protected void spawnInitialEntities() {
+	public void initialise() {
 		WorldGraph worldGraph = world.getWorldGraph();
 		Agent agent = world.spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
 		BehaviourMultiContinuousPathFind behaviour = new BehaviourMultiContinuousPathFind(

@@ -68,7 +68,7 @@ public class LearningMode extends Mode {
 	}
 
 	@Override
-	protected void spawnInitialEntities() {
+	public void initialise() {
 		WorldGraph worldGraph = world.getWorldGraph();
 		worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
 		Agent agent = world.spawnAgent(world.getTileSize().scl(0.5f));

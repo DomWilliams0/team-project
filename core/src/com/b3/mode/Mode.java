@@ -54,7 +54,7 @@ public abstract class Mode extends ScreenAdapter {
 
 		camera.setWorld(world);
 		world.initEngine(camera);
-		spawnInitialEntities();
+		initialise();
 
 		// initialise sidebars and back button
 		initSidebar();
@@ -72,7 +72,10 @@ public abstract class Mode extends ScreenAdapter {
 
 	protected abstract void tick(float delta);
 
-	protected abstract void spawnInitialEntities();
+	protected abstract void initialise();
+	
+	public void finishInitialisation() {
+	}
 
 	protected void initSidebar() {
 		sideBarStage = new Stage(new ScreenViewport());

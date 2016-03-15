@@ -92,6 +92,7 @@ public class MainGame extends Game {
 				throw new IllegalArgumentException("Cannot switch to unknown mode '" + modeType + "'");
 		}
 
+		m.finishInitialisation();
 		super.setScreen(m);
 	}
 }
