@@ -8,14 +8,13 @@ import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.gui.CoordinatePopup;
-import com.b3.gui.RenderTester;
+import com.b3.gui.PopupDescriptions;
 import com.b3.gui.popup.PopupManager;
 import com.b3.input.InputHandler;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
-import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -97,7 +96,7 @@ public class World implements Disposable {
 	private int currentNodeClickY;
 	private boolean newClick = false;
 
-	private RenderTester rt;
+	private PopupDescriptions rt;
 	private float animationNextDestination;
 
 	private int yNextDestination;
@@ -364,7 +363,7 @@ public class World implements Disposable {
 		worldCamera.setCurrentZoom(Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) / 2);
 
 		//set up these after the camera has been setup
-		rt = new RenderTester(this);
+		rt = new PopupDescriptions(this);
 
 		popupManager = new PopupManager(worldCamera, mode);
 		popupManager.showIntro();
@@ -848,7 +847,7 @@ public class World implements Disposable {
 //	}
 // --Commented out by Inspection STOP (15/03/2016, 12:21)
 
-	public RenderTester getRenderTester() {
+	public PopupDescriptions getRenderTester() {
 		return rt;
 	}
 

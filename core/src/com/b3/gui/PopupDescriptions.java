@@ -26,19 +26,13 @@ import static java.util.Collections.reverse;
  * A pop-up visual that explains what each node is
  * Including drawing the heuristic and explaining to the user where the costs come from.
  */
-public class RenderTester {
+public class PopupDescriptions {
 
     private ShapeRenderer shapeRenderer;
 
-    private WorldCamera textCamera;
-    private WorldGraph worldGraph;
     private WorldCamera worldCamera;
     private World world;
-    private Sprite emptyCanvas;
     private SpriteBatch spriteBatch;
-
-    private BitmapFont fontButton;
-    private BitmapFont fontAStar;
 
     private Sprite[] currentNodeSprite;
     private Sprite[] startNodeSprite;
@@ -48,7 +42,6 @@ public class RenderTester {
     private Sprite[] olderFrontierSprite;
     private Sprite[] numbers;
 
-    private Stage stage;
     private int pageNo;
     private Sprite plus;
     private Sprite equals;
@@ -61,19 +54,15 @@ public class RenderTester {
      * Creates a new pop-up, with an empty canas
      * @param world the world that this pop-up will be shown on top of
      */
-    public RenderTester(World world) {
+    public PopupDescriptions(World world) {
         counterAnimationFade = 0;
         popupShowing = false;
 
         this.world = world;
-        this.worldGraph = world.getWorldGraph();
         this.worldCamera = world.getWorldCamera();
 
         spriteBatch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-
-        Texture tempTexture = new Texture("core/assets/world/popups/emptycanvas250x250.png");
-        emptyCanvas = new Sprite(tempTexture);
 
         pageNo = 0;
 
@@ -311,7 +300,7 @@ public class RenderTester {
 				//show how costs are calulated (4th page)
 				if (pageNo == 3) {
 					//if has been shown for a little while
-					float animate = 0;
+					float animate;
 					if (counterAnimationFade < 200) {
 						//don't scale
 						animate = scalingZoom;
@@ -421,7 +410,7 @@ public class RenderTester {
      * @return ArrayList of Integer containing a list of costs corrosponding to the edge costs between the path given, in the correct (IE not reversed) order
      */
     private ArrayList<Integer> getCostsAllNodes(List<Node> path) {
-        ArrayList<Integer> arrTempCosts = new ArrayList<Integer>();
+        ArrayList<Integer> arrTempCosts = new ArrayList<>();
         if (path.isEmpty()) return arrTempCosts;
 
         for (int i = path.size()-1; i > 0; i--) {
