@@ -11,23 +11,19 @@ Team members are:
 
 ## Contributing
 
-Following are some guidelines on contributing to this project.
+The following are some guidelines for contributing to this project.
 
 ### Style guide
-
-#### JavaDoc and comments
-
-Always JavaDoc everything. If some parts of code are unclear then put inline comments otherwise
-there is no need for additional ones (since it should be readable enough).
 
 #### Formatting
 
 - Use **same line** curly braces.
 - Tabs should be used instead of spaces.
-- Always allow whitespace between a keyword (e.g. `if`) and the next word
+- Always allow whitespace between a keyword (e.g. `if`) and the next word or bracket.
 - Vertical whitespace must be present in these situations:
     * Within method bodies, as needed to create *logical groupings* of statements.
-    * Between consecutive members (or initializers) of a class: fields, constructors, methods, nested classes, static initializers, instance initializers.
+    * Between consecutive members (or initialisers) of a class: fields, constructors, methods, nested classes, static initialisers, instance initialisers.
+- Do not overly nest code.
 
 Examples:
 
@@ -76,6 +72,9 @@ while (notFound) {
 
 #### Documentation practices
 
+Always JavaDoc everything. If some parts of code are unclear then put inline comments otherwise
+there is no need for additional ones (since it should be easily readable and understandable).
+
 - Use {@link Class} when refering to any class that isn't the current class and it isn't obvious. (Not enforced, use common sense)
 - Use &lt;code&gt;native type&lt;/code&gt;, for things such as &lt;code&gt;true&lt;/code&gt; and &lt;code&gt;static&lt;/code&gt;.
 - Use &lt;code&gt;Java/Pseudo code&lt;/code&gt; for snippets of Java, Pseudo and any other types of code.
@@ -84,4 +83,4 @@ while (notFound) {
 
 ### Version Control
 
-TODO: finish
+This repository is for SVN. See `/branches` for the branches used.
