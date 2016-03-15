@@ -6,18 +6,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
+
+/**
+ * Represents a building in the world, containing its dimensions, position and cache
+ */
 public class Building {
 
-	private static Vector3 tempCullingPosition = new Vector3();
+	private static final Vector3 tempCullingPosition = new Vector3();
 
-	// id?
-	// door locations?
-	// collision box?
-	private Vector2 tilePosition;
-	private Vector3 dimensions;
+	private final Vector2 tilePosition;
+	private final Vector3 dimensions;
 
-	private Vector3 centre;
-	private Vector3 cullingDimensions;
+	private final Vector3 centre;
+	private final Vector3 cullingDimensions;
 
 	private boolean flattened;
 	private final ModelInstance modelInstance;
@@ -47,14 +48,23 @@ public class Building {
 		this.flattened = false;
 	}
 
+	/**
+	 * @return the tile position that this building is placed at (bottom left corner)
+     */
 	public Vector2 getTilePosition() {
 		return tilePosition;
 	}
 
+	/**
+	 * @return the dimensions of the current building
+     */
 	public Vector3 getDimensions() {
 		return dimensions;
 	}
 
+	/**
+	 * @param flatten iff true then the building will be flat, otherwise not
+     */
 	public void setFlattened(boolean flatten) {
 		flattened = flatten;
 	}
@@ -66,6 +76,9 @@ public class Building {
 		return null;
 	}
 
+	/**
+	 * @return the instance of the building, if flattened then no textures - just a black box; if not then contains textures too
+     */
 	public ModelInstance getModelInstance() {
 		if (flattened) {
 			return modelInstanceFlat;
@@ -74,10 +87,16 @@ public class Building {
 		}
 	}
 
+	/**
+	 * @return the type of building: house, fire or poilice
+     */
 	public BuildingType getType() {
 		return type;
 	}
 
+	/**
+	 * @param type the type to set the building to
+     */
 	public void setType(BuildingType type) {
 		this.type = type;
 	}
@@ -94,6 +113,11 @@ public class Building {
 		return camera.frustum.boundsInFrustum(tempCullingPosition, cullingDimensions);
 	}
 
+	/**
+	 * checks if one building is equal to o
+	 * @param o the building to be compared to
+	 * @return true if equal
+     */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -105,6 +129,9 @@ public class Building {
 
 	}
 
+	/**
+	 * @return the hash code of the current building
+     */
 	@Override
 	public int hashCode() {
 		int result = tilePosition.hashCode();

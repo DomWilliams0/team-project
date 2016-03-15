@@ -30,7 +30,7 @@ public class ModelController {
 	/**
 	 * Whether the model texture is flipped.
 	 */
-	private boolean flipped;
+	private final boolean flipped;
 	
 	/**
 	 * Whether the model should be rendered.

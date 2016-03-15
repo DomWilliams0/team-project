@@ -55,7 +55,7 @@ import static com.b3.world.building.BuildingType.HOUSE;
 
 public class World implements Disposable {
 
-	private static short ENTITY_CULL_TAG = 10101;
+	private static final short ENTITY_CULL_TAG = 10101;
 	private CoordinatePopup coordinatePopup;
 
 	private TiledMap map;
@@ -370,14 +370,16 @@ public class World implements Disposable {
 		popupManager.showIntro();
 	}
 
-	private Vector2 generateRandomTile() {
-		int x, y;
-		do {
-			x = Utils.RANDOM.nextInt(worldGraph.getMaxXValue());
-			y = Utils.RANDOM.nextInt(worldGraph.getMaxYValue());
-		} while (!worldGraph.hasNode(new Point(x, y)));
-		return new Vector2(x, y);
-	}
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	private Vector2 generateRandomTile() {
+//		int x, y;
+//		do {
+//			x = Utils.RANDOM.nextInt(worldGraph.getMaxXValue());
+//			y = Utils.RANDOM.nextInt(worldGraph.getMaxYValue());
+//		} while (!worldGraph.hasNode(new Point(x, y)));
+//		return new Vector2(x, y);
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	public ModelManager getModelManager() {
 		return modelManager;
@@ -395,22 +397,24 @@ public class World implements Disposable {
 		return worldGraph;
 	}
 
-	/**
-	 * Used for debugging: creates a regular grid of buildings across the world
-	 */
-	private void createDefaultBuildings() {
-		Vector3 dim = new Vector3(1, 1, 3);
-		float space = 4f;
-
-		// Get building type
-		List<BuildingType> types = Collections.unmodifiableList(Arrays.asList(BuildingType.values()));
-		BuildingType buildingType = types.get(Utils.RANDOM.nextInt(types.size()));
-
-		for (int x = 0; x < tileSize.x / space; x++)
-			for (int y = 0; y < tileSize.y / space; y++)
-				addBuilding(new Vector2(x * space, y * space), new Vector3(dim.x, dim.y, Utils.randomRange(4f, 8f)), buildingType);
-
-	}
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	/**
+//	 * Used for debugging: creates a regular grid of buildings across the world
+//	 */
+//	private void createDefaultBuildings() {
+//		Vector3 dim = new Vector3(1, 1, 3);
+//		float space = 4f;
+//
+//		// Get building type
+//		List<BuildingType> types = Collections.unmodifiableList(Arrays.asList(BuildingType.values()));
+//		BuildingType buildingType = types.get(Utils.RANDOM.nextInt(types.size()));
+//
+//		for (int x = 0; x < tileSize.x / space; x++)
+//			for (int y = 0; y < tileSize.y / space; y++)
+//				addBuilding(new Vector2(x * space, y * space), new Vector3(dim.x, dim.y, Utils.randomRange(4f, 8f)), buildingType);
+//
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	/**
 	 * Spawns a new entity in the world, at the given tile position
@@ -422,12 +426,14 @@ public class World implements Disposable {
 		return new Agent(this, tilePos);
 	}
 
-	/**
-	 * {@link World#spawnAgentWithPath(Vector2, List)}
-	 */
-	public Agent spawnAgentWithPath(Vector2 tilePos, Vector2... path) {
-		return spawnAgentWithPath(tilePos, Arrays.asList(path));
-	}
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	/**
+//	 * {@link World#spawnAgentWithPath(Vector2, List)}
+//	 */
+//	public Agent spawnAgentWithPath(Vector2 tilePos, Vector2... path) {
+//		return spawnAgentWithPath(tilePos, Arrays.asList(path));
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	/**
 	 * Spawns an agent at the start point of the path, and sets its behaviour to follow the given path
@@ -442,53 +448,59 @@ public class World implements Disposable {
 		return agent;
 	}
 
-	/**
-	 * Spawns an agent at the given tile position, who will path find to the given goal tiles in sequence, using
-	 * the given algorithm
-	 *
-	 * @param tilePos   The spawn position, and the start tile for path finding
-	 * @param algorithm The algorithm to use
-	 * @param visualise If this search should be visualised. There can only be one visualised search at a time
-	 * @param endTiles  A list of tile position, which will be travelled to in turn
-	 * @return The new agent
-	 */
-	private Agent spawnAgentWithMultiplePathFinding(Vector2 tilePos, SearchAlgorithm algorithm, boolean visualise, Vector2... endTiles) {
-		if (endTiles.length == 0)
-			throw new IllegalArgumentException("List of goals given must not be empty");
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	/**
+//	 * Spawns an agent at the given tile position, who will path find to the given goal tiles in sequence, using
+//	 * the given algorithm
+//	 *
+//	 * @param tilePos   The spawn position, and the start tile for path finding
+//	 * @param algorithm The algorithm to use
+//	 * @param visualise If this search should be visualised. There can only be one visualised search at a time
+//	 * @param endTiles  A list of tile position, which will be travelled to in turn
+//	 * @return The new agent
+//	 */
+//	private Agent spawnAgentWithMultiplePathFinding(Vector2 tilePos, SearchAlgorithm algorithm, boolean visualise, Vector2... endTiles) {
+//		if (endTiles.length == 0)
+//			throw new IllegalArgumentException("List of goals given must not be empty");
+//
+//		Agent agent = spawnAgent(tilePos);
+//		BehaviourMultiPathFind behaviour = new BehaviourMultiPathFind(agent, tilePos, endTiles[0], algorithm, worldGraph, worldCamera, this);
+//
+//		for (int i = 1, endTilesLength = endTiles.length; i < endTilesLength; i++)
+//			behaviour.addNextGoal(endTiles[i]);
+//
+//		agent.setBehaviour(behaviour);
+//		if (visualise)
+//			worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
+//		return agent;
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
-		Agent agent = spawnAgent(tilePos);
-		BehaviourMultiPathFind behaviour = new BehaviourMultiPathFind(agent, tilePos, endTiles[0], algorithm, worldGraph, worldCamera, this);
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	/**
+//	 * Spawns an agent at the given tile position, who will path find to the given goal tile with the given algorithm
+//	 *
+//	 * @param tilePos   The spawn position, and the start tile for path finding
+//	 * @param endNode   The node to path find to
+//	 * @param algorithm The algorithm to use
+//	 * @param visualise If this search should be visualised. There can only be one visualised search at a time
+//	 * @return The new agent
+//	 */
+//	private Agent spawnAgentWithPathFinding(Vector2 tilePos, Vector2 endNode, SearchAlgorithm algorithm, boolean visualise) {
+//		Agent agent = spawnAgent(tilePos);
+//		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, this);
+//		agent.setBehaviour(behaviour);
+//		if (visualise)
+//			worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
+//		return agent;
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
-		for (int i = 1, endTilesLength = endTiles.length; i < endTilesLength; i++)
-			behaviour.addNextGoal(endTiles[i]);
-
-		agent.setBehaviour(behaviour);
-		if (visualise)
-			worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
-		return agent;
-	}
-
-	/**
-	 * Spawns an agent at the given tile position, who will path find to the given goal tile with the given algorithm
-	 *
-	 * @param tilePos   The spawn position, and the start tile for path finding
-	 * @param endNode   The node to path find to
-	 * @param algorithm The algorithm to use
-	 * @param visualise If this search should be visualised. There can only be one visualised search at a time
-	 * @return The new agent
-	 */
-	private Agent spawnAgentWithPathFinding(Vector2 tilePos, Vector2 endNode, SearchAlgorithm algorithm, boolean visualise) {
-		Agent agent = spawnAgent(tilePos);
-		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, this);
-		agent.setBehaviour(behaviour);
-		if (visualise)
-			worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
-		return agent;
-	}
-
-	public List<Building> getBuildings() {
-		return buildings;
-	}
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	public List<Building> getBuildings() {
+//		return buildings;
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	/**
 	 * Adds a building to the world at the given coordinates
@@ -539,10 +551,12 @@ public class World implements Disposable {
 		return building;
 	}
 
-	public void addBuilding(Building building) {
-		buildings.add(building);
-		worldGraph.addBuilding(building);
-	}
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	public void addBuilding(Building building) {
+//		buildings.add(building);
+//		worldGraph.addBuilding(building);
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	/**
 	 * Updates and renders the world, by:
@@ -770,9 +784,11 @@ public class World implements Disposable {
 		return new Vector2(tileSize);
 	}
 
-	public Vector2 getPixelSize() {
-		return new Vector2(pixelSize);
-	}
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	public Vector2 getPixelSize() {
+//		return new Vector2(pixelSize);
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	/**
 	 * Checks if the given tile position is within the worlds bounds
@@ -800,9 +816,11 @@ public class World implements Disposable {
 		newClick = true;
 	}
 
-	public boolean hasNewClick() {
-		return newClick;
-	}
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	public boolean hasNewClick() {
+//		return newClick;
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	public Point getCurrentClick() {
 		newClick = false;
@@ -824,9 +842,11 @@ public class World implements Disposable {
 		return mode;
 	}
 
-	public InputHandler getInputHandler() {
-		return inputHandler;
-	}
+// --Commented out by Inspection START (15/03/2016, 12:21):
+//	public InputHandler getInputHandler() {
+//		return inputHandler;
+//	}
+// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	public RenderTester getRenderTester() {
 		return rt;

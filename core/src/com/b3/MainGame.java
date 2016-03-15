@@ -2,7 +2,6 @@ package com.b3;
 
 import com.b3.input.InputHandler;
 import com.b3.input.SoundController;
-import com.b3.mode.CompareMode;
 import com.b3.mode.MainMenuScreen;
 import com.b3.util.Config;
 import com.badlogic.gdx.Game;
@@ -40,10 +39,16 @@ public class MainGame extends Game {
 		setScreen(new MainMenuScreen(this));
 	}
 
+	/**
+	 * @return the current input handler for this world
+     */
 	public InputHandler getInputHandler() {
 		return inputHandler;
 	}
 
+	/**
+	 * dispose of this object correclty, also cleanly closing the sound controller
+	 */
 	@Override
 	public void dispose() {
 		super.dispose();

@@ -6,10 +6,6 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * Mainly edited (ordered by no. of lines) by dxw405
- * Commits:
- * 1  dxw405
- *
  * Debugs the renderer, used for rendering the world, spriteBatch and the Box2Drenderer
  */
 public class DebugRenderer {
@@ -17,6 +13,10 @@ public class DebugRenderer {
 	private final Box2DDebugRenderer renderer;
 	private final World world;
 
+	/**
+	 * Creates a new debug renderer using the current world
+	 * @param world the world that this debug renderer is using
+     */
 	public DebugRenderer(World world) {
 		this.world = world;
 		spriteBatch = new SpriteBatch();

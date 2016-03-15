@@ -48,6 +48,11 @@ public class ModelManager {
 	private final AssetManager assetManager = new AssetManager();
 	private final ModelBatch modelBatch = new ModelBatch();
 
+	/**
+	 * creates a new model manager
+	 * @param environment the environment to use in managing the models
+	 * @param map the tiled map the buildings will be placed on
+     */
 	public ModelManager(Environment environment, TiledMap map) {
 		this.environment = environment;
 		
@@ -150,7 +155,7 @@ public class ModelManager {
 	 *
 	 * @see #requestModel(ModelController, String, Consumer)
 	 */
-	public void tryLoadAssets() {
+	private void tryLoadAssets() {
 		// May as well queue up some asset loads.
 		assetManager.update();
 

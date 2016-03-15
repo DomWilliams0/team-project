@@ -194,10 +194,16 @@ public class WorldCamera extends PerspectiveCamera {
 		followedAgent = agent.getPhysicsComponent();
 	}
 
+	/**
+	 * @return the x position
+     */
 	public float getPosX() {
 		return posX;
 	}
 
+	/**
+	 * @return the y position
+     */
 	public float getPosY() {
 		return posY;
 	}

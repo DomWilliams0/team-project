@@ -22,27 +22,32 @@ import java.util.Map;
  * Maintains a set of building Models for reuse
  */
 public class BuildingModelCache implements Disposable {
-	private final World world;
 	private Map<Vector3, Model> models;
 	private ModelBuilder builder;
 
 	private Texture nightSide;
 	private Texture topSide;
-	private Texture brick;
 	private Texture nightSideFlipped;
 
+	/**
+	 * creates a new building model cache linked to a world
+	 * @param world the world that this cache should be linked to
+     */
 	public BuildingModelCache(World world) {
-		this.world = world;
+		World world1 = world;
 		models = new HashMap<>();
 		builder = new ModelBuilder();
 		loadTextures();
 	}
 
+	/**
+	 * load the textures that are required for buildings sides and roof
+	 */
 	private void loadTextures() {
 		nightSide = new Texture("core/assets/world/popups/night_side_scaled_new.jpg");
 		nightSideFlipped = new Texture("core/assets/world/popups/night_side_scaled_new_frontback.jpg");
 		topSide = new Texture("core/assets/world/popups/roof.jpg");
-		brick = new Texture("core/assets/world/popups/brick.jpg");
+		Texture brick = new Texture("core/assets/world/popups/brick.jpg");
 	}
 
 	/**
@@ -99,6 +104,9 @@ public class BuildingModelCache implements Disposable {
 		return new Color(c, c, c, 0.8f);
 	}
 
+	/**
+	 * dispose of the model cache cleanly.
+	 */
 	@Override
 	public void dispose() {
 		models.values().forEach(Model::dispose);
