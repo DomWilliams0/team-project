@@ -11,6 +11,7 @@ import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.world.World;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -65,6 +66,7 @@ public class LearningModeSettingsTab implements Tab {
         soundsOn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                SoundController.stopSound(3);
                 boolean soundsOn = Config.getBoolean(ConfigKey.SOUNDS_ON);
                 Config.set(ConfigKey.SOUNDS_ON, !soundsOn);
             }
