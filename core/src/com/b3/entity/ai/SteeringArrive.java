@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * A steering behaviour that seeks to the target, and slows down in an attempt to stop on the target
+ *
+ * @author dxw405
  */
 public class SteeringArrive extends SteeringWithTarget {
 	private double arrivalThreshold;
@@ -13,7 +15,7 @@ public class SteeringArrive extends SteeringWithTarget {
 	private SteeringSeek seek;
 
 	public SteeringArrive(PhysicsComponent owner, SteeringTarget target,
-	                      double arrivalThreshold, double deaccelerationDistance) {
+						  double arrivalThreshold, double deaccelerationDistance) {
 		super(owner, target);
 		this.arrivalThreshold = arrivalThreshold * arrivalThreshold;
 		this.deaccelerationDistance = deaccelerationDistance * deaccelerationDistance;

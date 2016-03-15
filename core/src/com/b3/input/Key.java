@@ -4,6 +4,8 @@ import com.badlogic.gdx.Input;
 
 /**
  * Represents the keyboard key mapping to functions that is used in this program.
+ *
+ * @author dxw405
  */
 public enum Key {
 	

@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.*;
 
 /**
  * An agent's body, which interacts with buildings and other agents through the power of love
+ *
+ * @author dxw405
  */
 public class PhysicsComponent implements Component {
 	

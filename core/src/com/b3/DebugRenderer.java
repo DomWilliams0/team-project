@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * Debugs the renderer, used for rendering the world, spriteBatch and the Box2Drenderer
+ *
+ * @author dxw405
  */
 public class DebugRenderer {
 	private final SpriteBatch spriteBatch;

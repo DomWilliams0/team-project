@@ -13,6 +13,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Entity system to render entities as simple coloured shapes
+ *
+ * @author dxw405
  */
 public class RenderSystem extends IteratingSystem {
 

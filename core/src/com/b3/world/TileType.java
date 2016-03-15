@@ -7,6 +7,8 @@ import java.util.Map;
 
 /**
  * A mapping of tile types to their IDs in the tileset
+ *
+ * @author dxw405
  */
 public enum TileType {
 

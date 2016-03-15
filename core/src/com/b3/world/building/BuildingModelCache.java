@@ -20,6 +20,7 @@ import java.util.Map;
 
 /**
  * Maintains a set of building Models for reuse
+ * @author dxw405
  */
 public class BuildingModelCache implements Disposable {
 	private Map<Vector3, Model> models;
@@ -34,7 +35,6 @@ public class BuildingModelCache implements Disposable {
 	 * @param world the world that this cache should be linked to
      */
 	public BuildingModelCache(World world) {
-		World world1 = world;
 		models = new HashMap<>();
 		builder = new ModelBuilder();
 		loadTextures();
@@ -47,7 +47,6 @@ public class BuildingModelCache implements Disposable {
 		nightSide = new Texture("core/assets/world/popups/night_side_scaled_new.jpg");
 		nightSideFlipped = new Texture("core/assets/world/popups/night_side_scaled_new_frontback.jpg");
 		topSide = new Texture("core/assets/world/popups/roof.jpg");
-		Texture brick = new Texture("core/assets/world/popups/brick.jpg");
 	}
 
 	/**
@@ -56,7 +55,6 @@ public class BuildingModelCache implements Disposable {
 	 *  otherwise a new model is created and cached for future use.
 	 * @param pos The tile position
 	 * @param dimensions (width, length, height) of the building
-	 * @param flat
 	 * @return The newly created building model instance
 	 */
 	public ModelInstance createBuilding(Vector2 pos, Vector3 dimensions, boolean flat) {

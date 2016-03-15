@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * A base for behaviours that contain an Agent and a corresponding Steering behaviour
+ *
+ * @author dxw405
  */
 public abstract class Behaviour {
 	protected Steering steering;
@@ -12,9 +14,10 @@ public abstract class Behaviour {
 
 	/**
 	 * Constructs a new behaviour with an agent and a type of movement behaviour
-	 * @param agent the agent that this new behaviour will be applied to
+	 *
+	 * @param agent    the agent that this new behaviour will be applied to
 	 * @param steering the physics that the agent will use
-     */
+	 */
 	public Behaviour(Agent agent, Steering steering) {
 		this.agent = agent;
 		this.steering = steering;
@@ -22,7 +25,7 @@ public abstract class Behaviour {
 
 	/**
 	 * @return the BehaviourType of the current behaviour
-     */
+	 */
 	public abstract BehaviourType getType();
 
 	/**

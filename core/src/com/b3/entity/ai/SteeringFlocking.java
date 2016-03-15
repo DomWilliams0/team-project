@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author dxw405
+ */
 public abstract class SteeringFlocking extends Steering {
 
 	private List<PhysicsComponent> neighbours;

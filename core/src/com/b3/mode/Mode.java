@@ -18,6 +18,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * A base game mode
+ *
+ * @author dxw405
+ */
 public abstract class Mode extends ScreenAdapter {
 
 	private final ModeType modeType;

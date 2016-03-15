@@ -5,6 +5,8 @@ import com.badlogic.ashley.core.Component;
 
 /**
  * An agent's brain through the power of friendship
+ *
+ * @author dxw405
  */
 public class AIComponent implements Component {
 	

@@ -3,6 +3,9 @@ package com.b3.entity.ai;
 import com.b3.entity.component.PhysicsComponent;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * @author dxw405
+ */
 public class SteeringAlignment extends SteeringFlocking {
 
 

@@ -12,6 +12,8 @@ import java.util.ArrayDeque;
 
 /**
  * A behaviour that maintains a queue of goals, which will be travelled to sequentially
+ *
+ * @author dxw405
  */
 public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPathFind {
 

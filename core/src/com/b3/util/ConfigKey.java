@@ -2,9 +2,11 @@ package com.b3.util;
 
 /**
  * All the different setting config keys.
+ *
+ * @author dxw405
  */
 public enum ConfigKey {
-	
+
 	/**
 	 * Whether the camera should be restricted.
 	 */
@@ -19,7 +21,7 @@ public enum ConfigKey {
 	 * appropriate buttons are pressed.
 	 */
 	CAMERA_MOVE_SPEED("camera-move-speed"),
-	
+
 	/**
 	 * The default zoom distance to render the camera at.
 	 */
@@ -32,7 +34,7 @@ public enum ConfigKey {
 	 * The maximum distance the camera is able to zoom out.
 	 */
 	CAMERA_DISTANCE_MAXIMUM("camera-distance-max"),
-	
+
 	/**
 	 * The distance between the world's edge and the area in which entities should be teleported.
 	 */
@@ -45,7 +47,7 @@ public enum ConfigKey {
 	 * The number of entities to spawn.
 	 */
 	ENTITY_SPAWN_COUNT("entity-spawn-count"),
-	
+
 	/**
 	 * Whether the building should have a collision box.
 	 */
@@ -54,7 +56,7 @@ public enum ConfigKey {
 	 * Whether to show collision boxes on the entities.
 	 */
 	PHYSICS_RENDERING("physics-rendering"),
-	
+
 	/**
 	 * Whether to show the grid lines on the world.
 	 */
@@ -96,7 +98,7 @@ public enum ConfigKey {
 	 * Whether sounds are enabled.
 	 */
 	SOUNDS_ON("sound-on"),
-	
+
 	/**
 	 * The speed of the search.
 	 */
@@ -115,7 +117,7 @@ public enum ConfigKey {
 	 * The default search speed.
 	 */
 	TIME_BETWEEN_TICKS_STEP("time-between-ticks-step"),
-	
+
 	/**
 	 * The texture to use for the sidebars and message boxes.
 	 */
@@ -130,12 +132,12 @@ public enum ConfigKey {
 	ConfigKey(String key) {
 		this.key = key;
 	}
-	
+
 	/**
 	 * @return The text of the key in the YAML file.
 	 */
 	public String getKey() {
 		return key;
 	}
-	
+
 }

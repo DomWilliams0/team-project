@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * A steering behaviour that travels directly towards the target without stopping
+ *
+ * @author dxw405
  */
 public class SteeringSeek extends SteeringWithTarget {
 

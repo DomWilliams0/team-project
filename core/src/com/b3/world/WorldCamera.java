@@ -16,6 +16,8 @@ import java.util.List;
 
 /**
  * The control class for the main {@link com.badlogic.gdx.graphics.Camera}.
+ *
+ * @author dxw405
  */
 public class WorldCamera extends PerspectiveCamera {
 

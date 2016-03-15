@@ -12,6 +12,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
  *
  * @author Stefan Bachmann
  *         Modified by Dom Williams
+ *         dxw405
  */
 public abstract class IteratingSystem extends EntitySystem {
 	private Family family;

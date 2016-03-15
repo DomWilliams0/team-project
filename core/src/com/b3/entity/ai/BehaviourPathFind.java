@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * A behaviour that makes an agent find a path, then follow it
+ * @author dxw405
  */
 public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFind {
 

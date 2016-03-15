@@ -15,6 +15,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 
+/**
+ * @author dxw405
+ */
 public class Agent extends Entity {
 
 	public static final Color FLOCKING_COLOUR = Color.GRAY;

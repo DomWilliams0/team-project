@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 
 /**
  * Represents a building in the world, containing its dimensions, position and cache
+ * @author dxw405
  */
 public class Building {
 

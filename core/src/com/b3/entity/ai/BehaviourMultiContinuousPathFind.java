@@ -1,7 +1,6 @@
 package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
-import com.b3.gui.popup.Popup;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -12,6 +11,9 @@ import com.b3.world.World;
 import com.b3.world.WorldCamera;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * @author dxw405
+ */
 public class BehaviourMultiContinuousPathFind extends Behaviour implements BehaviourWithPathFind {
 
 	private BehaviourPathFind pathFind;

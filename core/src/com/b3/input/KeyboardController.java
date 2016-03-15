@@ -8,6 +8,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+/**
+ * An input listener that keeps state about movement keys,
+ * zooming and exiting
+ *
+ * @author dxw405
+ */
 public class KeyboardController extends InputAdapter {
 	private static final Set<Integer> CONTROL_KEYS;
 

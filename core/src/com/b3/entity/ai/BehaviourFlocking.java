@@ -9,6 +9,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author dxw405
+ */
 public class BehaviourFlocking extends Behaviour {
 
 	private static final Vector2 additionVector = new Vector2();

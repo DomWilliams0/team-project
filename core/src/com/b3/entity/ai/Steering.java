@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * The target of a steering behaviour
+ *
+ * @author dxw405
  */
 interface SteeringTarget {
 	/**
@@ -15,6 +17,8 @@ interface SteeringTarget {
 
 /**
  * A general steering behaviour that is owned by an entity
+ *
+ * @author dxw405
  */
 abstract class Steering {
 	protected PhysicsComponent entity;
@@ -41,6 +45,8 @@ abstract class Steering {
 
 /**
  * A steering behaviour that has a target
+ *
+ * @author dxw405
  */
 abstract class SteeringWithTarget extends Steering {
 	protected SteeringTarget target;
@@ -68,6 +74,8 @@ abstract class SteeringWithTarget extends Steering {
 
 /**
  * A steering target that is a moving entity in the world
+ *
+ * @author dxw405
  */
 class EntitySteeringTarget implements SteeringTarget {
 
@@ -85,6 +93,8 @@ class EntitySteeringTarget implements SteeringTarget {
 
 /**
  * A steering target that is a static tile in the world
+ *
+ * @author dxw405
  */
 class TileSteeringTarget implements SteeringTarget {
 	private Vector2 position;

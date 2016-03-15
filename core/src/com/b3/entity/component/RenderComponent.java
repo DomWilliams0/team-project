@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Color;
 
 /**
  * An agent's physical manifestation on the screen, through the power of magnets
+ *
+ * @author dxw405
  */
 public class RenderComponent implements Component {
 	

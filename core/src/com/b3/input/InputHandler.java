@@ -3,8 +3,12 @@ package com.b3.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.scenes.scene2d.*;
 
+/**
+ * A global wrapper around libGDX's input multiplexer
+ *
+ * @author dxw405 oxw410
+ */
 public class InputHandler {
 
 	private InputMultiplexer inputMultiplexer;

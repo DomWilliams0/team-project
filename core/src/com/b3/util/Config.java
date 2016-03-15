@@ -7,6 +7,8 @@ import java.util.NoSuchElementException;
 /**
  * The value of every setting should be set and got through this class.
  * Config is originally loaded from (a) file(s) and stored in a {@link Map}.
+ *
+ * @author dxw405
  */
 public class Config {
 

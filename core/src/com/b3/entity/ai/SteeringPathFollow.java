@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 /**
  * A steering behaviour that follows the given path, and arrives at the last node
+ *
+ * @author dxw405
  */
 public class SteeringPathFollow extends Steering {
 	private static final float DEFAULT_ARRIVAL_THRESHOLD = 0.25f;

@@ -11,6 +11,9 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.Collections;
 
+/**
+ * @author dxw405
+ */
 public class ConfigurationFile {
 	private ConfigurationProvider provider;
 

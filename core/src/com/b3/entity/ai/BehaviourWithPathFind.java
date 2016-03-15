@@ -2,6 +2,9 @@ package com.b3.entity.ai;
 
 import com.b3.search.SearchTicker;
 
+/**
+ * @author dxw405
+ */
 public interface BehaviourWithPathFind {
 	/**
 	 * @return True if the final goal has been reached _since the last tick_,

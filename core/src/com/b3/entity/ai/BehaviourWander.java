@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * A behaviour that makes an agent wander aimlessly around
+ *
+ * @author dxw405
  */
 public class BehaviourWander extends Behaviour {
 
