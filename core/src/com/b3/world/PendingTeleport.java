@@ -4,6 +4,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * A queued message to teleport an entity who is at the edge of the world to the other side
+ * 
+ * @author dxw405
  */
 public class PendingTeleport {
 
