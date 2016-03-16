@@ -1,7 +1,6 @@
 # Team project - B3
+Team members:
 
-This is the repository of Cop Chase for the Team Project module 2016.
-Team members are:
 
 - Lewis Dawson
 - Ben Durrans
@@ -68,7 +67,6 @@ while (notFound) {
 #### Programming practices
 
 - Always use `@Override`
-- TODO: finish
 
 #### Documentation practices
 
