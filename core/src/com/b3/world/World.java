@@ -2,13 +2,12 @@ package com.b3.world;
 
 import com.b3.DebugRenderer;
 import com.b3.entity.Agent;
-import com.b3.entity.ai.BehaviourPathFollow;
 import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
 import com.b3.gui.CoordinatePopup;
-import com.b3.gui.PopupDescriptions;
+import com.b3.gui.PopupDescription;
 import com.b3.gui.popup.PopupManager;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
@@ -95,9 +94,8 @@ public class World implements Disposable {
 	//current node user has clicked on
 	private int currentNodeClickX;
 	private int currentNodeClickY;
-	private boolean newClick = false;
 
-	private PopupDescriptions rt;
+	private PopupDescription popupDescription;
 	private float animationNextDestination;
 
 	private int yNextDestination;
@@ -367,22 +365,11 @@ public class World implements Disposable {
 		worldCamera.setCurrentZoom(Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) / 2);
 
 		//set up these after the camera has been setup
-		rt = new PopupDescriptions(this);
+		popupDescription = new PopupDescription(this);
 
 		popupManager = new PopupManager(mode);
 		popupManager.showIntro();
 	}
-
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	private Vector2 generateRandomTile() {
-//		int x, y;
-//		do {
-//			x = Utils.RANDOM.nextInt(worldGraph.getWidth());
-//			y = Utils.RANDOM.nextInt(worldGraph.getHeight());
-//		} while (!worldGraph.hasNode(new Point(x, y)));
-//		return new Vector2(x, y);
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	public ModelManager getModelManager() {
 		return modelManager;
@@ -400,25 +387,6 @@ public class World implements Disposable {
 		return worldGraph;
 	}
 
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	/**
-//	 * Used for debugging: creates a regular grid of buildings across the world
-//	 */
-//	private void createDefaultBuildings() {
-//		Vector3 dim = new Vector3(1, 1, 3);
-//		float space = 4f;
-//
-//		// Get building type
-//		List<BuildingType> types = Collections.unmodifiableList(Arrays.asList(BuildingType.values()));
-//		BuildingType buildingType = types.get(Utils.RANDOM.nextInt(types.size()));
-//
-//		for (int x = 0; x < tileSize.x / space; x++)
-//			for (int y = 0; y < tileSize.y / space; y++)
-//				addBuilding(new Vector2(x * space, y * space), new Vector3(dim.x, dim.y, Utils.randomRange(4f, 8f)), buildingType);
-//
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
-
 	/**
 	 * Spawns a new entity in the world, at the given tile position
 	 *
@@ -429,81 +397,6 @@ public class World implements Disposable {
 		return new Agent(this, tilePos);
 	}
 
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	/**
-//	 * {@link World#spawnAgentWithPath(Vector2, List)}
-//	 */
-//	public Agent spawnAgentWithPath(Vector2 tilePos, Vector2... path) {
-//		return spawnAgentWithPath(tilePos, Arrays.asList(path));
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
-
-	/**
-	 * Spawns an agent at the start point of the path, and sets its behaviour to follow the given path
-	 *
-	 * @param tilePos The tile position to spawn the entity at
-	 * @param path    A list of tiles that make up the path
-	 * @return The new agent
-	 */
-	public Agent spawnAgentWithPath(Vector2 tilePos, List<Vector2> path) {
-		Agent agent = spawnAgent(tilePos);
-		agent.setBehaviour(new BehaviourPathFollow(agent, path));
-		return agent;
-	}
-
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	/**
-//	 * Spawns an agent at the given tile position, who will path find to the given goal tiles in sequence, using
-//	 * the given algorithm
-//	 *
-//	 * @param tilePos   The spawn position, and the start tile for path finding
-//	 * @param algorithm The algorithm to use
-//	 * @param visualise If this search should be visualised. There can only be one visualised search at a time
-//	 * @param endTiles  A list of tile position, which will be travelled to in turn
-//	 * @return The new agent
-//	 */
-//	private Agent spawnAgentWithMultiplePathFinding(Vector2 tilePos, SearchAlgorithm algorithm, boolean visualise, Vector2... endTiles) {
-//		if (endTiles.length == 0)
-//			throw new IllegalArgumentException("List of goals given must not be empty");
-//
-//		Agent agent = spawnAgent(tilePos);
-//		BehaviourMultiPathFind behaviour = new BehaviourMultiPathFind(agent, tilePos, endTiles[0], algorithm, worldGraph, worldCamera, this);
-//
-//		for (int i = 1, endTilesLength = endTiles.length; i < endTilesLength; i++)
-//			behaviour.addNextGoal(endTiles[i]);
-//
-//		agent.setBehaviour(behaviour);
-//		if (visualise)
-//			worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
-//		return agent;
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
-
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	/**
-//	 * Spawns an agent at the given tile position, who will path find to the given goal tile with the given algorithm
-//	 *
-//	 * @param tilePos   The spawn position, and the start tile for path finding
-//	 * @param endNode   The node to path find to
-//	 * @param algorithm The algorithm to use
-//	 * @param visualise If this search should be visualised. There can only be one visualised search at a time
-//	 * @return The new agent
-//	 */
-//	private Agent spawnAgentWithPathFinding(Vector2 tilePos, Vector2 endNode, SearchAlgorithm algorithm, boolean visualise) {
-//		Agent agent = spawnAgent(tilePos);
-//		BehaviourPathFind behaviour = new BehaviourPathFind(agent, tilePos, endNode, algorithm, this);
-//		agent.setBehaviour(behaviour);
-//		if (visualise)
-//			worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
-//		return agent;
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
-
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	public List<Building> getBuildings() {
-//		return buildings;
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
 
 	/**
 	 * Adds a building to the world at the given coordinates
@@ -552,13 +445,6 @@ public class World implements Disposable {
 		return building;
 	}
 
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	public void addBuilding(Building building) {
-//		buildings.add(building);
-//		worldGraph.addBuilding(building);
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
-
 	/**
 	 * Updates and renders the world, by:
 	 * Clearing up all entities marked as dead (which can't be done while ticking the world)
@@ -596,7 +482,7 @@ public class World implements Disposable {
 
 		//pop-ups on nodes
 		if (mode == LEARNING || mode == TUTORIAL)
-			rt.render(currentNodeClickX, currentNodeClickY, worldGraph.getCurrentSearch());
+			popupDescription.render(currentNodeClickX, currentNodeClickY, worldGraph.getCurrentSearch());
 
 		//pop-ups to show current coordinate
 		coordinatePopup.render();
@@ -729,14 +615,6 @@ public class World implements Disposable {
 			}
 		}
 
-//		WorldGraph tempWG = new WorldGraph(this);
-//
-//		Building building = new Building(new Vector2(x,y), new Vector3(4,4,10), buildingCache);
-//		building.setType(BuildingType.HOUSE);
-//		tempWG.addBuilding(building);
-//
-//		tempWG.checkEveryEdge();
-
 		return true;
 	}
 
@@ -787,12 +665,6 @@ public class World implements Disposable {
 		return new Vector2(tileSize);
 	}
 
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	public Vector2 getPixelSize() {
-//		return new Vector2(pixelSize);
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
-
 	/**
 	 * Checks if the given tile position is within the worlds bounds
 	 *
@@ -816,17 +688,9 @@ public class World implements Disposable {
 		if (x == currentNodeClickX && y == currentNodeClickY) return;
 		this.currentNodeClickX = x;
 		this.currentNodeClickY = y;
-		newClick = true;
 	}
 
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	public boolean hasNewClick() {
-//		return newClick;
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
-
 	public Point getCurrentClick() {
-		newClick = false;
 		return new Point(currentNodeClickX, currentNodeClickY);
 	}
 
@@ -837,22 +701,12 @@ public class World implements Disposable {
 		worldGraph.setNextDestination(x, y);
 	}
 
-	/*public Boolean getCompareMode() {
-		return compareMode;
-	}*/
-
 	public ModeType getMode() {
 		return mode;
 	}
 
-// --Commented out by Inspection START (15/03/2016, 12:21):
-//	public InputHandler getInputHandler() {
-//		return inputHandler;
-//	}
-// --Commented out by Inspection STOP (15/03/2016, 12:21)
-
-	public PopupDescriptions getRenderTester() {
-		return rt;
+	public PopupDescription getPopupDescription() {
+		return popupDescription;
 	}
 
 	public void setCurrentMousePos(int screenX, int screenY) {
@@ -874,8 +728,6 @@ public class World implements Disposable {
 					for (int j = 0; j < listBuildingsPhysics.size; j++) {
 						Fixture current = listBuildingsPhysics.get(j);
 
-//						System.out.println(current.getDensity() + "|" + current.getFriction());
-
 						if (current.getDensity() == positionDeletion.x && current.getFriction() == positionDeletion.y) {
 							toBeDestroyed = current;
 						}
@@ -890,7 +742,6 @@ public class World implements Disposable {
 				return;
 			}
 		}
-		System.out.println("BAD");
 	}
 
 	public void setPseudoCode(boolean enabled) {

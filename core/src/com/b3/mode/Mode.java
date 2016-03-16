@@ -129,15 +129,15 @@ public abstract class Mode extends ScreenAdapter {
 				// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
 				if (currentSelection.x == sideBarNodes.getNewClick().getX() && currentSelection.y == sideBarNodes.getNewClick().getY()) {
 					//old node so change page number
-					if (world.getRenderTester().getPopupShowing())
+					if (world.getPopupDescription().getPopupShowing())
 						//if popup showing
-						world.getRenderTester().resetCounterAnimation();
-					world.getRenderTester().flipPageRight();
+						world.getPopupDescription().resetCounterAnimation();
+					world.getPopupDescription().flipPageRight();
 				} else {
 					//new node so reset page number
-					if (world.getRenderTester().getPopupShowing())
+					if (world.getPopupDescription().getPopupShowing())
 						//if popup showing
-						world.getRenderTester().resetPage();
+						world.getPopupDescription().resetPage();
 				}
 
 				currentSelection = new Point(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());

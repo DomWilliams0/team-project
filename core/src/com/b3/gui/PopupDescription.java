@@ -23,7 +23,7 @@ import static java.util.Collections.reverse;
  * A pop-up visual that explains what each node is
  * Including drawing the heuristic and explaining to the user where the costs come from.
  */
-public class PopupDescriptions {
+public class PopupDescription {
 
 	private ShapeRenderer shapeRenderer;
 
@@ -52,7 +52,7 @@ public class PopupDescriptions {
 	 *
 	 * @param world the world that this pop-up will be shown on top of
 	 */
-	public PopupDescriptions(World world) {
+	public PopupDescription(World world) {
 		counterAnimationFade = 0;
 		popupShowing = false;
 
