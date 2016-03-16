@@ -98,7 +98,7 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 							descriptionPopup.show();
 							firstLoadAlert1 = false;
 						}
-						worldGraph.setRed(node.getPoint().getX(), node.getPoint().getY(), 50);
+						worldGraph.getRenderer().highlightNodeRed(node.getPoint().getX(), node.getPoint().getY(), 50);
 					} else {
 						frontier.take();
 						currentSearch.setMostRecentlyExpanded(node);
@@ -150,7 +150,7 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 							descriptionPopup.show();
 							firstLoadAlert2 = false;
 						}
-						worldGraph.setRed(node.getPoint().getX(), node.getPoint().getY(), 50);
+						worldGraph.getRenderer().highlightNodeRed(node.getPoint().getX(), node.getPoint().getY(), 50);
 					} else {
 						currentSearch.addToFrontier(node);
 						currentSearch.addToCameFrom(node, currentSearch.getMostRecentlyExpanded());

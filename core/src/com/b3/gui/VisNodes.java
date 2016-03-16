@@ -4,7 +4,7 @@ import com.b3.gui.components.LabelComponent;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
-import com.b3.search.WorldGraph;
+import com.b3.search.WorldGraphRenderer;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.search.util.takeable.PriorityQueueT;
 import com.b3.search.util.takeable.StackT;
@@ -343,7 +343,7 @@ public class VisNodes extends Table {
 			public boolean mouseMoved(InputEvent event, float x, float y) {
 				//the mouse is over a node.
 				//highlight it in the world.
-				world.getWorldGraph().highlightOver(n.getPoint(), getColorFromGraph(n));
+				world.getWorldGraph().getRenderer().highlightOver(n.getPoint(), getColorFromGraph(n));
 				return super.mouseMoved(event, x, y);
 			}
 		});
@@ -463,14 +463,14 @@ public class VisNodes extends Table {
 		//check whether the ndde is in the tables
 		if (cellmap.get(n) != null) {
 			//it is, so check if the node is in frontier or visited.
-			if (cellmap.get(n).getParent().equals(vt)) c = WorldGraph.VISITED_COLOUR;
-			if (cellmap.get(n).getParent().equals(ft)) c = WorldGraph.FRONTIER_COLOUR;
+			if (cellmap.get(n).getParent().equals(vt)) c = WorldGraphRenderer.VISITED_COLOUR;
+			if (cellmap.get(n).getParent().equals(ft)) c = WorldGraphRenderer.FRONTIER_COLOUR;
 		}
 
 		//check whether the node is actually a new frontier or just expanded
 		//done after table-check so that these colours take precedence.
-		if (newFrontier != null && newFrontier.contains(n)) c = WorldGraph.LAST_FRONTIER_COLOUR;
-		if (justExpanded != null && justExpanded.equals(n)) c = WorldGraph.JUST_EXPANDED_COLOUR;
+		if (newFrontier != null && newFrontier.contains(n)) c = WorldGraphRenderer.LAST_FRONTIER_COLOUR;
+		if (justExpanded != null && justExpanded.equals(n)) c = WorldGraphRenderer.JUST_EXPANDED_COLOUR;
 		return c;
 	}
 

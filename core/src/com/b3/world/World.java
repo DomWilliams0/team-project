@@ -14,6 +14,7 @@ import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
+import com.b3.search.WorldGraphRenderer;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -671,6 +672,7 @@ public class World implements Disposable {
 	 */
 	private void renderGUI() {
 		float zoomScalar = getZoomScalar();
+		WorldGraphRenderer renderer = worldGraph.getRenderer();
 
 		int fovNumber = mode == COMPARE ? 67 : 40; // Todo - Nish, what is this?
 		if (worldCamera.getFOV() < fovNumber) {
@@ -683,10 +685,10 @@ public class World implements Disposable {
 		if (counterAnimation > 1) {
 			counterAnimation = (float) (counterAnimation - 0.25);
 			if (Config.getBoolean(ConfigKey.SHOW_GRID))
-				worldGraph.render(worldCamera, counterAnimation, zoomScalar);
+				renderer.render(worldCamera, counterAnimation, zoomScalar);
 		} else {
 			if (Config.getBoolean(ConfigKey.SHOW_GRID))
-				worldGraph.render(worldCamera, 1, zoomScalar);
+				renderer.render(worldCamera, 1, zoomScalar);
 		}
 
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

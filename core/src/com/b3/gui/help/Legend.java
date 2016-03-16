@@ -1,7 +1,7 @@
 package com.b3.gui.help;
 
 import com.b3.gui.components.LabelComponent;
-import com.b3.search.WorldGraph;
+import com.b3.search.WorldGraphRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -48,16 +48,16 @@ public class Legend extends Table {
 		row();
 
 		//Visited
-		addLegend("Visited set", WorldGraph.VISITED_COLOUR);
+		addLegend("Visited set", WorldGraphRenderer.VISITED_COLOUR);
 
 		//Just Expanded
-		addLegend("Just Expanded", WorldGraph.JUST_EXPANDED_COLOUR);
+		addLegend("Just Expanded", WorldGraphRenderer.JUST_EXPANDED_COLOUR);
 
 		//New frontier
-		addLegend("New Frontier Node", WorldGraph.LAST_FRONTIER_COLOUR);
+		addLegend("New Frontier Node", WorldGraphRenderer.LAST_FRONTIER_COLOUR);
 
 		//Frontier
-		addLegend("Frontier Nodes", WorldGraph.FRONTIER_COLOUR);
+		addLegend("Frontier Nodes", WorldGraphRenderer.FRONTIER_COLOUR);
 
 		pm.dispose();
 	}

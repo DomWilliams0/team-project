@@ -189,7 +189,7 @@ public class SearchTicker extends Observable {
 			return;
 
 		if (!isPaused())
-			worldGraph.setColFlicker();
+			worldGraph.getRenderer().resetPathFlicker();
 
 		if (timer > 2 * timeBetweenTicks)
 			//it has been a long time since last tick so reset it instead of decrementing it
@@ -215,7 +215,7 @@ public class SearchTicker extends Observable {
 	public void tick(boolean override) {
 		tickedOnce = true;
 
-		worldGraph.setColFlicker();
+		worldGraph.getRenderer().resetPathFlicker();
 
 		if (override)
 			//override current status
