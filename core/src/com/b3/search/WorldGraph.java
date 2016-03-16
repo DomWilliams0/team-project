@@ -12,16 +12,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.StringBuilder;
 
-import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
- * The internal graph at a low level.
+ * The rendered graph, that holds all running searches
+ *
+ * @author oxe410 dxw405 nbg481
  */
-public class WorldGraph implements Serializable {
+public class WorldGraph {
 
 	public static final Color FRONTIER_COLOUR = Color.LIME;
 	public static final Color LAST_FRONTIER_COLOUR = Color.CYAN;
@@ -38,9 +37,7 @@ public class WorldGraph implements Serializable {
 	private static final float BORDER_THICKNESS = 1.3f; // relative to node radius
 	private static final int NODE_EDGES = 4;
 
-	private Map<Point, Node> nodes;
-	private int width;
-	private int height;
+	private Graph graph;
 	private World world;
 	private ShapeRenderer shapeRenderer;
 
@@ -71,18 +68,14 @@ public class WorldGraph implements Serializable {
 	 * @param height maximum y value (IE Point goes to max (-, height)
 	 */
 	public WorldGraph(int width, int height) {
+		this.graph = new Graph(width, height);
 		this.currentHighlightPoint = null;
 		this.currentHighlightTimer = 0;
-		this.nodes = new LinkedHashMap<>();
-		this.width = width;
-		this.height = height;
 		this.world = null;
 		this.shapeRenderer = null; // must be initialised with initRenderer()
 		this.searchTickers = new LinkedHashMap<>();
 
 		colPath = SEARCH_EDGE_COLOUR;
-
-		generateEmptyGraph(width, height);
 	}
 
 
@@ -92,136 +85,12 @@ public class WorldGraph implements Serializable {
 	}
 
 	/**
-	 * @param fileName file name (must NOT end in 'txt' / 'ser'). eg "text1.txt" would NOT be valid
-	 */
-	public static WorldGraph loadFromFile(String fileName) {
-		try (FileInputStream fin = new FileInputStream(fileName + ".ser");
-			 ObjectInputStream ois = new ObjectInputStream(fin)) {
-			return (WorldGraph) ois.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
 	 * This allows tests to be run without initialising Gdx's graphics
 	 * It must be called before any calls to render
 	 */
 	public void initRenderer() {
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.translate(0.5f, 0.5f, 0f);
-	}
-
-	/**
-	 * Adds a new node to the table of nodes.
-	 *
-	 * @param p The node's tile position
-	 * @return The new node. If it exists then simply return it.
-	 */
-	public Node addNode(Point p) {
-		Node node;
-
-		if (!nodes.containsKey(p)) {
-			node = new Node(p);
-			nodes.put(p, node);
-		} else
-			node = nodes.get(p);
-
-		return node;
-	}
-
-	/**
-	 * Adds an edge between 2 nodes
-	 *
-	 * @param p1   The content of the first node (source)
-	 * @param p2   The content of the second node (destination)
-	 * @param cost The edge cost
-	 */
-	public void addEdge(Point p1, Point p2, float cost) {
-		// Add nodes (if not existing) and get nodes from adjacency list
-		Node node1 = addNode(p1);
-		Node node2 = addNode(p2);
-
-		// create edge
-		node1.addNeighbour(node2, cost);
-		node2.addNeighbour(node1, cost);
-
-		// Update adjacency list
-		nodes.put(p1, node1);
-		nodes.put(p2, node2);
-	}
-
-	/**
-	 * Generates a graph with x and y dimensions as
-	 * specified in parameters.
-	 * <p>
-	 * Adds every possible successor to the edges.
-	 *
-	 * @param xMax max x value (coordinate's x value will go up to xMax-1) IE if you pass 5, it will go from 0 to 4
-	 * @param yMax max y value (coordinate's y value will go up to yMax-1) IE if you pass 5, it will go from 0 to 4
-	 */
-	public void generateEmptyGraph(int xMax, int yMax) {
-		ArrayList<Point> points = new ArrayList<>();
-		for (int x = 0; x < xMax; x++) {
-			for (int y = 0; y < yMax; y++) {
-				points.add(new Point(x, y));
-			}
-		}
-		for (Point p1 : points) {
-			for (Point p2 : points) {
-				int xDiff = Math.abs(p1.getX() - p2.getX());
-				int yDiff = Math.abs(p1.getY() - p2.getY());
-				// Check only one of the coords is off by one.
-				if ((xDiff == 1 && yDiff == 0) || (xDiff == 0 && yDiff == 1)) {
-					addEdge(p1, p2, 1);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Tells whether the graph has a specific edge
-	 *
-	 * @param p1 The first Point
-	 * @param p2 The second Point
-	 * @return True if the graph has a p1 -- p2 edge, false otherwise
-	 */
-	protected boolean hasEdge(Point p1, Point p2) {
-		Node n1 = nodes.get(p1);
-		Node n2 = nodes.get(p2);
-
-		return !(n1 == null || n2 == null) && n1.hasNeighbour(n2);
-	}
-
-	/**
-	 * Check whether there is node c in the table of nodes
-	 *
-	 * @param p The content of the node to search
-	 * @return True is the node exists, false otherwise
-	 */
-	public boolean hasNode(Point p) {
-		return nodes.containsKey(p);
-	}
-
-	/**
-	 * Removes an edge (undirected or directed) between two nodes if it exists
-	 *
-	 * @param p1 The content of the first node
-	 * @param p2 The content of the second node
-	 * @return True if the edge existed and has been removed, false otherwise
-	 */
-	protected boolean removeEdge(Point p1, Point p2) {
-		if (!hasNode(p1) || !hasNode(p2))
-			return false;
-
-		Node node1 = nodes.get(p1);
-		Node node2 = nodes.get(p2);
-
-		boolean removed1 = node1.removeNeighbours(node2);
-		boolean removed2 = node2.removeNeighbours(node1);
-
-		return removed1 || removed2;
 	}
 
 	/**
@@ -235,62 +104,7 @@ public class WorldGraph implements Serializable {
 		int upToX = Math.round(dPos.x);
 		int upToY = Math.round(dPos.y);
 
-//		Point entryPoint = building.getEntryPoint() == null ? null : Utils.vector2ToPoint(building.getEntryPoint());
-
-		for (int x = baseX; x < baseX + upToX; x++) {
-			for (int y = baseY; y < baseY + upToY; y++) {
-//				removeNode(new Node(new Point(x,y)));
-//				Point point = new Point(x, y);
-//				 Entry point check.
-//				if (point.equals(entryPoint))
-//					continue;
-				Node node = nodes.get(new Point(x, y));
-				if (node != null)
-					removeNode(node);
-				//node.clearNeighbours();
-			}
-		}
-	}
-
-	/**
-	 * Removes the given node from the graph, snipping all connected edges
-	 *
-	 * @param node The node to remove
-	 */
-	public void removeNode(Node node) {
-		node.clearNeighbours();
-		nodes.remove(node.getPoint());
-	}
-
-	/**
-	 * Removes the node at the given point, if it exists
-	 *
-	 * @param point The position of the node to remove
-	 * @return True if the node existed and has been removed, otherwise false
-	 * @see {@link WorldGraph#removeNode(Node)}
-	 */
-	public boolean removeNode(Point point) {
-		Node node = getNode(point);
-		if (node == null)
-			return false;
-
-		removeNode(node);
-		return true;
-	}
-
-	/**
-	 * Saves the object as a serialisation, containing all information in this object.
-	 *
-	 * @param filename file name (must NOT end in 'txt' / 'ser'). eg "text1.txt" would NOT be valid
-	 */
-	public void saveToFile(String filename) {
-
-		try (FileOutputStream fout = new FileOutputStream(filename);
-			 ObjectOutputStream oos = new ObjectOutputStream(fout)) {
-			oos.writeObject(this);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		graph.snipEdges(baseX, upToX, baseY, upToY);
 	}
 
 	/**
@@ -301,8 +115,6 @@ public class WorldGraph implements Serializable {
 	 * @param zoomScalar How zoomed the {@code Camera} is.
 	 */
 	public void render(Camera camera, float counter, float zoomScalar) {
-		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
-
 		if (zoomScalar < 1) zoomScalar = 1;
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
@@ -339,7 +151,7 @@ public class WorldGraph implements Serializable {
 	}
 
 	/**
-	 * @param zoomScalar How zoomed the {@code Camera} is.
+	 * @param zoomScalar How zoomed in the {@code Camera} is.
 	 */
 	private void renderSearchTicker(float zoomScalar, SearchTicker searchTicker) {
 		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
@@ -396,13 +208,6 @@ public class WorldGraph implements Serializable {
 				if (searchTicker.isInspectingSearch() && currentNeighbour != null)
 					renderSingleSearchNode(CURRENT_NEIGHBOUR_COLOUR, currentNeighbour, zoomScalarInside);
 			}
-
-
-			// TODO - Should send a message to World! (for now here)
-			// TODO - Better failing system for SearchTicker.
-			// just completed this tick: send the path to an agent
-			if (searchTicker.isPathComplete())
-				spawnAgentWithPath(searchTicker);
 		}
 
 		// render start and end over the top of search
@@ -426,19 +231,6 @@ public class WorldGraph implements Serializable {
 		currentHighlightTimer = currentHighlightTimer - 5;
 		shapeRenderer.ellipse((float) (currentHighlightPoint.x - ((currentHighlightTimer / 75.0) / 2.0)), (float) ((float) currentHighlightPoint.y - ((currentHighlightTimer / 75.0) / 2.0)), (float) (currentHighlightTimer / 75.0), (float) (currentHighlightTimer / 75.0));
 		shapeRenderer.end();
-	}
-
-	private void spawnAgentWithPath(SearchTicker searchTicker) {
-		List<Node> path = searchTicker.getPath();
-		if (path.isEmpty())
-			return;
-
-		List<Vector2> points = path
-				.stream()
-				.map(pointNode -> new Vector2(pointNode.getPoint().x, pointNode.getPoint().y))
-				.collect(Collectors.toList());
-
-		world.spawnAgentWithPath(points.get(0), points);
 	}
 
 	private void renderSearchNodes(Color colour, Collection<Node> nodes, float zoomScalarInside) {
@@ -468,7 +260,8 @@ public class WorldGraph implements Serializable {
 	private void renderZoomedOutGraph(float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
-		for (Node node1 : nodes.values()) {
+		Collection<Node> nodes = graph.getNodes().values();
+		for (Node node1 : nodes) {
 			Map<Node, Float> neighbours = node1.getEdges();
 			for (Map.Entry<Node, Float> neighbour : neighbours.entrySet()) {
 				if (neighbour.getKey().hashCode() < node1.hashCode())
@@ -518,18 +311,19 @@ public class WorldGraph implements Serializable {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
 		Color nodeColour = zoomScalar > 2 ? Color.BLACK : NODE_COLOUR;
+		Set<Point> points = graph.getNodes().keySet();
 
 		// border
 		shapeRenderer.setColor(BORDER_COLOUR);
 		final float finalZoomScalar = zoomScalar;
-		nodes.keySet()
+		points
 				.stream()
 				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * finalZoomScalar, NODE_EDGES));
 		shapeRenderer.setColor(nodeColour);
 
 		// node body
 		final float finalZoomScalar1 = zoomScalar;
-		nodes.keySet()
+		points
 				.stream()
 				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES));
 
@@ -567,11 +361,12 @@ public class WorldGraph implements Serializable {
 
 	private void renderEdges() {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+		Collection<Node> nodes = graph.getNodes().values();
 
-		for (Node node1 : nodes.values()) {
-			Map<Node, Float> neighbours = node1.getEdges();
+		for (Node node : nodes) {
+			Map<Node, Float> neighbours = node.getEdges();
 			for (Map.Entry<Node, Float> neighbour : neighbours.entrySet()) {
-				if (neighbour.getKey().hashCode() < node1.hashCode())
+				if (neighbour.getKey().hashCode() < node.hashCode())
 					continue;
 
 				Float colouringRedValue = neighbour.getValue() - 1;
@@ -583,7 +378,7 @@ public class WorldGraph implements Serializable {
 					shapeRenderer.setColor(col);
 				}
 				shapeRenderer.line(
-						node1.getPoint().x, node1.getPoint().y,
+						node.getPoint().x, node.getPoint().y,
 						neighbour.getKey().getPoint().x, neighbour.getKey().getPoint().y
 				);
 			}
@@ -592,25 +387,11 @@ public class WorldGraph implements Serializable {
 		shapeRenderer.end();
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		for (Map.Entry<Point, Node> entry : nodes.entrySet()) {
-			sb.append(entry.getKey())
-					.append(" -- ")
-					.append(entry.getValue().getEdges().keySet())
-					.append("\n");
-		}
-
-		return sb.toString();
-	}
-
 	/**
 	 * @return all the nodes on the graph as a linkedHashSet / Map<Point, Node>
 	 */
 	public Map<Point, Node> getNodes() {
-		return nodes;
+		return graph.getNodes();
 	}
 
 	/**
@@ -618,31 +399,94 @@ public class WorldGraph implements Serializable {
 	 * @return The node associated with the given key
 	 */
 	public Node getNode(Point point) {
-		return nodes.get(point);
+		return graph.getNode(point);
 	}
 
 	/**
 	 * @return size of graph in x dimension. -1 if not loaded / cleared object without new generation.
 	 */
-	public int getMaxXValue() {
-		return width;
+	public int getWidth() {
+		return graph.getWidth();
 	}
 
 	/**
 	 * @return size of graph in y dimension. -1 if not loaded / cleared object without new generation.
 	 */
-	public int getMaxYValue() {
-		return height;
+	public int getHeight() {
+		return graph.getHeight();
 	}
 
 	/**
-	 * Clears object and deletes all data stored in this object.
-	 * Does not delete saved data.
+	 * Removes an edge (undirected or directed) between two nodes if it exists
+	 *
+	 * @param p1 The content of the first node
+	 * @param p2 The content of the second node
+	 * @return True if the edge existed and has been removed, false otherwise
 	 */
-	public void clearWorld() {
-		width = -1;
-		height = -1;
-		nodes.clear();
+	public boolean removeEdge(Point p1, Point p2) {
+		return graph.removeEdge(p1, p2);
+	}
+
+	/**
+	 * Tells whether the graph has a specific edge
+	 *
+	 * @param p1 The first Point
+	 * @param p2 The second Point
+	 * @return True if the graph has a p1 -- p2 edge, false otherwise
+	 */
+	public boolean hasEdge(Point p1, Point p2) {
+		return graph.hasEdge(p1, p2);
+	}
+
+	/**
+	 * Check whether there is node c in the table of nodes
+	 *
+	 * @param p The content of the node to search
+	 * @return True is the node exists, false otherwise
+	 */
+	public boolean hasNode(Point p) {
+		return graph.hasNode(p);
+	}
+
+	/**
+	 * Removes the given node from the graph, snipping all connected edges
+	 *
+	 * @param node The node to remove
+	 */
+	public void removeNode(Node node) {
+		graph.removeNode(node);
+	}
+
+	/**
+	 * Removes the node at the given point, if it exists
+	 *
+	 * @param point The position of the node to remove
+	 * @return True if the node existed and has been removed, otherwise false
+	 * @see {@link Graph#removeNode(Node)}
+	 */
+	public boolean removeNode(Point point) {
+		return graph.removeNode(point);
+	}
+
+	/**
+	 * Adds a new node to the graph
+	 *
+	 * @param p The node's tile position
+	 * @return The new node. If it exists then simply return it.
+	 */
+	public Node addNode(Point p) {
+		return graph.addNode(p);
+	}
+
+	/**
+	 * Adds an edge between 2 nodes
+	 *
+	 * @param p1   The content of the first node (source)
+	 * @param p2   The content of the second node (destination)
+	 * @param cost The edge cost
+	 */
+	public void addEdge(Point p1, Point p2, float cost) {
+		graph.addEdge(p1, p2, cost);
 	}
 
 	/**
@@ -668,9 +512,6 @@ public class WorldGraph implements Serializable {
 		return searchTickers.keySet();
 	}
 
-	public Collection<SearchTicker> getAllSearches() {
-		return searchTickers.values();
-	}
 
 	/**
 	 * @return The agent that will follow {@link #getCurrentSearch()}.
@@ -685,7 +526,6 @@ public class WorldGraph implements Serializable {
 
 	public void clearAllSearches() {
 		searchTickers.forEach((a, s) -> s.reset(true));
-
 		searchTickers.clear();
 	}
 
@@ -747,21 +587,21 @@ public class WorldGraph implements Serializable {
 		//add nodes back into
 		for (int i = (int) positionDeletion.x; i < positionDeletion.x + 4; i++) {
 			for (int j = (int) positionDeletion.y; j < positionDeletion.y + 4; j++) {
-				addNode(new Point(i, j));
+				graph.addNode(new Point(i, j));
 			}
 		}
 		//add edges back into
 		for (int i = (int) positionDeletion.x; i < positionDeletion.x + 4; i++) {
 			for (int j = (int) positionDeletion.y; j < positionDeletion.y + 4; j++) {
 				Point currentPoint = new Point(i, j);
-				if (nodes.containsKey(new Point(i + 1, j)))
-					addEdge(currentPoint, new Point(i + 1, j), 1);
-				if (nodes.containsKey(new Point(i - 1, j)))
-					addEdge(currentPoint, new Point(i - 1, j), 1);
-				if (nodes.containsKey(new Point(i, j + 1)))
-					addEdge(currentPoint, new Point(i, j + 1), 1);
-				if (nodes.containsKey(new Point(i, j - 1)))
-					addEdge(currentPoint, new Point(i, j - 1), 1);
+				if (graph.hasNode(new Point(i + 1, j)))
+					graph.addEdge(currentPoint, new Point(i + 1, j), 1);
+				if (graph.hasNode(new Point(i - 1, j)))
+					graph.addEdge(currentPoint, new Point(i - 1, j), 1);
+				if (graph.hasNode(new Point(i, j + 1)))
+					graph.addEdge(currentPoint, new Point(i, j + 1), 1);
+				if (graph.hasNode(new Point(i, j - 1)))
+					graph.addEdge(currentPoint, new Point(i, j - 1), 1);
 			}
 		}
 
@@ -777,14 +617,4 @@ public class WorldGraph implements Serializable {
 		setRedNode = new PointTimer(x, y, time);
 	}
 
-//	public boolean checkEveryEdge() {
-//		for (Map.Entry<Point, Node> entry: nodes.entrySet()) {
-//			Point point = entry.getKey();
-//			Node connected = entry.getValue();
-//
-//			if (connected.getEdges().size() == 0)
-//				return false;
-//		}
-//		return true;
-//	}
 }

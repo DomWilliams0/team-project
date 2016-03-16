@@ -468,7 +468,7 @@ public class SearchTicker extends Observable {
 				float finalEuclid = (float) Math.sqrt(changeInX2 + changeInY2);
 
 				startNode = new Point(1, 1);
-				end = new Point(worldGraph.getMaxXValue(), worldGraph.getMaxYValue());
+				end = new Point(worldGraph.getWidth(), worldGraph.getHeight());
 
 				changeInX = startNode.getX() - end.getX();
 				changeInY = startNode.getY() - end.getY();

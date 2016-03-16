@@ -376,8 +376,8 @@ public class World implements Disposable {
 //	private Vector2 generateRandomTile() {
 //		int x, y;
 //		do {
-//			x = Utils.RANDOM.nextInt(worldGraph.getMaxXValue());
-//			y = Utils.RANDOM.nextInt(worldGraph.getMaxYValue());
+//			x = Utils.RANDOM.nextInt(worldGraph.getWidth());
+//			y = Utils.RANDOM.nextInt(worldGraph.getHeight());
 //		} while (!worldGraph.hasNode(new Point(x, y)));
 //		return new Vector2(x, y);
 //	}

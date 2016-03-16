@@ -72,7 +72,7 @@ public class PracticeMode extends Mode {
 	@Override
 	public void initialise() {
 		WorldGraph worldGraph = world.getWorldGraph();
-		Agent agent = world.spawnAgent(new Vector2(worldGraph.getMaxXValue() / 2, worldGraph.getMaxYValue() / 2));
+		Agent agent = world.spawnAgent(new Vector2(worldGraph.getWidth() / 2, worldGraph.getHeight() / 2));
 		BehaviourMultiContinuousPathFind behaviour = new BehaviourMultiContinuousPathFind(
 				agent, SearchAlgorithm.DEPTH_FIRST, worldGraph, world);
 		agent.setBehaviour(behaviour);

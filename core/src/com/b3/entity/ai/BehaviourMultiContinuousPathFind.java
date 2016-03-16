@@ -46,8 +46,8 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	private Vector2 generateRandomTile() {
 		int x, y;
 		do {
-			x = Utils.RANDOM.nextInt(graph.getMaxXValue());
-			y = Utils.RANDOM.nextInt(graph.getMaxYValue());
+			x = Utils.RANDOM.nextInt(graph.getWidth());
+			y = Utils.RANDOM.nextInt(graph.getHeight());
 		} while (!graph.hasNode(new Point(x, y)));
 		return new Vector2(x, y);
 	}
@@ -56,8 +56,8 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	private Vector2 generateRandomTile(Node currentPos) {
 		int x, y;
 		do {
-			x = Utils.RANDOM.nextInt(graph.getMaxXValue());
-			y = Utils.RANDOM.nextInt(graph.getMaxYValue());
+			x = Utils.RANDOM.nextInt(graph.getWidth());
+			y = Utils.RANDOM.nextInt(graph.getHeight());
 		} while (!graph.hasNode(new Point(x, y)) && !new Point(x, y).equals(currentPos.getPoint()));
 		return new Vector2(x, y);
 	}
