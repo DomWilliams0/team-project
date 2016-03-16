@@ -11,10 +11,12 @@ import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 
 import static com.b3.mode.ModeType.*;
 
+/**
+ * @author nbg481
+ */
 public class WorldGUI {
 	private World world;
 
@@ -22,9 +24,9 @@ public class WorldGUI {
 	private CoordinatePopup coordinatePopup;
 	private ShapeRenderer shapeRenderer;
 
-	private float counterAnimation = -1;
-	private int counterScaler = 0;
-	private double pos = 1;
+	private float counterAnimation;
+	private int counterScaler;
+	private double pos;
 
 	//current node user has clicked on
 	private int currentNodeClickX;
@@ -46,6 +48,9 @@ public class WorldGUI {
 		animationNextDestination = 0;
 		xNextDestination = 0;
 		yNextDestination = 0;
+		counterAnimation = 10;
+		counterScaler = 0;
+		pos = 1;
 
 		shapeRenderer = new ShapeRenderer();
 		coordinatePopup = new CoordinatePopup();
@@ -95,14 +100,6 @@ public class WorldGUI {
 		float zoomScalar = getZoomScalar();
 		WorldGraphRenderer worldGraphRenderer = world.getWorldGraph().getRenderer();
 		WorldCamera worldCamera = world.getWorldCamera();
-
-		int fovNumber = MainGame.getCurrentMode() == COMPARE ? 67 : 40; // Todo - Nish, what is this?
-		if (worldCamera.getFOV() < fovNumber) {
-			Vector2 cameraPos = world.getTileSize().scl(0.5f);
-			worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);
-			worldCamera.lookAt(cameraPos.x + (fovNumber - worldCamera.getFOV()), cameraPos.y + (fovNumber - worldCamera.getFOV()), 0);
-			counterAnimation = 10;
-		}
 
 		if (counterAnimation > 1) {
 			counterAnimation = (float) (counterAnimation - 0.25);

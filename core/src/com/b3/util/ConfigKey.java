@@ -23,10 +23,6 @@ public enum ConfigKey {
 	CAMERA_MOVE_SPEED("camera-move-speed"),
 
 	/**
-	 * The default zoom distance to render the camera at.
-	 */
-	CAMERA_DISTANCE_DEFAULT("camera-distance-default"),
-	/**
 	 * The maximum distance the camera is able to zoom in.
 	 */
 	CAMERA_DISTANCE_MINIMUM("camera-distance-min"),

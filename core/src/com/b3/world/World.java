@@ -231,7 +231,6 @@ public class World implements Disposable {
 		boundaryDef.isSensor = true;
 		boundaryDef.filter.groupIndex = ENTITY_CULL_TAG;
 
-		// todo this side doesn't seem quite right...
 		shape.setAsBox(offset + tileSize.x / 2f, thickness, new Vector2(tileSize.x / 2f, -thickness / 2f - offset), 0f); // bottom
 		buildingBody.createFixture(boundaryDef);
 
@@ -301,7 +300,6 @@ public class World implements Disposable {
 		engine.addSystem(new AISystem(worldGraph));
 
 		worldCamera = camera;
-		worldCamera.setCurrentZoom(Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) / 2);
 	}
 
 	public TiledMap getMap() {

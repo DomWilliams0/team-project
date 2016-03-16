@@ -19,7 +19,7 @@ public class PracticeMode extends Mode {
 
 	public PracticeMode(MainGame game) {
 		// create world
-		super(ModeType.PRACTICE, game, "core/assets/world/world_smaller_test_tiym.tmx", 26f);
+		super(ModeType.PRACTICE, game, "core/assets/world/world_smaller_test_tiym.tmx", 45f, 20f, null, null);
 
 		world.getWorldGUI().setPseudoCode(false);
 		WorldGraph worldGraph = world.getWorldGraph();

@@ -39,7 +39,16 @@ public abstract class Mode extends ScreenAdapter {
 	protected Stage sideBarStage;
 	protected SideBarNodes sideBarNodes;
 
-	public Mode(ModeType modeType, MainGame mainGame, String worldPath, float startingCameraRotation) {
+	/**
+	 * @param modeType     This mode's type
+	 * @param mainGame     The game instance
+	 * @param worldPath    The path of the world to load
+	 * @param startingFOV  The FOV to start at
+	 * @param startingZoom The zoom level to start at
+	 * @param startingX    The X coordinate to start at. Null for world centre
+	 * @param startingY    The Y coordinate to start at. Null for world centre
+	 */
+	public Mode(ModeType modeType, MainGame mainGame, String worldPath, float startingFOV, float startingZoom, Float startingX, Float startingY) {
 
 		game = mainGame;
 		InputHandler inputHandler = game.getInputHandler();
@@ -50,13 +59,17 @@ public abstract class Mode extends ScreenAdapter {
 		world = new World(worldPath);
 
 		// position camera
-		Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));
-		camera = new WorldCamera(1, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.position.set(cameraPos.x, cameraPos.y, Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM));
+		Vector2 centre = world.getTileSize().scl(0.5f);
+		if (startingY == null)
+			startingY = centre.y;
+		if (startingX == null)
+			startingX = centre.x;
+
+		camera = new WorldCamera(startingFOV, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camera.position.set(startingX, startingY, startingZoom);
 		camera.near = 1f;
 		camera.far = 300f;
-		camera.lookAt(cameraPos.x, cameraPos.y, 0);
-		camera.rotate(startingCameraRotation, 1, 0, 0);
+		camera.lookAt(startingX, startingY, 0);
 		camera.update();
 
 		camera.setWorld(world);
@@ -122,7 +135,6 @@ public abstract class Mode extends ScreenAdapter {
 		
 		// world rendering
 		world.render();
-		
 
 		// sidebar rendering
 		sideBarStage.act(Utils.TRUE_DELTA_TIME);
@@ -134,7 +146,7 @@ public abstract class Mode extends ScreenAdapter {
 				worldGUI.setPseudoCode(true);
 			}
 			if (worldGUI.getCurrentClick() != null) sideBarNodes.highlightNode(worldGUI.getCurrentClick(), true);
-				PopupDescription popupDescription = worldGUI.getPopupDescription();
+			PopupDescription popupDescription = worldGUI.getPopupDescription();
 			if (sideBarNodes.hasNewClick()) {
 				worldGUI.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
 				//check if need to change page

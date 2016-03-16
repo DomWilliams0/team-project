@@ -26,7 +26,7 @@ public class LearningMode extends Mode {
 	 */
 	public LearningMode(MainGame game) {
 		super(ModeType.LEARNING, game,
-				"core/assets/world/world_smaller_test.tmx", 26);
+				"core/assets/world/world_smaller_test.tmx", 45f, 30f, null, null);
 
 		SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
 		currentSearch.pause(1);

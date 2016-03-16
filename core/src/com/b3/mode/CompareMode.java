@@ -30,7 +30,7 @@ public class CompareMode extends Mode {
 	private Sprite bfsTexture;
 
 	public CompareMode(MainGame game) {
-		super(ModeType.COMPARE, game, "core/assets/world/world-compare.tmx", 29.7f);
+		super(ModeType.COMPARE, game, "core/assets/world/world-compare.tmx", 67, 25.f, null, 0f);
 		agents = new ArrayList<>(3);
 		searchLabels = new SpriteBatch(3);
 
