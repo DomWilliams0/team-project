@@ -1,5 +1,6 @@
 package com.b3.gui.sidebars;
 
+import com.b3.MainGame;
 import com.b3.gui.sidebars.tabs.NodesTab;
 import com.b3.gui.sidebars.tabs.PseudocodeTab;
 import com.b3.gui.sidebars.tabs.Tab;
@@ -28,6 +29,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 	 * TODO - Should use non-static {@link #isOpen()}.
 	 */
 	public static boolean s_isOpen;
+	private ModeType mode;
 
 	public SideBarNodes(Stage stage, World world) {
 		this(stage, world, 460);
@@ -35,6 +37,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 
 	public SideBarNodes(Stage stage, World world, float preferredWidth) {
 		super(stage, world, false, "window_02", preferredWidth, new LinkedHashMap<>());
+		mode = MainGame.getCurrentMode();
 		initTabs();
 		initComponents();
 	}
@@ -57,7 +60,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 			tabs.put("Nodes", new NodesTab(skin, font, preferredWidth, data));
 
 			// Add pseudocode tab
-			if ((world.getMode() == ModeType.LEARNING) || (world.getMode() == ModeType.TUTORIAL)) {
+			if ((mode == ModeType.LEARNING) || (mode == ModeType.TUTORIAL)) {
 				data = new HashMap<String, Object>() {{
 					put("world", world);
 				}};
@@ -124,7 +127,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 	public void setStepthrough(boolean stepthrough) {
 		NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
 		nodesTab.getUI().setStepthrough(stepthrough);
-		nodesTab.getNextBtn().getComponent().setVisible(stepthrough && (world.getMode() != ModeType.PRACTICE));
+		nodesTab.getNextBtn().getComponent().setVisible(stepthrough && (mode != ModeType.PRACTICE));
 	}
 
 	public boolean hasNewClick() {
@@ -141,7 +144,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 		ticker.setInspectSearch(false);
 		//ticker.resume(1);
 
-		if (world.getMode() == ModeType.LEARNING) {
+		if (mode == ModeType.LEARNING) {
 			PseudocodeTab pseudocodeTab = (PseudocodeTab) tabs.get("Pseudocode");
 
 			pseudocodeTab.getManualAutoBtn().getComponent().setVisible(false);

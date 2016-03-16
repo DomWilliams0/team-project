@@ -6,7 +6,6 @@ import com.b3.entity.component.PhysicsComponent;
 import com.b3.entity.system.AISystem;
 import com.b3.entity.system.PhysicsSystem;
 import com.b3.entity.system.RenderSystem;
-import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -72,16 +71,11 @@ public class World implements Disposable {
 
 	private WorldGUI worldGUI;
 
-	// todo this should be in MainGame instead
-	private ModeType mode;
-
 	public World() {
 		// todo srsly unsafe
 	}
 
-	public World(String fileName, ModeType mode) {
-		this.mode = mode;
-
+	public World(String fileName) {
 		map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
 				(int) map.getProperties().get("width"),
@@ -527,10 +521,6 @@ public class World implements Disposable {
 
 	public WorldCamera getWorldCamera() {
 		return worldCamera;
-	}
-
-	public ModeType getMode() {
-		return mode;
 	}
 
 	//TODO make it so don't have to click in bottom left corner

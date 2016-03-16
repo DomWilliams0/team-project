@@ -47,7 +47,7 @@ public abstract class Mode extends ScreenAdapter {
 		this.modeType = modeType;
 
 		// load world
-		world = new World(worldPath, modeType);
+		world = new World(worldPath);
 
 		// position camera
 		Vector2 cameraPos = new Vector2(world.getTileSize().scl(0.5f));

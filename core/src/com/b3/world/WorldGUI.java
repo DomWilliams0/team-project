@@ -1,5 +1,6 @@
 package com.b3.world;
 
+import com.b3.MainGame;
 import com.b3.gui.CoordinatePopup;
 import com.b3.gui.PopupDescription;
 import com.b3.gui.popup.PopupManager;
@@ -63,7 +64,7 @@ public class WorldGUI {
 		dfsTexture = loadTexture("DFSTEXT.png");
 
 		popupDescription = new PopupDescription(world);
-		popupManager = new PopupManager(world.getMode());
+		popupManager = new PopupManager(MainGame.getCurrentMode());
 	}
 	
 	public void showIntroPopup() {
@@ -90,7 +91,7 @@ public class WorldGUI {
 	 * Rendering physics/collisions (if configured)
 	 */
 	public void render() {
-		ModeType mode = world.getMode();
+		ModeType mode = MainGame.getCurrentMode();
 
 		renderGUI();
 
@@ -129,7 +130,7 @@ public class WorldGUI {
 		WorldGraphRenderer worldGraphRenderer = world.getWorldGraph().getRenderer();
 		WorldCamera worldCamera = world.getWorldCamera();
 
-		int fovNumber = world.getMode() == COMPARE ? 67 : 40; // Todo - Nish, what is this?
+		int fovNumber = MainGame.getCurrentMode() == COMPARE ? 67 : 40; // Todo - Nish, what is this?
 		if (worldCamera.getFOV() < fovNumber) {
 			Vector2 cameraPos = world.getTileSize().scl(0.5f);
 			worldCamera.setFieldOfViewY(worldCamera.getFOV() + 1);

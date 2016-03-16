@@ -1,5 +1,6 @@
 package com.b3.gui.sidebars.tabs;
 
+import com.b3.MainGame;
 import com.b3.gui.VisNodes;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.mode.ModeType;
@@ -46,7 +47,7 @@ public class NodesTab implements Tab {
 			}
 		});
 
-		nextBtn.getComponent().setVisible(world.getMode() != ModeType.PRACTICE);
+		nextBtn.getComponent().setVisible(MainGame.getCurrentMode() != ModeType.PRACTICE);
 
 		//put the nodes ui onto this
 		nodesTab.add(ui).maxWidth(preferredWidth).top().pad(20);

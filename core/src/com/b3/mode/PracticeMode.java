@@ -55,7 +55,7 @@ public class PracticeMode extends Mode {
 		super.initSidebar();
 		popupStage = new Stage(new ScreenViewport());
 
-		HelpBox helpBox = new HelpBox(sideBarStage, world.getMode());
+		HelpBox helpBox = new HelpBox(sideBarStage);
 		sideBarStage.addActor(helpBox);
 	}
 

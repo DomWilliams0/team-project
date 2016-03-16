@@ -1,8 +1,8 @@
 package com.b3.gui.help;
 
+import com.b3.MainGame;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.LabelComponent;
-import com.b3.mode.ModeType;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -29,7 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class HelpBox extends Table {
 
 	private Stage stage;
-	private ModeType mode;
 	private ButtonComponent triggerBtn;
 	private boolean isOpen;
 	private float preferredHeight;
@@ -49,11 +48,10 @@ public class HelpBox extends Table {
 			"such as simulation speed and search speed.\n" +
 			"You can also play/pause the search here.";
 
-	public HelpBox(Stage stage, ModeType mode) {
+	public HelpBox(Stage stage) {
 		this.stage = stage;
-		this.mode = mode;
 		this.isOpen = false;
-		switch (mode) {
+		switch (MainGame.getCurrentMode()) {
 			case LEARNING:
 				preferredHeight = 390;
 				break;
@@ -97,7 +95,7 @@ public class HelpBox extends Table {
 		// === HELP TEXT & LEGEND ===
 		// ==========================
 
-		switch (mode) {
+		switch (MainGame.getCurrentMode()) {
 			case LEARNING:
 				setupLM();
 				break;

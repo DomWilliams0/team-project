@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
  */
 public class MainGame extends Game {
 
+	private static ModeType currentMode;
+	
 	private InputHandler inputHandler;
 	private SoundController sc;
 
@@ -66,6 +68,7 @@ public class MainGame extends Game {
 	 */
 	public void goToMainMenu() {
 		super.setScreen(new MainMenuScreen(this));
+		currentMode = ModeType.MENU;
 	}
 
 	/**
@@ -74,8 +77,14 @@ public class MainGame extends Game {
 	 * @param modeType The mode type to switch to
 	 */
 	public void goToMode(ModeType modeType) {
+		ModeType modeBackup = currentMode;
+		currentMode = modeType;
+		
 		Mode m;
 		switch (modeType) {
+			case MENU:
+				goToMainMenu();
+				return;
 			case LEARNING:
 				m = new LearningMode(this);
 				break;
@@ -89,10 +98,15 @@ public class MainGame extends Game {
 				m = new TutorialMode(this);
 				break;
 			default:
+				currentMode = modeBackup;
 				throw new IllegalArgumentException("Cannot switch to unknown mode '" + modeType + "'");
 		}
 
 		m.finishInitialisation();
 		super.setScreen(m);
+	}
+
+	public static ModeType getCurrentMode() {
+		return currentMode;
 	}
 }

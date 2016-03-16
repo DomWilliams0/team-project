@@ -33,7 +33,7 @@ public class CompareMode extends Mode {
 		sideBar.setController(game);
 		sideBarStage.addActor(sideBar);
 
-		HelpBox helpBox = new HelpBox(sideBarStage, world.getMode());
+		HelpBox helpBox = new HelpBox(sideBarStage);
 		sideBarStage.addActor(helpBox);
 	}
 

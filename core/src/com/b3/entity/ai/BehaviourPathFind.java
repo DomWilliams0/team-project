@@ -1,5 +1,6 @@
 package com.b3.entity.ai;
 
+import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.input.SoundController;
 import com.b3.search.Node;
@@ -32,7 +33,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, World world) {
 		super(agent, null);
 		WorldGraph worldGraph = world.getWorldGraph();
-		ticker = new SearchTicker(worldGraph, world.getMode());
+		ticker = new SearchTicker(worldGraph, MainGame.getCurrentMode());
 		wasArrivedLastFrame = false;
 
 		startNode = getNodeFromTile(worldGraph, startTile);
