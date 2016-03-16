@@ -1,6 +1,7 @@
 package com.b3.mode;
 
 import com.b3.MainGame;
+import com.b3.gui.PopupDescription;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;
@@ -11,6 +12,7 @@ import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
 import com.b3.world.World;
 import com.b3.world.WorldCamera;
+import com.b3.world.WorldGUI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -71,6 +73,8 @@ public abstract class Mode extends ScreenAdapter {
 		registerFurtherInputProcessors(inputHandler);
 
 		this.currentSelection = new Point(0, 0);
+		
+		world.getWorldGUI().showIntroPopup();
 	}
 
 	protected abstract void registerFurtherInputProcessors(InputHandler inputHandler);
@@ -118,26 +122,28 @@ public abstract class Mode extends ScreenAdapter {
 		sideBarStage.act(Utils.TRUE_DELTA_TIME);
 		if (sideBarNodes != null) {
 			sideBarNodes.render();
-			if (!world.getPseudoCode()) {
+			WorldGUI worldGUI = world.getWorldGUI();
+			if (!worldGUI.getPseudoCode()) {
 				sideBarNodes.resetPseudoCode();
-				world.setPseudoCode(true);
+				worldGUI.setPseudoCode(true);
 			}
-			if (world.getCurrentClick() != null) sideBarNodes.highlightNode(world.getCurrentClick(), true);
+			if (worldGUI.getCurrentClick() != null) sideBarNodes.highlightNode(worldGUI.getCurrentClick(), true);
+				PopupDescription popupDescription = worldGUI.getPopupDescription();
 			if (sideBarNodes.hasNewClick()) {
-				world.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
+				worldGUI.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
 				//check if need to change page
 				// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
 				if (currentSelection.x == sideBarNodes.getNewClick().getX() && currentSelection.y == sideBarNodes.getNewClick().getY()) {
 					//old node so change page number
-					if (world.getPopupDescription().getPopupShowing())
+					if (popupDescription.getPopupShowing())
 						//if popup showing
-						world.getPopupDescription().resetCounterAnimation();
-					world.getPopupDescription().flipPageRight();
+						popupDescription.resetCounterAnimation();
+					popupDescription.flipPageRight();
 				} else {
 					//new node so reset page number
-					if (world.getPopupDescription().getPopupShowing())
+					if (popupDescription.getPopupShowing())
 						//if popup showing
-						world.getPopupDescription().resetPage();
+						popupDescription.resetPage();
 				}
 
 				currentSelection = new Point(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
@@ -162,7 +168,7 @@ public abstract class Mode extends ScreenAdapter {
 		if (sideBarNodes != null)
 			sideBarNodes.resize(width, height);
 
-		world.getCoordinatePopup().resize();
+		world.getWorldGUI().getCoordinatePopup().resize();
 	}
 
 	@Override

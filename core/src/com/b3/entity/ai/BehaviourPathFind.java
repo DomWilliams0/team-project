@@ -79,7 +79,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			} else {
 				if (getPath().size() == 0) {
 					//Path not completed properly, so show error and start again
-					world.getPopupManager().showBehaviourError();
+					world.getWorldGUI().getPopupManager().showBehaviourError();
 					shouldPlayFail = -1;
 					SearchAlgorithm algo = world.getWorldGraph().getLearningModeNext();
 					ticker.reset(algo, startNode, endNode);
@@ -92,7 +92,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			ticker.tick();
 
 		if (shouldPlayFail == 1 || shouldPlayFail == -1) {
-			world.setPseudoCode(false);
+			world.getWorldGUI().setPseudoCode(false);
 		}
 		if (shouldPlayFail == 1) {
 			SoundController.playSounds(1);

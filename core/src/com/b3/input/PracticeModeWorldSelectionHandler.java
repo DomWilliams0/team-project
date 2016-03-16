@@ -1,5 +1,6 @@
 package com.b3.input;
 
+import com.b3.gui.PopupDescription;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.gui.popup.Popup;
 import com.b3.gui.sidebars.SideBarNodes;
@@ -63,17 +64,18 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 		WorldGraph worldGraph = world.getWorldGraph();
 		Node node = worldGraph.getNode(new Point((int) tempRayCast.x, (int) tempRayCast.y));
 
+		PopupDescription popupDescription = world.getWorldGUI().getPopupDescription();
 		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
 			//old node so change page number
-			if (world.getPopupDescription().getPopupShowing())
+			if (popupDescription.getPopupShowing())
 				//if popup showing
-				world.getPopupDescription().resetCounterAnimation();
-			world.getPopupDescription().flipPageRight();
+				popupDescription.resetCounterAnimation();
+			popupDescription.flipPageRight();
 		} else {
 			//new node so reset page number
-			if (world.getPopupDescription().getPopupShowing())
+			if (popupDescription.getPopupShowing())
 				//if popup showing
-				world.getPopupDescription().resetPage();
+				popupDescription.resetPage();
 		}
 
 		currentSelection = new Point((int) tempRayCast.x, (int) tempRayCast.y);

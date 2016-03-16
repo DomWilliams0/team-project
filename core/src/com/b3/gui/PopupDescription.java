@@ -27,7 +27,6 @@ public class PopupDescription {
 
 	private ShapeRenderer shapeRenderer;
 
-	private WorldCamera worldCamera;
 	private World world;
 	private SpriteBatch spriteBatch;
 
@@ -57,7 +56,6 @@ public class PopupDescription {
 		popupShowing = false;
 
 		this.world = world;
-		this.worldCamera = world.getWorldCamera();
 
 		spriteBatch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
@@ -180,6 +178,8 @@ public class PopupDescription {
 	 * @param currentNodeClickY the y position (on the nodes graph / worldGraph) that the user last clicked one
 	 */
 	public void render(int currentNodeClickX, int currentNodeClickY, SearchTicker currentSearch) {
+		WorldCamera worldCamera = world.getWorldCamera();
+		
 		counterAnimationFade++;
 		popupShowing = false;
 		float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
@@ -193,7 +193,7 @@ public class PopupDescription {
 		if (stickyCurrentNode && currentSearch.isPaused()) {
 			currentNodeClickX = mostRecentExpand.getPoint().getX();
 			currentNodeClickY = mostRecentExpand.getPoint().getY();
-			world.setCurrentClick(currentNodeClickX, currentNodeClickY);
+			world.getWorldGUI().setCurrentClick(currentNodeClickX, currentNodeClickY);
 		}
 
 		//----ALL RENDERS GO HERE---
@@ -447,7 +447,7 @@ public class PopupDescription {
 		float x2 = (float) (searchTicker.getEnd().getPoint().getX() + 0.5);
 		float y2 = (float) (searchTicker.getEnd().getPoint().getY() + 0.5);
 
-		shapeRenderer.setProjectionMatrix(worldCamera.combined);
+		shapeRenderer.setProjectionMatrix(world.getWorldCamera().combined);
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 		shapeRenderer.setColor(Color.SKY);
 
@@ -470,7 +470,7 @@ public class PopupDescription {
 	 */
 	private void drawDottedLine(float dotDist, float x1, float y1, float x2, float y2) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-		shapeRenderer.setProjectionMatrix(worldCamera.combined);
+		shapeRenderer.setProjectionMatrix(world.getWorldCamera().combined);
 
 		Vector2 vec2 = new Vector2(x2, y2).sub(new Vector2(x1, y1));
 		float length = vec2.len();

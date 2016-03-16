@@ -21,7 +21,7 @@ public class PracticeMode extends Mode {
 		// create world
 		super(ModeType.PRACTICE, game, "core/assets/world/world_smaller_test_tiym.tmx", 26f);
 
-		world.setPseudoCode(false);
+		world.getWorldGUI().setPseudoCode(false);
 		WorldGraph worldGraph = world.getWorldGraph();
 		worldGraph.setLearningModeNext(SearchAlgorithm.DEPTH_FIRST);
 		worldGraph.getCurrentSearch().pause(1);

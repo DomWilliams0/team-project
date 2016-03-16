@@ -130,7 +130,7 @@ public class TutorialPopups {
 				}
 				break;
 			case 7:
-				if (world.getCurrentClick().equals(world.getWorldGraph().getCurrentSearch().getMostRecentlyExpanded().getPoint())) {
+				if (world.getWorldGUI().getCurrentClick().equals(world.getWorldGraph().getCurrentSearch().getMostRecentlyExpanded().getPoint())) {
 					stepCounter++;
 				}
 				break;
@@ -140,7 +140,7 @@ public class TutorialPopups {
 				}
 				break;
 			case 9:
-				if (world.getCurrentClick().equals(world.getWorldGraph().getCurrentSearch().getEnd().getPoint()) & currentPage == 2) {
+				if (world.getWorldGUI().getCurrentClick().equals(world.getWorldGraph().getCurrentSearch().getEnd().getPoint()) & currentPage == 2) {
 					stepCounter++;
 				}
 				break;

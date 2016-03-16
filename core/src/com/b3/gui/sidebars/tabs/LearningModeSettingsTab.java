@@ -85,7 +85,7 @@ public class LearningModeSettingsTab implements Tab {
 					Config.set(ConfigKey.ADD_BUILDING_MODE, !currentBoolean);
 					System.out.println("Add building mode is " + !currentBoolean);
 				} else {
-					world.getPopupManager().showBuildingError();
+					world.getWorldGUI().getPopupManager().showBuildingError();
 					SoundController.playSounds(2);
 					System.err.println("Search has begun cannot add");
 				}
@@ -110,7 +110,7 @@ public class LearningModeSettingsTab implements Tab {
 					Config.set(ConfigKey.REMOVE_BUILDING_MODE, !currentBoolean);
 					System.out.println("Remove building mode is " + !currentBoolean);
 				} else {
-					world.getPopupManager().showBuildingError();
+					world.getWorldGUI().getPopupManager().showBuildingError();
 					SoundController.playSounds(2);
 					System.err.println("Search has begun cannot add");
 				}

@@ -113,7 +113,7 @@ public class PseudocodeTab implements Tab {
 					nextBtn.getComponent().setVisible(false);
 					manualAutoBtn.setData(true);
 					manualAutoBtn.setText("Manual inspect");
-					world.setPseudoCode(false);
+					world.getWorldGUI().setPseudoCode(false);
 					ticker.clearPseudocodeInfo();
 				}
 			}

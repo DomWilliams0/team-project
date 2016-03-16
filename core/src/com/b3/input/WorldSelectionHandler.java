@@ -3,7 +3,9 @@ package com.b3.input;
 import com.b3.entity.ai.Behaviour;
 import com.b3.entity.ai.BehaviourMultiPathFind;
 import com.b3.gui.CoordinatePopup;
+import com.b3.gui.PopupDescription;
 import com.b3.gui.popup.Popup;
+import com.b3.gui.popup.PopupManager;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.WorldGraph;
@@ -31,11 +33,12 @@ public class WorldSelectionHandler extends InputAdapter {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		//TODO selecting an entity
+		PopupManager popupManager = world.getWorldGUI().getPopupManager();
 
 		//Close error pop-ups if need
-		for (int i = 0; i < world.getPopupManager().length(); i++) {
-			Popup popup = world.getPopupManager().getPopup(i);
+		int popupCount = world.getWorldGUI().getPopupManager().length();
+		for (int i = 0; i < popupCount; i++) {
+			Popup popup = popupManager.getPopup(i);
 			if (popup.justOpen) {
 				popup.shouldClose = true;
 				return false;
@@ -76,17 +79,18 @@ public class WorldSelectionHandler extends InputAdapter {
 		}
 
 		// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
+		PopupDescription popupDescription = world.getWorldGUI().getPopupDescription();
 		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
 			//old node so change page number
-			if (world.getPopupDescription().getPopupShowing())
+			if (popupDescription.getPopupShowing())
 				//if popup showing
-				world.getPopupDescription().resetCounterAnimation();
-			world.getPopupDescription().flipPageRight();
+				popupDescription.resetCounterAnimation();
+			popupDescription.flipPageRight();
 		} else {
 			//new node so reset page number
-			if (world.getPopupDescription().getPopupShowing())
+			if (popupDescription.getPopupShowing())
 				//if popup showing
-				world.getPopupDescription().resetPage();
+				popupDescription.resetPage();
 		}
 
 		currentSelection = new Point((int) tempRayCast.x, (int) tempRayCast.y);
@@ -97,9 +101,9 @@ public class WorldSelectionHandler extends InputAdapter {
 		System.out.println("You clicked node: " + node.getPoint());
 
 		if (button == Input.Buttons.LEFT)
-			world.setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
+			world.getWorldGUI().setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
 		else {
-			world.setNextDestination(node.getPoint().getX(), node.getPoint().getY());
+			world.getWorldGUI().setNextDestination(node.getPoint().getX(), node.getPoint().getY());
 		}
 
 		// no search
@@ -126,7 +130,7 @@ public class WorldSelectionHandler extends InputAdapter {
 		Ray ray = worldCamera.getPickRay(screenX, screenY);
 		ray.getEndPoint(tempRayCast, worldCamera.position.z);
 
-		world.setCurrentMousePos((int) tempRayCast.x, (int) tempRayCast.y);
+		world.getWorldGUI().setCurrentMousePos((int) tempRayCast.x, (int) tempRayCast.y);
 
 		WorldGraph worldGraph = world.getWorldGraph();
 		Node node = worldGraph.getNode(new Point((int) tempRayCast.x, (int) tempRayCast.y));

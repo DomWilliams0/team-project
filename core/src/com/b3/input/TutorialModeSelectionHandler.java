@@ -1,5 +1,6 @@
 package com.b3.input;
 
+import com.b3.gui.PopupDescription;
 import com.b3.mode.TutorialMode;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -59,28 +60,29 @@ public class TutorialModeSelectionHandler extends InputAdapter {
 			return true;
 
 		// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
+		PopupDescription popupDescription = world.getWorldGUI().getPopupDescription();
 		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
 			//old node so change page number
-			if (world.getPopupDescription().getPopupShowing())
+			if (popupDescription.getPopupShowing())
 				//if popup showing
-				world.getPopupDescription().resetCounterAnimation();
-			world.getPopupDescription().flipPageRight();
+				popupDescription.resetCounterAnimation();
+			popupDescription.flipPageRight();
 		} else {
 			//new node so reset page number
-			if (world.getPopupDescription().getPopupShowing())
+			if (popupDescription.getPopupShowing())
 				//if popup showing
-				world.getPopupDescription().resetPage();
+				popupDescription.resetPage();
 		}
 
-		tutorialMode.setCurrentPage(world.getPopupDescription().getPageNo());
+		tutorialMode.setCurrentPage(popupDescription.getPageNo());
 
 		currentSelection = new Point((int) tempRayCast.x, (int) tempRayCast.y);
 
 		if (node != null)
 			if (button == Input.Buttons.LEFT)
-				world.setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
+				world.getWorldGUI().setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
 			else {
-				world.setNextDestination(node.getPoint().getX(), node.getPoint().getY());
+				world.getWorldGUI().setNextDestination(node.getPoint().getX(), node.getPoint().getY());
 			}
 		return true;
 	}
