@@ -85,6 +85,9 @@ public abstract class Mode extends ScreenAdapter {
 
 	public void finishInitialisation() {
 	}
+	
+	protected void renderBeforeWorld() {
+	}
 
 	protected void initSidebar() {
 		sideBarStage = new Stage(new ScreenViewport());
@@ -115,8 +118,11 @@ public abstract class Mode extends ScreenAdapter {
 		camera.move(keyboardController);
 		camera.update();
 
+		renderBeforeWorld();
+		
 		// world rendering
 		world.render();
+		
 
 		// sidebar rendering
 		sideBarStage.act(Utils.TRUE_DELTA_TIME);

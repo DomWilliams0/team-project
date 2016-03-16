@@ -10,9 +10,6 @@ import com.b3.search.WorldGraphRenderer;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -43,12 +40,6 @@ public class WorldGUI {
 
 	private boolean pseudoCodeEnabled;
 
-	// todo these don't even need to be here
-	private Sprite aStarTexture;
-	private Sprite dfsTexture;
-	private Sprite bfsTexture;
-
-
 	public WorldGUI(World world) {
 		this.world = world;
 
@@ -59,22 +50,12 @@ public class WorldGUI {
 		shapeRenderer = new ShapeRenderer();
 		coordinatePopup = new CoordinatePopup();
 
-		aStarTexture = loadTexture("ASTARTEXT.png");
-		bfsTexture = loadTexture("BFSTEXT.png");
-		dfsTexture = loadTexture("DFSTEXT.png");
-
 		popupDescription = new PopupDescription(world);
 		popupManager = new PopupManager(MainGame.getCurrentMode());
 	}
 	
 	public void showIntroPopup() {
 		popupManager.showIntro();
-	}
-
-	private Sprite loadTexture(String fileName) {
-		Texture tempTexture = new Texture("core/assets/gui/" + fileName);
-		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		return new Sprite(tempTexture);
 	}
 
 	public PopupManager getPopupManager() {
@@ -104,23 +85,8 @@ public class WorldGUI {
 
 		//render big pop-ups
 		popupManager.render();
-
-		//if compare mode load text to show what it is all about
-		// todo nononono
-		if (mode == COMPARE) renderTextBelowWorld();
 	}
 
-	private void renderTextBelowWorld() {
-		SpriteBatch spriteBatch = new SpriteBatch();
-		spriteBatch.setProjectionMatrix(world.getWorldCamera().combined);
-		spriteBatch.begin();
-
-		spriteBatch.draw(aStarTexture, -3, (float) -7.5, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-		spriteBatch.draw(dfsTexture, 15, (float) -7.5, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-		spriteBatch.draw(bfsTexture, 33, (float) -7.5, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-
-		spriteBatch.end();
-	}
 
 	/**
 	 * Renders graph, building placement overlay and animations

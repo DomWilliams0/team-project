@@ -11,6 +11,9 @@ import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -18,13 +21,30 @@ import java.util.List;
 
 public class CompareMode extends Mode {
 
+	private SpriteBatch searchLabels;
 	private SideBarCompareMode sideBar;
 	private List<Agent> agents;
+
+	private Sprite aStarTexture;
+	private Sprite dfsTexture;
+	private Sprite bfsTexture;
 
 	public CompareMode(MainGame game) {
 		super(ModeType.COMPARE, game, "core/assets/world/world-compare.tmx", 29.7f);
 		agents = new ArrayList<>(3);
+		searchLabels = new SpriteBatch(3);
+
+		aStarTexture = loadTexture("ASTARTEXT.png");
+		bfsTexture = loadTexture("BFSTEXT.png");
+		dfsTexture = loadTexture("DFSTEXT.png");
 	}
+
+	private Sprite loadTexture(String fileName) {
+		Texture tempTexture = new Texture("core/assets/gui/" + fileName);
+		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		return new Sprite(tempTexture);
+	}
+
 
 	@Override
 	protected void initSidebar() {
@@ -41,6 +61,18 @@ public class CompareMode extends Mode {
 	protected void registerFurtherInputProcessors(InputHandler inputHandler) {
 		// world clicking
 		inputHandler.addProcessor(new WorldSelectionHandler(world));
+	}
+
+	@Override
+	protected void renderBeforeWorld() {
+		searchLabels.setProjectionMatrix(world.getWorldCamera().combined);
+		searchLabels.begin();
+
+		searchLabels.draw(aStarTexture, -3, (float) -7.5, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
+		searchLabels.draw(dfsTexture, 15, (float) -7.5, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
+		searchLabels.draw(bfsTexture, 33, (float) -7.5, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
+
+		searchLabels.end();
 	}
 
 	@Override
