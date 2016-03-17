@@ -65,15 +65,8 @@ public abstract class Mode extends ScreenAdapter {
 		if (startingX == null)
 			startingX = centre.x;
 
-		camera = new WorldCamera(startingFOV, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.position.set(startingX, startingY, startingZoom);
-		camera.near = 1f;
-		camera.far = 300f;
-		camera.lookAt(startingX, startingY, 0);
-		camera.update();
-
-		camera.setWorld(world);
-		world.initEngine(camera);
+		world.initCamera(startingFOV, startingX, startingY, startingZoom);
+		camera = world.getWorldCamera();
 		initialise();
 
 		// initialise sidebars and back button

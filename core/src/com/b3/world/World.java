@@ -26,10 +26,8 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -42,30 +40,26 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This represents a world.
- * It controls:
- * 	the entities
- * 	the nodes and rendering
- * 	moving agents
- * 	rendering buildings
+ * A world, which contains its personal entity-system-components engine,
+ * its WorldGraph and its buildings.
+ *
+ * @author dxw405 nbg481 oxe410
  */
 public class World implements Disposable {
 
 	private static final short ENTITY_CULL_TAG = 10101;
 
-	private TiledMap map;
-
 	private Vector2 tileSize;
 
 	private ModelManager modelManager;
 	private DebugRenderer debugRenderer;
-	private TiledMapRenderer renderer;
 	private Environment environment;
 
 	private ModelBatch buildingBatch;
 	private List<Building> buildings;
 	private BuildingModelCache buildingCache;
 
+	private TiledMap map;
 	private Engine engine;
 
 	private com.badlogic.gdx.physics.box2d.World physicsWorld;
@@ -92,15 +86,15 @@ public class World implements Disposable {
 	 * Starts the building rendering ({@link Building}, {@link BuildingModelCache})
 	 * Initiates the search ({@link WorldGraph})
 	 * Initiates the GUI renderer ({@link WorldGUI})
+	 *
 	 * @param fileName the name of the world to be loaded from file
-     */
+	 */
 	public World(String fileName) {
 		map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
 				(int) map.getProperties().get("width"),
 				(int) map.getProperties().get("height")
 		);
-		renderer = new OrthogonalTiledMapRenderer(map, 1f / Utils.TILESET_RESOLUTION);
 
 		// buildings and lighting
 		buildingBatch = new ModelBatch();
@@ -133,7 +127,7 @@ public class World implements Disposable {
 		loadBuildings(map);
 		// processMapTileTypes must be before ModelManager.
 		processMapTileTypes(map);
-		
+
 		// ModelManager must be after processMapTileTypes.
 		modelManager = new ModelManager(environment, map);
 	}
@@ -150,7 +144,7 @@ public class World implements Disposable {
 	/**
 	 * Takes a tile map and removes nodes and changes edge costs accordingly.
 	 *
-	 * @param map The tile map to process and change the {@link #worldGraph} accordingly to.
+	 * @param map         The tile map to process and change the {@link #worldGraph} accordingly to.
 	 * @param renderBoxes if true then render the physics collidible boxes; false for testing
 	 */
 	private void processMapTileTypes(TiledMap map, boolean renderBoxes) {
@@ -318,50 +312,50 @@ public class World implements Disposable {
 	}
 
 	/**
-	 * Initiates entity systems with the given camera
+	 * Initiates this world's camera with the given parameters,
+	 * and the entity-system-components engine
 	 *
-	 * @param camera The world camera
+	 * @param fov  The field of view
+	 * @param x    The starting X coordinate
+	 * @param y    The starting Y coordinate
+	 * @param zoom The starting Z coordinate
 	 */
-	public void initEngine(WorldCamera camera) {
+	public void initCamera(float fov, float x, float y, float zoom) {
+		worldCamera = new WorldCamera(fov, map, x, y, zoom);
+		if (Config.getBoolean(ConfigKey.CAMERA_RESTRICT))
+			worldCamera.addBoundaries(this);
+
 		engine.addSystem(new PhysicsSystem(physicsWorld));
-		engine.addSystem(new RenderSystem(camera));
+		engine.addSystem(new RenderSystem(worldCamera));
 		engine.addSystem(new AISystem(worldGraph));
-
-		worldCamera = camera;
-	}
-
-	/**
-	 * @return the {@link TiledMap} this World is based on
-     */
-	public TiledMap getMap() {
-		return map;
 	}
 
 	/**
 	 * @return the {@link ModelManager} that the buildings in this world are managed by
-     */
+	 */
 	public ModelManager getModelManager() {
 		return modelManager;
 	}
 
 	/**
 	 * @return the {@link WorldGUI} that this world uses to show pop-ups and errors
-     */
+	 */
 	public WorldGUI getWorldGUI() {
 		return worldGUI;
 	}
 
 	/**
 	 * @return the {@link Engine} that this world uses
-     */
+	 */
 	public Engine getEngine() {
 		return engine;
 	}
 
 	/**
 	 * This WorldGraph is a representation of the tiles and buildings in this World in an {@link Node} and edge way
+	 *
 	 * @return the {@link WorldGraph} that this World uses.
-     */
+	 */
 	public WorldGraph getWorldGraph() {
 		return worldGraph;
 	}
@@ -440,10 +434,7 @@ public class World implements Disposable {
 		// teleport entities
 		processPendingTeleports();
 
-		// render tiled world
-		worldCamera.positionMapRenderer(renderer);
-		renderer.render();
-
+		worldCamera.renderWorld();
 		worldGUI.render();
 
 		// models
@@ -511,10 +502,11 @@ public class World implements Disposable {
 	/**
 	 * Checks that, given the coordinate, a 4x4 building can be placed there. The {@param x} and {@param y} represent
 	 * the bottom left of the building.
+	 *
 	 * @param x bottom left x coordinate that potential building would like to be placed
 	 * @param y bottom left y coordinate that potential building would like to be placed
-     * @return true if a building can be placed in this position
-     */
+	 * @return true if a building can be placed in this position
+	 */
 	public boolean isValidBuildingPos(float x, float y) {
 
 		for (int i = (int) x; i < x + 4; i++) {
@@ -553,7 +545,7 @@ public class World implements Disposable {
 
 	/**
 	 * @return the size of the tiles as a {@link Vector2}
-     */
+	 */
 	public Vector2 getTileSize() {
 		return new Vector2(tileSize);
 	}
@@ -571,14 +563,14 @@ public class World implements Disposable {
 
 	/**
 	 * @return the physics world that has been used as a {@link com.badlogic.gdx.physics.box2d.World}
-     */
+	 */
 	public com.badlogic.gdx.physics.box2d.World getPhysicsWorld() {
 		return physicsWorld;
 	}
 
 	/**
 	 * @return the {@link WorldCamera} that this World is recorded by
-     */
+	 */
 	public WorldCamera getWorldCamera() {
 		return worldCamera;
 	}
@@ -588,7 +580,7 @@ public class World implements Disposable {
 	 * Does not check building already exists in the world - isValidBuilding() does that
 	 *
 	 * @param positionDeletion the coordinate as a {@link Vector2} to delete the building from
-     */
+	 */
 	//TODO make it so don't have to click in bottom left corner
 	public void removeBuilding(Vector2 positionDeletion) {
 		for (int i = 0; i < buildings.size(); i++) {
