@@ -1,6 +1,5 @@
 package com.b3.gui.sidebars.tabs;
 
-import com.b3.MainGame;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.CheckBoxComponent;
 import com.b3.gui.components.LabelComponent;
@@ -203,25 +202,6 @@ public class CompareModeSettingsTab implements Tab {
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
 		settingsTab.row();
-
-		ButtonComponent backToMenuBtn = new ButtonComponent(skin, font, "Main menu");
-		backToMenuBtn.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				MainGame controller = sidebar.getController();
-
-				sidebar.dispose();
-				controller.goToMainMenu();
-			}
-		});
-
-		settingsTab.add(backToMenuBtn.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(25);
-		settingsTab.row();
-
-		//tabbedPane.addTab("Settings", settingsTab);
 	}
 
 	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey) {

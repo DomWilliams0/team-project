@@ -1,6 +1,5 @@
 package com.b3.gui.sidebars.tabs;
 
-import com.b3.MainGame;
 import com.b3.gui.components.*;
 import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
@@ -231,27 +230,6 @@ public class LearningModeSettingsTab implements Tab {
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
-
-		// ====================
-		// === BACK TO MENU ===
-		// ====================
-
-		ButtonComponent backToMenuBtn = new ButtonComponent(skin, font, "Main menu");
-		backToMenuBtn.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				MainGame controller = sidebar.getController();
-
-				sidebar.dispose();
-				controller.goToMainMenu();
-			}
-		});
-
-		settingsTab.add(backToMenuBtn.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(25);
 		settingsTab.row();
 	}
 

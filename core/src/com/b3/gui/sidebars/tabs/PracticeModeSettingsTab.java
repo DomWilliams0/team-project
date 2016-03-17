@@ -1,7 +1,5 @@
 package com.b3.gui.sidebars.tabs;
 
-import com.b3.MainGame;
-import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.LabelComponent;
 import com.b3.gui.components.SelectBoxComponent;
 import com.b3.gui.components.SliderComponent;
@@ -112,26 +110,6 @@ public class PracticeModeSettingsTab implements Tab {
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
-
-		// ====================
-		// === BACK TO MENU ===
-		// ====================
-
-		MainGame controller = (MainGame) data.get("controller");
-		ButtonComponent backToMenuBtn = new ButtonComponent(skin, font, "Main menu");
-		backToMenuBtn.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				controller.getInputHandler().clear();
-				controller.goToMainMenu();
-			}
-		});
-
-		settingsTab.add(backToMenuBtn.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(25);
 		settingsTab.row();
 	}
 
