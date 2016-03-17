@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class LabelComponent {
 
-	private Label label;
+	protected Label label;
 
 	public LabelComponent(Skin skin, String text) {
 		this(skin, text, Color.BLACK);

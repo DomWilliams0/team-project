@@ -2,6 +2,8 @@ package com.b3.mode;
 
 import com.b3.MainGame;
 import com.b3.gui.PopupDescription;
+import com.b3.gui.components.MenuComponent;
+import com.b3.gui.components.MenuItemComponent;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;
@@ -16,8 +18,13 @@ import com.b3.world.WorldGUI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
@@ -35,6 +42,9 @@ public abstract class Mode extends ScreenAdapter {
 
 	protected final MainGame game;
 	protected final KeyboardController keyboardController;
+
+	protected Stage menuStage;
+	protected MenuComponent menu;
 
 	protected Stage sideBarStage;
 	protected SideBarNodes sideBarNodes;
@@ -72,9 +82,13 @@ public abstract class Mode extends ScreenAdapter {
 		// initialise sidebars and back button
 		initSidebar();
 
+		// initialise menu
+		initMenu();
+
 		// init input handlers
 		keyboardController = new KeyboardController();
 		inputHandler.addProcessor(keyboardController);
+		inputHandler.addProcessor(menuStage);
 		inputHandler.addProcessor(sideBarStage);
 		registerFurtherInputProcessors(inputHandler);
 
@@ -113,6 +127,46 @@ public abstract class Mode extends ScreenAdapter {
 
 	}
 
+	protected void initMenu() {
+		menuStage = new Stage(new ScreenViewport());
+		menu = new MenuComponent();
+
+		// Get skin and font
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
+		Skin skin = new Skin(atlas);
+		BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
+
+		// Add items
+		MenuItemComponent helpItem = new MenuItemComponent(skin, font, "Help");
+		MenuItemComponent mainMenuItem = new MenuItemComponent(skin, font, "Main menu");
+		MenuItemComponent exitItem = new MenuItemComponent(skin, font, "Exit");
+
+		helpItem.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				// help popup
+			}
+		});
+		mainMenuItem.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.goToMainMenu();
+			}
+		});
+		exitItem.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Gdx.app.exit();
+			}
+		});
+
+		menu.addItem(helpItem);
+		menu.addItem(mainMenuItem);
+		menu.addItem(exitItem);
+
+		menuStage.addActor(menu);
+	}
+
 	/**
 	 * Renders the world, sidebars, screen and keyboard controllers
 	 * @param delta the difference in time since last tick
@@ -134,6 +188,10 @@ public abstract class Mode extends ScreenAdapter {
 
 		// world rendering
 		world.render();
+
+		// menu rendering
+		menuStage.act();
+		menuStage.draw();
 
 		// sidebar rendering
 		sideBarStage.act(Utils.TRUE_DELTA_TIME);
@@ -184,6 +242,10 @@ public abstract class Mode extends ScreenAdapter {
 		camera.viewportWidth = width;
 		camera.viewportHeight = height;
 		camera.update();
+
+		// Menu updating
+		menuStage.getViewport().update(width, height, true);
+		menu.resize(width, height);
 
 		sideBarStage.getViewport().update(width, height, true);
 

@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Represents a button component
+ *
+ * @author oxe410
  */
 public class ButtonComponent extends Component {
 
