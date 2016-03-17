@@ -21,11 +21,14 @@ sourceSets {
         resources {
             srcDirs = ["src-test/resources"]
         }
-
-
     }
 }
 
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
 
 eclipse.project {
     name = appName + "-core"

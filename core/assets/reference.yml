@@ -29,5 +29,5 @@ time-between-ticks-step: 0.25
 event-generation-min-time: 3
 event-generation-max-time: 10
 
-texture-atlas: core/assets/gui/ui-blue.atlas
+texture-atlas: gui/ui-blue.atlas
 font-file: aller/Aller_Rg.ttf

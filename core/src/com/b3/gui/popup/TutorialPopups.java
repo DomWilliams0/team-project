@@ -34,7 +34,7 @@ public class TutorialPopups {
 	 * Setup the tutorial popups, loading all the textures and setting up the array of text to be shown to the user
 	 */
 	public TutorialPopups() {
-		Texture tempTexture = new Texture("core/assets/gui/tutorial/bg.png");
+		Texture tempTexture = new Texture("gui/tutorial/bg.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		backgroundTexture = new Sprite(tempTexture);
 

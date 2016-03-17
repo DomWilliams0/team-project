@@ -102,9 +102,9 @@ public class MainMenuScreen implements Screen {
 
         //Load texture for ICON
         spriteBatch = new SpriteBatch();
-        sprite = new Sprite(new Texture("core/assets/icon.png"));
+        sprite = new Sprite(new Texture("icon.png"));
 
-        spriteTwoText= new Sprite(new Texture("core/assets/icon_final.png"));
+        spriteTwoText= new Sprite(new Texture("icon_final.png"));
     }
 
     @Override

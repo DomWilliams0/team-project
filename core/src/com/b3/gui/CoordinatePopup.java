@@ -32,7 +32,7 @@ public class CoordinatePopup {
 		//load font from file
 		font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 18);
 		//load texture
-		Texture tempTexture = new Texture("core/assets/world/popups/bottom_canvas.png");
+		Texture tempTexture = new Texture("world/popups/bottom_canvas.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		background = new Sprite(tempTexture);
 

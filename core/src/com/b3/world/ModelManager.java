@@ -147,7 +147,7 @@ public class ModelManager {
 	 * @return The path for the given {@link Model} name.
 	 */
 	private String getModelPath(String modelName) {
-		return "core/assets/world/assets/" + modelName + "/" + modelName + ".g3db";
+		return "world/assets/" + modelName + "/" + modelName + ".g3db";
 	}
 
 	/**

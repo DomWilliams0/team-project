@@ -21,27 +21,27 @@ public class PopupManager {
      */
 	public PopupManager(ModeType mode) {
 		//load error textures
-		Texture tempTexture = new Texture("core/assets/world/popups/errorBuildings.png");
+		Texture tempTexture = new Texture("world/popups/errorBuildings.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		buildingErrorPopup = new Popup(new Sprite(tempTexture));
 
-		tempTexture = new Texture("core/assets/world/popups/errorCode.png");
+		tempTexture = new Texture("world/popups/errorCode.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		pseudocodeError = new Popup(new Sprite(tempTexture));
 
-		tempTexture = new Texture("core/assets/world/popups/errorSearch.png");
+		tempTexture = new Texture("world/popups/errorSearch.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		behaviourError = new Popup(new Sprite(tempTexture));
 
 		switch (mode) {
 			case COMPARE:
-				tempTexture = new Texture("core/assets/world/popups/Intro/C.png");
+				tempTexture = new Texture("world/popups/Intro/C.png");
 				break;
 			case PRACTICE:
-				tempTexture = new Texture("core/assets/world/popups/Intro/TY.png");
+				tempTexture = new Texture("world/popups/Intro/TY.png");
 				break;
 			case LEARNING:
-				tempTexture = new Texture("core/assets/world/popups/Intro/ILM.png");
+				tempTexture = new Texture("world/popups/Intro/ILM.png");
 				break;
 			default:
 				tempTexture = null;

@@ -82,7 +82,7 @@ public class HelpBox extends Table {
 
 		setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("core/assets/gui/ui-blue.atlas"));
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("gui/ui-blue.atlas"));
 		Skin skin = new Skin(atlas);
 		BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
 		skin.add("default", font, BitmapFont.class);

@@ -25,9 +25,9 @@ public class ImageButtonComponent extends Component {
 	 * @param imageOverPath The path to the image for the OVER state
 	 */
 	public ImageButtonComponent(String imageUpPath, String imageDownPath, String imageOverPath) {
-		Texture textureUp = new Texture(Gdx.files.internal(MessageFormat.format("core/assets/gui/buttons/{0}", imageUpPath)));
-		Texture textureDown = new Texture(Gdx.files.internal(MessageFormat.format("core/assets/gui/buttons/{0}", imageDownPath)));
-		Texture textureOver = new Texture(Gdx.files.internal(MessageFormat.format("core/assets/gui/buttons/{0}", imageOverPath)));
+		Texture textureUp = new Texture(Gdx.files.internal(MessageFormat.format("gui/buttons/{0}", imageUpPath)));
+		Texture textureDown = new Texture(Gdx.files.internal(MessageFormat.format("gui/buttons/{0}", imageDownPath)));
+		Texture textureOver = new Texture(Gdx.files.internal(MessageFormat.format("gui/buttons/{0}", imageOverPath)));
 		TextureRegion imageUp = new TextureRegion(textureUp);
 		TextureRegion imageDown = new TextureRegion(textureDown);
 		TextureRegion imageOver = new TextureRegion(textureOver);

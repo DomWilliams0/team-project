@@ -40,7 +40,7 @@ public class CompareMode extends Mode {
 	 * @param game used to set up the world, contains directories to config files
 	 */
 	public CompareMode(MainGame game) {
-		super(ModeType.COMPARE, game, "core/assets/world/world-compare.tmx", 67, 25.f, null, 0f);
+		super(ModeType.COMPARE, game, "world/world-compare.tmx", 67, 25.f, null, 0f);
 		agents = new ArrayList<>(3);
 		searchLabels = new SpriteBatch(3);
 
@@ -55,7 +55,7 @@ public class CompareMode extends Mode {
 	 * @return the {@link Sprite} loaded from the file
      */
 	private Sprite loadTexture(String fileName) {
-		Texture tempTexture = new Texture("core/assets/gui/" + fileName);
+		Texture tempTexture = new Texture("gui/" + fileName);
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		return new Sprite(tempTexture);
 	}

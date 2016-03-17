@@ -8,6 +8,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 
+import java.io.File;
+
 /**
  * Loads the current configuration file and sets up the input handler for the program (onClicks, onMouseOver etc.)
  */
@@ -25,15 +27,16 @@ public class MainGame extends Game {
 	 */
 	@Override
 	public void create() {
+		System.out.println("new File(\"\").getAbsolutePath( = " + new File("").getAbsolutePath());
 		sc = new SoundController(new String[]{
-				"core/assets/sounds/sad_failure.wav",
-				"core/assets/sounds/search_complete.mp3",
-				"core/assets/sounds/error_buildings.mp3",
-				"core/assets/sounds/ping.mp3"
+				"sounds/sad_failure.wav",
+				"sounds/search_complete.mp3",
+				"sounds/error_buildings.mp3",
+				"sounds/ping.mp3"
 		});
 
 		// load config
-		Config.loadConfig("core/assets/reference.yml", "core/assets/userconfig.yml");
+		Config.loadConfig("reference.yml", "userconfig.yml");
 
 		// render the models properly
 		DefaultShader.defaultCullFace = 0;

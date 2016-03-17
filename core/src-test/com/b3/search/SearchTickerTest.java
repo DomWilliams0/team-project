@@ -1,5 +1,6 @@
 package com.b3.search;
 
+import com.b3.TestConstants;
 import com.b3.gui.PseudocodeVisualiser;
 import com.b3.input.SoundController;
 import com.b3.mode.ModeType;
@@ -34,7 +35,7 @@ public class SearchTickerTest {
 		Utils.DELTA_TIME = Utils.TRUE_DELTA_TIME = 10;
 
 		// Setup the config.
-		Config.loadConfig("assets/reference.yml");
+		Config.loadConfig(TestConstants.REFERENCE_CONFIG);
 
 		// Stop PseudocodeVisualiser errors.
 		Field fieldInstance = PseudocodeVisualiser.class.getDeclaredField("instance");
