@@ -56,14 +56,16 @@ public class SoundController {
 	 * @return true if played successfully; false if cannot find sounds or cannot be played
 	 */
 	public static boolean playSounds(int soundIndex, float pitch) {
-		System.out.println("Playing sound at " + pitch);
-//        if (soundIndex >= sounds.length) return false;
 		if (id == -1) id = sounds[soundIndex].play(1.0f, pitch, 0);
 		sounds[soundIndex].setLooping(id, true);
 		sounds[soundIndex].setPitch(id, pitch);
 		return true;
 	}
 
+	/**
+	 * Stops soundIndex from playing, if already playing
+	 * @param soundIndex the index of the sound to stop
+     */
 	public static void stopSound(int soundIndex) {
 		if (id != -1) {
 			sounds[soundIndex].stop();

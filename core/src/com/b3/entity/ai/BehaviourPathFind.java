@@ -71,6 +71,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 	public void tick(Vector2 steeringOutput) {
 		int shouldPlayFail = 0;
 		if (ticker.isPathComplete()) {
+			SoundController.stopSound(3);
 			if (steering == null) {
 				shouldPlayFail = 1;
 				updatePathFromTicker();

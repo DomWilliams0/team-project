@@ -452,8 +452,8 @@ public class SearchTicker extends Observable {
 
 		setUpdated(true);
 
+		//TODO this is the sound 'wave' pings that sounds cool. Needs to be refactored out of here though.
 		if (Config.getBoolean(ConfigKey.SOUNDS_ON) && mode == ModeType.LEARNING) {
-			//TODO this is the sound 'wave' pings that sounds cool. Needs to be refactored out of here though.
 			if (worldGraph.getCurrentSearch().getStart() != null && worldGraph.getCurrentSearch().getEnd() != null && worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
 				Point currentNode = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint();
 				Point startNode;
@@ -483,10 +483,7 @@ public class SearchTicker extends Observable {
 
 				SoundController.playSounds(3, convertedFinalEuclid);
 			}
-		} else {
-			SoundController.stopSound(3);
 		}
-
 	}
 
 	/**
