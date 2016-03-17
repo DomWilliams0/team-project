@@ -8,8 +8,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 
-import java.io.File;
-
 /**
  * Loads the current configuration file and sets up the input handler for the program (onClicks, onMouseOver etc.)
  */
@@ -27,7 +25,6 @@ public class MainGame extends Game {
 	 */
 	@Override
 	public void create() {
-		System.out.println("new File(\"\").getAbsolutePath( = " + new File("").getAbsolutePath());
 		sc = new SoundController(new String[]{
 				"sounds/sad_failure.wav",
 				"sounds/search_complete.mp3",
