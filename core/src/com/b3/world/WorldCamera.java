@@ -1,7 +1,5 @@
 package com.b3.world;
 
-import com.b3.entity.Agent;
-import com.b3.entity.component.PhysicsComponent;
 import com.b3.input.KeyboardController;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -25,14 +23,11 @@ public class WorldCamera extends PerspectiveCamera {
 	private Vector3 lastPosition;
 	private final Vector2 inputDelta;
 
-	private PhysicsComponent followedAgent;
 	private float zoomAmount;
 
 	private float posX;
 	private float posY;
 	private float posZ;
-
-	private float FOV;
 
 	// todo redo camera restriction
 
@@ -45,27 +40,13 @@ public class WorldCamera extends PerspectiveCamera {
 	public WorldCamera(float fieldOfViewY, float viewportWidth, float viewportHeight) {
 		super(fieldOfViewY, viewportWidth, viewportHeight);
 
-		FOV = fieldOfViewY;
 		lastPosition = null;
 		borders = new ArrayList<>(4);
 		inputDelta = new Vector2();
-		followedAgent = null;
 
 		posX = 0;
 		posY = 0;
 		posZ = 0;
-	}
-
-	/**
-	 * Changes the field of view.
-	 *
-	 * @param fov The new field of view.
-	 */
-	public void setFieldOfViewY(float fov) {
-		this.FOV = fov;
-
-		PerspectiveCamera a = this;
-		a.fieldOfView = fov;
 	}
 
 	/**
@@ -131,12 +112,8 @@ public class WorldCamera extends PerspectiveCamera {
 	 * Polls the given keyboard controller, and moves/zooms appropriately
 	 */
 	public void move(KeyboardController keyboardController) {
-		if (followedAgent != null) {
-			trackEntity();
-		} else {
-			keyboardController.pollMovement(inputDelta, Config.getFloat(ConfigKey.CAMERA_MOVE_SPEED));
-			translateSafe(inputDelta.x, inputDelta.y, 0f);
-		}
+		keyboardController.pollMovement(inputDelta, Config.getFloat(ConfigKey.CAMERA_MOVE_SPEED));
+		translateSafe(inputDelta.x, inputDelta.y, 0f);
 
 		int zoom = keyboardController.pollZoom();
 		if (zoom != 0)
@@ -176,35 +153,18 @@ public class WorldCamera extends PerspectiveCamera {
 
 	/**
 	 * @return the z position of the camera.
-     */
+	 */
 	public float getActualZoom() {
 		return zoomAmount;
 	}
 
 	/**
 	 * @return 1 if high contrast mode shouldn't be shown, >1 if it should
-     */
+	 */
 	public float getCurrentZoom() {
 		if (zoomAmount > 30) {
 			return zoomAmount - 30;
 		} else return 1;
-	}
-
-	/**
-	 * Updates the camera to the new position of the tracked entity.
-	 */
-	private void trackEntity() {
-		position.set(followedAgent.getPosition(), position.z);
-		update();
-	}
-
-	/**
-	 * Makes the camera follow an entity.
-	 *
-	 * @param agent The agent to follow.
-	 */
-	public void setFollowedAgent(Agent agent) {
-		followedAgent = agent.getPhysicsComponent();
 	}
 
 	/**
