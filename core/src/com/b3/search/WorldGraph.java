@@ -206,7 +206,6 @@ public class WorldGraph {
 		return searchTickers.keySet();
 	}
 
-
 	/**
 	 * @return A collection of all current search tickers
 	 * Note that they are not all necessarily in progress
@@ -222,15 +221,27 @@ public class WorldGraph {
 		return latestSearchAgent;
 	}
 
+	/**
+	 * @param entity check this entity to see if it is currently searching
+	 * @return true if the entity supplied is currently partwaythough a search
+     */
 	public boolean isAgentSearching(Entity entity) {
 		return entity instanceof Agent && searchTickers.containsKey(entity);
 	}
 
+	/**
+	 * Clears all the current searches, resetting their respective search tickers
+	 */
 	public void clearAllSearches() {
 		searchTickers.forEach((a, s) -> s.reset(true));
 		searchTickers.clear();
 	}
 
+	/**
+	 * Removes the link between the current searching agent and the search ticker.
+	 * Resets the search ticker back to default
+	 * @param searchingAgent the {@link Agent} that the current search is working on
+     */
 	public void clearSearch(Agent searchingAgent) {
 		SearchTicker searchTicker = searchTickers.remove(searchingAgent);
 		if (searchTicker != null)
@@ -265,10 +276,17 @@ public class WorldGraph {
 		return new Point(wantedNextDestinationX, wantedNextDestinationY);
 	}
 
+	/**
+	 * @return the {@link SearchAlgorithm} that the next search will use (after current agent gets to his destination)
+     */
 	public SearchAlgorithm getLearningModeNext() {
 		return learningModeNext;
 	}
 
+	/**
+	 * Set the next {@link SearchAlgorithm} the search will use (after current agent gets to his destination)
+	 * @param learningModeNext the {@link SearchAlgorithm} the next search will use
+     */
 	public void setLearningModeNext(SearchAlgorithm learningModeNext) {
 		this.learningModeNext = learningModeNext;
 	}

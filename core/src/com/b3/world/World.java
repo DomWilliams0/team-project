@@ -441,9 +441,6 @@ public class World implements Disposable {
 		worldCamera.positionMapRenderer(renderer);
 		renderer.render();
 
-		// tick entities and physics
-		engine.update(Utils.DELTA_TIME);
-
 		worldGUI.render();
 
 		// models
@@ -454,6 +451,9 @@ public class World implements Disposable {
 				.filter(building -> building.isVisible(worldCamera))
 				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
 		buildingBatch.end();
+
+		// tick entities and physics
+		engine.update(Utils.DELTA_TIME);
 
 		worldGUI.renderPopups();
 
