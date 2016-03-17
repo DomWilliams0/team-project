@@ -1,5 +1,6 @@
 package com.b3.world;
 
+import com.b3.search.util.Function2;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Matrix4;
@@ -56,23 +57,18 @@ public class WorldLandscapeCamera extends WorldCamera {
 			landscapeLayer = new TiledMapTileLayer(width, height,
 					(int) exampleLayer.getTileWidth(), (int) exampleLayer.getTileHeight());
 
-			// fill with 0, 0
-			// todo nope!
-			for (int x = 0; x < width; x++)
-				for (int y = 0; y < height; y++)
-					landscapeLayer.setCell(x, y, exampleLayer.getCell(0, 0));
-
-			expandTilesVertically();
-			expandTilesHorizontally();
+			expandTilesVertically(this::getExampleCell);
+			expandTilesHorizontally(this::getExampleCell);
+			expandTilesVertically(this::getLandscapeCell);
 
 			landscapeMap.getTileSets().addTileSet(originalMap.getTileSets().getTileSet(0));
 			landscapeMap.getLayers().add(landscapeLayer);
 		}
 
-		private void expandTilesHorizontally() {
+		private void expandTilesHorizontally(Function2<Integer, Integer, TiledMapTileLayer.Cell> cellGetter) {
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					TiledMapTileLayer.Cell cell = getCell(x, y);
+					TiledMapTileLayer.Cell cell = cellGetter.apply(x, y);
 					if (cell != null) {
 						setRow(cell, y, 0, x);
 						break;
@@ -82,7 +78,7 @@ public class WorldLandscapeCamera extends WorldCamera {
 			}
 			for (int y = 0; y < height; y++) {
 				for (int x = width - 1; x >= 0; x--) {
-					TiledMapTileLayer.Cell cell = getCell(x, y);
+					TiledMapTileLayer.Cell cell = cellGetter.apply(x, y);
 					if (cell != null) {
 						setRow(cell, y, x, width);
 						break;
@@ -91,10 +87,10 @@ public class WorldLandscapeCamera extends WorldCamera {
 			}
 		}
 
-		private void expandTilesVertically() {
+		private void expandTilesVertically(Function2<Integer, Integer, TiledMapTileLayer.Cell> cellGetter) {
 			for (int x = 0; x < width; x++) {
 				for (int y = 0; y < height; y++) {
-					TiledMapTileLayer.Cell cell = getCell(x, y);
+					TiledMapTileLayer.Cell cell = cellGetter.apply(x, y);
 					if (cell != null) {
 						setColumn(cell, x, 0, y);
 						break;
@@ -104,7 +100,7 @@ public class WorldLandscapeCamera extends WorldCamera {
 			}
 			for (int x = 0; x < width; x++) {
 				for (int y = height - 1; y >= 0; y--) {
-					TiledMapTileLayer.Cell cell = getCell(x, y);
+					TiledMapTileLayer.Cell cell = cellGetter.apply(x, y);
 					if (cell != null) {
 						setColumn(cell, x, y, height);
 						break;
@@ -113,10 +109,14 @@ public class WorldLandscapeCamera extends WorldCamera {
 			}
 		}
 
-		private TiledMapTileLayer.Cell getCell(int x, int y) {
+		private TiledMapTileLayer.Cell getExampleCell(int x, int y) {
 			return exampleLayer.getCell(
 					x - width / 2 + exampleLayer.getWidth() / 2,
 					y - height / 2 + exampleLayer.getHeight() / 2);
+		}
+
+		private TiledMapTileLayer.Cell getLandscapeCell(int x, int y) {
+			return landscapeLayer.getCell(x, y);
 		}
 
 		private void setColumn(TiledMapTileLayer.Cell cell, int column, int from, int to) {
