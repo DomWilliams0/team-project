@@ -403,7 +403,9 @@ public class World implements Disposable {
 
 		// tick entities and physics
 		engine.update(Utils.DELTA_TIME);
-		
+
+		worldGUI.render();
+
 		// models
 		modelManager.render(worldCamera);
 
@@ -413,7 +415,7 @@ public class World implements Disposable {
 				.forEach(building -> buildingBatch.render(building.getModelInstance(), environment));
 		buildingBatch.end();
 
-		worldGUI.render();
+		worldGUI.renderPopups();
 
 		// physics debug rendering
 		if (Config.getBoolean(ConfigKey.PHYSICS_RENDERING))

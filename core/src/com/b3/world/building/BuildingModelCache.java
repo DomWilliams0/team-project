@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Maintains a set of building Models for reuse
  *
- * @author dxw405
+ * @author dxw405 nbg481
  */
 public class BuildingModelCache implements Disposable {
 	private Map<Vector3, Model> models;

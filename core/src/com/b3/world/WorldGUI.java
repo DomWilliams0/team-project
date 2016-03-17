@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import static com.b3.mode.ModeType.*;
 
 /**
+ * Deals with rendering a layer of interaction ontop of the graph - pop-ups, errors and heuristics
+ *
  * @author nbg481
  */
 public class WorldGUI {
@@ -42,6 +44,11 @@ public class WorldGUI {
 
 	private boolean pseudoCodeEnabled;
 
+	/**
+	 * Creates a new WorldGUI, fundamentally linked to a specific world
+	 *
+	 * @param world the world that this GUI will be overlayed ontop of
+     */
 	public WorldGUI(World world) {
 		this.world = world;
 
@@ -58,11 +65,17 @@ public class WorldGUI {
 		popupDescription = new PopupDescription(world);
 		popupManager = new PopupManager(MainGame.getCurrentMode());
 	}
-	
+
+	/**
+	 * Shows the intro pop-up on first launching the mode
+	 */
 	public void showIntroPopup() {
 		popupManager.showIntro();
 	}
 
+	/**
+	 * @return the pop-up manager for this {@link World} and WorldGUI ONLY
+     */
 	public PopupManager getPopupManager() {
 		return popupManager;
 	}
@@ -77,9 +90,14 @@ public class WorldGUI {
 	 * Rendering physics/collisions (if configured)
 	 */
 	public void render() {
-		ModeType mode = MainGame.getCurrentMode();
-
 		renderGUI();
+	}
+
+	/**
+	 * renders any pop-ups (errors, pop-ups)
+	 */
+	public void renderPopups() {
+		ModeType mode = MainGame.getCurrentMode();
 
 		//pop-ups on nodes
 		if (mode == LEARNING || mode == TUTORIAL)
@@ -136,7 +154,10 @@ public class WorldGUI {
 		shapeRenderer.end();
 	}
 
-
+	/**
+	 * @return the amount that node's should be scaled, and background blackened, depending on the amount of zoom of the
+	 * camera.
+     */
 	private float getZoomScalar() {
 		if (Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) != 45)
 			System.err.println("Set max zoom in userconfig to 45, zoom only works with this so far...");
@@ -162,16 +183,29 @@ public class WorldGUI {
 		return zoomScalar;
 	}
 
+	/**
+	 * Sets the currently clicked node
+	 * @param x the x coordinate of the current click
+	 * @param y the y coordinate of the current click
+     */
 	public void setCurrentClick(int x, int y) {
 		if (x == currentNodeClickX && y == currentNodeClickY) return;
 		this.currentNodeClickX = x;
 		this.currentNodeClickY = y;
 	}
 
+	/**
+	 * @return the currently clicked node as a type {@link Point}
+     */
 	public Point getCurrentClick() {
 		return new Point(currentNodeClickX, currentNodeClickY);
 	}
 
+	/**
+	 * Updates the next destination of the search
+	 * @param x the x coordinate of the next search
+	 * @param y the y coordinate of the next search
+     */
 	public void setNextDestination(int x, int y) {
 		animationNextDestination = (float) 2.0;
 		xNextDestination = x;
@@ -179,23 +213,41 @@ public class WorldGUI {
 		world.getWorldGraph().setNextDestination(x, y);
 	}
 
+	/**
+	 * Updates the current mouse position for use when adding buildings
+	 * @param screenX the x position to add building
+	 * @param screenY the y position to add building
+     */
 	public void setCurrentMousePos(int screenX, int screenY) {
 		currentMousePos = new Point(screenX, screenY);
 	}
 
-	//TODO
+	/**
+	 * @param enabled true if pseudcode mode is enabled; false otherwise
+     */
 	public void setPseudoCode(boolean enabled) {
 		pseudoCodeEnabled = enabled;
 	}
 
+	/**
+	 * @return true if pseudcode mode is enabled; false otherwise
+     */
 	public boolean getPseudoCode() {
 		return pseudoCodeEnabled;
 	}
 
+	/**
+	 * Should only be called to be used when resizing, or mouse clicks / movements - this should not be changed indirectly
+	 * @return the {@link CoordinatePopup} that is linked to this world
+     */
 	public CoordinatePopup getCoordinatePopup() {
 		return coordinatePopup;
 	}
 
+	/**
+	 * Should only be called to be used when resizing, or mouse clicks / movements - this should not be changed indirectly
+	 * @return the {@link PopupDescription} that is linked to this world
+     */
 	public PopupDescription getPopupDescription() {
 		return popupDescription;
 	}
