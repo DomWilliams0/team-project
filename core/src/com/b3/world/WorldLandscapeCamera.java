@@ -53,7 +53,11 @@ public class WorldLandscapeCamera extends WorldCamera {
 			exampleLayer = originalMap.getLayers().getByType(TiledMapTileLayer.class).first();
 
 			landscapeMap = new TiledMap();
-			width = height = 60; // todo calculate
+			float scale = 3f;
+			width = (int) (exampleLayer.getWidth() * scale);
+			height = (int) (exampleLayer.getHeight() * scale);
+			
+			
 			landscapeLayer = new TiledMapTileLayer(width, height,
 					(int) exampleLayer.getTileWidth(), (int) exampleLayer.getTileHeight());
 
