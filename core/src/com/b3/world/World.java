@@ -69,7 +69,9 @@ public class World implements Disposable {
 
 	private Set<Entity> deadEntities;
 	private List<PendingTeleport> pendingTeleports;
+
 	private WorldCamera worldCamera;
+	private WorldCamera landscapeCamera;
 
 	private WorldGUI worldGUI;
 
@@ -130,6 +132,28 @@ public class World implements Disposable {
 
 		// ModelManager must be after processMapTileTypes.
 		modelManager = new ModelManager(environment, map);
+	}
+
+	private TiledMap generateLandscape(TiledMap map) {
+		TiledMapTileLayer exampleLayer = map.getLayers().getByType(TiledMapTileLayer.class).first();
+
+		TiledMap landscape = new TiledMap();
+		int width = 60;
+		int height = 60; // todo calculate
+		TiledMapTileLayer landscapeLayer = new TiledMapTileLayer(width, height,
+				(int) exampleLayer.getTileWidth(), (int) exampleLayer.getTileHeight());
+
+		// fill with grass temporarily
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				landscapeLayer.setCell(x, y, exampleLayer.getCell(0, 0));
+			}
+
+		}
+
+		landscape.getTileSets().addTileSet(map.getTileSets().getTileSet(0));
+		landscape.getLayers().add(landscapeLayer);
+		return landscape;
 	}
 
 	/**
@@ -313,7 +337,7 @@ public class World implements Disposable {
 
 	/**
 	 * Initiates this world's camera with the given parameters,
-	 * and the entity-system-components engine
+	 * along with its landscape and entity-system-components engine
 	 *
 	 * @param fov  The field of view
 	 * @param x    The starting X coordinate
@@ -322,8 +346,10 @@ public class World implements Disposable {
 	 */
 	public void initCamera(float fov, float x, float y, float zoom) {
 		worldCamera = new WorldCamera(fov, map, x, y, zoom);
-		if (Config.getBoolean(ConfigKey.CAMERA_RESTRICT))
-			worldCamera.addBoundaries(this);
+//		if (Config.getBoolean(ConfigKey.CAMERA_RESTRICT))
+//			worldCamera.addBoundaries(this);
+
+		landscapeCamera = new WorldLandscapeCamera(fov, generateLandscape(map), x, y, zoom, worldCamera);
 
 		engine.addSystem(new PhysicsSystem(physicsWorld));
 		engine.addSystem(new RenderSystem(worldCamera));
@@ -428,13 +454,13 @@ public class World implements Disposable {
 	 * Rendering physics/collisions (if configured)
 	 */
 	public void render() {
-		// remove dead entities
+		// deal with entities from last tick
 		cleanseDeadEntities();
-
-		// teleport entities
 		processPendingTeleports();
 
+		landscapeCamera.renderWorld();
 		worldCamera.renderWorld();
+
 		worldGUI.render();
 
 		// models

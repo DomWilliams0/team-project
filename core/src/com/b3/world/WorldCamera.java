@@ -10,11 +10,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The control class for the main {@link com.badlogic.gdx.graphics.Camera}.
@@ -23,9 +18,7 @@ import java.util.List;
  */
 public class WorldCamera extends PerspectiveCamera {
 
-	private final List<BoundingBox> borders;
 	private final Vector2 inputDelta;
-
 	private float zoomAmount;
 
 	private TiledMapRenderer renderer;
@@ -35,10 +28,10 @@ public class WorldCamera extends PerspectiveCamera {
 	/**
 	 * @param fieldOfViewY The field of view of the height, in degrees, the field of view for
 	 *                     the width will be calculated according to the aspect ratio.
-	 * @param tmx
-	 * @param startX
-	 * @param startY
-	 * @param startZoom
+	 * @param tmx          The TileMap to render
+	 * @param startX       The starting X coordinate
+	 * @param startY       The starting Y coordinate
+	 * @param startZoom    The starting Z coordinate
 	 */
 	public WorldCamera(float fieldOfViewY, TiledMap tmx, float startX, float startY, float startZoom) {
 		super(fieldOfViewY, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -49,28 +42,14 @@ public class WorldCamera extends PerspectiveCamera {
 		lookAt(startX, startY, 0);
 		update();
 
-		borders = new ArrayList<>(4);
 		inputDelta = new Vector2();
 
 		renderer = new OrthogonalTiledMapRenderer(tmx, 1f / Utils.TILESET_RESOLUTION);
 	}
 
 	/**
-	 * Sets the camera boundaries to the given world's borders
-	 *
-	 * @param world The world
+	 * Renders the tilemap
 	 */
-	public void addBoundaries(World world) {
-		Vector2 worldSize = world.getTileSize();
-		int size = 1;
-
-		borders.clear();
-		borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(-size, worldSize.y, 0))); // left
-		borders.add(new BoundingBox(new Vector3(0, 0, 0), new Vector3(worldSize.x, size, 0))); // bottom
-		borders.add(new BoundingBox(new Vector3(0, worldSize.y, 0), new Vector3(worldSize.x, worldSize.y + size, 0))); // top
-		borders.add(new BoundingBox(new Vector3(worldSize.x, 0, 0), new Vector3(worldSize.x + size, worldSize.y, 0))); // right
-	}
-
 	public void renderWorld() {
 		renderer.setView(combined,
 				position.x - viewportWidth / 2,
