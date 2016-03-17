@@ -165,7 +165,7 @@ public class WorldGUI {
 		WorldCamera worldCamera = world.getWorldCamera();
 		float zoomScalar = worldCamera.getCurrentZoom();
 
-		if (zoomScalar < 14 && zoomScalar > 1.5) {
+		if (zoomScalar < 14 && zoomScalar > 1) {
 			counterScaler++;
 		} else {
 			counterScaler = 0;

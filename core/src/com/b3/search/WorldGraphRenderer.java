@@ -1,12 +1,10 @@
 package com.b3.search;
 
-import com.b3.mode.CompareMode;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.Collection;
 import java.util.List;
@@ -307,6 +305,7 @@ public class WorldGraphRenderer {
 		final float finalZoomScalar = zoomScalar;
 
 		// border
+//		System.out.println(finalZoomScalar);
 		float tempFinalZoomScalar;
 		if (finalZoomScalar > 3) {
 			tempFinalZoomScalar = (float) (finalZoomScalar * 1.25);
@@ -315,19 +314,32 @@ public class WorldGraphRenderer {
 		}
 
 		shapeRenderer.setColor(BORDER_COLOUR);
-
 		points
 				.stream()
-				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * tempFinalZoomScalar, NODE_EDGES));
+				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * BORDER_THICKNESS * tempFinalZoomScalar, NODE_EDGES, tempFinalZoomScalar));
+//		points
+//				.stream()
+//				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * tempFinalZoomScalar, NODE_EDGES));
 		shapeRenderer.setColor(nodeColour);
 
 		// node body
 		final float finalZoomScalar1 = zoomScalar;
+//		points
+//				.stream()
+//				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES));
 		points
 				.stream()
-				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES));
+				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES, tempFinalZoomScalar));
 
 		shapeRenderer.end();
+	}
+
+	private void renderSingleSearchNodeWithScaling(int x, int y, float v, int nodeEdges, float tempFinalZoomScalar) {
+		if ((x == 0 || y == 0 || x == worldGraph.getWidth()-1 || y == worldGraph.getHeight()-1)) {
+			shapeRenderer.circle(x, y, v * tempFinalZoomScalar, nodeEdges);
+		} else {
+			shapeRenderer.circle(x, y, v, nodeEdges);
+		}
 	}
 
 	/**
