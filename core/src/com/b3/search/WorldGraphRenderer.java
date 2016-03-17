@@ -305,7 +305,6 @@ public class WorldGraphRenderer {
 		final float finalZoomScalar = zoomScalar;
 
 		// border
-//		System.out.println(finalZoomScalar);
 		float tempFinalZoomScalar;
 		if (finalZoomScalar > 3) {
 			tempFinalZoomScalar = (float) (finalZoomScalar * 1.25);
@@ -316,27 +315,21 @@ public class WorldGraphRenderer {
 		shapeRenderer.setColor(BORDER_COLOUR);
 		points
 				.stream()
-				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * BORDER_THICKNESS * tempFinalZoomScalar, NODE_EDGES, tempFinalZoomScalar));
-//		points
-//				.stream()
-//				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * tempFinalZoomScalar, NODE_EDGES));
+				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * BORDER_THICKNESS * tempFinalZoomScalar, NODE_EDGES, tempFinalZoomScalar, counter));
 		shapeRenderer.setColor(nodeColour);
 
 		// node body
 		final float finalZoomScalar1 = zoomScalar;
-//		points
-//				.stream()
-//				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES));
 		points
 				.stream()
-				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES, tempFinalZoomScalar));
+				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES, tempFinalZoomScalar, counter));
 
 		shapeRenderer.end();
 	}
 
-	private void renderSingleSearchNodeWithScaling(int x, int y, float v, int nodeEdges, float tempFinalZoomScalar) {
+	private void renderSingleSearchNodeWithScaling(int x, int y, float v, int nodeEdges, float tempFinalZoomScalar, float counter) {
 		if ((x == 0 || y == 0 || x == worldGraph.getWidth()-1 || y == worldGraph.getHeight()-1)) {
-			shapeRenderer.circle(x, y, v * tempFinalZoomScalar, nodeEdges);
+			shapeRenderer.circle(x, y, v * tempFinalZoomScalar * counter * 2, nodeEdges);
 		} else {
 			shapeRenderer.circle(x, y, v, nodeEdges);
 		}
