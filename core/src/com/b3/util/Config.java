@@ -20,7 +20,7 @@ public class Config {
 	 * it will override the value set in the user config, unless it is
 	 * unset using {@link Config#unset(ConfigKey)}
 	 */
-	private static Map<ConfigKey, Object> gameConfig = new EnumMap<>(ConfigKey.class);
+	private static final Map<ConfigKey, Object> gameConfig = new EnumMap<>(ConfigKey.class);
 
 	/**
 	 * Prevent instantiation.

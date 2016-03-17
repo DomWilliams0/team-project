@@ -33,6 +33,12 @@ public class LearningMode extends Mode {
 		currentSearch.setUpdated(true);
 	}
 
+	/**
+	 * Adds the special {@link WorldSelectionHandler} which listens for mouse inputs and responds accordingly, taking
+	 * into account the fact that this is learning mode
+	 *
+	 * @param inputHandler the current input handler
+	 */
 	@Override
 	protected void registerFurtherInputProcessors(InputHandler inputHandler) {
 		// world clicking

@@ -25,14 +25,14 @@ public class SearchTicker extends Observable {
 
 	private final WorldGraph worldGraph;
 	private Takeable<Node> frontier;
-	private List<Node> lastFrontier = new ArrayList<>();
+	private final List<Node> lastFrontier = new ArrayList<>();
 	private Node mostRecentlyExpanded;                        // Current node (expanded)
 	private List<Node> currentNeighbours;                    // Current neighbours to be expanded
 	private Node currentNeighbour;                            // Current neighbour being analyzed
 	private int neighboursSoFar;                            // Neighbours visited so far
 
-	private Set<Node> visited = new HashSet<>();
-	private Map<Node, Node> cameFrom = new HashMap<>();
+	private final Set<Node> visited = new HashSet<>();
+	private final Map<Node, Node> cameFrom = new HashMap<>();
 
 	private List<Node> path = new ArrayList<>();
 	private boolean pathComplete;
@@ -44,7 +44,7 @@ public class SearchTicker extends Observable {
 	//0: scrollpane
 	//1: play/pause button
 	//4: stepthrough active
-	private boolean[] paused;
+	private final boolean[] paused;
 	private boolean updated;
 	private boolean tickedOnce;
 
@@ -55,7 +55,7 @@ public class SearchTicker extends Observable {
 	// Pseudocode (inspect search)
 	private Pseudocode pseudocode;
 	private boolean inspectSearch;
-	private ModeType mode;
+	private final ModeType mode;
 
 	public SearchTicker(WorldGraph worldGraph, ModeType mode) {
 		this.worldGraph = worldGraph;
@@ -456,7 +456,7 @@ public class SearchTicker extends Observable {
 			//TODO this is the sound 'wave' pings that sounds cool. Needs to be refactored out of here though.
 			if (worldGraph.getCurrentSearch().getStart() != null && worldGraph.getCurrentSearch().getEnd() != null && worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
 				Point currentNode = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint();
-				Point startNode = worldGraph.getCurrentSearch().getStart().getPoint();
+				Point startNode;
 				Point end = worldGraph.getCurrentSearch().getEnd().getPoint();
 
 				int changeInX = currentNode.getX() - end.getX();
@@ -489,6 +489,13 @@ public class SearchTicker extends Observable {
 
 	}
 
+	/**
+	 * Contructs a path from the {@code start} to the {@code end} using the {@code map} generated throughout the search
+	 * @param map the map of nodes to each other nodes
+	 * @param start the start node of the path
+	 * @param end the end node of the path
+     * @return a {@link List} of {@link Node}s that is a path from {@code start} to {@code end}
+     */
 	private List<Node> constructPath(Map<Node, Node> map, Node start, Node end) {
 
 		// Helper stack for inserting elements
@@ -513,19 +520,33 @@ public class SearchTicker extends Observable {
 		return retPath;
 	}
 
+	/**
+	 * @return a {@link Takeable} list of {@link Node}s in the frontier
+     */
 	public Takeable<Node> getFrontier() {
 		return frontier;
 	}
 
+	/**
+	 * Adds {@code node} to the frontier
+	 * @param node the node to be added to the frontier
+     */
 	public void addToFrontier(Node node) {
 		frontier.add(node);
 		setUpdated(true);
 	}
 
+	/**
+	 * @return a {@link Set} of type {@link Node} containing all the nodes in the visitied
+     */
 	public Set<Node> getVisited() {
 		return visited;
 	}
 
+	/**
+	 * Adds a node to the visited set
+	 * @param node the ndoe to add to the visited set
+     */
 	public void addToVisited(Node node) {
 		visited.add(node);
 		setUpdated(true);
@@ -654,22 +675,41 @@ public class SearchTicker extends Observable {
 		return currentNeighbour;
 	}
 
+	/**
+	 * Sets the most recently expanded node to the {@code mostRecentlyExpanded}
+	 * @param mostRecentlyExpanded the most recently expanded node
+     */
 	public void setMostRecentlyExpanded(Node mostRecentlyExpanded) {
 		this.mostRecentlyExpanded = mostRecentlyExpanded;
 	}
 
+	/**
+	 * @return a {@link List} of type {@link Node} containing the nodes added to the frontier this tick
+     */
 	public List<Node> getLastFrontier() {
 		return lastFrontier;
 	}
 
+	/**
+	 * Set the updated valude to {@code updated}
+	 * @param updated the value to set the internal updated {@code SearchTicker} value to
+     */
 	public void setUpdated(boolean updated) {
 		this.updated = updated;
 	}
 
+	/**
+	 * @return true if the search ticker has been changed since last update to {@code setUpdated}
+     */
 	public boolean isUpdated() {
 		return updated;
 	}
 
+	/**
+	 * @param node a node
+	 * @param child a node
+     * @return the g value from the {@code node} to {@code child}
+     */
 	public float getG(Node node, Node child) {
 		return costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
 	}
@@ -685,10 +725,16 @@ public class SearchTicker extends Observable {
 		return costSoFarFunction.apply(node);
 	}
 
+	/**
+	 * @return true if SearchTicker has ticked once
+     */
 	public boolean isTickedOnce() {
 		return tickedOnce;
 	}
 
+	/**
+	 * Resets the pseudocode information
+	 */
 	public void clearPseudocodeInfo() {
 		currentNeighbour = null;
 		currentNeighbours = new ArrayList<>();

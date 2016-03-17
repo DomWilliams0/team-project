@@ -59,6 +59,9 @@ public class Tuple<T, U> {
 		return getFirst().equals(oT.getFirst()) && getSecond().equals(oT.getSecond());
 	}
 
+	/**
+	 * @return the hashCode of this Tuple
+     */
 	@Override
 	public int hashCode() {
 		return getFirst().hashCode();

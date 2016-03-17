@@ -13,10 +13,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * A mode to allow the user to practice what they've learnt by choosing what should be added to the frontier and
+ * visited themselves
+ *
+ */
 public class PracticeMode extends Mode {
 
 	private Stage popupStage;
 
+	/**
+	 * Constructs the world, sets up the camera, loads to worldmap and launches the world paused.
+	 *
+	 * @param game used to set up the world, contains directories to config files
+	 */
 	public PracticeMode(MainGame game) {
 		// create world
 		super(ModeType.PRACTICE, game, "core/assets/world/world_smaller_test_tiym.tmx", 45f, 20f, null, null);
@@ -26,18 +36,14 @@ public class PracticeMode extends Mode {
 		worldGraph.setLearningModeNext(SearchAlgorithm.DEPTH_FIRST);
 		worldGraph.getCurrentSearch().pause(1);
 		worldGraph.getCurrentSearch().setUpdated(true);
-
-		// Display first popup
-//        MessageBoxComponent descriptionPopup = new MessageBoxComponent(popupStage,
-//                "Welcome to the 'Try it yourself' mode.\n" +
-//                        "Here you can practice what you have learned in the 'Learning mode'.\n" +
-//                        "Currently you can interact using DFS.\n" +
-//                        "Now please click on the node to be expanded next.",
-//                "OK");
-//        descriptionPopup.show();
 	}
 
-
+	/**
+	 * Adds the special {@link PracticeModeWorldSelectionHandler} which disables pop-up and other unnecessary controls
+	 * and functions, allowing the user to concentrate on Practice Mode.
+	 *
+	 * @param inputHandler the current input handler
+	 */
 	@Override
 	protected void registerFurtherInputProcessors(InputHandler inputHandler) {
 		// popup clicking

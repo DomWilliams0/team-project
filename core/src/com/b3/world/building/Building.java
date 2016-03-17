@@ -70,13 +70,6 @@ public class Building {
 	}
 
 	/**
-	 * @return The position of the building's entry and exit point
-	 */
-	public Vector2 getEntryPoint() {
-		return null;
-	}
-
-	/**
 	 * @return the instance of the building, if flattened then no textures - just a black box; if not then contains textures too
 	 */
 	public ModelInstance getModelInstance() {
@@ -113,7 +106,6 @@ public class Building {
 		Building building = (Building) o;
 
 		return tilePosition.equals(building.tilePosition) && dimensions.equals(building.dimensions);
-
 	}
 
 	/**

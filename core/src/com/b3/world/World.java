@@ -41,6 +41,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This represents a world.
+ * It controls:
+ * 	the entities
+ * 	the nodes and rendering
+ * 	moving agents
+ * 	rendering buildings
+ */
 public class World implements Disposable {
 
 	private static final short ENTITY_CULL_TAG = 10101;
@@ -71,10 +79,21 @@ public class World implements Disposable {
 
 	private WorldGUI worldGUI;
 
+	/**
+	 * Creates a new world, for testing purposes only
+	 */
 	public World() {
 		// todo srsly unsafe
 	}
 
+	/**
+	 * Loads a TMX file from file
+	 * Initiates the world environment
+	 * Starts the building rendering ({@link Building}, {@link BuildingModelCache})
+	 * Initiates the search ({@link WorldGraph})
+	 * Initiates the GUI renderer ({@link WorldGUI})
+	 * @param fileName the name of the world to be loaded from file
+     */
 	public World(String fileName) {
 		map = new TmxMapLoader().load(fileName);
 		tileSize = new Vector2(
@@ -127,6 +146,12 @@ public class World implements Disposable {
 		processMapTileTypes(map, true);
 	}
 
+	/**
+	 * Takes a tile map and removes nodes and changes edge costs accordingly.
+	 *
+	 * @param map The tile map to process and change the {@link #worldGraph} accordingly to.
+	 * @param renderBoxes if true then render the physics collidible boxes; false for testing
+	 */
 	private void processMapTileTypes(TiledMap map, boolean renderBoxes) {
 		FixtureDef objectDef = null;
 		if (renderBoxes) { // renderBoxes is needed so as to be compatible with the tests.
@@ -302,22 +327,38 @@ public class World implements Disposable {
 		worldCamera = camera;
 	}
 
+	/**
+	 * @return the {@link TiledMap} this World is based on
+     */
 	public TiledMap getMap() {
 		return map;
 	}
 
+	/**
+	 * @return the {@link ModelManager} that the buildings in this world are managed by
+     */
 	public ModelManager getModelManager() {
 		return modelManager;
 	}
 
+	/**
+	 * @return the {@link WorldGUI} that this world uses to show pop-ups and errors
+     */
 	public WorldGUI getWorldGUI() {
 		return worldGUI;
 	}
 
+	/**
+	 * @return the {@link Engine} that this world uses
+     */
 	public Engine getEngine() {
 		return engine;
 	}
 
+	/**
+	 * This WorldGraph is a representation of the tiles and buildings in this World in an {@link Node} and edge way
+	 * @return the {@link WorldGraph} that this World uses.
+     */
 	public WorldGraph getWorldGraph() {
 		return worldGraph;
 	}
@@ -331,7 +372,6 @@ public class World implements Disposable {
 	public Agent spawnAgent(Vector2 tilePos) {
 		return new Agent(this, tilePos);
 	}
-
 
 	/**
 	 * Adds a building to the world at the given coordinates
@@ -465,7 +505,13 @@ public class World implements Disposable {
 		pendingTeleports.clear();
 	}
 
-
+	/**
+	 * Checks that, given the coordinate, a 4x4 building can be placed there. The {@param x} and {@param y} represent
+	 * the bottom left of the building.
+	 * @param x bottom left x coordinate that potential building would like to be placed
+	 * @param y bottom left y coordinate that potential building would like to be placed
+     * @return true if a building can be placed in this position
+     */
 	public boolean isValidBuildingPos(float x, float y) {
 
 		for (int i = (int) x; i < x + 4; i++) {
@@ -481,7 +527,6 @@ public class World implements Disposable {
 		return true;
 	}
 
-
 	/**
 	 * Flatten buildings and models.
 	 *
@@ -493,6 +538,9 @@ public class World implements Disposable {
 		}
 	}
 
+	/**
+	 * Safely dispose of all the components in a world
+	 */
 	@Override
 	public void dispose() {
 		buildingCache.dispose();
@@ -500,6 +548,9 @@ public class World implements Disposable {
 		physicsWorld.dispose();
 	}
 
+	/**
+	 * @return the size of the tiles as a {@link Vector2}
+     */
 	public Vector2 getTileSize() {
 		return new Vector2(tileSize);
 	}
@@ -515,14 +566,26 @@ public class World implements Disposable {
 				&& tilePos.y >= 0 && tilePos.y < tileSize.y;
 	}
 
+	/**
+	 * @return the physics world that has been used as a {@link com.badlogic.gdx.physics.box2d.World}
+     */
 	public com.badlogic.gdx.physics.box2d.World getPhysicsWorld() {
 		return physicsWorld;
 	}
 
+	/**
+	 * @return the {@link WorldCamera} that this World is recorded by
+     */
 	public WorldCamera getWorldCamera() {
 		return worldCamera;
 	}
 
+	/**
+	 * Removes a building from the world
+	 * Does not check building already exists in the world - isValidBuilding() does that
+	 *
+	 * @param positionDeletion the coordinate as a {@link Vector2} to delete the building from
+     */
 	//TODO make it so don't have to click in bottom left corner
 	public void removeBuilding(Vector2 positionDeletion) {
 		for (int i = 0; i < buildings.size(); i++) {

@@ -21,9 +21,9 @@ import java.util.List;
  */
 public class WorldCamera extends PerspectiveCamera {
 
-	private List<BoundingBox> borders;
+	private final List<BoundingBox> borders;
 	private Vector3 lastPosition;
-	private Vector2 inputDelta;
+	private final Vector2 inputDelta;
 
 	private PhysicsComponent followedAgent;
 	private float zoomAmount;
@@ -174,10 +174,16 @@ public class WorldCamera extends PerspectiveCamera {
 		zoomAmount = zoom;
 	}
 
+	/**
+	 * @return the z position of the camera.
+     */
 	public float getActualZoom() {
 		return zoomAmount;
 	}
 
+	/**
+	 * @return 1 if high contrast mode shouldn't be shown, >1 if it should
+     */
 	public float getCurrentZoom() {
 		if (zoomAmount > 30) {
 			return zoomAmount - 30;
@@ -213,14 +219,6 @@ public class WorldCamera extends PerspectiveCamera {
 	 */
 	public float getPosY() {
 		return posY;
-	}
-
-	public float getPosZ() {
-		return posZ;
-	}
-
-	public float getFOV() {
-		return FOV;
 	}
 
 }

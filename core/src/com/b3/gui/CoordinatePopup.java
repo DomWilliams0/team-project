@@ -45,7 +45,7 @@ public class CoordinatePopup {
 	 * @param visibility if true then can see pop-up, if false then cannot
      */
 	public void setVisibility(Boolean visibility) {
-		this.visibility = visibility;
+		CoordinatePopup.visibility = visibility;
 	}
 
 	/**

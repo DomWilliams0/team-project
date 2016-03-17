@@ -19,12 +19,12 @@ import java.util.Set;
  * @author oxe410 dxw405 nbg481
  */
 public class WorldGraph {
-	private Graph graph;
-	private WorldGraphRenderer renderer;
+	private final Graph graph;
+	private final WorldGraphRenderer renderer;
 
 	private SearchTicker latestSearchTicker;
 	private Agent latestSearchAgent;
-	private Map<Agent, SearchTicker> searchTickers;
+	private final Map<Agent, SearchTicker> searchTickers;
 
 	//current wanted next destination (right click)
 	private int wantedNextDestinationX = -5;

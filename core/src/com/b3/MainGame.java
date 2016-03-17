@@ -106,6 +106,10 @@ public class MainGame extends Game {
 		super.setScreen(m);
 	}
 
+	/**
+	 *
+	 * @return the current mode this game is in
+     */
 	public static ModeType getCurrentMode() {
 		return currentMode;
 	}

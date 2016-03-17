@@ -10,8 +10,8 @@ import java.util.Set;
  */
 public class Node implements Serializable {
 
-	private Point point;
-	private Map<Node, Float> edges;
+	private final Point point;
+	private final Map<Node, Float> edges;
 
 	/**
 	 * Creates a Node instance from the point

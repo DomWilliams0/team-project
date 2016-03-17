@@ -8,23 +8,38 @@ import java.util.List;
 import java.util.Observable;
 import java.util.stream.Collectors;
 
+/**
+ * Observable pseudocode, which links what a user sees on the screen to what is happening in the code
+ * Contains the lines of pseudocode
+ * Highlights the lines
+ */
 public class Pseudocode extends Observable {
 
 	private SearchAlgorithm algorithm;
 	private List<Tuple<String, Tuple<Boolean, Integer>>> lines;
 	private int currentLine;
 
+	/**
+	 * Constructs a new pseudocode
+	 */
 	public Pseudocode() {
 		lines = new ArrayList<>();
 		currentLine = 0;
 	}
 
+	/**
+	 * Constructs a new pseudocode. Changes pseudocode depending on {@param algorithm}
+	 * @param algorithm the algorithm to tailor this pseudocode to
+     */
 	public Pseudocode(SearchAlgorithm algorithm) {
 		this.algorithm = algorithm;
 		currentLine = 0;
 		initLines();
 	}
 
+	/**
+	 * Initialise the correct lines of pseudocode depending on the {@link SearchAlgorithm}
+	 */
 	private void initLines() {
 		switch (algorithm) {
 			case BREADTH_FIRST:
@@ -60,10 +75,17 @@ public class Pseudocode extends Observable {
 		}
 	}
 
+	/**
+	 * @return the {@link SearchAlgorithm} that this pseudocode visualisation is using
+     */
 	public SearchAlgorithm getAlgorithm() {
 		return algorithm;
 	}
 
+	/**
+	 * Changes the pseudocode to match the new {@code algorithm}
+	 * @param algorithm the algorithm to re-initialise this Pseuocode with
+     */
 	public void setAlgorithm(SearchAlgorithm algorithm) {
 		this.algorithm = algorithm;
 		initLines();
@@ -72,18 +94,31 @@ public class Pseudocode extends Observable {
 		notifyObservers();
 	}
 
+	/**
+	 * @return a {@link Tuple} of all the lines of pseudocode
+     */
 	public List<Tuple<String, Tuple<Boolean, Integer>>> getLines() {
 		return lines;
 	}
 
+	/**
+	 * @return the index of teh current line of pseudocode that is currently ighlighted
+     */
 	public int getCurrentLine() {
 		return currentLine;
 	}
 
+	/**
+	 * @param currentLine the line that will be highlighted
+     */
 	public void setCurrentLine(int currentLine) {
 		this.currentLine = currentLine;
 	}
 
+	/**
+	 * De-highlights the pseudocode and then highlights the current line of pseudocode
+	 * @param i the line to highlight
+     */
 	public void highlight(int i) {
 		// Un-highlight
 		lines = lines
@@ -102,8 +137,4 @@ public class Pseudocode extends Observable {
 		notifyObservers();
 	}
 
-	@Override
-	public String toString() {
-		return super.toString();
-	}
 }

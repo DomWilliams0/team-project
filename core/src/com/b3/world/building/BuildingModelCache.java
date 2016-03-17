@@ -23,8 +23,8 @@ import java.util.Map;
  * @author dxw405 nbg481
  */
 public class BuildingModelCache implements Disposable {
-	private Map<Vector3, Model> models;
-	private ModelBuilder builder;
+	private final Map<Vector3, Model> models;
+	private final ModelBuilder builder;
 
 	private Texture nightSide;
 	private Texture topSide;

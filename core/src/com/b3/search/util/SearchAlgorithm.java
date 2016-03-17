@@ -32,18 +32,31 @@ public enum SearchAlgorithm {
 		this.frontierDescription = frontierDescription;
 	}
 
+	/**
+	 * @param name the name of the algorithm chosen
+	 * @return the algorithm chosen as a enum of {@link SearchAlgorithm}
+     */
 	public static SearchAlgorithm fromName(String name) {
 		return NAMES.get(name);
 	}
 
+	/**
+	 * @return a {@link Set} of {@link String} containing all the algorithms as strings
+     */
 	public static Set<String> allNames() {
 		return NAMES.keySet();
 	}
 
+	/**
+	 * @return the current name of the chosen algorithm as a String
+     */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * @return the frontier's description
+     */
 	public String getFrontierDescription() {
 		return frontierDescription;
 	}

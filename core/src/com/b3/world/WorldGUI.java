@@ -20,11 +20,11 @@ import static com.b3.mode.ModeType.*;
  * @author nbg481
  */
 public class WorldGUI {
-	private World world;
+	private final World world;
 
-	private PopupManager popupManager;
-	private CoordinatePopup coordinatePopup;
-	private ShapeRenderer shapeRenderer;
+	private final PopupManager popupManager;
+	private final CoordinatePopup coordinatePopup;
+	private final ShapeRenderer shapeRenderer;
 
 	private float counterAnimation;
 	private int counterScaler;
@@ -34,7 +34,7 @@ public class WorldGUI {
 	private int currentNodeClickX;
 	private int currentNodeClickY;
 
-	private PopupDescription popupDescription;
+	private final PopupDescription popupDescription;
 	private float animationNextDestination;
 
 	private int yNextDestination;
@@ -109,7 +109,6 @@ public class WorldGUI {
 		//render big pop-ups
 		popupManager.render();
 	}
-
 
 	/**
 	 * Renders graph, building placement overlay and animations

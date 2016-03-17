@@ -38,7 +38,7 @@ public enum TileType {
 
 	UNKNOWN(0);
 
-	private static Map<Integer, TileType> TILES;
+	private static final Map<Integer, TileType> TILES;
 
 	static {
 		TILES = new HashMap<>();

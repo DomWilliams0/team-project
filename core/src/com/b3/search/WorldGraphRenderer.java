@@ -33,10 +33,10 @@ public class WorldGraphRenderer {
 	private static final float BORDER_THICKNESS = 1.3f; // relative to node radius
 	private static final int NODE_EDGES = 4;
 
-	private WorldGraph worldGraph;
+	private final WorldGraph worldGraph;
 	private ShapeRenderer shapeRenderer;
 
-	private Color colPath;
+	private final Color colPath;
 
 	private int currentHighlightTimer;
 	private Point currentHighlightPoint;
@@ -96,6 +96,10 @@ public class WorldGraphRenderer {
 
 	}
 
+	/**
+	 * Sets a node red for an fixed period of time. This is one tick of x left in the timer.
+	 * @param zoomScalar the current zoom (scaled), so that red node is sized correctly
+     */
 	private void setRenderRed(float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 		float zoomScalarInside = (float) (zoomScalar * 2.5);
@@ -181,6 +185,9 @@ public class WorldGraphRenderer {
 			renderHighlightedNode();
 	}
 
+	/**
+	 * Highlights a node a set colour for a fixed period of time, slowly getting smaller until it disappears
+	 */
 	private void renderHighlightedNode() {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 		shapeRenderer.setColor(currentHighlightColor);
@@ -189,12 +196,24 @@ public class WorldGraphRenderer {
 		shapeRenderer.end();
 	}
 
+	/**
+	 * Renders all the nodes of the graph
+	 * @param colour the colour to render the node
+	 * @param nodes the list of nodes to render on the screen
+	 * @param zoomScalarInside the zoomScalar to decide how big the nodes should be, taking into account z position of {@code Camera}
+     */
 	private void renderSearchNodes(Color colour, Collection<Node> nodes, float zoomScalarInside) {
 		shapeRenderer.setColor(colour);
 		nodes.stream()
 				.forEach(n -> renderSingleSearchNode(colour, n, zoomScalarInside));
 	}
 
+	/**
+	 * Renders a single node with a black boarder around it
+	 * @param color The colour of the interior colour
+	 * @param node the node to render on the world
+	 * @param zoomScalarInside the zoomScalar to decide how big the nodes should be, taking into account z position of {@code Camera}
+     */
 	private void renderSingleSearchNode(Color color, Node node, float zoomScalarInside) {
 		shapeRenderer.setColor(Color.BLACK);
 		shapeRenderer.circle(
@@ -213,6 +232,10 @@ public class WorldGraphRenderer {
 		);
 	}
 
+	/**
+	 * Renders the graph without any nodes, but a black background and lines only to represent edges and nodes of importance
+	 * @param zoomScalar the zoomScalar to decide how big the nodes should be, taking into account z position of the {@code Camera}
+     */
 	private void renderZoomedOutGraph(float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
@@ -248,6 +271,10 @@ public class WorldGraphRenderer {
 		shapeRenderer.end();
 	}
 
+	/**
+	 * Renders the nodes in the frontier, visited and other ones of importance
+	 * @param searchTicker an instance of {@link SearchTicker}, which contains recent information about all node's status
+     */
 	private void renderZoomedOutSearch(SearchTicker searchTicker) {
 		shapeRenderer.setColor(SEARCH_EDGE_COLOUR);
 
@@ -263,6 +290,11 @@ public class WorldGraphRenderer {
 		}
 	}
 
+	/**
+	 * Renders all the nodes on the grid
+	 * @param counter the radius of nodes
+	 * @param zoomScalar the zoomScalar to decide how big the nodes should be, taking into account z position of the {@code Camera}
+     */
 	private void renderNodes(float counter, float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -286,6 +318,11 @@ public class WorldGraphRenderer {
 		shapeRenderer.end();
 	}
 
+	/**
+	 * Renders the path ontop of the search
+	 * @param showPaths if true then render the path, otherwise not
+	 * @param searchTicker an instance of {@link SearchTicker}, which contains the path to render
+     */
 	private void renderPath(boolean showPaths, SearchTicker searchTicker) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -315,6 +352,10 @@ public class WorldGraphRenderer {
 		shapeRenderer.end();
 	}
 
+	/**
+	 * Renders all of the edges onto the world, between all existing nodes
+	 * Renders lower cost nodes black, and higher cost nodes white
+	 */
 	private void renderEdges() {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 		Collection<Node> nodes = worldGraph.getNodes().values();

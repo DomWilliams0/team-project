@@ -30,11 +30,11 @@ public abstract class Mode extends ScreenAdapter {
 	private final ModeType modeType;
 	private Point currentSelection;
 
-	protected World world;
-	protected WorldCamera camera;
+	protected final World world;
+	protected final WorldCamera camera;
 
-	protected MainGame game;
-	protected KeyboardController keyboardController;
+	protected final MainGame game;
+	protected final KeyboardController keyboardController;
 
 	protected Stage sideBarStage;
 	protected SideBarNodes sideBarNodes;
@@ -90,6 +90,10 @@ public abstract class Mode extends ScreenAdapter {
 		world.getWorldGUI().showIntroPopup();
 	}
 
+	/**
+	 * Allows other {@link InputHandler} to watch over this world, and respond to inputs
+	 * @param inputHandler the extra {@link InputHandler} to watch over this world
+     */
 	protected abstract void registerFurtherInputProcessors(InputHandler inputHandler);
 
 	protected abstract void tick();
@@ -102,6 +106,9 @@ public abstract class Mode extends ScreenAdapter {
 	protected void renderBeforeWorld() {
 	}
 
+	/**
+	 * Initialise the sidebars, making sure that the correct tabs are shown in learning mode
+	 */
 	protected void initSidebar() {
 		sideBarStage = new Stage(new ScreenViewport());
 
@@ -116,6 +123,10 @@ public abstract class Mode extends ScreenAdapter {
 
 	}
 
+	/**
+	 * Renders the world, sidebars, screen and keyboard controllers
+	 * @param delta the difference in time since last tick
+     */
 	@Override
 	public void render(float delta) {
 		// delta time
@@ -175,6 +186,11 @@ public abstract class Mode extends ScreenAdapter {
 			Gdx.app.exit();
 	}
 
+	/**
+	 * Reshuffle the sidebars to keep centered when the user resizes the window
+	 * @param width the new width of the window UI
+	 * @param height the new height of the window UI
+     */
 	@Override
 	public void resize(int width, int height) {
 		camera.viewportWidth = width;

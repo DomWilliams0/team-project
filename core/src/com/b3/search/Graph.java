@@ -11,9 +11,9 @@ import java.util.Map;
  */
 public class Graph {
 
-	private Map<Point, Node> nodes;
-	private int width;
-	private int height;
+	private final Map<Point, Node> nodes;
+	private final int width;
+	private final int height;
 
 	/**
 	 * Constructs a new graph with the given x and y dimensions.
