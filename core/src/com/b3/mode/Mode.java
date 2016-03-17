@@ -96,9 +96,6 @@ public abstract class Mode extends ScreenAdapter {
 	public void finishInitialisation() {
 	}
 	
-	protected void renderBeforeWorld() {
-	}
-
 	/**
 	 * Initialise the sidebars, making sure that the correct tabs are shown in learning mode
 	 */
@@ -135,8 +132,6 @@ public abstract class Mode extends ScreenAdapter {
 		camera.move(keyboardController);
 		camera.update();
 
-		renderBeforeWorld();
-		
 		// world rendering
 		world.render();
 

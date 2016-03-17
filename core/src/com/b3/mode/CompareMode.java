@@ -11,9 +11,6 @@ import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -26,13 +23,8 @@ import java.util.List;
  */
 public class CompareMode extends Mode {
 
-	private final SpriteBatch searchLabels;
 	private SideBarCompareMode sideBar;
 	private final List<Agent> agents;
-
-	private final Sprite aStarTexture;
-	private final Sprite dfsTexture;
-	private final Sprite bfsTexture;
 
 	/**
 	 * Constructs the world, sets up the camera, loads to worldmap and launches the world with the search already running.
@@ -42,22 +34,6 @@ public class CompareMode extends Mode {
 	public CompareMode(MainGame game) {
 		super(ModeType.COMPARE, game, "world/world-compare.tmx", 67, 25.f, null, 10f);
 		agents = new ArrayList<>(3);
-		searchLabels = new SpriteBatch(3);
-
-		aStarTexture = loadTexture("ASTARTEXT.png");
-		bfsTexture = loadTexture("BFSTEXT.png");
-		dfsTexture = loadTexture("DFSTEXT.png");
-	}
-
-	/**
-	 * Loads a specific texture from the core/assests/gui/{@code fileName}
-	 * @param fileName the name of the file to load from file. Needs extension on end too.
-	 * @return the {@link Sprite} loaded from the file
-     */
-	private Sprite loadTexture(String fileName) {
-		Texture tempTexture = new Texture("gui/" + fileName);
-		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		return new Sprite(tempTexture);
 	}
 
 	/**
@@ -86,21 +62,6 @@ public class CompareMode extends Mode {
 	protected void registerFurtherInputProcessors(InputHandler inputHandler) {
 		// world clicking
 		inputHandler.addProcessor(new WorldSelectionHandler(world));
-	}
-
-	/**
-	 * Draws the text "A*", "DFS" and "BFS" at the bottom of the world, in the proper respective positions.
-	 */
-	@Override
-	protected void renderBeforeWorld() {
-//		searchLabels.setProjectionMatrix(world.getWorldCamera().combined);
-//		searchLabels.begin();
-//
-//		searchLabels.draw(aStarTexture, -3, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-//		searchLabels.draw(dfsTexture, 15, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-//		searchLabels.draw(bfsTexture, 33, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-//
-//		searchLabels.end();
 	}
 
 	/**
