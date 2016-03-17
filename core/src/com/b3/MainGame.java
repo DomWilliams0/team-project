@@ -67,6 +67,7 @@ public class MainGame extends Game {
 	 * Destroys the current state and switches to the main menu
 	 */
 	public void goToMainMenu() {
+		inputHandler.clear();
 		super.setScreen(new MainMenuScreen(this));
 		currentMode = ModeType.MENU;
 	}
