@@ -54,6 +54,11 @@ public enum ConfigKey {
 	PHYSICS_RENDERING("physics-rendering"),
 
 	/**
+	 * Whether to show the landscape/terrain extension.
+	 */
+	LANDSCAPE_RENDERING("landscape-rendering"),
+
+	/**
 	 * Whether to show the grid lines on the world.
 	 */
 	SHOW_GRID("show-grid"),

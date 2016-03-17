@@ -436,7 +436,9 @@ public class World implements Disposable {
 		cleanseDeadEntities();
 		processPendingTeleports();
 
-		landscapeCamera.renderWorld();
+		if (Config.getBoolean(ConfigKey.LANDSCAPE_RENDERING))
+			landscapeCamera.renderWorld();
+		
 		worldCamera.renderWorld();
 
 		worldGUI.render();
