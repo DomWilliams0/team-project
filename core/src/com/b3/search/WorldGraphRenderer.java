@@ -1,10 +1,12 @@
 package com.b3.search;
 
+import com.b3.mode.CompareMode;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.Collection;
 import java.util.List;
@@ -89,6 +91,7 @@ public class WorldGraphRenderer {
 					.forEach(this::renderZoomedOutSearch);
 			shapeRenderer.end();
 		}
+
 		final float finalZoomScalar = zoomScalar;
 		worldGraph.getAllSearches()
 				.stream()
@@ -301,12 +304,21 @@ public class WorldGraphRenderer {
 		Color nodeColour = zoomScalar > 2 ? Color.BLACK : NODE_COLOUR;
 		Set<Point> points = worldGraph.getNodes().keySet();
 
-		// border
-		shapeRenderer.setColor(BORDER_COLOUR);
 		final float finalZoomScalar = zoomScalar;
+
+		// border
+		float tempFinalZoomScalar;
+		if (finalZoomScalar > 3) {
+			tempFinalZoomScalar = (float) (finalZoomScalar * 1.25);
+		} else  {
+			tempFinalZoomScalar = finalZoomScalar;
+		}
+
+		shapeRenderer.setColor(BORDER_COLOUR);
+
 		points
 				.stream()
-				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * finalZoomScalar, NODE_EDGES));
+				.forEach(p -> shapeRenderer.circle(p.x, p.y, NODE_RADIUS * counter * BORDER_THICKNESS * tempFinalZoomScalar, NODE_EDGES));
 		shapeRenderer.setColor(nodeColour);
 
 		// node body

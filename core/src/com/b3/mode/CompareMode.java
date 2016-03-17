@@ -96,9 +96,9 @@ public class CompareMode extends Mode {
 		searchLabels.setProjectionMatrix(world.getWorldCamera().combined);
 		searchLabels.begin();
 
-		searchLabels.draw(aStarTexture, -3, (float) -7.5, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-		searchLabels.draw(dfsTexture, 15, (float) -7.5, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-		searchLabels.draw(bfsTexture, 33, (float) -7.5, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
+		searchLabels.draw(aStarTexture, -3, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
+		searchLabels.draw(dfsTexture, 15, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
+		searchLabels.draw(bfsTexture, 33, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
 
 		searchLabels.end();
 	}
