@@ -134,28 +134,6 @@ public class World implements Disposable {
 		modelManager = new ModelManager(environment, map);
 	}
 
-	private TiledMap generateLandscape(TiledMap map) {
-		TiledMapTileLayer exampleLayer = map.getLayers().getByType(TiledMapTileLayer.class).first();
-
-		TiledMap landscape = new TiledMap();
-		int width = 60;
-		int height = 60; // todo calculate
-		TiledMapTileLayer landscapeLayer = new TiledMapTileLayer(width, height,
-				(int) exampleLayer.getTileWidth(), (int) exampleLayer.getTileHeight());
-
-		// fill with grass temporarily
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				landscapeLayer.setCell(x, y, exampleLayer.getCell(0, 0));
-			}
-
-		}
-
-		landscape.getTileSets().addTileSet(map.getTileSets().getTileSet(0));
-		landscape.getLayers().add(landscapeLayer);
-		return landscape;
-	}
-
 	/**
 	 * Takes a tile map and removes nodes and changes edge costs accordingly.
 	 *
@@ -349,7 +327,7 @@ public class World implements Disposable {
 //		if (Config.getBoolean(ConfigKey.CAMERA_RESTRICT))
 //			worldCamera.addBoundaries(this);
 
-		landscapeCamera = new WorldLandscapeCamera(fov, generateLandscape(map), x, y, zoom, worldCamera);
+		landscapeCamera = new WorldLandscapeCamera(fov, map, x, y, zoom, worldCamera);
 
 		engine.addSystem(new PhysicsSystem(physicsWorld));
 		engine.addSystem(new RenderSystem(worldCamera));

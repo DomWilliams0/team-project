@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Matrix4;
 public class WorldLandscapeCamera extends WorldCamera {
 
 	private WorldCamera mainWorld;
-	private float landscapeWidth;
-	private float landscapeHeight;
+	private float renderOffsetX;
+	private float renderOffsetY;
 
 	/**
 	 * @param fieldOfViewY The field of view of the height, in degrees, the field of view for
@@ -23,19 +23,112 @@ public class WorldLandscapeCamera extends WorldCamera {
 	 * @param startZoom    The starting Z coordinate
 	 */
 	public WorldLandscapeCamera(float fieldOfViewY, TiledMap tmx, float startX, float startY, float startZoom, WorldCamera mainWorld) {
-		super(fieldOfViewY, tmx, startX, startY, startZoom);
+		super(fieldOfViewY, LandscapeGenerator.generate(tmx), startX, startY, startZoom);
 		this.mainWorld = mainWorld;
 
 		TiledMapTileLayer layer = (TiledMapTileLayer) tmx.getLayers().get(0);
-		landscapeWidth = -layer.getWidth() / 3f;
-		landscapeHeight = -layer.getHeight() / 3f;
+//		renderOffsetX = -layer.getWidth();
+//		renderOffsetY = -layer.getHeight();
+		renderOffsetX = renderOffsetY = 0; // todo temporary
 	}
 
 
 	@Override
 	public void renderWorld() {
 		combined.set(new Matrix4(mainWorld.combined)
-				.translate(landscapeWidth, landscapeHeight, 0f));
+				.translate(renderOffsetX, renderOffsetY, 0f));
 		super.renderWorld();
+	}
+
+	private static class LandscapeGenerator {
+
+		private TiledMap landscapeMap;
+		private TiledMapTileLayer exampleLayer, landscapeLayer;
+
+		private int width, height;
+
+		public LandscapeGenerator(TiledMap originalMap) {
+			exampleLayer = originalMap.getLayers().getByType(TiledMapTileLayer.class).first();
+
+			landscapeMap = new TiledMap();
+			width = height = 60; // todo calculate
+			landscapeLayer = new TiledMapTileLayer(width, height,
+					(int) exampleLayer.getTileWidth(), (int) exampleLayer.getTileHeight());
+
+			// fill with 0, 0
+			// todo nope!
+			for (int x = 0; x < width; x++)
+				for (int y = 0; y < height; y++)
+					landscapeLayer.setCell(x, y, exampleLayer.getCell(0, 0));
+
+			expandTilesVertically();
+			expandTilesHorizontally();
+
+			landscapeMap.getTileSets().addTileSet(originalMap.getTileSets().getTileSet(0));
+			landscapeMap.getLayers().add(landscapeLayer);
+		}
+
+		private void expandTilesHorizontally() {
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					TiledMapTileLayer.Cell cell = getCell(x, y);
+					if (cell != null) {
+						setRow(cell, y, 0, x);
+						break;
+					}
+				}
+
+			}
+			for (int y = 0; y < height; y++) {
+				for (int x = width - 1; x >= 0; x--) {
+					TiledMapTileLayer.Cell cell = getCell(x, y);
+					if (cell != null) {
+						setRow(cell, y, x, width);
+						break;
+					}
+				}
+			}
+		}
+
+		private void expandTilesVertically() {
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					TiledMapTileLayer.Cell cell = getCell(x, y);
+					if (cell != null) {
+						setColumn(cell, x, 0, y);
+						break;
+					}
+				}
+
+			}
+			for (int x = 0; x < width; x++) {
+				for (int y = height - 1; y >= 0; y--) {
+					TiledMapTileLayer.Cell cell = getCell(x, y);
+					if (cell != null) {
+						setColumn(cell, x, y, height);
+						break;
+					}
+				}
+			}
+		}
+
+		private TiledMapTileLayer.Cell getCell(int x, int y) {
+			return exampleLayer.getCell(x, y);
+		}
+
+		private void setColumn(TiledMapTileLayer.Cell cell, int column, int from, int to) {
+			for (int y = from; y < to; y++)
+				landscapeLayer.setCell(column, y, cell);
+		}
+
+		private void setRow(TiledMapTileLayer.Cell cell, int row, int from, int to) {
+			for (int x = from; x < to; x++)
+				landscapeLayer.setCell(x, row, cell);
+		}
+
+
+		public static TiledMap generate(TiledMap tmx) {
+			return new LandscapeGenerator(tmx).landscapeMap;
+		}
 	}
 }
