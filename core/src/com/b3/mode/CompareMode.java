@@ -40,7 +40,7 @@ public class CompareMode extends Mode {
 	 * @param game used to set up the world, contains directories to config files
 	 */
 	public CompareMode(MainGame game) {
-		super(ModeType.COMPARE, game, "world/world-compare.tmx", 67, 25.f, null, 0f);
+		super(ModeType.COMPARE, game, "world/world-compare.tmx", 67, 25.f, null, 10f);
 		agents = new ArrayList<>(3);
 		searchLabels = new SpriteBatch(3);
 
@@ -93,14 +93,14 @@ public class CompareMode extends Mode {
 	 */
 	@Override
 	protected void renderBeforeWorld() {
-		searchLabels.setProjectionMatrix(world.getWorldCamera().combined);
-		searchLabels.begin();
-
-		searchLabels.draw(aStarTexture, -3, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-		searchLabels.draw(dfsTexture, 15, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-		searchLabels.draw(bfsTexture, 33, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
-
-		searchLabels.end();
+//		searchLabels.setProjectionMatrix(world.getWorldCamera().combined);
+//		searchLabels.begin();
+//
+//		searchLabels.draw(aStarTexture, -3, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
+//		searchLabels.draw(dfsTexture, 15, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
+//		searchLabels.draw(bfsTexture, 33, (float) -9, aStarTexture.getWidth() / 13, aStarTexture.getHeight() / 13);
+//
+//		searchLabels.end();
 	}
 
 	/**
