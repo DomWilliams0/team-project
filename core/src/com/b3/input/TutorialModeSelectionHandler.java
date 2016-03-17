@@ -14,6 +14,8 @@ import com.badlogic.gdx.math.collision.Ray;
 
 /**
  * A listener class for use with tutorial mode
+ *
+ * @author nbg481
  */
 public class TutorialModeSelectionHandler extends InputAdapter {
 

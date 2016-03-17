@@ -8,12 +8,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * Creates a pop-up and displays it to the user for x amount of time (or next click)
  * Displayed in middle of the GUI (width / 2; height / 2)
- * Created by Nishanth on 02/03/2016.
+ *
+ * @author nbg481
  */
 public class Popup {
 
-	public static boolean shouldClose;
-	public static boolean justOpen;
+	public boolean shouldClose;
+	public boolean justOpen;
 
 	private SpriteBatch spriteBatch;
 	private Sprite sprite;

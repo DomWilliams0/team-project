@@ -15,6 +15,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
+ * Pop-ups that will be shown when the user is in tutorial mode. These pop-ups tell the user what to do to progress in
+ * the tutorial
+ *
  * @author nbg481
  */
 public class TutorialPopups {
@@ -27,6 +30,9 @@ public class TutorialPopups {
 	private Node currentEndNode;
 	private int currentPage;
 
+	/**
+	 * Setup the tutorial popups, loading all the textures and setting up the array of text to be shown to the user
+	 */
 	public TutorialPopups() {
 		Texture tempTexture = new Texture("core/assets/gui/tutorial/bg.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -74,6 +80,9 @@ public class TutorialPopups {
 		stepCounter = 0;
 	}
 
+	/**
+	 * Renders the currently dispalying pop-up on screen
+	 */
 	public void render() {
 		float xGraphic = Gdx.graphics.getWidth() / 2 - backgroundTexture.getWidth() / 2;
 		float yGraphic = 0;
@@ -90,6 +99,12 @@ public class TutorialPopups {
 		spriteBatch.end();
 	}
 
+	/**
+	 * Checks that the current task that the user has to do has been completed
+	 * @param world the tutorial world that the user is in
+	 * @param sideBar the left hand sidebar (for use when checking if has opened + button presses)
+	 * @param sideBarNodes the right hand sidebar (for use when checking if has opened + button presses)
+     */
 	public void checkTaskCompleted(World world, SideBarIntensiveLearningMode sideBar, SideBarNodes sideBarNodes) {
 		switch (stepCounter) {
 			case 0:
@@ -154,14 +169,23 @@ public class TutorialPopups {
 		}
 	}
 
+	/**
+	 * @param currentPos the current position of the mouse on a node in the world
+     */
 	public void setCurrentPos(Point currentPos) {
 		this.currentPos = currentPos;
 	}
 
+	/**
+	 * @return the task that the user is currently on
+     */
 	public int getCounter() {
 		return stepCounter;
 	}
 
+	/**
+	 * @param currentPage the current page that the user is on in any of the {@link com.b3.gui.PopupDescription}
+     */
 	public void setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
 	}

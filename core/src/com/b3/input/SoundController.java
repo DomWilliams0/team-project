@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 /**
+ * Controls all of the sounds that will play during the lifetime of the program.
  * @author nbg481
  */
 public class SoundController {

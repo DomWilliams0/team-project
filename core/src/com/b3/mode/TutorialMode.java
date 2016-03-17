@@ -12,12 +12,21 @@ import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * A mode to introduce the user to common controls and functions of the application
+ *
+ * @author nbg481
+ */
 public class TutorialMode extends Mode {
 
 	private SideBarIntensiveLearningMode sideBar;
-
 	private final TutorialPopups tutorialPopups;
 
+	/**
+	 * Constructs the world, sets up the camera, loads to worldmap and launches the world paused.
+	 *
+	 * @param game used to set up the world, contains directories to config files
+     */
 	public TutorialMode(MainGame game) {
 		// create world
 		super(ModeType.TUTORIAL, game, "core/assets/world/world_smaller_test_tiym.tmx", 45f, 25f, null, null);
@@ -29,6 +38,11 @@ public class TutorialMode extends Mode {
 		tutorialPopups = new TutorialPopups();
 	}
 
+	/**
+	 * Adds the special {@link TutorialModeSelectionHandler} which allows specfic clicks disabled, to focus
+	 * user to ONLY do as instructed.
+	 * @param inputHandler the current input handler
+     */
 	@Override
 	protected void registerFurtherInputProcessors(InputHandler inputHandler) {
 		// world clicking
@@ -89,14 +103,27 @@ public class TutorialMode extends Mode {
 		sideBar.resize(width, height);
 	}
 
+	/**
+	 * sets the current position of the mouse to the nearest node
+	 * @param currentPos the node the user's mouse is closed to
+     */
 	public void setCurrentPos(Point currentPos) {
 		tutorialPopups.setCurrentPos(currentPos);
 	}
 
+	/**
+	 * {@link com.b3.gui.PopupDescription} should only be shown after the tutorial mode has asked for the user to click
+	 * on it
+	 * @return true if the {@link com.b3.gui.PopupDescription} should be shown
+     */
 	public boolean needPopups() {
 		return (tutorialPopups.getCounter() >= 7);
 	}
 
+	/**
+	 * Sets the current page of the currently open pop-up
+	 * @param currentPage the current page of the currently open pop-up
+     */
 	public void setCurrentPage(int currentPage) {
 		tutorialPopups.setCurrentPage(currentPage);
 	}

@@ -45,9 +45,12 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if (Popup.justOpen) {
-			Popup.shouldClose = true;
-			return false;
+		for (int i = 0; i < world.getWorldGUI().getPopupManager().length(); i ++) {
+			Popup popup = world.getWorldGUI().getPopupManager().getPopup(i);
+			if (popup.justOpen) {
+				popup.shouldClose = true;
+				return false;
+			}
 		}
 
 		//if near bottom of screen hitting the intensive learning mode button so ignore

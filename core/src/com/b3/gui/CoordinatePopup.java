@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
+ * Displays a coordinate picker on the bottom of the screen showing the current node that the user is hovering over
+ *
  * @author nbg481
  */
 public class CoordinatePopup {
@@ -22,6 +24,9 @@ public class CoordinatePopup {
 
 	public static Boolean visibility;
 
+	/**
+	 * Sets up a new coordinate picker displayer
+	 */
 	public CoordinatePopup() {
 		spriteBatch = new SpriteBatch();
 		//load font from file
@@ -35,14 +40,26 @@ public class CoordinatePopup {
 		coordinate = null;
 	}
 
+	/**
+	 * Sets the visibility of the coordinate picker
+	 * @param visibility if true then can see pop-up, if false then cannot
+     */
 	public void setVisibility(Boolean visibility) {
 		this.visibility = visibility;
 	}
 
+	/**
+	 * sets the coordinate to display as (x, y)
+	 * @param x the x coordinate the user's mouse is hovering on
+	 * @param y the y coordinate the user's mouse is hovering on
+     */
 	public static void setCoordinate(int x, int y) {
 		coordinate = "(" + x + ", " + y + ")";
 	}
 
+	/**
+	 * Renders the coordinate picker
+	 */
 	public void render() {
 		if (visibility) {
 			spriteBatch.begin();
@@ -52,6 +69,9 @@ public class CoordinatePopup {
 		}
 	}
 
+	/**
+	 * Resises the coordinate picker, to be called whenever the viewport is resized.
+	 */
 	public void resize() {
 		spriteBatch = new SpriteBatch();
 	}

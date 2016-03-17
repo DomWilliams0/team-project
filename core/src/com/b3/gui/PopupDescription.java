@@ -22,6 +22,8 @@ import static java.util.Collections.reverse;
 /**
  * A pop-up visual that explains what each node is
  * Including drawing the heuristic and explaining to the user where the costs come from.
+ *
+ * @author nbg481
  */
 public class PopupDescription {
 
@@ -617,10 +619,16 @@ public class PopupDescription {
 		pageNo = 0;
 	}
 
+	/**
+	 * Resets the animation
+	 */
 	public void resetCounterAnimation() {
 		counterAnimationFade = 0;
 	}
 
+	/**
+	 * @return the page of the currently opened pop-up
+     */
 	public int getPageNo() {
 		return pageNo;
 	}
