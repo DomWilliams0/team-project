@@ -1,6 +1,8 @@
 package com.b3.world;
 
 import com.b3.search.util.Function2;
+import com.b3.util.Utils;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Matrix4;
@@ -48,25 +50,55 @@ public class WorldLandscapeCamera extends WorldCamera {
 		private TiledMapTileLayer exampleLayer, landscapeLayer;
 
 		private int width, height;
+		private float scale;
 
 		public LandscapeGenerator(TiledMap originalMap) {
 			exampleLayer = originalMap.getLayers().getByType(TiledMapTileLayer.class).first();
 
 			landscapeMap = new TiledMap();
-			float scale = 3f;
+			scale = 3f;
 			width = (int) (exampleLayer.getWidth() * scale);
 			height = (int) (exampleLayer.getHeight() * scale);
-			
-			
-			landscapeLayer = new TiledMapTileLayer(width, height,
-					(int) exampleLayer.getTileWidth(), (int) exampleLayer.getTileHeight());
 
+
+			landscapeLayer = createLayer();
+
+			// expand terrain
 			expandTilesVertically(this::getExampleCell);
 			expandTilesHorizontally(this::getExampleCell);
 			expandTilesVertically(this::getLandscapeCell);
 
+			// add random objects
+			MapLayer objectsLayer = originalMap.getLayers().get("objects");
+			if (objectsLayer != null)
+				populateWithObjects((TiledMapTileLayer) objectsLayer, createLayer());
+
 			landscapeMap.getTileSets().addTileSet(originalMap.getTileSets().getTileSet(0));
-			landscapeMap.getLayers().add(landscapeLayer);
+		}
+
+		private TiledMapTileLayer createLayer() {
+			TiledMapTileLayer newLayer = new TiledMapTileLayer(width, height,
+					(int) exampleLayer.getTileWidth(), (int) exampleLayer.getTileHeight());
+
+			landscapeMap.getLayers().add(newLayer);
+			return newLayer;
+		}
+
+		private void populateWithObjects(TiledMapTileLayer sourceObjects, TiledMapTileLayer landscapeObjects) {
+			// find objects
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					TiledMapTileLayer.Cell cell = sourceObjects.getCell(x, y);
+					if (cell == null || TileType.getFromCell(cell) != TileType.UNKNOWN)
+						continue;
+
+					// add at a random position
+					int objX = Utils.RANDOM.nextInt(width);
+					int objY = Utils.RANDOM.nextInt(height);
+
+					landscapeObjects.setCell(objX, objY, cell);
+				}
+			}
 		}
 
 		private void expandTilesHorizontally(Function2<Integer, Integer, TiledMapTileLayer.Cell> cellGetter) {
