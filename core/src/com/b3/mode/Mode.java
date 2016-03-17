@@ -190,6 +190,7 @@ public abstract class Mode extends ScreenAdapter {
 		world.render();
 
 		// menu rendering
+		menu.render();
 		menuStage.act();
 		menuStage.draw();
 

@@ -3,12 +3,17 @@ package com.b3.gui.components;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 public class MenuComponent extends Table {
+
+    private final Sprite backgroundTexture;
+    private final SpriteBatch spriteBatch;
 
     private float height;
 
@@ -18,6 +23,8 @@ public class MenuComponent extends Table {
 
     public MenuComponent(float height) {
         this.height = height;
+        backgroundTexture = new Sprite(new Texture("world/popups/emptycanvas250x250.png"));
+        spriteBatch = new SpriteBatch();
         init();
     }
 
@@ -35,8 +42,14 @@ public class MenuComponent extends Table {
         setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
     }
 
+    public void render() {
+        spriteBatch.begin();
+        spriteBatch.draw(backgroundTexture, (float) -19, Gdx.graphics.getHeight() - backgroundTexture.getHeight() + 75, 350, 100);
+        spriteBatch.end();
+    }
+
     private void init() {
-        setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
+//        setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
 
         setPosition(0, Gdx.graphics.getHeight() - height);
         setSize(Gdx.graphics.getWidth(), height);
