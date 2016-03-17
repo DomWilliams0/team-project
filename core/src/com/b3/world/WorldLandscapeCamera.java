@@ -26,10 +26,11 @@ public class WorldLandscapeCamera extends WorldCamera {
 		super(fieldOfViewY, LandscapeGenerator.generate(tmx), startX, startY, startZoom);
 		this.mainWorld = mainWorld;
 
-		TiledMapTileLayer layer = (TiledMapTileLayer) tmx.getLayers().get(0);
-//		renderOffsetX = -layer.getWidth();
-//		renderOffsetY = -layer.getHeight();
-		renderOffsetX = renderOffsetY = 0; // todo temporary
+		TiledMapTileLayer landscapeLayer = map.getLayers().getByType(TiledMapTileLayer.class).first();
+		TiledMapTileLayer originalLayer = tmx.getLayers().getByType(TiledMapTileLayer.class).first();
+
+		renderOffsetX = -landscapeLayer.getWidth() / 2 + originalLayer.getWidth() / 2;
+		renderOffsetY = -landscapeLayer.getHeight() / 2 + originalLayer.getHeight() / 2;
 	}
 
 
@@ -113,7 +114,9 @@ public class WorldLandscapeCamera extends WorldCamera {
 		}
 
 		private TiledMapTileLayer.Cell getCell(int x, int y) {
-			return exampleLayer.getCell(x, y);
+			return exampleLayer.getCell(
+					x - width / 2 + exampleLayer.getWidth() / 2,
+					y - height / 2 + exampleLayer.getHeight() / 2);
 		}
 
 		private void setColumn(TiledMapTileLayer.Cell cell, int column, int from, int to) {

@@ -22,6 +22,7 @@ public class WorldCamera extends PerspectiveCamera {
 	private float zoomAmount;
 
 	private TiledMapRenderer renderer;
+	protected final TiledMap map;
 
 	// todo redo camera restriction
 
@@ -45,6 +46,7 @@ public class WorldCamera extends PerspectiveCamera {
 		inputDelta = new Vector2();
 
 		renderer = new OrthogonalTiledMapRenderer(tmx, 1f / Utils.TILESET_RESOLUTION);
+		map = tmx;
 	}
 
 	/**
