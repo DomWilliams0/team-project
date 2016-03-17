@@ -111,8 +111,6 @@ public class World implements Disposable {
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-		
-		modelManager = new ModelManager(environment, map);
 
 		// entities
 		engine = new Engine();
@@ -133,8 +131,11 @@ public class World implements Disposable {
 
 		// load map tiles
 		loadBuildings(map);
+		// processMapTileTypes must be before ModelManager.
 		processMapTileTypes(map);
-
+		
+		// ModelManager must be after processMapTileTypes.
+		modelManager = new ModelManager(environment, map);
 	}
 
 	/**
@@ -167,6 +168,8 @@ public class World implements Disposable {
 
 			// remove node even if unknown tile type is found
 			boolean objectLayer = layer.getName().equals("objects");
+			// remove all nodes from cut layer
+			boolean cutLayer = layer.getName().equals("cut");
 
 			// remove nodes on invalid tiles
 			// todo assign costs to edges
@@ -177,7 +180,7 @@ public class World implements Disposable {
 						continue;
 
 					TileType type = TileType.getFromCell(cell);
-					if (!objectLayer && type == TileType.UNKNOWN)
+					if (!cutLayer && !objectLayer && type == TileType.UNKNOWN)
 						continue;
 
 
@@ -195,7 +198,7 @@ public class World implements Disposable {
 						continue;
 
 					// cost of 0
-					if (!type.shouldHaveNode()) {
+					if (!type.shouldHaveNode() || cutLayer) {
 						worldGraph.removeNode(node);
 					}
 					// apply cost to edges if the tile types are the same, or this node's cost is more than its neighbour's

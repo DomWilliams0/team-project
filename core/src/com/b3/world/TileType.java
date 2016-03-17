@@ -27,6 +27,8 @@ public enum TileType {
 			869, 870, 871, 904, 905, 906, 907, 908),
 
 	ZEBRA_CROSSING(1, 824, 825, 826, 827, 828, 829),
+	
+	RIVER(0, 212, 214),
 
 	COBBLESTONE(1, 704, 705, 706, 707, 708, 709, 710, 711, 712, 741, 742,
 			743, 744,
@@ -49,10 +51,10 @@ public enum TileType {
 			}
 	}
 
-	private final float cost;
+	private final int cost;
 	private int[] ids;
 
-	TileType(float cost, int... ids) {
+	TileType(int cost, int... ids) {
 		this.cost = cost;
 		this.ids = ids;
 	}
@@ -81,7 +83,7 @@ public enum TileType {
 	/**
 	 * @return The cost of this TileType
 	 */
-	public float getCost() {
+	public int getCost() {
 		return cost;
 	}
 
@@ -90,6 +92,6 @@ public enum TileType {
 	 * <code>false</code> otherwise.
 	 */
 	public boolean shouldHaveNode() {
-		return cost > 0f;
+		return cost > 0;
 	}
 }
