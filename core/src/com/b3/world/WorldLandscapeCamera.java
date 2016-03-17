@@ -44,6 +44,10 @@ public class WorldLandscapeCamera extends WorldCamera {
 		super.renderWorld();
 	}
 
+	/**
+	 * Generates a landscape TiledMap, extrapolating
+	 * the tiles on the edges of the given TiledMap
+	 */
 	private static class LandscapeGenerator {
 
 		private TiledMap landscapeMap;
@@ -52,6 +56,9 @@ public class WorldLandscapeCamera extends WorldCamera {
 		private int width, height;
 		private float scale;
 
+		/**
+		 * @param originalMap The TiledMap to extrapolate
+		 */
 		public LandscapeGenerator(TiledMap originalMap) {
 			exampleLayer = originalMap.getLayers().getByType(TiledMapTileLayer.class).first();
 
@@ -76,6 +83,11 @@ public class WorldLandscapeCamera extends WorldCamera {
 			landscapeMap.getTileSets().addTileSet(originalMap.getTileSets().getTileSet(0));
 		}
 
+		/**
+		 * Creates a new layer based on the exampleLayer and adds it to the landscape map
+		 *
+		 * @return The newly created layer
+		 */
 		private TiledMapTileLayer createLayer() {
 			TiledMapTileLayer newLayer = new TiledMapTileLayer(width, height,
 					(int) exampleLayer.getTileWidth(), (int) exampleLayer.getTileHeight());
@@ -84,6 +96,12 @@ public class WorldLandscapeCamera extends WorldCamera {
 			return newLayer;
 		}
 
+		/**
+		 * Populates the landscape with random objects taken from the original map
+		 *
+		 * @param sourceObjects    The original map's object layer
+		 * @param landscapeObjects The landscape map's object layer to populate
+		 */
 		private void populateWithObjects(TiledMapTileLayer sourceObjects, TiledMapTileLayer landscapeObjects) {
 			// find objects
 			for (int x = 0; x < width; x++) {
@@ -101,6 +119,11 @@ public class WorldLandscapeCamera extends WorldCamera {
 			}
 		}
 
+		/**
+		 * Extrapolates border tiles horizontally
+		 *
+		 * @param cellGetter A function that returns a cell at given coordinates
+		 */
 		private void expandTilesHorizontally(Function2<Integer, Integer, TiledMapTileLayer.Cell> cellGetter) {
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
@@ -123,6 +146,11 @@ public class WorldLandscapeCamera extends WorldCamera {
 			}
 		}
 
+		/**
+		 * Extrapolates border tiles vertically
+		 *
+		 * @param cellGetter A function that returns a cell at given coordinates
+		 */
 		private void expandTilesVertically(Function2<Integer, Integer, TiledMapTileLayer.Cell> cellGetter) {
 			for (int x = 0; x < width; x++) {
 				for (int y = 0; y < height; y++) {
@@ -145,27 +173,61 @@ public class WorldLandscapeCamera extends WorldCamera {
 			}
 		}
 
+		/**
+		 * Gets the cell in the original world at the given scaled coordinates
+		 *
+		 * @param x Landscape scale X coordinate
+		 * @param y Landscape scale Y coordinate
+		 * @return The cell at the given coordinates
+		 */
 		private TiledMapTileLayer.Cell getExampleCell(int x, int y) {
 			return exampleLayer.getCell(
 					x - width / 2 + exampleLayer.getWidth() / 2,
 					y - height / 2 + exampleLayer.getHeight() / 2);
 		}
 
+		/**
+		 * Gets the cell in the landscape world at the given coordinates
+		 *
+		 * @param x X coordinate
+		 * @param y Y coordinate
+		 * @return The cell at the given coordinates
+		 */
 		private TiledMapTileLayer.Cell getLandscapeCell(int x, int y) {
 			return landscapeLayer.getCell(x, y);
 		}
 
+		/**
+		 * Sets the whole given column to the given tile
+		 *
+		 * @param cell   The cell to fill up with
+		 * @param column Index of the column to fill up
+		 * @param from   Index of the row to fill from
+		 * @param to     Index of the row to fill to
+		 */
 		private void setColumn(TiledMapTileLayer.Cell cell, int column, int from, int to) {
 			for (int y = from; y < to; y++)
 				landscapeLayer.setCell(column, y, cell);
 		}
 
+		/**
+		 * Sets the whole given row to the given tile
+		 *
+		 * @param cell The cell to fill up with
+		 * @param row  Index of the row to fill up
+		 * @param from Index of the column to fill from
+		 * @param to   Index of the column to fill to
+		 */
 		private void setRow(TiledMapTileLayer.Cell cell, int row, int from, int to) {
 			for (int x = from; x < to; x++)
 				landscapeLayer.setCell(x, row, cell);
 		}
 
 
+		/**
+		 * @param tmx The tiled map to generate a landscape for
+		 * @return The newly generated landscape tiled map
+		 */
 		public static TiledMap generate(TiledMap tmx) {
 			return new LandscapeGenerator(tmx).landscapeMap;
 		}
