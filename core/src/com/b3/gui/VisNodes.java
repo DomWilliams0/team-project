@@ -54,7 +54,6 @@ public class VisNodes extends Table {
 					"With each expansion we mark the node \n" +
 					"as visited (using a hash set),\n" +
 					"to ensure we do not expand it again.";
-	private static final Color defaultBackground = new Color(0.56f, 0.69f, 0.83f, 1);
 
 	private Node newVisited;
 	private List<Node> newFrontier;
@@ -82,14 +81,8 @@ public class VisNodes extends Table {
 
 	/**
 	 * Create a new data visualisation table
-<<<<<<< HEAD
-	 *
-	 * @param stage The stage with which to render
-	 * @param skin  The skin of the table and scrollpanes (background of scrollpane is removed)
-=======
 	 * @param stage The stage with which to render
 	 * @param skin The skin of the table and scrollpanes (background of scrollpane is removed)
->>>>>>> extracted scroll pane management to outside visnodes
 	 * @param world The world of the simulation
 	 */
 	public VisNodes(Stage stage, Skin skin, World world) {

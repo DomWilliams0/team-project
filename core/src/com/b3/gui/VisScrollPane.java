@@ -2,7 +2,6 @@ package com.b3.gui;
 
 import com.b3.search.Node;
 import com.b3.search.Point;
-import com.b3.search.WorldGraph;
 import com.b3.search.WorldGraphRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -20,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by lewis on 15/03/16.
+ * @author lxd417
  */
 public class VisScrollPane extends ScrollPane {
 

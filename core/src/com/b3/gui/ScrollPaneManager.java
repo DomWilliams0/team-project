@@ -14,13 +14,11 @@ import java.util.List;
  */
 public class ScrollPaneManager {
 
-	private VisNodes vn;
 	private VisScrollPane vp, fp;
 	private MostRecentlyUpdated mru = MostRecentlyUpdated.NONE;
 
 
 	public ScrollPaneManager(Stage stage, VisNodes vn) {
-		this.vn = vn;
 		Skin skin = vn.getSkin();
 
 		ScrollPane.ScrollPaneStyle style = new ScrollPane.ScrollPaneStyle();
@@ -45,10 +43,6 @@ public class ScrollPaneManager {
 	public void clear() {
 		vp.clearTable();
 		fp.clearTable();
-	}
-
-	public boolean hasChildren() {
-		return vp.hasChildren() || fp.hasChildren();
 	}
 
 	public VisScrollPane getVp() {
