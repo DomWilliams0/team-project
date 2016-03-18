@@ -79,7 +79,8 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			if (steering != null) {
 				steering.tick(steeringOutput);
 			} else {
-				if (getPath().size() == 0) {
+				List<Vector2> path = getPath();
+				if (path.size() == 0) {
 					//Path not completed properly, so show error and start again
 					world.getWorldGUI().getPopupManager().showBehaviourError();
 					shouldPlayFail = -1;
@@ -87,7 +88,8 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 					ticker.reset(algo, startNode, endNode);
 					ticker.pause(1);
 				} else {
-					if (!(getPath().get(getPath().size() - 1).x == endNode.getPoint().x && getPath().get(getPath().size() - 1).y == endNode.getPoint().y))
+					if (!(path.get(path.size() - 1).x == endNode.getPoint().x &&
+							path.get(path.size() - 1).y == endNode.getPoint().y))
 						ticker.reset(algorithm, startNode, endNode);
 				}
 			}
