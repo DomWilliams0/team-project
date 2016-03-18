@@ -10,6 +10,7 @@ import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
+import com.b3.input.SoundController;
 import com.b3.search.Point;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -156,6 +157,7 @@ public abstract class Mode extends ScreenAdapter {
 		mainMenuItem.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				SoundController.stopSound(3);
 				game.goToMainMenu();
 			}
 		});

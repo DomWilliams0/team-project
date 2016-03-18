@@ -302,36 +302,42 @@ public class WorldGraphRenderer {
 		Color nodeColour = zoomScalar > 2 ? Color.BLACK : NODE_COLOUR;
 		Set<Point> points = worldGraph.getNodes().keySet();
 
-		final float finalZoomScalar = zoomScalar;
-
 		// border
 		float tempFinalZoomScalar;
-		if (finalZoomScalar > 3) {
-			tempFinalZoomScalar = (float) (finalZoomScalar * 1.25);
+		if (zoomScalar > 3) {
+			tempFinalZoomScalar = (float) (zoomScalar * 1.25);
 		} else  {
-			tempFinalZoomScalar = finalZoomScalar;
+			tempFinalZoomScalar = zoomScalar;
 		}
 
 		shapeRenderer.setColor(BORDER_COLOUR);
 		points
 				.stream()
-				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * BORDER_THICKNESS * tempFinalZoomScalar, NODE_EDGES, tempFinalZoomScalar, counter));
+				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * BORDER_THICKNESS * tempFinalZoomScalar, tempFinalZoomScalar, counter));
 		shapeRenderer.setColor(nodeColour);
 
 		// node body
 		final float finalZoomScalar1 = zoomScalar;
 		points
 				.stream()
-				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * finalZoomScalar1, NODE_EDGES, tempFinalZoomScalar, counter));
+				.forEach(point -> renderSingleSearchNodeWithScaling(point.getX(), point.getY(), NODE_RADIUS * counter * finalZoomScalar1, tempFinalZoomScalar, counter));
 
 		shapeRenderer.end();
 	}
 
-	private void renderSingleSearchNodeWithScaling(int x, int y, float v, int nodeEdges, float tempFinalZoomScalar, float counter) {
+	/**
+	 * Renders a single search node with four scaling corners which are bigger by default the scale to cover the rest of the world
+	 * @param x x coordinate of node
+	 * @param y y coordinate of node
+	 * @param v radius of circle
+	 * @param tempFinalZoomScalar the zoom scalar for animation
+	 * @param counter the counter initial animation
+	 */
+	private void renderSingleSearchNodeWithScaling(int x, int y, float v, float tempFinalZoomScalar, float counter) {
 		if (x == 0 && y == 0 || x == worldGraph.getWidth()-1 & y == worldGraph.getHeight()-1 || x == 0 && y == worldGraph.getHeight()-1 || x == worldGraph.getWidth()-1 & y ==0) {
-			shapeRenderer.circle(x, y, v * tempFinalZoomScalar * counter * 2, nodeEdges);
+			shapeRenderer.circle(x, y, v * tempFinalZoomScalar * counter * 2, WorldGraphRenderer.NODE_EDGES);
 		} else {
-			shapeRenderer.circle(x, y, v, nodeEdges);
+			shapeRenderer.circle(x, y, v, WorldGraphRenderer.NODE_EDGES);
 		}
 	}
 

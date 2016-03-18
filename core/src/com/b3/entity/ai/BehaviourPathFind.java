@@ -85,6 +85,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 					shouldPlayFail = -1;
 					SearchAlgorithm algo = world.getWorldGraph().getLearningModeNext();
 					ticker.reset(algo, startNode, endNode);
+					ticker.pause(1);
 				} else {
 					if (!(getPath().get(getPath().size() - 1).x == endNode.getPoint().x && getPath().get(getPath().size() - 1).y == endNode.getPoint().y))
 						ticker.reset(algorithm, startNode, endNode);
