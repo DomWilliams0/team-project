@@ -125,7 +125,6 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 
 		if (path.size() > 0)
 			if (path.get(path.size() - 1).x == endNode.getPoint().x && path.get(path.size() - 1).y == endNode.getPoint().y) {
-				System.out.println("Valid path");
 				steering = new SteeringPathFollow(agent.getPhysicsComponent(), path);
 			}
 	}
