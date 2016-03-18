@@ -4,6 +4,8 @@ import com.b3.MainGame;
 import com.b3.gui.PopupDescription;
 import com.b3.gui.components.MenuComponent;
 import com.b3.gui.components.MenuItemComponent;
+import com.b3.gui.components.MessageBoxComponent;
+import com.b3.gui.help.HelpBox;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;
@@ -145,6 +147,10 @@ public abstract class Mode extends ScreenAdapter {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				// help popup
+				HelpBox helpBox = new HelpBox(menuStage);
+
+				MessageBoxComponent messageBoxComponent = new MessageBoxComponent(menuStage, helpBox);
+				messageBoxComponent.show();
 			}
 		});
 		mainMenuItem.addListener(new ChangeListener() {

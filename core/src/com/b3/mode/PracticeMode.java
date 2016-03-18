@@ -3,7 +3,6 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
-import com.b3.gui.help.HelpBox;
 import com.b3.input.InputHandler;
 import com.b3.input.PracticeModeWorldSelectionHandler;
 import com.b3.search.WorldGraph;
@@ -60,9 +59,6 @@ public class PracticeMode extends Mode {
 	protected void initSidebar() {
 		super.initSidebar();
 		popupStage = new Stage(new ScreenViewport());
-
-		HelpBox helpBox = new HelpBox(sideBarStage);
-		sideBarStage.addActor(helpBox);
 	}
 
 	/**

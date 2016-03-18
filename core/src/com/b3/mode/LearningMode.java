@@ -3,7 +3,6 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
-import com.b3.gui.help.HelpBox;
 import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
 import com.b3.input.InputHandler;
 import com.b3.input.WorldSelectionHandler;
@@ -17,7 +16,6 @@ import com.b3.search.util.SearchAlgorithm;
  */
 public class LearningMode extends Mode {
 	private SideBarIntensiveLearningMode sideBar;
-	private HelpBox helpBox;
 
 	/**
 	 * Constructs the world, sets up the camera, loads to worldmap and launches the world paused.
@@ -54,9 +52,6 @@ public class LearningMode extends Mode {
 		sideBar = new SideBarIntensiveLearningMode(sideBarStage, world);
 		sideBar.setController(game);
 		sideBarStage.addActor(sideBar);
-
-		helpBox = new HelpBox(sideBarStage);
-		sideBarStage.addActor(helpBox);
 	}
 
 	/**
@@ -96,6 +91,5 @@ public class LearningMode extends Mode {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		sideBar.resize(width, height);
-		helpBox.resize(width, height);
 	}
 }

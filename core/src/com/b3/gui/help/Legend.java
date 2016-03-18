@@ -43,7 +43,7 @@ public class Legend extends Table {
 	 */
 	private void initComponents() {
 		//Encapsulate the title in a label and add it
-		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 20, "Legend:", new Color(0xa0a0ffff));
+		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 20, "Legend:", new Color(0x454589ff));
 		add(lbl.getComponent());
 		row();
 
