@@ -28,6 +28,8 @@ public class MainMenuScreen implements Screen {
     private final Sprite sprite;
     private final Sprite spriteTwoText;
     private final MainGame controller;
+    private final Sprite spriteBackground;
+    private float aspectRatioY;
 
     /**
      * Constructs the (static / final) main menu camera and the two buttons, and sets up events for each respective button.
@@ -100,9 +102,13 @@ public class MainMenuScreen implements Screen {
 
         mainMenuStage.addActor(wrapper);
 
-        //Load texture for ICON
         spriteBatch = new SpriteBatch();
+        //Load texture for ICON
         sprite = new Sprite(new Texture("icon.png"));
+        //Load texture for the BACKGROUND
+        spriteBackground = new Sprite(new Texture("menu_bg.png"));
+        aspectRatioY = spriteBackground.getHeight() / spriteBackground.getWidth();
+        System.out.println(aspectRatioY);
 
         spriteTwoText= new Sprite(new Texture("icon_final.png"));
     }
@@ -119,12 +125,16 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClearColor(0.925490196f, 0.941176471f, 0.941176471f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //render background
+
         camera.viewportWidth = Gdx.graphics.getWidth();
         camera.viewportHeight = Gdx.graphics.getHeight();
 
         mainMenuStage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
         camera.update();
+
+        renderBackground();
 
         spriteBatch.begin();
         float size = (float) (Gdx.graphics.getHeight() / 5);
@@ -134,6 +144,21 @@ public class MainMenuScreen implements Screen {
 
         mainMenuStage.act();
         mainMenuStage.draw();
+    }
+
+    private void renderBackground() {
+        spriteBatch.begin();
+
+        float width = Gdx.graphics.getWidth();
+        float height = width * aspectRatioY;
+
+        if (height < Gdx.graphics.getHeight()) {
+            height = Gdx.graphics.getHeight();
+            width = height / aspectRatioY;
+        }
+
+        spriteBatch.draw(spriteBackground, 0, 0, width, height);
+        spriteBatch.end();
     }
 
     /**
