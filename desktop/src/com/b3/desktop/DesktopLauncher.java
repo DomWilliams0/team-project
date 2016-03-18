@@ -18,7 +18,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
 		config.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
-		config.title = "Cop Chase";
+		config.title = "Learn Practice Compare";
 		new LwjglApplication(new MainGame(), config);
 	}
 	

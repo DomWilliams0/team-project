@@ -247,6 +247,13 @@ public class HelpBox extends Table {
 		return t.add(lbl.getComponent());
 	}
 
+	/**
+	 * Adds some help text to the given table, in a label component formatted in the appropriate way
+	 *
+	 * @param t       The table to add the text to
+	 * @param s       The string to put in
+	 * @return The cell created in the table
+	 */
 	private Cell addHelp(Table t, String s) {
 		return addHelp(t, s, false);
 	}

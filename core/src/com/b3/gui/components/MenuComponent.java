@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Align;
 public class MenuComponent extends Table {
 
     private final Sprite backgroundTexture;
-    private final SpriteBatch spriteBatch;
+    private SpriteBatch spriteBatch;
 
     private float height;
 
@@ -61,6 +61,7 @@ public class MenuComponent extends Table {
     }
 
     public void resize(int width, int height) {
+        spriteBatch = new SpriteBatch();
         setPosition(0, height - this.height);
         setWidth(width);
         setHeight(this.height);

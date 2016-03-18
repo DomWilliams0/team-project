@@ -129,7 +129,7 @@ public class MainMenuScreen implements Screen {
         spriteBatch.begin();
         float size = (float) (Gdx.graphics.getHeight() / 5);
         spriteBatch.draw(sprite, Gdx.graphics.getWidth() / 2 - size / 2, Gdx.graphics.getHeight() - size, size, size);
-        spriteBatch.draw(spriteTwoText, Gdx.graphics.getWidth() / 2 - spriteTwoText.getWidth()/2, (float) (Gdx.graphics.getHeight() - size*1.25) - 10);
+        spriteBatch.draw(spriteTwoText, Gdx.graphics.getWidth() / 2 - spriteTwoText.getWidth()/2, (float) (Gdx.graphics.getHeight() - size*1.25) - 50);
         spriteBatch.end();
 
         mainMenuStage.act();
