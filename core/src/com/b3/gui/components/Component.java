@@ -7,6 +7,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.function.Function;
 
+/**
+ * An abstract class of component that forms a base for any of the components.
+ * A component is an on screen object of a UI type, e.g. a button, label or checkbox
+ */
 public abstract class Component implements Observer {
 
 	private Function<Observable, Void> updateListener;
@@ -34,6 +38,11 @@ public abstract class Component implements Observer {
 		this.updateListener = updateListener;
 	}
 
+	/**
+	 * Updates the observers to match the current state of the Component
+	 * @param o the observable object apply to the listener
+	 * @param arg the arguments of any type
+     */
 	@Override
 	public void update(Observable o, Object arg) {
 		if (updateListener != null) {

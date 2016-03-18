@@ -473,14 +473,25 @@ public class VisNodes extends Table {
 	public Point getClickedNode() {
 		return spm.getClickedNode();
 	}
+
+	/**
+	 * @return the current {@link World} that this visNodes is linked to
+     */
 	public World getWorld() {
 		return world;
 	}
 
+	/**
+	 * @return the frontier of the current search, accessed using {@link SearchTicker}
+     */
 	public List<Node> getNewFrontier() {
 		return newFrontier;
 	}
 
+	/**
+	 * @return the most recently expanded node, accessed using {@link SearchTicker}; I.E. the more recently expanded
+	 * node 
+     */
 	public Node getJustExpanded() {
 		return justExpanded;
 	}

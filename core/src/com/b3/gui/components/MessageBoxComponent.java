@@ -122,6 +122,11 @@ public class MessageBoxComponent {
 		JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	/**
+	 * Moves the component to the left slightly
+	 * @param moveLeft the amount of pixels that the component shall be moved to the left, relative to the original
+	 *                 position
+     */
 	public void transposeLeft(boolean moveLeft) {
 		this.moveLeft = moveLeft;
 	}

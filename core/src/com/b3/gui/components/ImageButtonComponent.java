@@ -47,14 +47,24 @@ public class ImageButtonComponent extends Component {
 		return imageButton;
 	}
 
+	/**
+	 * @return the data of the current image button, as the Object that was set originally
+	 */
 	public Object getData() {
 		return data;
 	}
 
+	/**
+	 * @param data the data of any type that should be contained in this image button component
+	 */
 	public void setData(Object data) {
 		this.data = data;
 	}
 
+	/**
+	 * Adds a listener of this button
+	 * @param listener The {@link ChangeListener} that is mapped to this image button, and listens for any changes
+	 */
 	@Override
 	public void addListener(ChangeListener listener) {
 		imageButton.addListener(listener);

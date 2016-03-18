@@ -24,6 +24,14 @@ public class CheckBoxComponent extends Component {
 		this(skin, font, text, Color.BLACK);
 	}
 
+	/**
+	 * Creates an instance of a CheckBoxComponent with a set {@link Color}
+	 *
+	 * @param skin The checkbox libGDX skin
+	 * @param font The font to apply
+	 * @param text The text beside the checkbox
+	 * @param fontColor the colour of the font
+	 */
 	public CheckBoxComponent(Skin skin, BitmapFont font, String text, Color fontColor) {
 		CheckBox.CheckBoxStyle cbs = new CheckBox.CheckBoxStyle();
 		cbs.font = font; // skin.getFont("default");
@@ -51,11 +59,18 @@ public class CheckBoxComponent extends Component {
 		return checkBox.getText();
 	}
 
+	/**
+	 * @return the checkBox
+     */
 	@Override
 	public CheckBox getComponent() {
 		return checkBox;
 	}
 
+	/**
+	 * Adds a listener of this checkbox
+	 * @param listener The {@link ChangeListener} that is mapped to this checkbox, and listens for any changes
+	 */
 	@Override
 	public void addListener(ChangeListener listener) {
 		checkBox.addListener(listener);

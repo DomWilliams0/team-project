@@ -279,6 +279,9 @@ public class VisScrollPane extends ScrollPane {
 		return clickedNode.getPoint();
 	}
 
+	/**
+	 * Clears all items from the table
+	 */
 	public void clearTable() {
 		outerTable.clear();
 		cellmap.clear();

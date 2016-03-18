@@ -50,19 +50,32 @@ public class ButtonComponent extends Component {
 		return textButton.getText();
 	}
 
+	/**
+	 * @return the data of the current button, as the Object that was set originally
+     */
 	public Object getData() {
 		return data;
 	}
 
+	/**
+	 * @param data the data of any type that should be contained in this button component
+     */
 	public void setData(Object data) {
 		this.data = data;
 	}
 
+	/**
+	 * @return the text button as a {@link TextButton}
+     */
 	@Override
 	public TextButton getComponent() {
 		return textButton;
 	}
 
+	/**
+	 * Adds a listener of this button
+	 * @param listener The {@link ChangeListener} that is mapped to this button, and listens for any changes
+     */
 	@Override
 	public void addListener(ChangeListener listener) {
 		textButton.addListener(listener);
