@@ -190,9 +190,9 @@ public class MainMenuScreen implements Screen {
 
         shapeRenderer.rect(
                 (Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer -1))/2,
-                Gdx.graphics.getHeight() - 775 - (775 * (timer -1))/2,
+                Gdx.graphics.getHeight() - 2000 - (775 * (timer -1))/2,
                 500 * timer,
-                775 * timer
+                2000 * timer
                 );
         shapeRenderer.end();
     }
