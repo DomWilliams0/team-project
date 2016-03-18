@@ -1,13 +1,16 @@
-package com.b3.search;
+package com.b3.search.util;
+
+import com.b3.search.Point;
 
 /**
- * Links a point to a timer, to allow for animation
+ * Links a point, or another object to a timer, to allow for animation
  *  @author nbg481
  */
 public class PointTimer {
 
-	private final int x;
-	private final int y;
+	private int x;
+	private int y;
+	private Object ob;
 	private int timer;
 
 	/**
@@ -20,6 +23,19 @@ public class PointTimer {
 		this.x = x;
 		this.y = y;
 		this.timer = timer;
+	}
+
+	public PointTimer(Object ob, int timer) {
+		this.ob = ob;
+		this.timer = timer;
+	}
+
+	public Object getOb() {
+		return ob;
+	}
+
+	public void setOb(Object ob) {
+		this.ob = ob;
 	}
 
 	/**

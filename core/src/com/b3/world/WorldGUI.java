@@ -43,6 +43,7 @@ public class WorldGUI {
 	private Point currentMousePos;
 
 	private boolean pseudoCodeEnabled;
+	private boolean shownOnce;
 
 	/**
 	 * Creates a new WorldGUI, fundamentally linked to a specific world
@@ -58,6 +59,7 @@ public class WorldGUI {
 		counterAnimation = 10;
 		counterScaler = 0;
 		pos = 1;
+		shownOnce = false;
 
 		shapeRenderer = new ShapeRenderer();
 		coordinatePopup = new CoordinatePopup();
@@ -99,6 +101,8 @@ public class WorldGUI {
 	public void renderPopups() {
 		ModeType mode = MainGame.getCurrentMode();
 
+		checkForInitialPopup();
+
 		//pop-ups on nodes
 		if (mode == LEARNING || mode == TUTORIAL)
 			popupDescription.render(currentNodeClickX, currentNodeClickY, world.getWorldGraph().getCurrentSearch());
@@ -108,6 +112,13 @@ public class WorldGUI {
 
 		//render big pop-ups
 		popupManager.render();
+	}
+
+	private void checkForInitialPopup() {
+		if (world.getWorldGraph().getRenderer().getAnimationFinished() && shownOnce == false) {
+			world.getWorldGUI().getPopupManager().showIntro();
+			shownOnce = true;
+		}
 	}
 
 	/**

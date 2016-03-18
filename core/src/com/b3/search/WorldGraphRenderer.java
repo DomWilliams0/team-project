@@ -1,5 +1,6 @@
 package com.b3.search;
 
+import com.b3.search.util.PointTimer;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.Camera;
@@ -43,6 +44,7 @@ public class WorldGraphRenderer {
 	private Color currentHighlightColor;
 
 	private PointTimer redNode;
+	private boolean finishedInitialAnimation;
 
 	/**
 	 * Constructs a new renderer for the given graph
@@ -52,6 +54,7 @@ public class WorldGraphRenderer {
 		this.currentHighlightPoint = null;
 		this.currentHighlightTimer = 0;
 		this.shapeRenderer = null; // must be initialised with initRenderer()
+		finishedInitialAnimation = false;
 
 		colPath = SEARCH_EDGE_COLOUR;
 	}
@@ -299,6 +302,9 @@ public class WorldGraphRenderer {
 	private void renderNodes(float counter, float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
+		//if inital openeing animation finished then tell GUI to show intro popup
+		finishedInitialAnimation = (counter<=1.5);
+
 		Color nodeColour = zoomScalar > 2 ? Color.BLACK : NODE_COLOUR;
 		Set<Point> points = worldGraph.getNodes().keySet();
 
@@ -435,5 +441,9 @@ public class WorldGraphRenderer {
 	 */
 	public void highlightNodeRed(int x, int y, int time) {
 		redNode = new PointTimer(x, y, time);
+	}
+
+	public Boolean getAnimationFinished() {
+		return finishedInitialAnimation;
 	}
 }

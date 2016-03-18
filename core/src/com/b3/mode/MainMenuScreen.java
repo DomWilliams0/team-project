@@ -2,13 +2,16 @@ package com.b3.mode;
 
 import com.b3.MainGame;
 import com.b3.gui.components.ImageButtonComponent;
+import com.b3.search.util.PointTimer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -20,16 +23,20 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public class MainMenuScreen implements Screen {
 
+    public static final int ANIMATION_TIMER = 25;
     private final Table wrapper;
 
     private final OrthographicCamera camera;
     private final Stage mainMenuStage;
     private final SpriteBatch spriteBatch;
-    private final Sprite sprite;
+    private final Sprite spriteName;
     private final Sprite spriteTwoText;
     private final MainGame controller;
     private final Sprite spriteBackground;
+    private ShapeRenderer shapeRenderer;
     private float aspectRatioY;
+
+    private PointTimer pointTimer;
 
     /**
      * Constructs the (static / final) main menu camera and the two buttons, and sets up events for each respective button.
@@ -49,8 +56,9 @@ public class MainMenuScreen implements Screen {
         tutorialModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                dispose();
-                controller.goToMode(ModeType.TUTORIAL);
+                pointTimer = new PointTimer(ModeType.TUTORIAL, ANIMATION_TIMER);
+//                dispose();
+//                controller.goToMode(ModeType.TUTORIAL);
             }
         });
 
@@ -60,8 +68,9 @@ public class MainMenuScreen implements Screen {
         compareModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                dispose();
-                controller.goToMode(ModeType.COMPARE);
+                pointTimer = new PointTimer(ModeType.COMPARE, ANIMATION_TIMER);
+//                dispose();
+//                controller.goToMode(ModeType.COMPARE);
             }
         });
 
@@ -71,8 +80,9 @@ public class MainMenuScreen implements Screen {
         practiceModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                dispose();
-                controller.goToMode(ModeType.PRACTICE);
+                pointTimer = new PointTimer(ModeType.PRACTICE, ANIMATION_TIMER);
+//                dispose();
+//                controller.goToMode(ModeType.PRACTICE);
             }
         });
 
@@ -82,8 +92,9 @@ public class MainMenuScreen implements Screen {
         learningModeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                dispose();
-                controller.goToMode(ModeType.LEARNING);
+                pointTimer = new PointTimer(ModeType.LEARNING, ANIMATION_TIMER);
+//                dispose();
+//                controller.goToMode(ModeType.LEARNING);
             }
         });
 
@@ -102,9 +113,12 @@ public class MainMenuScreen implements Screen {
 
         mainMenuStage.addActor(wrapper);
 
+        //prepare renders
         spriteBatch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
+
         //Load texture for ICON
-        sprite = new Sprite(new Texture("icon.png"));
+        spriteName = new Sprite(new Texture("icon.png"));
         //Load texture for the BACKGROUND
         spriteBackground = new Sprite(new Texture("menu_bg.png"));
         aspectRatioY = spriteBackground.getHeight() / spriteBackground.getWidth();
@@ -136,14 +150,51 @@ public class MainMenuScreen implements Screen {
 
         renderBackground();
 
+        if (pointTimer == null) {
+            renderOverlayButtons(Color.WHITE, 1);
+        }
+
         spriteBatch.begin();
         float size = (float) (Gdx.graphics.getHeight() / 5);
-        spriteBatch.draw(sprite, Gdx.graphics.getWidth() / 2 - size / 2, Gdx.graphics.getHeight() - size, size, size);
+        spriteBatch.draw(spriteName, Gdx.graphics.getWidth() / 2 - size / 2, Gdx.graphics.getHeight() - size, size, size);
         spriteBatch.draw(spriteTwoText, Gdx.graphics.getWidth() / 2 - spriteTwoText.getWidth()/2, (float) (Gdx.graphics.getHeight() - size*1.25) - 50);
         spriteBatch.end();
 
         mainMenuStage.act();
         mainMenuStage.draw();
+
+        if (pointTimer != null) {
+            pointTimer.decrementTimer();
+            float rgbColPercent = (float) (pointTimer.getTimer()) / (float) ANIMATION_TIMER;
+            Color colour = new Color(rgbColPercent,
+                    rgbColPercent,
+                    rgbColPercent,
+                    1);
+
+            renderOverlayButtons(colour, ANIMATION_TIMER - pointTimer.getTimer());
+
+            if (pointTimer.finishedTiming()) {
+                ModeType mode = (ModeType) pointTimer.getOb();
+                dispose();
+                controller.goToMode(mode);
+            }
+        }
+    }
+
+    private void renderOverlayButtons(Color colour, int timer) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        if (colour.r < 0.247)
+            shapeRenderer.setColor(Color.DARK_GRAY);
+        else
+            shapeRenderer.setColor(colour);
+
+        shapeRenderer.rect(
+                (Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer -1))/2,
+                Gdx.graphics.getHeight() - 775 - (775 * (timer -1))/2,
+                500 * timer,
+                775 * timer
+                );
+        shapeRenderer.end();
     }
 
     private void renderBackground() {
@@ -169,6 +220,7 @@ public class MainMenuScreen implements Screen {
      */
     @Override
     public void resize(int width, int height) {
+        shapeRenderer = new ShapeRenderer();
         spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
         wrapper.setWidth(width);
         wrapper.setHeight(height);

@@ -96,8 +96,6 @@ public abstract class Mode extends ScreenAdapter {
 		registerFurtherInputProcessors(inputHandler);
 
 		this.currentSelection = new Point(0, 0);
-		
-		world.getWorldGUI().showIntroPopup();
 	}
 
 	/**
