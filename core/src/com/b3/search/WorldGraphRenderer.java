@@ -328,7 +328,7 @@ public class WorldGraphRenderer {
 	}
 
 	private void renderSingleSearchNodeWithScaling(int x, int y, float v, int nodeEdges, float tempFinalZoomScalar, float counter) {
-		if ((x == 0 || y == 0 || x == worldGraph.getWidth()-1 || y == worldGraph.getHeight()-1)) {
+		if (x == 0 && y == 0 || x == worldGraph.getWidth()-1 & y == worldGraph.getHeight()-1 || x == 0 && y == worldGraph.getHeight()-1 || x == worldGraph.getWidth()-1 & y ==0) {
 			shapeRenderer.circle(x, y, v * tempFinalZoomScalar * counter * 2, nodeEdges);
 		} else {
 			shapeRenderer.circle(x, y, v, nodeEdges);
