@@ -119,7 +119,7 @@ public class CompareMode extends Mode {
 			int xOffset = i * 18;
 			spawnAgent(
 					new Vector2(12 + xOffset, 1),
-					new Vector2(2 + xOffset, 29),
+					new Vector2(2 + xOffset, 35),
 					algorithms[i]
 			);
 		}
