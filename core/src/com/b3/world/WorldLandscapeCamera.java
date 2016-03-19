@@ -75,11 +75,6 @@ public class WorldLandscapeCamera extends WorldCamera {
 			expandTilesHorizontally(this::getExampleCell);
 			expandTilesVertically(this::getLandscapeCell);
 
-			// add random objects
-			MapLayer objectsLayer = originalMap.getLayers().get("objects");
-			if (objectsLayer != null)
-				populateWithObjects((TiledMapTileLayer) objectsLayer, createLayer());
-
 			landscapeMap.getTileSets().addTileSet(originalMap.getTileSets().getTileSet(0));
 		}
 
@@ -94,29 +89,6 @@ public class WorldLandscapeCamera extends WorldCamera {
 
 			landscapeMap.getLayers().add(newLayer);
 			return newLayer;
-		}
-
-		/**
-		 * Populates the landscape with random objects taken from the original map
-		 *
-		 * @param sourceObjects    The original map's object layer
-		 * @param landscapeObjects The landscape map's object layer to populate
-		 */
-		private void populateWithObjects(TiledMapTileLayer sourceObjects, TiledMapTileLayer landscapeObjects) {
-			// find objects
-			for (int x = 0; x < width; x++) {
-				for (int y = 0; y < height; y++) {
-					TiledMapTileLayer.Cell cell = sourceObjects.getCell(x, y);
-					if (cell == null || TileType.getFromCell(cell) != TileType.UNKNOWN)
-						continue;
-
-					// add at a random position
-					int objX = Utils.RANDOM.nextInt(width);
-					int objY = Utils.RANDOM.nextInt(height);
-
-					landscapeObjects.setCell(objX, objY, cell);
-				}
-			}
 		}
 
 		/**
