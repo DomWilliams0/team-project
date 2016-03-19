@@ -2,8 +2,10 @@ package com.b3.mode;
 
 import com.b3.MainGame;
 import com.b3.gui.components.ImageButtonComponent;
+import com.b3.search.util.PointTimer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public class MainMenuScreen extends ScreenAdapter {
 
+    public static final int ANIMATION_TIMER = 25;
 	private final Table wrapper;
 
 	private final OrthographicCamera camera;
@@ -34,7 +37,9 @@ public class MainMenuScreen extends ScreenAdapter {
 	private ShapeRenderer shapeRenderer;
 	private float aspectRatioY;
 
-	/**
+    private PointTimer pointTimer;
+
+    /**
 	 * Constructs the (static / final) main menu camera and the two buttons, and sets up events for each respective button.
 	 *
 	 * @param controller used to set up the world, contains directories to config files
@@ -83,8 +88,9 @@ public class MainMenuScreen extends ScreenAdapter {
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				controller.goToMode(modeType);
+//				dispose();
+//				controller.goToMode(modeType);
+				pointTimer = new PointTimer(ModeType.PRACTICE, ANIMATION_TIMER);
 			}
 		});
 		return button;
@@ -107,13 +113,47 @@ public class MainMenuScreen extends ScreenAdapter {
 
 		renderBackground();
 
+        if (pointTimer == null) {
+            renderOverlayButtons(Color.WHITE, 1);
+        }
+
+		if (pointTimer != null) {
+			pointTimer.decrementTimer();
+			float rgbColPercent = (float) (pointTimer.getTimer()) / (float) ANIMATION_TIMER;
+			Color colour = new Color(rgbColPercent,
+					rgbColPercent,
+					rgbColPercent,
+					1);
+
+			renderOverlayButtons(colour, ANIMATION_TIMER - pointTimer.getTimer());
+
+			if (pointTimer.finishedTiming()) {
+				ModeType mode = (ModeType) pointTimer.getLinkedObject();
+				dispose();
+				controller.goToMode(mode);
+			}
+		}
+
 		mainMenuStage.act();
 		mainMenuStage.draw();
 	}
 
-	/**
-	 * Renders the background at the correct aspect ratio
-	 */
+    private void renderOverlayButtons(Color colour, int timer) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        if (colour.r < 0.247)
+            shapeRenderer.setColor(Color.DARK_GRAY);
+        else
+            shapeRenderer.setColor(colour);
+
+        shapeRenderer.rect(
+                (Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer -1))/2,
+                Gdx.graphics.getHeight() - 2000 - (775 * (timer -1))/2,
+                500 * timer,
+                2000 * timer
+                );
+        shapeRenderer.end();
+    }
+
 	private void renderBackground() {
 		spriteBatch.begin();
 
