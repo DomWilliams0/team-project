@@ -34,6 +34,8 @@ public class MainMenuScreen extends ScreenAdapter {
 	private final SpriteBatch spriteBatch;
 	private final MainGame controller;
 	private final Sprite backgroundSprite;
+	private final Sprite spriteForground;
+	private final Sprite spriteTransForground;
 	private ShapeRenderer shapeRenderer;
 	private float aspectRatioY;
 
@@ -61,9 +63,14 @@ public class MainMenuScreen extends ScreenAdapter {
 		wrapper.setHeight(Gdx.graphics.getHeight());
 
 		int padding = 5;
-		wrapper.add(new Image(new Texture("icon_final.png")))
-				.padBottom(padding * 8)
-				.row();
+
+		spriteForground = new Sprite(new Texture("icon_final.png"));
+		spriteTransForground = new Sprite(new Texture("transparentForeground.png"));
+
+
+//		wrapper.add(new Image(new Texture("icon_final.png")))
+//				.padBottom(padding * 8)
+//				.row();
 
 		ModeType[] modes = {ModeType.TUTORIAL, ModeType.LEARNING, ModeType.PRACTICE, ModeType.COMPARE};
 		for (ModeType modeType : modes) {
@@ -117,6 +124,9 @@ public class MainMenuScreen extends ScreenAdapter {
             renderOverlayButtons(Color.WHITE, 1);
         }
 
+		mainMenuStage.act();
+		mainMenuStage.draw();
+
 		if (pointTimer != null) {
 			pointTimer.decrementTimer();
 			float rgbColPercent = (float) (pointTimer.getTimer()) / (float) ANIMATION_TIMER;
@@ -134,26 +144,48 @@ public class MainMenuScreen extends ScreenAdapter {
 			}
 		}
 
-		mainMenuStage.act();
-		mainMenuStage.draw();
+		renderForeground();
 	}
 
-    private void renderOverlayButtons(Color colour, int timer) {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        if (colour.r < 0.247)
-            shapeRenderer.setColor(Color.DARK_GRAY);
-        else
-            shapeRenderer.setColor(colour);
+	private void renderForeground() {
+		spriteBatch.begin();
+		spriteBatch.draw(spriteForground, Gdx.graphics.getWidth()/2 - spriteForground.getWidth()/2, Gdx.graphics.getHeight() - 100);
+		spriteBatch.end();
+	}
 
-        shapeRenderer.rect(
-                (Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer -1))/2,
-                Gdx.graphics.getHeight() - 2000 - (775 * (timer -1))/2,
-                500 * timer,
-                2000 * timer
-                );
-        shapeRenderer.end();
+	/**
+	 * Renders the background box that goes behind the buttons
+	 * @param colour the colour of the box (default = Dark Grey)
+	 * @param timer the time before changing to the mode
+     */
+	private void renderOverlayButtons(Color colour, int timer) {
+		if (timer == 1) {
+			spriteBatch.begin();
+			spriteBatch.draw(spriteTransForground, (Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer - 1)) / 2,
+				Gdx.graphics.getHeight() - Gdx.graphics.getHeight() - (775 * (timer - 1)) / 2,
+				500 * timer,
+				Gdx.graphics.getHeight() * timer);
+			spriteBatch.end();
+		} else {
+			shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+			if (colour.r < 0.247)
+				shapeRenderer.setColor(Color.DARK_GRAY);
+			else
+				shapeRenderer.setColor(colour);
+
+			shapeRenderer.rect(
+					(Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer - 1)) / 2,
+					Gdx.graphics.getHeight() - 2000 - (775 * (timer - 1)) / 2,
+					500 * timer,
+					2000 * timer
+			);
+			shapeRenderer.end();
+		}
     }
 
+	/**
+	 * Renders the background at the correct aspect ratio
+	 */
 	private void renderBackground() {
 		spriteBatch.begin();
 
@@ -178,7 +210,8 @@ public class MainMenuScreen extends ScreenAdapter {
 	 */
 	@Override
 	public void resize(int width, int height) {
-		shapeRenderer.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+//		shapeRenderer.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+		shapeRenderer = new ShapeRenderer();
 		spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
 		wrapper.setSize(width, height);
 		mainMenuStage.getViewport().update(width, height, true);
