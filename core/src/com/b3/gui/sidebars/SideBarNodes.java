@@ -2,7 +2,6 @@ package com.b3.gui.sidebars;
 
 import com.b3.MainGame;
 import com.b3.gui.sidebars.tabs.NodesTab;
-import com.b3.gui.sidebars.tabs.PseudocodeTab;
 import com.b3.gui.sidebars.tabs.Tab;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
@@ -58,14 +57,6 @@ public class SideBarNodes extends SideBar implements Disposable {
 				put("stage", stage);
 			}};
 			tabs.put("Nodes", new NodesTab(skin, font, preferredWidth, data));
-
-			// Add pseudocode tab
-			if ((mode == ModeType.LEARNING) || (mode == ModeType.TUTORIAL)) {
-				data = new HashMap<String, Object>() {{
-					put("world", world);
-				}};
-				tabs.put("Pseudocode", new PseudocodeTab(skin, font, data));
-			}
 		}
 	}
 
@@ -143,14 +134,6 @@ public class SideBarNodes extends SideBar implements Disposable {
 		SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
 		ticker.setInspectSearch(false);
 		//ticker.resume(1);
-
-		if (mode == ModeType.LEARNING) {
-			PseudocodeTab pseudocodeTab = (PseudocodeTab) tabs.get("Pseudocode");
-
-			pseudocodeTab.getManualAutoBtn().getComponent().setVisible(false);
-			pseudocodeTab.getInspectSearchBtn().setData(false);
-			pseudocodeTab.getInspectSearchBtn().setText("Begin");
-		}
 	}
 
 	@Override
@@ -189,6 +172,6 @@ public class SideBarNodes extends SideBar implements Disposable {
 	}
 
 	public Boolean getPseudocodeBegin() {
-		return ((PseudocodeTab) tabs.get("Pseudocode")).getInspectSearchBtn().getText().toString().equals("Begin");
+		return world.getWorldGraph().getCurrentSearch().isInspectingSearch();
 	}
 }

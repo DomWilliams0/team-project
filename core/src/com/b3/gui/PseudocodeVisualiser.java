@@ -40,15 +40,12 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
 		// Add description labels
 		LabelComponent descLbl1 = new LabelComponent("aller/Aller_Bd.ttf", 18, getDescription(0), Color.BLACK);
-		descriptionTable.add(descLbl1.getComponent());
+		descriptionTable.add(descLbl1.getComponent()).padTop(20);
 		descriptionTable.row();
-
-		LabelComponent descLbl2 = new LabelComponent("aller/Aller_Bd.ttf", 18, getDescription(1), Color.BLACK);
-		descriptionTable.add(descLbl2.getComponent()).padTop(15);
 
 		add(descriptionTable);
 		row();
-		add(pseudocodeTable).padTop(60);
+		add(pseudocodeTable).padTop(25);
 	}
 
 	private static void setBackgroundColor(Table table, float r, float g, float b, float a) {
@@ -60,11 +57,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
 	private String getDescription(int index) {
 		ArrayList<String> desc = new ArrayList<String>() {{
-			add("Click on 'Begin' to visualise the pseudocode.\n" +
-					"Lines will be highlighted at each tick\n" +
-					"according to the algorithm.");
-
-			add("Click on 'Manual inspect' to\nmanually control the search.");
+			add("Pseudocode visualisation");
 		}};
 
 		return desc.get(index);

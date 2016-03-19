@@ -54,7 +54,7 @@ public class LearningModeSettingsTab implements Tab {
 				.spaceBottom(10);
 		settingsTab.row();
 
-		// Flat buildings checkbox
+		// Search sounds checkbox
 		CheckBoxComponent soundsOn = new CheckBoxComponent(skin, font, "Search Sounds");
 		soundsOn.getComponent().setChecked(Config.getBoolean(ConfigKey.SOUNDS_ON));
 		soundsOn.addListener(new ChangeListener() {
@@ -67,6 +67,23 @@ public class LearningModeSettingsTab implements Tab {
 		});
 
 		settingsTab.add(soundsOn.getComponent())
+				.align(Align.left)
+				.maxWidth(preferredWidth)
+				.spaceBottom(10);
+		settingsTab.row();
+
+		// Pseudocode checkbox
+		CheckBoxComponent pseudocodeOn = new CheckBoxComponent(skin, font, "Pseudocode");
+		pseudocodeOn.getComponent().setChecked(false);
+		pseudocodeOn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
+				currentSearch.setInspectSearch(pseudocodeOn.getComponent().isChecked());
+			}
+		});
+
+		settingsTab.add(pseudocodeOn.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceBottom(10);

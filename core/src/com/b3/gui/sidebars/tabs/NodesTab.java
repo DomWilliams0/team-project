@@ -1,6 +1,7 @@
 package com.b3.gui.sidebars.tabs;
 
 import com.b3.MainGame;
+import com.b3.gui.PseudocodeVisualiser;
 import com.b3.gui.VisNodes;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.mode.ModeType;
@@ -31,13 +32,19 @@ public class NodesTab implements Tab {
 
 		nodesTab = new Table();
 		nodesTab.setFillParent(true);
-		//nodesTab.pad(10);
 
 		// Create the data table which will display the nodes
 		Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 		skin.add("default", labelStyle);
 		ui = new VisNodes(stage, skin, world);
 
+		// Pseudocode
+		Table pseudocodeTable = new Table();
+
+		PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
+		pseudocodeTable.add(pseudocodeVisualiser).spaceBottom(30).row();
+
+		// Next button
 		nextBtn = new ButtonComponent(skin, font, "Next step");
 		nextBtn.addListener(new ChangeListener() {
 			@Override
@@ -53,6 +60,8 @@ public class NodesTab implements Tab {
 		nodesTab.add(ui).maxWidth(preferredWidth).top().pad(20);
 		nodesTab.row();
 		nodesTab.add(nextBtn.getComponent());
+		nodesTab.row();
+		nodesTab.add(pseudocodeTable);
 	}
 
 	public VisNodes getUI() {

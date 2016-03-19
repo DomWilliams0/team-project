@@ -188,7 +188,7 @@ public class VisNodes extends Table {
 
 		//put the description on the sidebar
 		//BOTTOM of the sidebar
-		setupDescription();
+		//setupDescription();
 		return 1;
 	}
 
@@ -354,9 +354,6 @@ public class VisNodes extends Table {
 			addLabel("--------------------\n" +
 					"Lowest Priority");
 			addLabel("");
-			row();
-			addLabel("_________________________________________")
-					.colspan(3).padTop(5);
 			row();
 
 		} else {
