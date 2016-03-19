@@ -2,6 +2,7 @@ package com.b3.mode;
 
 import com.b3.MainGame;
 import com.b3.gui.components.ImageButtonComponent;
+import com.b3.input.MainMenuInputHandler;
 import com.b3.search.util.PointTimer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -27,6 +27,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class MainMenuScreen extends ScreenAdapter {
 
     public static final int ANIMATION_TIMER = 25;
+	public static final float MAIN_OFFSET = 100;
+	public static final float SECONDARY_OFFSET = 25;
+
 	private final Table wrapper;
 
 	private final OrthographicCamera camera;
@@ -40,8 +43,10 @@ public class MainMenuScreen extends ScreenAdapter {
 	private float aspectRatioY;
 
     private PointTimer pointTimer;
+	private int offsetX;
+	private int offsetY;
 
-    /**
+	/**
 	 * Constructs the (static / final) main menu camera and the two buttons, and sets up events for each respective button.
 	 *
 	 * @param controller used to set up the world, contains directories to config files
@@ -55,8 +60,10 @@ public class MainMenuScreen extends ScreenAdapter {
 		this.shapeRenderer = new ShapeRenderer();
 		this.wrapper = new Table();
 
+
 		mainMenuStage.addActor(wrapper);
 		controller.getInputHandler().addProcessor(mainMenuStage);
+		controller.getInputHandler().addProcessor(new MainMenuInputHandler(this));
 
 		// create gui
 		wrapper.setWidth(Gdx.graphics.getWidth());
@@ -127,6 +134,8 @@ public class MainMenuScreen extends ScreenAdapter {
 		mainMenuStage.act();
 		mainMenuStage.draw();
 
+		renderForeground();
+
 		if (pointTimer != null) {
 			pointTimer.decrementTimer();
 			float rgbColPercent = (float) (pointTimer.getTimer()) / (float) ANIMATION_TIMER;
@@ -144,7 +153,6 @@ public class MainMenuScreen extends ScreenAdapter {
 			}
 		}
 
-		renderForeground();
 	}
 
 	private void renderForeground() {
@@ -161,10 +169,12 @@ public class MainMenuScreen extends ScreenAdapter {
 	private void renderOverlayButtons(Color colour, int timer) {
 		if (timer == 1) {
 			spriteBatch.begin();
-			spriteBatch.draw(spriteTransForground, (Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer - 1)) / 2,
-				Gdx.graphics.getHeight() - Gdx.graphics.getHeight() - (775 * (timer - 1)) / 2,
+			spriteBatch.draw(spriteTransForground,
+					(Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer - 1)) / 2 + (float)offsetX/MAIN_OFFSET,
+				Gdx.graphics.getHeight() - Gdx.graphics.getHeight() - (775 * (timer - 1)) / 2 - (float)offsetY/MAIN_OFFSET,
 				500 * timer,
-				Gdx.graphics.getHeight() * timer);
+				Gdx.graphics.getHeight() * timer
+			);
 			spriteBatch.end();
 		} else {
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -189,6 +199,11 @@ public class MainMenuScreen extends ScreenAdapter {
 	private void renderBackground() {
 		spriteBatch.begin();
 
+		//Amount to overscale image by
+		float overGrowth = 50;
+		//dividor to prevent too much paralax effect
+		float divisor = SECONDARY_OFFSET;
+
 		float width = Gdx.graphics.getWidth();
 		float height = width * aspectRatioY;
 
@@ -197,9 +212,16 @@ public class MainMenuScreen extends ScreenAdapter {
 			width = height / aspectRatioY;
 		}
 
-		spriteBatch.draw(backgroundSprite, 0, 0, width, height);
+		spriteBatch.draw(backgroundSprite,
+				-overGrowth + (float)offsetX/divisor,
+				-overGrowth - (float)offsetY/divisor,
+				width + overGrowth*2 + (float)offsetX/divisor,
+				height + overGrowth*2 - (float)offsetY/divisor
+		);
 		spriteBatch.end();
 	}
+
+
 
 	/**
 	 * Called whenever the window is resized
@@ -224,5 +246,10 @@ public class MainMenuScreen extends ScreenAdapter {
 	public void dispose() {
 		controller.getInputHandler().clear();
 		mainMenuStage.dispose();
+	}
+
+	public void setOffset(int offsetX, int offsetY) {
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
 	}
 }
