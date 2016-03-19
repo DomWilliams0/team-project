@@ -156,16 +156,16 @@ public class PopupDescription {
 		numbers = new Sprite[10];
 		//Load Numbers
 		for (int i = 0; i <= 9; i++) {
-			tempTexture = new Texture("world/popups/Numbers/" + i + ".png");
+			tempTexture = new Texture("world/popups/digits/" + i + ".png");
 			tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 			numbers[i] = new Sprite(tempTexture);
 		}
 
-		tempTexture = new Texture("world/popups/Numbers/plus.png");
+		tempTexture = new Texture("world/popups/digits/plus.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		plus = new Sprite(tempTexture);
 
-		tempTexture = new Texture("world/popups/Numbers/equals.png");
+		tempTexture = new Texture("world/popups/digits/equals.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		equals = new Sprite(tempTexture);
 
