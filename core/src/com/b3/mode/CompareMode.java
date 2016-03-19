@@ -6,6 +6,7 @@ import com.b3.entity.ai.BehaviourPathFind;
 import com.b3.gui.sidebars.SideBarCompareMode;
 import com.b3.input.InputHandler;
 import com.b3.input.WorldSelectionHandler;
+import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
@@ -100,19 +101,19 @@ public class CompareMode extends Mode {
 			return;
 
 		// todo user selects with mouse
-		// todo correspond to search agent's segment
 
 		graph.clearAllSearches();
-		for (Agent agent : agents) {
+		Node nextTarget = world.getWorldGraph().getRandomNode();
+
+		for (int i = 0; i < agents.length; i++) {
+			Agent agent = agents[i];
 			BehaviourPathFind oldBehaviour = (BehaviourPathFind) agent.getBehaviour();
 			Point oldEnd = oldBehaviour.getSearchTicker().getEnd().getPoint();
 			Vector2 oldEndVector = new Vector2(oldEnd.x, oldEnd.y);
-			Point oldStart = oldBehaviour.getSearchTicker().getStart().getPoint();
-			Vector2 oldStartVector = new Vector2(oldStart.x, oldStart.y);
 
 			BehaviourPathFind newBehaviour = new BehaviourPathFind(agent,
 					oldEndVector,
-					oldStartVector,
+					findLocalGoal(i, nextTarget),
 					oldBehaviour.getSearchTicker().getAlgorithm(),
 					world);
 			agent.setBehaviour(newBehaviour);
@@ -120,6 +121,19 @@ public class CompareMode extends Mode {
 			graph.setCurrentSearch(agent, newBehaviour.getSearchTicker());
 		}
 
+	}
+
+	/**
+	 * Converts the given node into a tile in the corresponding segment
+	 *
+	 * @param segment    The target segment ID, starting at 0
+	 * @param nextTarget The node to convert
+	 * @return A tile in the given segment
+	 */
+	private Vector2 findLocalGoal(int segment, Node nextTarget) {
+		return new Vector2(
+				(nextTarget.getPoint().x % WORLD_OFFSET) + (WORLD_OFFSET * segment),
+				(nextTarget.getPoint().y % WORLD_OFFSET));
 	}
 
 	/**
