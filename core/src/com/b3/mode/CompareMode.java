@@ -10,10 +10,10 @@ import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A large scale world with comparison views but no pop-ups or data structue views to allow for users to see the differences
@@ -22,8 +22,19 @@ import java.util.List;
  */
 public class CompareMode extends Mode {
 
+	private static final float FONT_SCALE = 1 / 15f;
+	private static final float Y_OFFSET = 2f;
+
+	private static final int WORLD_WIDTH = 16;
+	private static final int WORLD_OFFSET = WORLD_WIDTH + 2; // dividers
+
+	private static final int SEARCH_COUNT = 3;
+
+	private Texture[] labels;
+	private SpriteBatch labelBatch;
+
 	private SideBarCompareMode sideBar;
-	private final List<Agent> agents;
+	private Agent[] agents;
 
 	/**
 	 * Constructs the world, sets up the camera, loads to worldmap and launches the world with the search already running.
@@ -32,7 +43,13 @@ public class CompareMode extends Mode {
 	 */
 	public CompareMode(MainGame game) {
 		super(ModeType.COMPARE, game, "world/world-compare.tmx", 67, 25.f, null, 10f);
-		agents = new ArrayList<>(3);
+		agents = new Agent[SEARCH_COUNT];
+		labelBatch = new SpriteBatch(SEARCH_COUNT);
+
+		String[] labelAssets = {"astar", "dfs", "bfs"};
+		labels = new Texture[labelAssets.length];
+		for (int i = 0; i < labelAssets.length; i++)
+			labels[i] = new Texture(Gdx.files.internal("gui/search-labels/" + labelAssets[i] + "-label.png"));
 	}
 
 	/**
@@ -67,6 +84,28 @@ public class CompareMode extends Mode {
 	 */
 	@Override
 	protected void tick() {
+
+		labelBatch.begin();
+		labelBatch.setProjectionMatrix(camera.combined);
+
+		for (int i = 0; i < labels.length; i++) {
+			Texture label = labels[i];
+			float w = label.getWidth() * FONT_SCALE;
+			float h = -label.getHeight() * FONT_SCALE;
+
+			float offset = (WORLD_OFFSET - w - 1) / 2;
+
+			labelBatch.draw(label,
+					(WORLD_OFFSET * i) + offset,
+					h - Y_OFFSET,
+					w,
+					label.getHeight() * FONT_SCALE
+			);
+		}
+
+
+		labelBatch.end();
+
 		WorldGraph graph = world.getWorldGraph();
 
 		boolean allArrived = graph.getAllSearchAgents()
@@ -108,16 +147,16 @@ public class CompareMode extends Mode {
 	}
 
 	/**
-	 * Spaws three agents on the screen, one following A*, one folllowing DFS and one following BFS and starts them moving
+	 * Spawns three agents on the screen, one following A*, one folllowing DFS and one following BFS and starts them moving
 	 * and searching for the end position
 	 */
 	@Override
 	public void finishInitialisation() {
 
 		SearchAlgorithm[] algorithms = {SearchAlgorithm.A_STAR, SearchAlgorithm.DEPTH_FIRST, SearchAlgorithm.BREADTH_FIRST};
-		for (int i = 0; i < 3; i++) {
-			int xOffset = i * 18;
-			spawnAgent(
+		for (int i = 0; i < SEARCH_COUNT; i++) {
+			int xOffset = i * WORLD_OFFSET;
+			agents[i] = spawnAgent(
 					new Vector2(12 + xOffset, 1),
 					new Vector2(2 + xOffset, 35),
 					algorithms[i]
@@ -127,11 +166,13 @@ public class CompareMode extends Mode {
 
 	/**
 	 * Spawns an agent following a specific algorithm on the world, with a specific start and end position
-	 * @param startPos the starting position of the agent
-	 * @param goalPos the ending position of the agent
+	 *
+	 * @param startPos  the starting position of the agent
+	 * @param goalPos   the ending position of the agent
 	 * @param algorithm the {@link SearchAlgorithm} that the agent should use to get from the startPos to the endPos
-     */
-	private void spawnAgent(Vector2 startPos, Vector2 goalPos, SearchAlgorithm algorithm) {
+	 * @return The newly created Agent
+	 */
+	private Agent spawnAgent(Vector2 startPos, Vector2 goalPos, SearchAlgorithm algorithm) {
 		Agent agent = world.spawnAgent(startPos);
 		BehaviourPathFind behaviour = new BehaviourPathFind(
 				agent, startPos, goalPos, algorithm,
@@ -140,7 +181,7 @@ public class CompareMode extends Mode {
 
 		SearchTicker ticker = behaviour.getSearchTicker();
 		world.getWorldGraph().setCurrentSearch(agent, ticker);
-		agents.add(agent);
+		return agent;
 	}
 
 	/**
