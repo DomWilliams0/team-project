@@ -50,6 +50,8 @@ public class CompareMode extends Mode {
 		labels = new Texture[labelAssets.length];
 		for (int i = 0; i < labelAssets.length; i++)
 			labels[i] = new Texture(Gdx.files.internal("gui/search-labels/" + labelAssets[i] + "-label.png"));
+
+		world.getWorldGUI().setPrePopopRenderer(this::renderSearchLabels);
 	}
 
 	/**
@@ -84,28 +86,6 @@ public class CompareMode extends Mode {
 	 */
 	@Override
 	protected void tick() {
-
-		labelBatch.begin();
-		labelBatch.setProjectionMatrix(camera.combined);
-
-		for (int i = 0; i < labels.length; i++) {
-			Texture label = labels[i];
-			float w = label.getWidth() * FONT_SCALE;
-			float h = -label.getHeight() * FONT_SCALE;
-
-			float offset = (WORLD_OFFSET - w - 1) / 2;
-
-			labelBatch.draw(label,
-					(WORLD_OFFSET * i) + offset,
-					h - Y_OFFSET,
-					w,
-					label.getHeight() * FONT_SCALE
-			);
-		}
-
-
-		labelBatch.end();
-
 		WorldGraph graph = world.getWorldGraph();
 
 		boolean allArrived = graph.getAllSearchAgents()
@@ -140,6 +120,31 @@ public class CompareMode extends Mode {
 			graph.setCurrentSearch(agent, newBehaviour.getSearchTicker());
 		}
 
+	}
+
+	/**
+	 * Renders the search labels on the world
+	 */
+	private void renderSearchLabels() {
+		labelBatch.begin();
+		labelBatch.setProjectionMatrix(camera.combined);
+
+		for (int i = 0; i < labels.length; i++) {
+			Texture label = labels[i];
+			float w = label.getWidth() * FONT_SCALE;
+			float h = -label.getHeight() * FONT_SCALE;
+
+			float offset = (WORLD_OFFSET - w - 1) / 2;
+
+			labelBatch.draw(label,
+					(WORLD_OFFSET * i) + offset,
+					h - Y_OFFSET,
+					w,
+					label.getHeight() * FONT_SCALE
+			);
+		}
+
+		labelBatch.end();
 	}
 
 	@Override
