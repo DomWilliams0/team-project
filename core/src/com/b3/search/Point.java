@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Represents a non-mutable point in 2 dimensions.
  */
-public class Point {
+public class Point implements Comparable<Point> {
 
 	public final int x;
 	public final int y;
@@ -70,4 +70,12 @@ public class Point {
 		return new Vector2(x, y);
 	}
 
+	@Override
+	public int compareTo(Point point) {
+		int xCompare = Integer.compare(x, point.x);
+		if (xCompare != 0)
+			return xCompare;
+
+		return Integer.compare(y, point.y);
+	}
 }

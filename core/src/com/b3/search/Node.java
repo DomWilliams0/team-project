@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Describes a node in a graph
  */
-public class Node implements Serializable {
+public class Node implements Comparable<Node> {
 
 	private final Point point;
 	private final Map<Node, Float> edges;
@@ -20,7 +21,7 @@ public class Node implements Serializable {
 	 */
 	public Node(Point point) {
 		this.point = point;
-		this.edges = new HashMap<>();
+		this.edges = new TreeMap<>();
 	}
 
 	@Override
@@ -147,6 +148,11 @@ public class Node implements Serializable {
 		for (Node neighbour : getNeighbours())
 			neighbour.removeNeighbours(this);
 		edges.clear();
+	}
+
+	@Override
+	public int compareTo(Node n) {
+		return point.compareTo(n.point);
 	}
 }
 
