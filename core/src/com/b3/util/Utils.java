@@ -55,13 +55,13 @@ public abstract class Utils {
 	}
 
 	/**
-	 * Converts a {@link Vector2} to a {@link Point} rounding the values.
+	 * Converts a {@link Point} to a {@link Vector2}.
 	 *
-	 * @param vector2 The {@link Vector2} to convert.
-	 * @return A new {@link Point} which has the same coordinates as {@code vector2} but rounded.
+	 * @param p The {@link Point} to convert.
+	 * @return A new {@link Vector2} which has the same coordinates as {@code p}.
 	 */
-	public static Point vector2ToPoint(Vector2 vector2) {
-		return new Point(Math.round(vector2.x), Math.round(vector2.y));
+	public static Vector2 pointToVector2(Point p) {
+		return new Vector2(p.x, p.y);
 	}
 
 	/**

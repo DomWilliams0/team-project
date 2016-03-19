@@ -23,7 +23,7 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 		super(agent, null);
 		graph = worldGraph;
 		algorithm = searchAlgorithm;
-		pathFind = new BehaviourPathFind(agent, agent.getPhysicsComponent().getPosition(), generateRandomTile(), searchAlgorithm, world);
+		pathFind = new BehaviourPathFind(agent, agent.getPhysicsComponent().getPosition(), Utils.pointToVector2(graph.getRandomNode().getPoint()), searchAlgorithm, world);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 			Node currentPos = pathFind.getNodeFromTile(graph, agent.getPhysicsComponent().getPosition());
 
 			if (currentPos.equals(new Node(graph.getNextDestination())) || graph.getNextDestination().getY() == 0 && graph.getNextDestination().getX() == 0 || graph.getNextDestination().getX() == -5)
-				pathFind.reset(agent.getPhysicsComponent().getPosition(), generateRandomTile(currentPos), algorithm, graph);
+				pathFind.reset(agent.getPhysicsComponent().getPosition(), Utils.pointToVector2(graph.getRandomNode(currentPos).getPoint()), algorithm, graph);
 			else
 				pathFind.reset(agent.getPhysicsComponent().getPosition(), new Vector2(graph.getNextDestination().getX(), graph.getNextDestination().getY()), algorithm, graph);
 
@@ -43,24 +43,6 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 		}
 	}
 
-	private Vector2 generateRandomTile() {
-		int x, y;
-		do {
-			x = Utils.RANDOM.nextInt(graph.getWidth());
-			y = Utils.RANDOM.nextInt(graph.getHeight());
-		} while (!graph.hasNode(new Point(x, y)));
-		return new Vector2(x, y);
-	}
-
-
-	private Vector2 generateRandomTile(Node currentPos) {
-		int x, y;
-		do {
-			x = Utils.RANDOM.nextInt(graph.getWidth());
-			y = Utils.RANDOM.nextInt(graph.getHeight());
-		} while (!graph.hasNode(new Point(x, y)) && !new Point(x, y).equals(currentPos.getPoint()));
-		return new Vector2(x, y);
-	}
 
 	@Override
 	public BehaviourType getType() {

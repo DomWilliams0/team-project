@@ -2,6 +2,7 @@ package com.b3.search;
 
 import com.b3.entity.Agent;
 import com.b3.search.util.SearchAlgorithm;
+import com.b3.util.Utils;
 import com.b3.world.World;
 import com.b3.world.building.Building;
 import com.badlogic.ashley.core.Entity;
@@ -224,7 +225,7 @@ public class WorldGraph {
 	/**
 	 * @param entity check this entity to see if it is currently searching
 	 * @return true if the entity supplied is currently partwaythough a search
-     */
+	 */
 	public boolean isAgentSearching(Entity entity) {
 		return entity instanceof Agent && searchTickers.containsKey(entity);
 	}
@@ -240,8 +241,9 @@ public class WorldGraph {
 	/**
 	 * Removes the link between the current searching agent and the search ticker.
 	 * Resets the search ticker back to default
+	 *
 	 * @param searchingAgent the {@link Agent} that the current search is working on
-     */
+	 */
 	public void clearSearch(Agent searchingAgent) {
 		SearchTicker searchTicker = searchTickers.remove(searchingAgent);
 		if (searchTicker != null)
@@ -278,15 +280,16 @@ public class WorldGraph {
 
 	/**
 	 * @return the {@link SearchAlgorithm} that the next search will use (after current agent gets to his destination)
-     */
+	 */
 	public SearchAlgorithm getLearningModeNext() {
 		return learningModeNext;
 	}
 
 	/**
 	 * Set the next {@link SearchAlgorithm} the search will use (after current agent gets to his destination)
+	 *
 	 * @param learningModeNext the {@link SearchAlgorithm} the next search will use
-     */
+	 */
 	public void setLearningModeNext(SearchAlgorithm learningModeNext) {
 		this.learningModeNext = learningModeNext;
 	}
@@ -320,4 +323,34 @@ public class WorldGraph {
 		}
 
 	}
+
+
+	/**
+	 * @return A random {@link Node} from the graph
+	 */
+	public Node getRandomNode() {
+		Collection<Node> nodes = graph.getNodes().values();
+		int index = Utils.RANDOM.nextInt(nodes.size());
+		for (Node node : nodes)
+			if (--index == 0)
+				return node;
+
+		return null;
+	}
+
+	/**
+	 * @param except The node to not generate
+	 * @return A random {@link Node} from the graph that isn't <code>except</code>
+	 */
+	public Node getRandomNode(Node except) {
+		Node node;
+		do {
+			node = getRandomNode();
+		} while (node.equals(except));
+
+		return node;
+
+	}
+
+
 }
