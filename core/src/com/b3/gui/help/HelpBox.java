@@ -241,7 +241,7 @@ public class HelpBox extends Table {
 	 * @return The cell created in the table
 	 */
 	private Cell addHelp(Table t, String s, boolean isTitle) {
-		Color c = isTitle ? new Color(0x454589ff) : Color.BLACK;
+		Color c = isTitle ? Color.WHITE : Color.BLACK;
 		int size = isTitle ? 20 : 16;
 		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", size, s, c);
 		return t.add(lbl.getComponent());
