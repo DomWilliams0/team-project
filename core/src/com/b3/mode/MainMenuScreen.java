@@ -26,9 +26,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public class MainMenuScreen extends ScreenAdapter {
 
-    public static final int ANIMATION_TIMER = 25;
+	public static final int TERT_OFFSET = 250;
 	public static final float MAIN_OFFSET = 100;
-	public static final float SECONDARY_OFFSET = 25;
+	public static final float SECONDARY_OFFSET = MAIN_OFFSET / 4;
+
+	public static final int ANIMATION_TIMER = 25;
 
 	private final Table wrapper;
 
@@ -71,7 +73,9 @@ public class MainMenuScreen extends ScreenAdapter {
 
 		int padding = 5;
 
-		spriteForground = new Sprite(new Texture("icon_final.png"));
+		Texture texture = new Texture("icon_final.png");
+		texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		spriteForground = new Sprite(texture);
 		spriteTransForground = new Sprite(new Texture("transparentForeground.png"));
 
 
@@ -157,7 +161,11 @@ public class MainMenuScreen extends ScreenAdapter {
 
 	private void renderForeground() {
 		spriteBatch.begin();
-		spriteBatch.draw(spriteForground, Gdx.graphics.getWidth()/2 - spriteForground.getWidth()/2, Gdx.graphics.getHeight() - 100);
+		spriteBatch.draw(spriteForground,
+				Gdx.graphics.getWidth()/2 - spriteForground.getWidth()/2 + 20 + (float)offsetX / TERT_OFFSET,
+				Gdx.graphics.getHeight() - 100 - (float)offsetY / TERT_OFFSET,
+				spriteForground.getWidth() - 40,
+				spriteForground.getHeight() - 5);
 		spriteBatch.end();
 	}
 
@@ -171,9 +179,9 @@ public class MainMenuScreen extends ScreenAdapter {
 			spriteBatch.begin();
 			spriteBatch.draw(spriteTransForground,
 					(Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer - 1)) / 2 + (float)offsetX/MAIN_OFFSET,
-				Gdx.graphics.getHeight() - Gdx.graphics.getHeight() - (775 * (timer - 1)) / 2 - (float)offsetY/MAIN_OFFSET,
+				Gdx.graphics.getHeight() - Gdx.graphics.getHeight() - 50 - (775 * (timer - 1)) / 2 - (float)offsetY/MAIN_OFFSET,
 				500 * timer,
-				Gdx.graphics.getHeight() * timer
+				Gdx.graphics.getHeight() + 50 * timer
 			);
 			spriteBatch.end();
 		} else {
