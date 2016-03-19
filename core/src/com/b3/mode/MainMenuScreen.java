@@ -90,7 +90,7 @@ public class MainMenuScreen extends ScreenAdapter {
 			public void changed(ChangeEvent event, Actor actor) {
 //				dispose();
 //				controller.goToMode(modeType);
-				pointTimer = new PointTimer(ModeType.PRACTICE, ANIMATION_TIMER);
+				pointTimer = new PointTimer(modeType, ANIMATION_TIMER);
 			}
 		});
 		return button;
