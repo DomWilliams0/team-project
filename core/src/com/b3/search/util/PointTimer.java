@@ -10,7 +10,7 @@ public class PointTimer {
 
 	private int x;
 	private int y;
-	private Object ob;
+	private Object linkedObject;
 	private int timer;
 
 	/**
@@ -25,17 +25,17 @@ public class PointTimer {
 		this.timer = timer;
 	}
 
-	public PointTimer(Object ob, int timer) {
-		this.ob = ob;
+	public PointTimer(Object linkedObject, int timer) {
+		this.linkedObject = linkedObject;
 		this.timer = timer;
 	}
 
-	public Object getOb() {
-		return ob;
+	public Object getLinkedObject() {
+		return linkedObject;
 	}
 
-	public void setOb(Object ob) {
-		this.ob = ob;
+	public void setLinkedObject(Object linkedObject) {
+		this.linkedObject = linkedObject;
 	}
 
 	/**
