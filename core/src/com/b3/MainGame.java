@@ -78,6 +78,7 @@ public class MainGame extends Game {
 	 * @param modeType The mode type to switch to
 	 */
 	public void goToMode(ModeType modeType) {
+		Config.clearConfig();
 		ModeType modeBackup = currentMode;
 		currentMode = modeType;
 		

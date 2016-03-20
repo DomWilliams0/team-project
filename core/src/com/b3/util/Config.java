@@ -68,6 +68,16 @@ public class Config {
 	public static void unset(ConfigKey key) {
 		gameConfig.remove(key);
 	}
+	
+	/**
+	 * Completely clears the current config of any changes that were
+	 * made to it not specified in the config files.
+	 * All values will have to be reloaded from the files when they
+	 * are next needed, unless they are set again by code.
+	 */
+	public static void clearConfig() {
+		gameConfig.clear();
+	}
 
 	/**
 	 * Gets a value from the game config, or loaded config file(s) if not found.
