@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public class MainMenuScreen extends ScreenAdapter {
 
-	public static final int TERT_OFFSET = 250;
+	public static final int TERT_OFFSET = 175;
 	public static final float MAIN_OFFSET = 100;
 	public static final float SECONDARY_OFFSET = MAIN_OFFSET / 4;
 
@@ -163,6 +163,9 @@ public class MainMenuScreen extends ScreenAdapter {
 				spriteForground.getWidth() - 40,
 				spriteForground.getHeight() - 5);
 		spriteBatch.end();
+
+		//updates wrapper of buttons
+		wrapper.setPosition((float) offsetX / TERT_OFFSET, (float) -offsetY / TERT_OFFSET);
 	}
 
 	/**
