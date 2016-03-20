@@ -47,6 +47,16 @@ public abstract class SideBar extends Table {
 	protected boolean left;
 	protected boolean isOpen;
 
+	/**
+	 * Creates a new sidebar
+	 *
+	 * @param stage the stage that will contain this sidebar, used for resizing.
+	 * @param world the world that this sidebar is linked to
+	 * @param left if true then on left, otherwise right
+	 * @param background the background image that this will use for
+	 * @param preferredWidth the preferred width of this sidebar
+     * @param tabs a {@link Map} of {@link String} and {@link Tab} to add to this sidebar.
+     */
 	public SideBar(Stage stage,
 	               World world,
 	               boolean left,
@@ -198,14 +208,24 @@ public abstract class SideBar extends Table {
 		}
 	}
 
+	/**
+	 * @return the preferred width of this sidebar, if space allows it will take up this amount of space max
+     */
 	public float getPreferredWidth() {
 		return preferredWidth;
 	}
 
+	/**
+	 * @return the {@link World} that this sidebar is linked to
+     */
 	public World getWorld() {
 		return world;
 	}
 
+	/**
+	 * Sets the world for this sidebar
+	 * @param world the {@link World} to use with this sidebar
+     */
 	public void setWorld(World world) {
 		this.world = world;
 	}
@@ -224,6 +244,11 @@ public abstract class SideBar extends Table {
 		return isOpen;
 	}
 
+	/**
+	 * Adds a tab to the sidebar
+	 *
+	 * @param tab the {@link Table} to add to the pane
+     */
 	public void addTab(Table tab) {
 		tabbedPane.addTab(tab.getName(), tab);
 	}

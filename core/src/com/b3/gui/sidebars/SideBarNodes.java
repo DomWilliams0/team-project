@@ -30,10 +30,23 @@ public class SideBarNodes extends SideBar implements Disposable {
 	public static boolean s_isOpen;
 	private ModeType mode;
 
+	/**
+	 * Creates a new sidebar full of nodes for use in learning mode
+	 *
+	 * @param stage the stage that this sidebar is contained in
+	 * @param world the {@link World} that this sidebar is linked to
+     */
 	public SideBarNodes(Stage stage, World world) {
 		this(stage, world, 460);
 	}
 
+	/**
+	 * Creates a new sidebar full of nodes for use in learning mode
+	 *
+	 * @param stage the stage that this sidebar is contained in
+	 * @param world the {@link World} that this sidebar is linked to
+	 * @param preferredWidth the preferred width of this sidebar, if space allows it will take up this amount of space max
+     */
 	public SideBarNodes(Stage stage, World world, float preferredWidth) {
 		super(stage, world, false, "window_02", preferredWidth, new LinkedHashMap<>());
 		mode = MainGame.getCurrentMode();
@@ -42,6 +55,15 @@ public class SideBarNodes extends SideBar implements Disposable {
 		top();
 	}
 
+	/**
+	 * Creates a new sidebar full of nodes for use in learning mode
+	 *
+	 * @param stage the stage that this sidebar is contained in
+	 * @param world the {@link World} that this sidebar is linked to
+	 * @param preferredWidth the preferred width of this sidebar, if space allows it will take up this amount of space max
+	 * @param left if true then on left hand side, otherwise on right
+     * @param deferred if true then don't immediately generate components, otherwise do
+     */
 	public SideBarNodes(Stage stage, World world, float preferredWidth, boolean left, boolean deferred) {
 		super(stage, world, left, "window_02", preferredWidth, new LinkedHashMap<>());
 		initTabs();
@@ -50,6 +72,9 @@ public class SideBarNodes extends SideBar implements Disposable {
 			initComponents();
 	}
 
+	/**
+	 * Initialise the nodes tab using {@link NodesTab}
+	 */
 	private void initTabs() {
 		if (tabs != null) {
 			// Add nodes tab
@@ -61,6 +86,11 @@ public class SideBarNodes extends SideBar implements Disposable {
 		}
 	}
 
+	/**
+	 * Add multiple tabs onto the sidebar
+	 *
+	 * @param additionalTabs a {@link Map} of String to {@link Tab} to add to the sidebar
+     */
 	public void addTabs(Map<String, Tab> additionalTabs) {
 		tabs.putAll(additionalTabs);
 	}
@@ -116,33 +146,50 @@ public class SideBarNodes extends SideBar implements Disposable {
 		return ((NodesTab) tabs.get("Nodes")).getUI().setCellColour(n, singleHighlight);
 	}
 
+	/**
+	 * @param stepthrough if true then sets the pseudocode mode to on, otherwise off
+     */
 	public void setStepthrough(boolean stepthrough) {
 		NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
 		nodesTab.getUI().setStepthrough(stepthrough);
 		nodesTab.getNextBtn().getComponent().setVisible(stepthrough && (mode != ModeType.PRACTICE));
 	}
 
+	/**
+	 * @return true if world has new click on this sidebar
+     */
 	public boolean hasNewClick() {
 		return ((NodesTab) tabs.get("Nodes")).getUI().isClickedUpdated();
 	}
 
+	/**
+	 * @return the {@link Point} that the user clicked on, specifically a node
+     */
 	public Point getNewClick() {
 		return ((NodesTab) tabs.get("Nodes")).getUI().getClickedNode();
 	}
 
+	/**
+	 * Resets the pseudocode back to normal non-pseudocode search
+	 */
 	public void resetPseudoCode() {
-
 		SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
 		ticker.setInspectSearch(false);
 		//ticker.resume(1);
 	}
 
+	/**
+	 * Opens the sidebar
+	 */
 	@Override
 	public void open() {
 		super.open();
 		s_isOpen = true;
 	}
 
+	/**
+	 * Closes the sidebar
+	 */
 	@Override
 	public void close() {
 		super.close();
@@ -175,6 +222,9 @@ public class SideBarNodes extends SideBar implements Disposable {
 		stage.dispose();
 	}
 
+	/**
+	 * @return true if pseudocode inspection is enabled.
+     */
 	public Boolean getPseudocodeBegin() {
 		return world.getWorldGraph().getCurrentSearch().isInspectingSearch();
 	}

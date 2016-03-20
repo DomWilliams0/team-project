@@ -21,10 +21,19 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+/**
+ * Creates a sidebar for use in compare mode
+ */
 public class SideBarCompareMode extends SideBar implements Disposable {
 
 	private MainGame controller;
 
+	/**
+	 * Constructs a new sidebar for use in comparemode
+	 *
+	 * @param stage the stage that this sidebar is contained in
+	 * @param world the {@link World} that this sidebar is linked to
+     */
 	public SideBarCompareMode(Stage stage, World world) {
 		super(stage, world, true, "window_03", 230, new LinkedHashMap<>());
 
@@ -39,18 +48,31 @@ public class SideBarCompareMode extends SideBar implements Disposable {
 		initComponents();
 	}
 
+	/**
+	 * @param world the {@link World} to use with this sidebar
+     */
 	public void setWorld(World world) {
 		this.world = world;
 	}
 
+	/**
+	 * @return the {@link MainGame} controller that this sidebar uses for input handling
+     */
 	public MainGame getController() {
 		return controller;
 	}
 
+	/**
+	 * Sets the controller used for input handling to this sidebar
+	 * @param controller the new {@link MainGame} to set this sidebar tom
+     */
 	public void setController(MainGame controller) {
 		this.controller = controller;
 	}
 
+	/**
+	 * Dispose of the sidebar cleanly
+	 */
 	@Override
 	public void dispose() {
 		controller.getInputHandler().clear();
