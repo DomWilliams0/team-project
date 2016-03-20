@@ -2,6 +2,7 @@ package com.b3.gui.sidebars;
 
 import com.b3.gui.TabbedPane;
 import com.b3.gui.components.ButtonComponent;
+import com.b3.gui.components.CheckBoxComponent;
 import com.b3.gui.sidebars.tabs.Tab;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -20,8 +21,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Easy pezy basis of a sidebar.
@@ -45,11 +48,11 @@ public abstract class SideBar extends Table {
 	protected boolean isOpen;
 
 	public SideBar(Stage stage,
-				   World world,
-				   boolean left,
-				   String background,
-				   float preferredWidth,
-				   Map<String, Tab> tabs) {
+	               World world,
+	               boolean left,
+	               String background,
+	               float preferredWidth,
+	               Map<String, Tab> tabs) {
 
 		this.stage = stage;
 		this.preferredWidth = preferredWidth;
@@ -259,5 +262,7 @@ public abstract class SideBar extends Table {
 
 	public void render() {
 	}
+
+
 
 }

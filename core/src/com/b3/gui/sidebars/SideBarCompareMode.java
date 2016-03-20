@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 
 public class SideBarCompareMode extends SideBar implements Disposable {
 
-	private ButtonComponent playPause;
 	private MainGame controller;
 
 	public SideBarCompareMode(Stage stage, World world) {
@@ -40,37 +39,8 @@ public class SideBarCompareMode extends SideBar implements Disposable {
 		initComponents();
 	}
 
-	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey) {
-		createCheckbox(skin, font, table, label, configKey, null);
-	}
-
-	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey,
-								Consumer<Boolean> checkedListener) {
-		CheckBoxComponent checkBox = new CheckBoxComponent(skin, font, label);
-		checkBox.getComponent().setChecked(Config.getBoolean(configKey));
-		checkBox.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				boolean checked = checkBox.getComponent().isChecked();
-				Config.set(configKey, checked);
-				if (checkedListener != null)
-					checkedListener.accept(checked);
-			}
-		});
-
-		table.add(checkBox.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceBottom(10);
-		table.row();
-	}
-
 	public void setWorld(World world) {
 		this.world = world;
-	}
-
-	public void updatePlayPauseButton() {
-		playPause.setText("Play");
 	}
 
 	public MainGame getController() {

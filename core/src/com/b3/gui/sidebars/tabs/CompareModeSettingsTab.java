@@ -1,5 +1,6 @@
 package com.b3.gui.sidebars.tabs;
 
+import com.b3.gui.GuiUtils;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.CheckBoxComponent;
 import com.b3.gui.components.LabelComponent;
@@ -52,44 +53,21 @@ public class CompareModeSettingsTab implements Tab {
 		skin.add("default", font, BitmapFont.class);
 
 		// Show grid checkbox
-		createCheckbox(skin, font, settingsTab, "Show grid", ConfigKey.SHOW_GRID);
+		GuiUtils.createCheckbox(skin, font, settingsTab, "Show grid", ConfigKey.SHOW_GRID, preferredWidth);
 
 		// Flat buildings checkbox
-		createCheckbox(skin, font, settingsTab, "Flat buildings", ConfigKey.FLATTEN_BUILDINGS,
-				world::flattenBuildings);
+		GuiUtils.createCheckbox(skin, font, settingsTab, "Flat buildings", ConfigKey.FLATTEN_BUILDINGS,
+				world::flattenBuildings, preferredWidth);
 
 		// Render static models checkbox
-		createCheckbox(skin, font, settingsTab, "Static 3D objects", ConfigKey.RENDER_STATIC_MODELS,
-				(visible) -> world.getModelManager().setStaticsVisible(visible));
-
-		// im removing this toggle for now, as it requires a complex design decision
-		//
-		// we should remove the FLOCKING_ENABLED config flag, and have it iterate all
-		// non-searching-agents and set them to invisible. unfortunately, models are
-		// (for some reason) rendered outside of RenderSystem so this is currently
-		// difficult to do without mangling everything
-
-		// Flocking enable/disable
-//        CheckBoxComponent showFlockingCheckBox = new CheckBoxComponent(skin, font, "Roaming civilians");
-//        showFlockingCheckBox.getComponent().setChecked(Config.getBoolean(ConfigKey.FLOCKING_ENABLED));
-//        showFlockingCheckBox.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                Config.set(ConfigKey.FLOCKING_ENABLED, showFlockingCheckBox.getComponent().isChecked());
-//            }
-//        });
-//
-//        settingsTab.add(showFlockingCheckBox.getComponent())
-//                .align(Align.left)
-//                .maxWidth(preferredWidth)
-//                .spaceBottom(10);
-//        settingsTab.row();
+		GuiUtils.createCheckbox(skin, font, settingsTab, "Static 3D objects", ConfigKey.RENDER_STATIC_MODELS,
+				(visible) -> world.getModelManager().setStaticsVisible(visible), preferredWidth);
 
 		// Agent model rendering toggle
-		createCheckbox(skin, font, settingsTab, "3D agents", ConfigKey.RENDER_AGENT_MODELS);
+		GuiUtils.createCheckbox(skin, font, settingsTab, "3D agents", ConfigKey.RENDER_AGENT_MODELS, preferredWidth);
 
 		// Show paths checkbox
-		createCheckbox(skin, font, settingsTab, "Show paths", ConfigKey.SHOW_PATHS);
+//		GuiUtils.createCheckbox(skin, font, settingsTab, "Show paths", ConfigKey.SHOW_PATHS, preferredWidth);
 
 		// Search speed slider
 		LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
@@ -215,48 +193,6 @@ public class CompareModeSettingsTab implements Tab {
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
 		settingsTab.row();
-	}
-
-	/**
-	 * Utility to create a checkbox
-	 * @param skin The libGDX skin
-	 * @param font The font to apply
-	 * @param table The parent tab
-	 * @param label The label next to the checkbox
-     * @param configKey The associated configuration key
-     */
-	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey) {
-		createCheckbox(skin, font, table, label, configKey, null);
-	}
-
-	/**
-	 * Utility to create a checkbox
-	 * @param skin The libGDX skin
-	 * @param font The font to apply
-	 * @param table The parent tab
-	 * @param label The label next to the checkbox
-	 * @param configKey The associated configuration key
-     * @param checkedListener
-     */
-	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey,
-								Consumer<Boolean> checkedListener) {
-		CheckBoxComponent checkBox = new CheckBoxComponent(skin, font, label);
-		checkBox.getComponent().setChecked(Config.getBoolean(configKey));
-		checkBox.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				boolean checked = checkBox.getComponent().isChecked();
-				Config.set(configKey, checked);
-				if (checkedListener != null)
-					checkedListener.accept(checked);
-			}
-		});
-
-		table.add(checkBox.getComponent())
-				.align(Align.left)
-				//.maxWidth(preferredWidth)
-				.spaceBottom(10);
-		table.row();
 	}
 
 	@Override
