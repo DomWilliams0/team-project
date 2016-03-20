@@ -122,6 +122,19 @@ public class VisNodes extends Table {
 	}
 
 	/**
+	 * This forces the node bar to reload it's data, and recalculate positioning of everything without informing the ticker
+	 * @param ticker {@link SearchTicker} of the current search
+     */
+	public void forceUpdateTable(SearchTicker ticker) {
+		render(
+				ticker.getFrontier(),
+				ticker.getVisited(),
+				ticker.getAlgorithm(),
+				(!ticker.isInspectingSearch() || ticker.getMode() == ModeType.PRACTICE)
+		);
+	}
+
+	/**
 	 * Render the table, preventing re-render based on time defined in config file.
 	 * If stepthrough mode is active, calling this will force a render regardless;
 	 * the calling function should ensure the search has been updated prior to calling this.
@@ -317,7 +330,11 @@ public class VisNodes extends Table {
 
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
-			float sh = h / 5;
+			float sh;
+			if (world.getWorldGraph().getCurrentSearch().isInspectingSearch())
+				sh = h / 5;
+			else
+				sh = (float) (h / 2.5);
 
 			//row 4 - display the scroll panes holding the collection tables
 			add(spm.getFp()).fill().height(sh).maxHeight(sh);

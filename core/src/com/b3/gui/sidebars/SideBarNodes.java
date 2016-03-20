@@ -228,4 +228,18 @@ public class SideBarNodes extends SideBar implements Disposable {
 	public Boolean getPseudocodeBegin() {
 		return world.getWorldGraph().getCurrentSearch().isInspectingSearch();
 	}
+
+	/**
+	 * When screen is resized update node bar accordingly
+	 *
+	 * @param width  The new width of the window.
+	 * @param height The new height of the window.
+     */
+	@Override
+	public void resize(int width, int height) {
+		SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
+		NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
+		nodesTab.getUI().forceUpdateTable(currentSearch);
+		super.resize(width, height);
+	}
 }
