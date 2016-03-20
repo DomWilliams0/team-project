@@ -26,7 +26,7 @@ import java.util.*;
  * A table which will display the frontier and visited nodes
  * in a useful way to inspect what is happening internally with the algorithm.
  * <p>
- * Created by Lewis, worked on mostly by Lewis but refactored a lot by whole group.
+ * @author lxd417 oxe410
  */
 public class VisNodes extends Table {
 

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import java.util.List;
 
 /**
- * Created by lewis on 17/03/16.
+ * @author lxd417
  * TODO JAVADOC
  */
 public class ScrollPaneManager {

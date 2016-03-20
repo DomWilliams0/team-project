@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
  * Gives instructions on how the mode can be used and interacted with
  * And a legend to explain meaning of colours.
  * <p>
- * Created by Ben, worked on mostly by Lewis
+ * @author lxd417
  */
 public class HelpBox extends Table {
 

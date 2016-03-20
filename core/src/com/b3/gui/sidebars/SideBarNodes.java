@@ -19,7 +19,7 @@ import java.util.Map;
  * Provides a table to display the frontier and visited nodes
  * As part of the gui.
  * <p>
- * Created by Lewis adapted from Ossama's code, worked on mostly by Lewis but added to and converted to SideBar by whole group.
+ * @author lxd417 oxe410
  */
 public class SideBarNodes extends SideBar implements Disposable {
 
