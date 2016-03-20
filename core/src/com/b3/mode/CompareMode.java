@@ -43,7 +43,7 @@ public class CompareMode extends Mode {
 	 * @param game used to set up the world, contains directories to config files
 	 */
 	public CompareMode(MainGame game) {
-		super(ModeType.COMPARE, game, "world/world-compare.tmx", 67, 25.f, null, 10f);
+		super(game, "world/world-compare.tmx", 67, 25.f, null, 10f);
 		agents = new Agent[SEARCH_COUNT];
 		labelBatch = new SpriteBatch(SEARCH_COUNT);
 

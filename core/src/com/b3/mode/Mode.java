@@ -7,7 +7,6 @@ import com.b3.gui.components.MenuItemComponent;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.gui.help.HelpBox;
 import com.b3.gui.sidebars.SideBarNodes;
-import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
 import com.b3.input.SoundController;
@@ -33,11 +32,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 /**
  * A base game mode
  *
- * @author dxw405, oxe410
+ * @author dxw405 oxe410
  */
 public abstract class Mode extends ScreenAdapter {
 
-	private final ModeType modeType;
 	private Point currentSelection;
 
 	protected final World world;
@@ -53,7 +51,6 @@ public abstract class Mode extends ScreenAdapter {
 	protected SideBarNodes sideBarNodes;
 
 	/**
-	 * @param modeType     This mode's type
 	 * @param mainGame     The game instance
 	 * @param worldPath    The path of the world to load
 	 * @param startingFOV  The FOV to start at
@@ -61,12 +58,10 @@ public abstract class Mode extends ScreenAdapter {
 	 * @param startingX    The X coordinate to start at. Null for world centre
 	 * @param startingY    The Y coordinate to start at. Null for world centre
 	 */
-	public Mode(ModeType modeType, MainGame mainGame, String worldPath, float startingFOV, float startingZoom, Float startingX, Float startingY) {
+	public Mode(MainGame mainGame, String worldPath, float startingFOV, float startingZoom, Float startingX, Float startingY) {
 
 		game = mainGame;
 		InputHandler inputHandler = game.getInputHandler();
-
-		this.modeType = modeType;
 
 		// load world
 		world = new World(worldPath);

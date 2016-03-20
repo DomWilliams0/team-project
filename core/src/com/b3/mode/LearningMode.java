@@ -24,7 +24,7 @@ public class LearningMode extends Mode {
 	 * @param game used to set up the world, contains directories to config files
 	 */
 	public LearningMode(MainGame game) {
-		super(ModeType.LEARNING, game,
+		super(game,
 				"world/world_smaller_test.tmx", 45f, 30f, null, null);
 
 		SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();

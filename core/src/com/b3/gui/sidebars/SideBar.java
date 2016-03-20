@@ -29,7 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Easy pezy basis of a sidebar.
+ * Easy peazy basis of a sidebar.
  * Ensures consistent styles.
  */
 public class SideBar extends Table {

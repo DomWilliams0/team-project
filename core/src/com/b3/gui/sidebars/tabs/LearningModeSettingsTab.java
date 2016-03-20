@@ -27,11 +27,6 @@ import java.util.Map;
 public class LearningModeSettingsTab extends Tab {
 
 	/**
-<<<<<<< Updated upstream
-=======
-	 * Creates the compare mode settings tab
-	 *
->>>>>>> Stashed changes
 	 * @param skin           The libGDX skin
 	 * @param font           The font to apply
 	 * @param preferredWidth The tab width
