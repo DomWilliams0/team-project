@@ -209,9 +209,22 @@ public class WorldGraphTest {
 	}
 
 	@Test
+	/**
+	 * Tests the {@link WorldGraph#getRandomNode()} and
+	 * {@link WorldGraph#getRandomNode(Node)} methods
+	 */
 	public void testRandomNode() {
-		for (int i = 0; i < 10000; i++)
-			assertNotNull(graph.getRandomNode());
+		for (int i = 0; i < 10000; i++) {
+			Node randomNode = graph.getRandomNode();
+			assertNotNull(randomNode);
+			assertTrue(graph.hasNode(randomNode.getPoint()));
+		}
+
+		Node notMe = graph.getRandomNode();
+		for (int i = 0; i < 1000; i++) {
+			Node randomNode = graph.getRandomNode(notMe);
+			assertNotEquals(randomNode, notMe);
+		}
 	}
 
 }
