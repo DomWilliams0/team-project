@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -172,13 +173,21 @@ public class CompareModeSettingsTab extends Tab {
 			public void changed(ChangeEvent event, Actor actor) {
 				TextButton btnplaypause = playPause.getComponent();
 				String text = btnplaypause.getText().toString();
-				SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+				Collection<SearchTicker> searches = world.getWorldGraph().getAllSearches();
+
 				if (text.equals("Pause")) {
-					ticker.pause(1);
-					ticker.setUpdated(true);
+					searches
+							.stream()
+							.forEach(searchTicker -> {
+								searchTicker.pause(1);
+								searchTicker.setUpdated(true);
+							});
 					btnplaypause.setText("Play");
+
 				} else if (text.equals("Play")) {
-					ticker.resume(1);
+					searches
+							.stream()
+							.forEach(searchTicker -> searchTicker.resume(1));
 					btnplaypause.setText("Pause");
 				}
 			}

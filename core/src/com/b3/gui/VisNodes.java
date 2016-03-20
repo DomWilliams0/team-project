@@ -332,10 +332,11 @@ public class VisNodes extends Table {
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
 			float sh;
-			if (world.getWorldGraph().getCurrentSearch().isInspectingSearch() || world.getWorldGraph().getCurrentSearch().getMode()==ModeType.PRACTICE)
+			if (world.getWorldGraph().getCurrentSearch().isInspectingSearch() && world.getWorldGraph().getCurrentSearch().getMode() != ModeType.PRACTICE) {
 				sh = h / 5;
-			else
+			} else {
 				sh = (float) (h / 2.75);
+			}
 
 			//row 4 - display the scroll panes holding the collection tables
 			add(spm.getFp()).fill().height(sh).maxHeight(sh);
