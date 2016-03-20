@@ -26,11 +26,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public class MainMenuScreen extends ScreenAdapter {
 
-	public static final int TERT_OFFSET = 175;
-	public static final float MAIN_OFFSET = 100;
-	public static final float SECONDARY_OFFSET = MAIN_OFFSET / 4;
-
-	public static final int ANIMATION_TIMER = 50;
+	private static final int TERT_OFFSET = 175;
+	private static final float MAIN_OFFSET = 100;
+	private static final float SECONDARY_OFFSET = MAIN_OFFSET / 4;
+	private static final int ANIMATION_TIMER = 50;
 
 	private final Table wrapper;
 
@@ -44,7 +43,7 @@ public class MainMenuScreen extends ScreenAdapter {
 	private ShapeRenderer shapeRenderer;
 	private float aspectRatioY;
 
-    private PointTimer pointTimer;
+	private PointTimer pointTimer;
 	private int offsetX;
 	private int offsetY;
 
@@ -98,12 +97,10 @@ public class MainMenuScreen extends ScreenAdapter {
 	 */
 	private ImageButtonComponent createButton(ModeType modeType) {
 		String modeName = modeType.name().toLowerCase();
-		ImageButtonComponent button = new ImageButtonComponent(modeName + "_mode_primary.png",  modeName + "_mode_pressed.png",modeName + "_mode_mouseover.png");
+		ImageButtonComponent button = new ImageButtonComponent(modeName + "_mode_primary.png", modeName + "_mode_pressed.png", modeName + "_mode_mouseover.png");
 		button.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-//				dispose();
-//				controller.goToMode(modeType);
 				pointTimer = new PointTimer(modeType, ANIMATION_TIMER);
 			}
 		});
@@ -127,9 +124,9 @@ public class MainMenuScreen extends ScreenAdapter {
 
 		renderBackground();
 
-        if (pointTimer == null) {
-            renderOverlayButtons(Color.WHITE, 1);
-        }
+		if (pointTimer == null) {
+			renderOverlayButtons(Color.WHITE, 1);
+		}
 
 		mainMenuStage.act();
 		mainMenuStage.draw();
@@ -158,8 +155,8 @@ public class MainMenuScreen extends ScreenAdapter {
 	private void renderForeground() {
 		spriteBatch.begin();
 		spriteBatch.draw(spriteForground,
-				Gdx.graphics.getWidth()/2 - spriteForground.getWidth()/2 + 20 + (float)offsetX / TERT_OFFSET,
-				Gdx.graphics.getHeight() - 100 - (float)offsetY / TERT_OFFSET,
+				Gdx.graphics.getWidth() / 2 - spriteForground.getWidth() / 2 + 20 + (float) offsetX / TERT_OFFSET,
+				Gdx.graphics.getHeight() - 100 - (float) offsetY / TERT_OFFSET,
 				spriteForground.getWidth() - 40,
 				spriteForground.getHeight() - 5);
 		spriteBatch.end();
@@ -170,17 +167,18 @@ public class MainMenuScreen extends ScreenAdapter {
 
 	/**
 	 * Renders the background box that goes behind the buttons
+	 *
 	 * @param colour the colour of the box (default = Dark Grey)
-	 * @param timer the time before changing to the mode
-     */
+	 * @param timer  the time before changing to the mode
+	 */
 	private void renderOverlayButtons(Color colour, int timer) {
 		if (timer == 1) {
 			spriteBatch.begin();
-			spriteBatch.draw(spriteTransForground,
-					(Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer - 1)) / 2 + (float)offsetX/MAIN_OFFSET,
-				Gdx.graphics.getHeight() - Gdx.graphics.getHeight() - 50 - (775 * (timer - 1)) / 2 - (float)offsetY/MAIN_OFFSET,
-				500 * timer,
-				Gdx.graphics.getHeight() + 50 * timer
+			spriteBatch.draw(spriteTransForground, // i love me some hard coded values that make no sense
+					(Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer - 1)) / 2 + (float) offsetX / MAIN_OFFSET,
+					Gdx.graphics.getHeight() - Gdx.graphics.getHeight() - 50 - (775 * (timer - 1)) / 2 - (float) offsetY / MAIN_OFFSET,
+					500 * timer,
+					Gdx.graphics.getHeight() + 50 * timer
 			);
 			spriteBatch.end();
 		} else {
@@ -198,7 +196,7 @@ public class MainMenuScreen extends ScreenAdapter {
 			);
 			shapeRenderer.end();
 		}
-    }
+	}
 
 	/**
 	 * Renders the background at the correct aspect ratio
@@ -206,9 +204,9 @@ public class MainMenuScreen extends ScreenAdapter {
 	private void renderBackground() {
 		spriteBatch.begin();
 
-		//Amount to overscale image by
+		// amount to overscale image by
 		float overGrowth = 50;
-		//dividor to prevent too much paralax effect
+		// divider to prevent too much parallax effect
 		float divisor = SECONDARY_OFFSET;
 
 		float width = Gdx.graphics.getWidth();
@@ -220,10 +218,10 @@ public class MainMenuScreen extends ScreenAdapter {
 		}
 
 		spriteBatch.draw(backgroundSprite,
-				-overGrowth + (float)offsetX/divisor,
-				-overGrowth - (float)offsetY/divisor,
-				width + overGrowth*2 + (float)offsetX/divisor,
-				height + overGrowth*2 - (float)offsetY/divisor
+				-overGrowth + (float) offsetX / divisor,
+				-overGrowth - (float) offsetY / divisor,
+				width + overGrowth * 2 + (float) offsetX / divisor,
+				height + overGrowth * 2 - (float) offsetY / divisor
 		);
 		spriteBatch.end();
 	}
@@ -237,8 +235,7 @@ public class MainMenuScreen extends ScreenAdapter {
 	 */
 	@Override
 	public void resize(int width, int height) {
-//		shapeRenderer.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
-		shapeRenderer = new ShapeRenderer();
+		shapeRenderer.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
 		spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
 		wrapper.setSize(width, height);
 		mainMenuStage.getViewport().update(width, height, true);
@@ -258,7 +255,7 @@ public class MainMenuScreen extends ScreenAdapter {
 	 *
 	 * @param offsetX x amount of pixels away that the mouse is from the center of the screen (-ve is left from center; +ve is right from center)
 	 * @param offsetY y amount of pixels away that the mouse is from the center of the screen (-ve is above center; +ve is right from center)
-     */
+	 */
 	public void setOffset(int offsetX, int offsetY) {
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
