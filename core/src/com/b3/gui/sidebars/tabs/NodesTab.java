@@ -18,12 +18,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import java.util.Map;
 
+/**
+ * Represents a tab that holds the information about the nodes
+ *
+ * @author oxe410
+ */
 public class NodesTab implements Tab {
 
 	private Table nodesTab;
 	private VisNodes ui;
 	private ButtonComponent nextBtn;
 
+	/**
+	 * Create a {@link NodesTab} object
+	 * @param skin The libGDX skin
+	 * @param font The font to apply
+	 * @param preferredWidth The width of the widget
+     * @param data Additional data
+     */
 	public NodesTab(Skin skin, BitmapFont font, float preferredWidth, Map<String, Object> data) {
 
 		// Extract data
@@ -64,6 +76,9 @@ public class NodesTab implements Tab {
 		nodesTab.add(pseudocodeTable);
 	}
 
+	/**
+	 * @return The node visualisation/UI object
+     */
 	public VisNodes getUI() {
 		return ui;
 	}

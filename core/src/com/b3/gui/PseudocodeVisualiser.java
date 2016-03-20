@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * Represents the pseudocode visualisation box
+ *
+ * @author oxe410
+ */
 public class PseudocodeVisualiser extends Table implements Observer {
 
 	private static PseudocodeVisualiser instance;
@@ -27,6 +32,9 @@ public class PseudocodeVisualiser extends Table implements Observer {
 	private Pixmap pixmap;
 	private Table pseudocodeTable;
 
+	/**
+	 * Creates the default {@link PseudocodeVisualiser} object
+	 */
 	private PseudocodeVisualiser() {
 		font = Utils.getFont("monaco.ttf", 15);
 		font.getData().markupEnabled = true;
@@ -48,6 +56,14 @@ public class PseudocodeVisualiser extends Table implements Observer {
 		add(pseudocodeTable).padTop(25);
 	}
 
+	/**
+	 * Sets the background of a give table
+	 * @param table The table
+	 * @param r The red component
+	 * @param g The green component
+	 * @param b The blue component
+     * @param a The alpha component
+     */
 	private static void setBackgroundColor(Table table, float r, float g, float b, float a) {
 		Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
 		pm1.setColor(r, g, b, a);
@@ -55,6 +71,11 @@ public class PseudocodeVisualiser extends Table implements Observer {
 		table.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
 	}
 
+	/**
+	 * Returns the description to display on top of the pseudocode
+	 * @param index Defines which description to choose
+	 * @return See above
+     */
 	private String getDescription(int index) {
 		ArrayList<String> desc = new ArrayList<String>() {{
 			add("Pseudocode visualisation");
@@ -63,12 +84,19 @@ public class PseudocodeVisualiser extends Table implements Observer {
 		return desc.get(index);
 	}
 
+	/**
+	 * @return The default {@link PseudocodeVisualiser} object
+     */
 	public static PseudocodeVisualiser getInstance() {
 		if (instance == null)
 			instance = new PseudocodeVisualiser();
 		return instance;
 	}
 
+	/**
+	 * @param skin The libGDX skin
+	 * @return The default {@link PseudocodeVisualiser} object
+     */
 	public static PseudocodeVisualiser getInstance(Skin skin) {
 		if (instance == null) {
 			instance = new PseudocodeVisualiser();

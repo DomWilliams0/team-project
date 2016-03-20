@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
  * Observable pseudocode, which links what a user sees on the screen to what is happening in the code
  * Contains the lines of pseudocode
  * Highlights the lines
+ *
+ * @author oxe410
  */
 public class Pseudocode extends Observable {
 
@@ -132,6 +134,8 @@ public class Pseudocode extends Observable {
 
 			currentLine = i;
 		}
+		else
+			currentLine = 0;
 
 		setChanged();
 		notifyObservers();

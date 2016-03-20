@@ -33,7 +33,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 /**
  * A base game mode
  *
- * @author dxw405
+ * @author dxw405, oxe410
  */
 public abstract class Mode extends ScreenAdapter {
 
@@ -195,11 +195,6 @@ public abstract class Mode extends ScreenAdapter {
 		// world rendering
 		world.render();
 
-		// menu rendering
-		menu.render();
-		menuStage.act();
-		menuStage.draw();
-
 		// sidebar rendering
 		sideBarStage.act(Utils.TRUE_DELTA_TIME);
 		if (sideBarNodes != null) {
@@ -232,6 +227,11 @@ public abstract class Mode extends ScreenAdapter {
 			}
 		}
 		sideBarStage.draw();
+
+		// menu rendering
+		menu.render();
+		menuStage.act();
+		menuStage.draw();
 
 		tick();
 

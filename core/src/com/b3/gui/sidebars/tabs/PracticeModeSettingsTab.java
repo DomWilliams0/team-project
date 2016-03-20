@@ -19,10 +19,22 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Map;
 
+/**
+ * Represents the practice mode settings tab
+ *
+ * @author oxe410
+ */
 public class PracticeModeSettingsTab implements Tab {
 
 	private Table settingsTab;
 
+	/**
+	 * Creates the practice mode settings tab
+	 * @param skin The libGDX skin
+	 * @param font The font to apply
+	 * @param preferredWidth The tab width
+	 * @param data Additional data
+     */
 	public PracticeModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, Map<String, Object> data) {
 
 		settingsTab = new Table();
@@ -113,6 +125,10 @@ public class PracticeModeSettingsTab implements Tab {
 		settingsTab.row();
 	}
 
+	/**
+	 * Sets the name of the tab
+	 * @param name The name
+     */
 	public void setName(String name) {
 		settingsTab.setName(name);
 	}

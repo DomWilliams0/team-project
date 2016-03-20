@@ -14,14 +14,16 @@ import com.badlogic.gdx.utils.Pools;
 
 /**
  * A {@code TabbedPane} widget.
+ *
+ * @author oxe410
  */
 public class TabbedPane extends Table {
-	private TabbedPaneStyle style;
 
-	Table tabTitleTable;
-	Stack tabBodyStack;
-	int selectedIndex;
-	int tabTitleAlign = Align.left;
+	private TabbedPaneStyle style;
+	private Table tabTitleTable;
+	private Stack tabBodyStack;
+	private int selectedIndex;
+	private int tabTitleAlign = Align.left;
 
 	/**
 	 * Creates a {@code TabbedPane} using the specified skin.
@@ -179,9 +181,6 @@ public class TabbedPane extends Table {
 		tabBodyStack.add(actor);
 
 		// Make sure the 1st tab is selected even after adding the tab
-		// TODO
-		// CAUTION: if you've added a ChangeListener before adding the tab
-		// the following lines will fire 2 ChangeEvents.
 		setSelectedIndex(index);
 		setSelectedIndex(0);
 	}
@@ -206,7 +205,7 @@ public class TabbedPane extends Table {
 
 	private void setSelectedTab(boolean value) {
 		TabTitleButton tabTitleButton = ((TabTitleButton) tabTitleTable.getCells().get(selectedIndex).getActor());
-		tabTitleButton.setDisabled(value); // Can't toggle the selected tab
+		tabTitleButton.setDisabled(value);
 		tabTitleButton.setChecked(value);
 		tabBodyStack.getChildren().get(selectedIndex).setVisible(value);
 	}

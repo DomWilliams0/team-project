@@ -20,10 +20,23 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Map;
 
+/**
+ * Represents the learning mode settings tab
+ *
+ * @author oxe410
+ */
 public class LearningModeSettingsTab implements Tab {
 
 	private Table settingsTab;
 
+	/**
+	 * Creates the compare mode settings tab
+	 * @param skin The libGDX skin
+	 * @param font The font to apply
+	 * @param preferredWidth The tab width
+	 * @param parent The {@link SideBar} which contains this tab
+	 * @param data Additional data
+     */
 	public LearningModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
 
 		// Extract data

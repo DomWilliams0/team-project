@@ -383,7 +383,7 @@ public class SearchTicker extends Observable {
 			currentNeighbour = null;
 		}
 
-		pseudocode.setCurrentLine(0);
+		pseudocode.highlight(0);
 		setUpdated(true);
 		completedPseudocodeTick = true;
 	}
