@@ -1,6 +1,7 @@
 package com.b3.gui;
 
 import com.b3.gui.components.LabelComponent;
+import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -107,7 +108,12 @@ public class VisNodes extends Table {
 				//tell the ticker we've used its data
 				ticker.setUpdated(false);
 				//render the data
-				render = render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm(), !ticker.isInspectingSearch());
+				render = render(
+						ticker.getFrontier(),
+						ticker.getVisited(),
+						ticker.getAlgorithm(),
+						(!ticker.isInspectingSearch() || ticker.getMode() == ModeType.PRACTICE)
+				);
 			} else
 				render = 0;
 		}

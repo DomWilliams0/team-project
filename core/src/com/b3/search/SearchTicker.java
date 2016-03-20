@@ -742,4 +742,12 @@ public class SearchTicker extends Observable {
 		currentNeighbours = new ArrayList<>();
 		neighboursSoFar = 0;
 	}
+
+	/**
+	 * Get the current {@link ModeType} of the world in which this search is running
+	 * @return the current {@link ModeType} of the world in which this search is running
+	 */
+	public ModeType getMode() {
+		return mode;
+	}
 }
