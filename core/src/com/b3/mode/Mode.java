@@ -116,21 +116,9 @@ public abstract class Mode extends ScreenAdapter {
 	 */
 	protected void initSidebar() {
 		sideBarStage = new Stage(new ScreenViewport());
-
-		if (modeType != ModeType.COMPARE) {
-			sideBarNodes = new SideBarNodes(sideBarStage, world);
-
-			sideBarNodes.setStepthrough(true);
-			sideBarStage.addActor(sideBarNodes);
-
-			if (modeType == modeType.PRACTICE) {
-				sideBarStage.addActor(new SideBarPracticeMode(sideBarStage, world, game, 460));
-			}
-		}
-
 	}
 
-	protected void initMenu() {
+	private void initMenu() {
 		menuStage = new Stage(new ScreenViewport());
 		menu = new MenuComponent();
 

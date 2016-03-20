@@ -3,6 +3,8 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
+import com.b3.gui.sidebars.SideBarNodes;
+import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;
 import com.b3.input.PracticeModeWorldSelectionHandler;
 import com.b3.search.WorldGraph;
@@ -15,7 +17,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 /**
  * A mode to allow the user to practice what they've learnt by choosing what should be added to the frontier and
  * visited themselves
- *
  */
 public class PracticeMode extends Mode {
 
@@ -58,12 +59,18 @@ public class PracticeMode extends Mode {
 	@Override
 	protected void initSidebar() {
 		super.initSidebar();
+		sideBarNodes = new SideBarNodes(sideBarStage, world);
+		sideBarNodes.setStepthrough(true);
+		sideBarStage.addActor(sideBarNodes);
+
+
+		sideBarStage.addActor(new SideBarPracticeMode(sideBarStage, world, game, 460));
+
 		popupStage = new Stage(new ScreenViewport());
 	}
 
 	/**
 	 * Renders the world, the three sidebars and updates the world's position and zoom depending on input from the user via the input listeners.
-	 *
 	 */
 	@Override
 	protected void tick() {

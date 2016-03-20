@@ -4,6 +4,7 @@ import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
 import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
+import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.WorldSelectionHandler;
 import com.b3.search.SearchTicker;
@@ -49,6 +50,12 @@ public class LearningMode extends Mode {
 	@Override
 	protected void initSidebar() {
 		super.initSidebar();
+		sideBarNodes = new SideBarNodes(sideBarStage, world);
+
+		sideBarNodes.setStepthrough(true);
+		sideBarStage.addActor(sideBarNodes);
+
+
 		sideBar = new SideBarIntensiveLearningMode(sideBarStage, world);
 		sideBar.setController(game);
 		sideBarStage.addActor(sideBar);
@@ -56,7 +63,6 @@ public class LearningMode extends Mode {
 
 	/**
 	 * Renders the world, the three sidebars and updates the world's position and zoom depending on input from the user via the input listeners.
-	 *
 	 */
 	@Override
 	public void tick() {
