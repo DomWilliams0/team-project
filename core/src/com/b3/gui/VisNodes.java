@@ -131,7 +131,7 @@ public class VisNodes extends Table {
 				ticker.getFrontier(),
 				ticker.getVisited(),
 				ticker.getAlgorithm(),
-				(!SearchTicker.isInspectingSearch() || ticker.getMode() != ModeType.PRACTICE)
+				(!SearchTicker.isInspectingSearch() && ticker.getMode() != ModeType.PRACTICE)
 		);
 	}
 
@@ -367,7 +367,7 @@ public class VisNodes extends Table {
 	private void setupDescription() {
 		convertNodeReps();
 		stepString = new StringBuilder();
-		formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
+		formatter = new Formatter(stepString, Locale.UK);
 		String expandedNode = "I have just expanded the node:\n" +
 				"%s, which is now\n" +
 				"added to the visited set.\n";
