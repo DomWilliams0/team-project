@@ -11,6 +11,7 @@ import com.b3.input.InputHandler;
 import com.b3.input.KeyboardController;
 import com.b3.input.SoundController;
 import com.b3.search.Point;
+import com.b3.search.SearchTicker;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -62,6 +63,8 @@ public abstract class Mode extends ScreenAdapter {
 
 		game = mainGame;
 		InputHandler inputHandler = game.getInputHandler();
+
+		SearchTicker.setInspectSearch(false);
 
 		// load world
 		world = new World(worldPath);
