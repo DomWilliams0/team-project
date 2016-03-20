@@ -88,7 +88,7 @@ public class VisNodes extends Table {
 		//check that the ticker exists; if it does, see if the ticker has data to render
 		if (ticker == null || ticker.getVisited() == null || ticker.getFrontier() == null) {
 			//no data to render, so render this with dummy contents.
-			render = render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST, false, ticker);
+			render = render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST, false);
 		} else {
 			//we have data to render. get the most recent changes from the ticker
 			newVisited = ticker.getMostRecentlyExpanded();
@@ -104,7 +104,7 @@ public class VisNodes extends Table {
 						ticker.getFrontier(),
 						ticker.getVisited(),
 						ticker.getAlgorithm(),
-						(!ticker.isInspectingSearch() || ticker.getMode() == ModeType.PRACTICE), ticker
+						(!ticker.isInspectingSearch() && ticker.getMode() != ModeType.PRACTICE)
 				);
 			} else
 				render = 0;
@@ -125,14 +125,13 @@ public class VisNodes extends Table {
 	/**
 	 * This forces the node bar to reload it's data, and recalculate positioning of everything without informing the ticker
      * @param ticker {@link SearchTicker} of the current search
-     * @param mode
      */
-	public void forceUpdateTable(SearchTicker ticker, ModeType mode) {
+	public void forceUpdateTable(SearchTicker ticker) {
 		render(
 				ticker.getFrontier(),
 				ticker.getVisited(),
 				ticker.getAlgorithm(),
-				(!ticker.isInspectingSearch() || ticker.getMode() == ModeType.PRACTICE), ticker
+				(!ticker.isInspectingSearch() || ticker.getMode() != ModeType.PRACTICE)
 		);
 	}
 
@@ -149,7 +148,7 @@ public class VisNodes extends Table {
 	 * - 1: Rendered as normal
 	 * - 2: The scrollpane(s) are being dragged.
 	 */
-	public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg, boolean showDesc, SearchTicker searchTicker) {
+	public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg, boolean showDesc) {
 		//check if a scrollpane is being used
 		if (spm.scrollpanesBeingUsed()) {
 			return 2;
@@ -180,7 +179,7 @@ public class VisNodes extends Table {
 
 		//put the description on the sidebar
 		//BOTTOM of the sidebar
-		if (showDesc && searchTicker.getMode() != ModeType.PRACTICE) setupDescription();
+		if (showDesc) setupDescription();
 		descriptionShown = showDesc;
 		return 1;
 	}
@@ -333,10 +332,10 @@ public class VisNodes extends Table {
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
 			float sh;
-			if (world.getWorldGraph().getCurrentSearch().isInspectingSearch())
+			if (world.getWorldGraph().getCurrentSearch().isInspectingSearch() || world.getWorldGraph().getCurrentSearch().getMode()==ModeType.PRACTICE)
 				sh = h / 5;
 			else
-				sh = (float) (h / 2.5);
+				sh = (float) (h / 2.75);
 
 			//row 4 - display the scroll panes holding the collection tables
 			add(spm.getFp()).fill().height(sh).maxHeight(sh);

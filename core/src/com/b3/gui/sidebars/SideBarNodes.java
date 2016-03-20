@@ -206,7 +206,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 		NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
 		if (currentSearch != null) {
 			setStepthrough(currentSearch.isPaused(1));
-			nodesTab.setPseudocodeVisible(currentSearch.isInspectingSearch());
+			nodesTab.setPseudocodeVisible(currentSearch.isInspectingSearch() || currentSearch.getMode()==ModeType.PRACTICE);
 		} else {
 			setStepthrough(false);
 			nodesTab.setPseudocodeVisible(false);
@@ -239,7 +239,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 	public void resize(int width, int height) {
 		SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
 		NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
-		nodesTab.getUI().forceUpdateTable(currentSearch, mode);
+		nodesTab.getUI().forceUpdateTable(currentSearch);
 		super.resize(width, height);
 	}
 }
