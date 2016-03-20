@@ -72,7 +72,7 @@ public class TutorialMode extends Mode {
 	protected void tick() {
 		if (!world.getWorldGUI().getPseudoCode()) {
 			sideBarNodes.resetPseudoCode();
-			//sideBarNodes.render();
+			sideBarNodes.render();
 			world.getWorldGUI().setPseudoCode(true);
 		}
 		sideBar.render();

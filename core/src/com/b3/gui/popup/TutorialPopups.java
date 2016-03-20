@@ -67,9 +67,9 @@ public class TutorialPopups {
 				+ '\n' + "until all the previous costs are shown ";
 		tutorialText[9] = "[LIGHT_GRAY]Click[] on the [BLUE]end node[] and change the page until"
 				+ '\n' + "the heuristic is shown";
-		tutorialText[10] = "Open the right hand menu"
-				+ '\n' + "and [LIGHT_GRAY]click on the pseudocode tab[]"
-				+ '\n' + "then [LIGHT_GRAY]click begin[] and"
+		tutorialText[10] = "Open the left hand menu"
+				+ '\n' + "and [LIGHT_GRAY]enable the pseudocode checkbox[]"
+				+ '\n' + "then [LIGHT_GRAY]on the right hand side[] you can"
 				+ '\n' + "watch how the search works behind the scenes";
 		tutorialText[11] = "And that's it! You now know how to use this program"
 				+ '\n' + "but if you ever get stuck you can click on a help tab at the top"
@@ -160,7 +160,7 @@ public class TutorialPopups {
 				}
 				break;
 			case 10:
-				if (!sideBarNodes.getPseudocodeBegin()) {
+				if (world.getWorldGraph().getCurrentSearch().isInspectingSearch()) {
 					stepCounter++;
 				}
 				break;

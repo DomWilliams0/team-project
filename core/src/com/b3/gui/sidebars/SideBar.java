@@ -285,6 +285,4 @@ public abstract class SideBar extends Table {
 	public void render() {
 	}
 
-
-
 }
