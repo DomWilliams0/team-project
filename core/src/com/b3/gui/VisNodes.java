@@ -155,8 +155,6 @@ public class VisNodes extends Table {
 			return 2;
 		}
 
-        System.out.println(showDesc);
-
 		this.alg = alg;
 
 		//stop it rendering every frame if we're on play mode
