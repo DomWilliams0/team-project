@@ -50,19 +50,12 @@ public class CompareModeSettingsTab extends Tab {
 		// Show grid checkbox
 		GuiUtils.createCheckbox(skin, font, tab, "Show grid", ConfigKey.SHOW_GRID, preferredWidth);
 
-		// Flat buildings checkbox
-		GuiUtils.createCheckbox(skin, font, tab, "Flat buildings", ConfigKey.FLATTEN_BUILDINGS,
-				world::flattenBuildings, preferredWidth);
-
 		// Render static models checkbox
 		GuiUtils.createCheckbox(skin, font, tab, "Static 3D objects", ConfigKey.RENDER_STATIC_MODELS,
 				(visible) -> world.getModelManager().setStaticsVisible(visible), preferredWidth);
 
 		// Agent model rendering toggle
 		GuiUtils.createCheckbox(skin, font, tab, "3D agents", ConfigKey.RENDER_AGENT_MODELS, preferredWidth);
-
-		// Show paths checkbox
-//		GuiUtils.createCheckbox(skin, font, tab, "Show paths", ConfigKey.SHOW_PATHS, preferredWidth);
 
 		// Search speed slider
 		LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
@@ -111,56 +104,6 @@ public class CompareModeSettingsTab extends Tab {
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		tab.row();
-
-		// Add Building button
-		ButtonComponent addBuildingMode = new ButtonComponent(skin, font, "Add Building Mode");
-		addBuildingMode.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				parent.close();
-
-				if (!world.getWorldGraph().getCurrentSearch().isTickedOnce()) {
-					Boolean currentBoolean = Config.getBoolean(ConfigKey.ADD_BUILDING_MODE);
-					Config.set(ConfigKey.ADD_BUILDING_MODE, !currentBoolean);
-					System.out.println("Add building mode is " + !currentBoolean);
-				} else {
-					world.getWorldGUI().getPopupManager().showBuildingError();
-					SoundController.playSounds(2);
-					System.err.println("Search has begun cannot add");
-				}
-			}
-		});
-
-		tab.add(addBuildingMode.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(20);
-		tab.row();
-
-		// Remove Building button
-		ButtonComponent removeBuildingButton = new ButtonComponent(skin, font, "Remove Building");
-		removeBuildingButton.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				parent.close();
-
-				if (!world.getWorldGraph().getCurrentSearch().isTickedOnce()) {
-					Boolean currentBoolean = Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE);
-					Config.set(ConfigKey.REMOVE_BUILDING_MODE, !currentBoolean);
-					System.out.println("Remove building mode is " + !currentBoolean);
-				} else {
-					world.getWorldGUI().getPopupManager().showBuildingError();
-					SoundController.playSounds(2);
-					System.err.println("Search has begun cannot add");
-				}
-			}
-		});
-
-		tab.add(removeBuildingButton.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(20);
 		tab.row();
 
 		//Play and Pause button
