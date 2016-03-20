@@ -2,7 +2,6 @@ package com.b3.entity.ai;
 
 import com.b3.entity.Agent;
 import com.b3.search.Node;
-import com.b3.search.Point;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
@@ -33,13 +32,13 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 			if (graph.getLearningModeNext() != null)
 				algorithm = graph.getLearningModeNext();
 			Node currentPos = pathFind.getNodeFromTile(graph, agent.getPhysicsComponent().getPosition());
+			Vector2 nextDestination = graph.getNextDestination();
 
-			if (currentPos.equals(new Node(graph.getNextDestination())) || graph.getNextDestination().getY() == 0 && graph.getNextDestination().getX() == 0 || graph.getNextDestination().getX() == -5)
-				pathFind.reset(agent.getPhysicsComponent().getPosition(), Utils.pointToVector2(graph.getRandomNode(currentPos).getPoint()), algorithm, graph);
-			else
-				pathFind.reset(agent.getPhysicsComponent().getPosition(), new Vector2(graph.getNextDestination().getX(), graph.getNextDestination().getY()), algorithm, graph);
+			Vector2 nextGoal = nextDestination == null ?
+					Utils.pointToVector2(graph.getRandomNode(currentPos).getPoint()) : nextDestination;
 
-			graph.setNextDestination(-5, -5);
+			pathFind.reset(agent.getPhysicsComponent().getPosition(), nextGoal, algorithm, graph);
+			graph.clearNextDestination();
 		}
 	}
 

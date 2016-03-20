@@ -98,8 +98,6 @@ public class WorldSelectionHandler extends InputAdapter {
 		if (node == null)
 			return false;
 
-		System.out.println("You clicked node: " + node.getPoint());
-
 		if (button == Input.Buttons.LEFT)
 			world.getWorldGUI().setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
 		else {

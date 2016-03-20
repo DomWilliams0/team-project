@@ -27,9 +27,7 @@ public class WorldGraph {
 	private Agent latestSearchAgent;
 	private final Map<Agent, SearchTicker> searchTickers;
 
-	//current wanted next destination (right click)
-	private int wantedNextDestinationX = -5;
-	private int wantedNextDestinationY = -5;
+	private Vector2 wantedNextDestination;
 
 	//search algorithm wanted for learning mode only (Leave as null if compare mode)
 	private SearchAlgorithm learningModeNext = null;
@@ -45,6 +43,7 @@ public class WorldGraph {
 		this.graph = new Graph(width, height);
 		this.renderer = new WorldGraphRenderer(this);
 		this.searchTickers = new LinkedHashMap<>();
+		this.wantedNextDestination = null;
 	}
 
 
@@ -267,15 +266,21 @@ public class WorldGraph {
 	 * @param y The y coordinate to request.
 	 */
 	public void setNextDestination(int x, int y) {
-		wantedNextDestinationX = x;
-		wantedNextDestinationY = y;
+		wantedNextDestination = new Vector2(x, y);
 	}
 
 	/**
-	 * @return The next destination the {@link SearchTicker} will try reach.
+	 * @return The next destination the {@link SearchTicker} will try reach, or null if not set.
 	 */
-	public Point getNextDestination() {
-		return new Point(wantedNextDestinationX, wantedNextDestinationY);
+	public Vector2 getNextDestination() {
+		return wantedNextDestination;
+	}
+
+	/**
+	 * Forgets about the current next destination
+	 */
+	public void clearNextDestination() {
+		wantedNextDestination = null;
 	}
 
 	/**
@@ -298,30 +303,10 @@ public class WorldGraph {
 	 * Removed a building from the WorldGraph,
 	 * the {@link Node Nodes} and edges that were covered will be restored.
 	 *
-	 * @param positionDeletion The bottom left hand corner of the building to delete.
+	 * @param deletionTile The bottom left hand corner of the building to delete.
 	 */
-	public void removeBuilding(Vector2 positionDeletion) {
-		//add nodes back into
-		for (int i = (int) positionDeletion.x; i < positionDeletion.x + 4; i++) {
-			for (int j = (int) positionDeletion.y; j < positionDeletion.y + 4; j++) {
-				graph.addNode(new Point(i, j));
-			}
-		}
-		//add edges back into
-		for (int i = (int) positionDeletion.x; i < positionDeletion.x + 4; i++) {
-			for (int j = (int) positionDeletion.y; j < positionDeletion.y + 4; j++) {
-				Point currentPoint = new Point(i, j);
-				if (graph.hasNode(new Point(i + 1, j)))
-					graph.addEdge(currentPoint, new Point(i + 1, j), 1);
-				if (graph.hasNode(new Point(i - 1, j)))
-					graph.addEdge(currentPoint, new Point(i - 1, j), 1);
-				if (graph.hasNode(new Point(i, j + 1)))
-					graph.addEdge(currentPoint, new Point(i, j + 1), 1);
-				if (graph.hasNode(new Point(i, j - 1)))
-					graph.addEdge(currentPoint, new Point(i, j - 1), 1);
-			}
-		}
-
+	public void removeBuilding(Vector2 deletionTile) {
+		graph.addNodesInSquare((int) deletionTile.x, (int) deletionTile.y, 4);
 	}
 
 

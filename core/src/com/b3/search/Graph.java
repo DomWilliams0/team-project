@@ -1,7 +1,6 @@
 package com.b3.search;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -200,6 +199,7 @@ public class Graph {
 
 	/**
 	 * Snips all the edges in the given range
+	 *
 	 * @param baseX lower X bound
 	 * @param upToX upper X bound
 	 * @param baseY lower Y bound
@@ -215,6 +215,7 @@ public class Graph {
 		}
 	}
 
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -227,5 +228,30 @@ public class Graph {
 		}
 
 		return sb.toString();
+	}
+
+	public void addNodesInSquare(int x, int y, int size) {
+
+		// add nodes
+		for (int i = x; i < x + size; i++)
+			for (int j = y; j < y + size; j++)
+				addNode(new Point(i, j));
+
+		// add edges
+		for (int i = x; i < x + size; i++) {
+			for (int j = y; j < y + size; j++) {
+				Point currentPoint = new Point(i, j);
+				if (hasNode(new Point(i + 1, j)))
+					addEdge(currentPoint, new Point(i + 1, j), 1);
+				if (hasNode(new Point(i - 1, j)))
+					addEdge(currentPoint, new Point(i - 1, j), 1);
+				if (hasNode(new Point(i, j + 1)))
+					addEdge(currentPoint, new Point(i, j + 1), 1);
+				if (hasNode(new Point(i, j - 1)))
+					addEdge(currentPoint, new Point(i, j - 1), 1);
+			}
+		}
+
+
 	}
 }
