@@ -5,6 +5,7 @@ import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
 import com.b3.gui.popup.TutorialPopups;
 import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
+import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.TutorialModeSelectionHandler;
 import com.b3.search.Point;
@@ -55,6 +56,7 @@ public class TutorialMode extends Mode {
 	@Override
 	protected void initSidebar() {
 		super.initSidebar();
+		sideBarNodes = new SideBarNodes(sideBarStage, world);
 
 		sideBar = new SideBarIntensiveLearningMode(sideBarStage, world);
 		sideBar.setController(game);
