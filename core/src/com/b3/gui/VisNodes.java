@@ -332,7 +332,7 @@ public class VisNodes extends Table {
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
 			float sh;
-			if (SearchTicker.isInspectingSearch() && world.getWorldGraph().getCurrentSearch().getMode() != ModeType.PRACTICE) {
+			if (SearchTicker.isInspectingSearch() || world.getWorldGraph().getCurrentSearch().getMode() == ModeType.PRACTICE) {
 				sh = h / 5;
 			} else {
 				sh = (float) (h / 2.75);
