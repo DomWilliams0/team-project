@@ -12,6 +12,8 @@ import java.util.Map;
 
 /**
  * Creates a sidebar for use in practice mode
+ *
+ * @author oxe410
  */
 public class SideBarPracticeMode extends SideBar {
 

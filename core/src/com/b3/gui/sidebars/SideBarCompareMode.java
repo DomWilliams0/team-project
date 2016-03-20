@@ -12,6 +12,8 @@ import java.util.Map;
 
 /**
  * Creates a sidebar for use in compare mode
+ *
+ * @author oxe410
  */
 public class SideBarCompareMode extends SideBar implements Disposable {
 

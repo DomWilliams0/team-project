@@ -12,6 +12,8 @@ import java.util.Map;
 
 /**
  * The sidebar used for intensive learning mode
+ *
+ * @author oxe410
  */
 public class SideBarIntensiveLearningMode extends SideBar implements Disposable {
 
