@@ -12,8 +12,6 @@ import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import java.util.function.Consumer;
-
 import static com.b3.mode.ModeType.*;
 
 /**
@@ -122,8 +120,12 @@ public class WorldGUI {
 		popupManager.render();
 	}
 
+	/**
+	 * If the initial animation has finished and the intro pop-up has not been shown yet, then
+	 * show it
+	 */
 	private void checkForInitialPopup() {
-		if (world.getWorldGraph().getRenderer().getAnimationFinished() && shownOnce == false) {
+		if (world.getWorldGraph().getRenderer().getAnimationFinished() && !shownOnce) {
 			world.getWorldGUI().getPopupManager().showIntro();
 			shownOnce = true;
 		}

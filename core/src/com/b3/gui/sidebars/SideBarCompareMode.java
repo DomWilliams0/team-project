@@ -1,25 +1,14 @@
 package com.b3.gui.sidebars;
 
 import com.b3.MainGame;
-import com.b3.gui.components.ButtonComponent;
-import com.b3.gui.components.CheckBoxComponent;
 import com.b3.gui.sidebars.tabs.CompareModeSettingsTab;
-import com.b3.util.Config;
-import com.b3.util.ConfigKey;
 import com.b3.world.World;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * Creates a sidebar for use in compare mode

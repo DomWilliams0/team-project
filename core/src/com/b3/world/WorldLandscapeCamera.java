@@ -1,8 +1,6 @@
 package com.b3.world;
 
 import com.b3.search.util.Function2;
-import com.b3.util.Utils;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Matrix4;

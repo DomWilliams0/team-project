@@ -2,7 +2,6 @@ package com.b3.gui.components;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * A {@link ButtonComponent} that is present in {@link MenuComponent}

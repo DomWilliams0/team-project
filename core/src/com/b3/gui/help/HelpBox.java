@@ -24,9 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
  */
 public class HelpBox extends Table {
 
-	private Stage stage;
 	private float preferredHeight;
-	private final String padding = "   ";
 	private Table worldT;
 	private Table worldNodesT;
 	private Table sidebarsT;
@@ -43,7 +41,7 @@ public class HelpBox extends Table {
 			"You can also play/pause the search here.";
 
 	public HelpBox(Stage stage) {
-		this.stage = stage;
+		Stage stage1 = stage;
 		switch (MainGame.getCurrentMode()) {
 			case LEARNING:
 				preferredHeight = 390;
@@ -103,6 +101,7 @@ public class HelpBox extends Table {
 	private void fillThis() {
 		//top row for sidebar info then interacting with the nodes in the world
 		add(sidebarsT);
+		String padding = "   ";
 		add(padding);
 		add(worldNodesT);
 

@@ -44,15 +44,6 @@ public class VisNodes extends Table {
 	private String newFrontierStr = "<NOTHING>";
 	private String highestNodeStr = "<NOTHING>";
 
-	private final String expandedNode = "I have just expanded the node:\n" +
-			"%s, which is now\n" +
-			"added to the visited set.\n";
-	private final String addedToFrontier = "I have added the following\n" +
-			"nodes to the frontier:\n" +
-			"%s\n";
-	private final String nextNode = "My next node to expand is\n" +
-			"%s";
-
 	private StringBuilder stepString;
 	private Formatter formatter;
 
@@ -357,7 +348,15 @@ public class VisNodes extends Table {
 	private void setupDescription() {
 		convertNodeReps();
 		stepString = new StringBuilder();
-		formatter = new Formatter(stepString, Locale.UK);
+		formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
+		String expandedNode = "I have just expanded the node:\n" +
+				"%s, which is now\n" +
+				"added to the visited set.\n";
+		String addedToFrontier = "I have added the following\n" +
+				"nodes to the frontier:\n" +
+				"%s\n";
+		String nextNode = "My next node to expand is\n" +
+				"%s";
 		formatter.format(expandedNode + "\n" +
 						addedToFrontier + "\n" +
 						nextNode,
