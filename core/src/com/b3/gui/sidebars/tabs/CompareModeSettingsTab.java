@@ -2,7 +2,6 @@ package com.b3.gui.sidebars.tabs;
 
 import com.b3.gui.GuiUtils;
 import com.b3.gui.components.ButtonComponent;
-import com.b3.gui.components.CheckBoxComponent;
 import com.b3.gui.components.LabelComponent;
 import com.b3.gui.components.SliderComponent;
 import com.b3.gui.sidebars.SideBar;
@@ -22,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * Represents the compare mode settings tab
@@ -71,7 +69,7 @@ public class CompareModeSettingsTab implements Tab {
 
 		// Search speed slider
 		LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
-		settingsTab.add(searchSpeedLabel.getLabel())
+		settingsTab.add(searchSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
@@ -81,15 +79,15 @@ public class CompareModeSettingsTab implements Tab {
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MAX),
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_STEP));
-		searchSpeedSlider.setValue(searchSpeedSlider.getSlider().getMaxValue() - Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS));
+		searchSpeedSlider.setValue(searchSpeedSlider.getComponent().getMaxValue() - Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS));
 		searchSpeedSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				Config.set(ConfigKey.TIME_BETWEEN_TICKS, searchSpeedSlider.getSlider().getMaxValue() - searchSpeedSlider.getValue());
+				Config.set(ConfigKey.TIME_BETWEEN_TICKS, searchSpeedSlider.getComponent().getMaxValue() - searchSpeedSlider.getValue());
 			}
 		});
 
-		settingsTab.add(searchSpeedSlider.getSlider())
+		settingsTab.add(searchSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
@@ -97,7 +95,7 @@ public class CompareModeSettingsTab implements Tab {
 
 		// Game speed slider
 		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
-		settingsTab.add(gameSpeedLabel.getLabel())
+		settingsTab.add(gameSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
@@ -112,7 +110,7 @@ public class CompareModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(gameSpeedSlider.getSlider())
+		settingsTab.add(gameSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);

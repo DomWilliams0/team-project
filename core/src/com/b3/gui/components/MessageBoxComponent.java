@@ -20,7 +20,7 @@ import javax.swing.*;
  *
  * @author oxe410
  */
-public class MessageBoxComponent implements Component {
+public class MessageBoxComponent extends GUIComponent {
 
 	private Stage popupStage;
 	private Dialog dialog;
@@ -136,5 +136,13 @@ public class MessageBoxComponent implements Component {
 	 */
 	public void transposeLeft(boolean moveLeft) {
 		this.moveLeft = moveLeft;
+	}
+
+	/**
+	 * @return The inner component
+	 */
+	@Override
+	public Actor getComponent() {
+		return dialog;
 	}
 }

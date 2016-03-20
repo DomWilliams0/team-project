@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
  *
  * @author oxe410
  */
-public class MenuItemComponent extends ButtonComponent implements Component {
+public class MenuItemComponent extends ButtonComponent {
 
 	/**
 	 * Creates a new menu item with a specific skin, font and text
@@ -24,13 +24,5 @@ public class MenuItemComponent extends ButtonComponent implements Component {
 		super(skin, font, text);
 	}
 
-	/**
-	 * Adds a {@link ChangeListener} to the dropdown.
-	 *
-	 * @param listener The {@link ChangeListener} to add.
-	 */
-	public void addListener(ChangeListener listener) {
-		getComponent().addListener(listener);
-	}
 
 }

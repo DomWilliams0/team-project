@@ -157,11 +157,7 @@ public class LearningModeSettingsTab implements Tab {
 		SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
 		ticker.addObserver(playPause);
 
-		playPause.setUpdateListener(observable -> {
-			//SearchTicker searchTicker = (SearchTicker) observable;
-			playPause.setText(ticker.isPaused() ? "Play" : "Pause");
-			return null;
-		});
+		playPause.setCallback(observable -> playPause.setText(ticker.isPaused() ? "Play" : "Pause"));
 
 		playPause.addListener(new ChangeListener() {
 			@Override
@@ -197,7 +193,7 @@ public class LearningModeSettingsTab implements Tab {
 
 		// Search speed slider
 		LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
-		settingsTab.add(searchSpeedLabel.getLabel())
+		settingsTab.add(searchSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
@@ -207,15 +203,15 @@ public class LearningModeSettingsTab implements Tab {
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MAX),
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_STEP));
-		searchSpeedSlider.setValue(searchSpeedSlider.getSlider().getMaxValue() - Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS));
+		searchSpeedSlider.setValue(searchSpeedSlider.getComponent().getMaxValue() - Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS));
 		searchSpeedSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				Config.set(ConfigKey.TIME_BETWEEN_TICKS, searchSpeedSlider.getSlider().getMaxValue() - searchSpeedSlider.getValue());
+				Config.set(ConfigKey.TIME_BETWEEN_TICKS, searchSpeedSlider.getComponent().getMaxValue() - searchSpeedSlider.getValue());
 			}
 		});
 
-		settingsTab.add(searchSpeedSlider.getSlider())
+		settingsTab.add(searchSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
@@ -223,7 +219,7 @@ public class LearningModeSettingsTab implements Tab {
 
 		// Game speed slider
 		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
-		settingsTab.add(gameSpeedLabel.getLabel())
+		settingsTab.add(gameSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
@@ -238,7 +234,7 @@ public class LearningModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(gameSpeedSlider.getSlider())
+		settingsTab.add(gameSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
@@ -250,7 +246,7 @@ public class LearningModeSettingsTab implements Tab {
 				.spaceTop(90);
 		settingsTab.row();
 
-		settingsTab.add(searchSelectBox.getSelectBox())
+		settingsTab.add(searchSelectBox.getComponent())
 				.maxWidth(preferredWidth)
 				.spaceTop(10)
 				.spaceBottom(30);

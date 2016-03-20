@@ -48,13 +48,13 @@ public class PracticeModeSettingsTab implements Tab {
 		skin.add("default", font, BitmapFont.class);
 		//new LabelComponent("", 16, "", Color.BLACK)
 		LabelComponent labelOne = new LabelComponent(skin, "Left click the nodes to see more information", Color.BLACK);
-		labelOne.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
+		labelOne.getComponent().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
 		LabelComponent labelOneUnderneath = new LabelComponent(skin, "Click again on the same node to see more info", Color.BLACK);
-		labelOneUnderneath.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
+		labelOneUnderneath.getComponent().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
 		LabelComponent labelTwo = new LabelComponent(skin, "Right click a node to set the next destination", Color.BLACK);
-		labelTwo.getLabel().setPosition(-20, Gdx.graphics.getHeight() / 2);
+		labelTwo.getComponent().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
 		// ========================
 		// === WHAT SEARCH ALGO ===
@@ -79,7 +79,7 @@ public class PracticeModeSettingsTab implements Tab {
 
 		// Game speed slider
 		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
-		settingsTab.add(gameSpeedLabel.getLabel())
+		settingsTab.add(gameSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
@@ -94,13 +94,13 @@ public class PracticeModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(gameSpeedSlider.getSlider())
+		settingsTab.add(gameSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
 		settingsTab.row();
 
-		settingsTab.add(searchSelectBox.getSelectBox())
+		settingsTab.add(searchSelectBox.getComponent())
 				.maxWidth(preferredWidth)
 				.spaceTop(100)
 				.spaceBottom(30);

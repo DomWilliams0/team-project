@@ -1,15 +1,15 @@
 package com.b3.gui.components;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Represents a slider
  *
  * @author oxe410
  */
-public class SliderComponent implements Component {
+public class SliderComponent extends GUIComponent {
 
 	private Slider slider;
 
@@ -30,13 +30,6 @@ public class SliderComponent implements Component {
 	}
 
 	/**
-	 * @return The actual {@link Slider} object this component holds.
-	 */
-	public Slider getSlider() {
-		return slider;
-	}
-
-	/**
 	 * @return The value the {@link Slider} is pointing to.
 	 */
 	public float getValue() {
@@ -53,12 +46,10 @@ public class SliderComponent implements Component {
 	}
 
 	/**
-	 * Adds a {@link ChangeListener} to the {@link Slider}.
-	 *
-	 * @param listener The {@link ChangeListener} to add.
+	 * @return The inner component
 	 */
-	public void addListener(ChangeListener listener) {
-		slider.addListener(listener);
+	@Override
+	public Slider getComponent() {
+		return slider;
 	}
-
 }

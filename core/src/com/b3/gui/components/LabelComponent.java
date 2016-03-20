@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  *
  * @author oxe410
  */
-public class LabelComponent implements Component {
+public class LabelComponent extends GUIComponent {
 
 	protected Label label;
 
@@ -79,13 +79,6 @@ public class LabelComponent implements Component {
 	}
 
 	/**
-	 * @return The actual {@link Label} object this component holds.
-	 */
-	public Label getLabel() {
-		return label;
-	}
-
-	/**
 	 * @return The text of the {@link Label}.
 	 */
 	public String getText() {
@@ -102,7 +95,7 @@ public class LabelComponent implements Component {
 	}
 
 	/**
-	 * @return The inner button representation
+	 * @return The inner component
 	 */
 	public Label getComponent() {
 		return label;

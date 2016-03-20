@@ -14,7 +14,7 @@ import java.text.MessageFormat;
  *
  * @author oxe410
  */
-public class ImageButtonComponent extends BaseComponent {
+public class ImageButtonComponent extends GUIComponent {
 
 	private ImageButton imageButton;
 	private Object data;
@@ -45,6 +45,7 @@ public class ImageButtonComponent extends BaseComponent {
 	/**
 	 * @return The inner button representation
 	 */
+	@Override
 	public ImageButton getComponent() {
 		return imageButton;
 	}
@@ -63,10 +64,6 @@ public class ImageButtonComponent extends BaseComponent {
 		this.data = data;
 	}
 
-	@Override
-	public void addListener(ChangeListener listener) {
-		imageButton.addListener(listener);
-	}
 
 
 }

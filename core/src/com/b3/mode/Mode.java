@@ -170,7 +170,7 @@ public abstract class Mode extends ScreenAdapter {
 		menu.addItem(mainMenuItem);
 		menu.addItem(exitItem);
 
-		menuStage.addActor(menu);
+		menuStage.addActor(menu.getComponent());
 	}
 
 	/**

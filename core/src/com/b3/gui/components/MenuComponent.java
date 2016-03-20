@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 
@@ -12,7 +13,9 @@ import com.badlogic.gdx.utils.Align;
  *
  * @author oxe410
  */
-public class MenuComponent extends Table implements Component {
+public class MenuComponent extends GUIComponent {
+
+	private Table table;
 
 	private final Sprite backgroundTexture;
 	private SpriteBatch spriteBatch;
@@ -35,6 +38,7 @@ public class MenuComponent extends Table implements Component {
 		this.height = height;
 		backgroundTexture = new Sprite(new Texture("world/popups/emptycanvas250x250.png"));
 		spriteBatch = new SpriteBatch();
+		table = new Table();
 		init();
 	}
 
@@ -51,9 +55,9 @@ public class MenuComponent extends Table implements Component {
 	 * Initialises the components
 	 */
 	private void init() {
-		setPosition(0, Gdx.graphics.getHeight() - height);
-		setSize(Gdx.graphics.getWidth(), height);
-		align(Align.left);
+		table.setPosition(0, Gdx.graphics.getHeight() - height);
+		table.setSize(Gdx.graphics.getWidth(), height);
+		table.align(Align.left);
 	}
 
 	/**
@@ -62,7 +66,7 @@ public class MenuComponent extends Table implements Component {
 	 * @param item the {@link MenuItemComponent} that is to be added to the Menu Component
 	 */
 	public void addItem(MenuItemComponent item) {
-		add(item.getComponent()).spaceLeft(10).pad(5, 10, 5, 10);
+		table.add(item.getComponent()).spaceLeft(10).pad(5, 10, 5, 10);
 	}
 
 	/**
@@ -75,8 +79,16 @@ public class MenuComponent extends Table implements Component {
 	 */
 	public void resize(int width, int height) {
 		spriteBatch = new SpriteBatch();
-		setPosition(0, height - this.height);
-		setWidth(width);
-		setHeight(this.height);
+		table.setPosition(0, height - this.height);
+		table.setWidth(width);
+		table.setHeight(this.height);
+	}
+
+	/**
+	 * @return The inner component
+	 */
+	@Override
+	public Actor getComponent() {
+		return table;
 	}
 }

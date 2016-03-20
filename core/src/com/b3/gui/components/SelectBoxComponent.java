@@ -2,6 +2,7 @@ package com.b3.gui.components;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.utils.Array;
  *
  * @author oxe410
  */
-public class SelectBoxComponent implements Component {
+public class SelectBoxComponent extends GUIComponent {
 
 	private Array items;
 	private SelectBox selectBox;
@@ -45,13 +46,6 @@ public class SelectBoxComponent implements Component {
 
 		selectBox = new SelectBox(skin);
 		setItems(items);
-	}
-
-	/**
-	 * @return The actual {@link SelectBox} object this component holds.
-	 */
-	public SelectBox getSelectBox() {
-		return selectBox;
 	}
 
 	/**
@@ -88,12 +82,10 @@ public class SelectBoxComponent implements Component {
 	}
 
 	/**
-	 * Adds a {@link ChangeListener} to the dropdown.
-	 *
-	 * @param listener The {@link ChangeListener} to add.
+	 * @return The inner component
 	 */
-	public void addListener(ChangeListener listener) {
-		selectBox.addListener(listener);
+	@Override
+	public Actor getComponent() {
+		return selectBox;
 	}
-
 }

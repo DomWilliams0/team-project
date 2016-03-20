@@ -3,17 +3,21 @@ package com.b3.gui.components;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
+import java.util.Observable;
+import java.util.Observer;
+import java.util.function.Consumer;
 
 /**
  * Represents a button component
  *
  * @author oxe410
  */
-public class ButtonComponent extends BaseComponent {
+public class ButtonComponent extends GUIComponent implements Observer {
 
 	private TextButton textButton;
 	private Object data;
+	private Consumer<Observable> callback;
 
 	/**
 	 * Creates an instance of a ButtonComponent
@@ -69,9 +73,22 @@ public class ButtonComponent extends BaseComponent {
 		return textButton;
 	}
 
-	@Override
-	public void addListener(ChangeListener listener) {
-		textButton.addListener(listener);
+	public void setCallback(Consumer<Observable> callback) {
+		this.callback = callback;
 	}
 
+	/**
+	 * This method is called whenever the observed object is changed. An
+	 * application calls an <tt>Observable</tt> object's
+	 * <code>notifyObservers</code> method to have all the object's
+	 * observers notified of the change.
+	 *
+	 * @param o   the observable object.
+	 * @param arg an argument passed to the <code>notifyObservers</code>
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		if (callback != null)
+			callback.accept(o);
+	}
 }

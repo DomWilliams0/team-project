@@ -4,14 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Represents a checkbox component
  *
  * @author oxe410
  */
-public class CheckBoxComponent extends BaseComponent {
+public class CheckBoxComponent extends GUIComponent {
 
 	private CheckBox checkBox;
 
@@ -61,13 +60,12 @@ public class CheckBoxComponent extends BaseComponent {
 		return checkBox.getText();
 	}
 
+	/**
+	 * @return The inner button representation
+	 */
 	@Override
 	public CheckBox getComponent() {
 		return checkBox;
 	}
 
-	@Override
-	public void addListener(ChangeListener listener) {
-		checkBox.addListener(listener);
-	}
 }
