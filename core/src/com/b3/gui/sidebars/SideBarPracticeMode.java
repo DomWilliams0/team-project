@@ -28,7 +28,7 @@ public class SideBarPracticeMode extends SideBar {
 	 * @param preferredWidth the preferred width of this sidebar, if space allows it will take up this amount of space max
  	*/
 	public SideBarPracticeMode(Stage stage, World world, MainGame controller, float preferredWidth) {
-		super(stage, world, true, "window_02", preferredWidth, new LinkedHashMap<>());
+		super(stage, world, true, "window_02", preferredWidth);
 
 		this.controller = controller;
 

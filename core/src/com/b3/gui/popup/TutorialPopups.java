@@ -1,6 +1,6 @@
 package com.b3.gui.popup;
 
-import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
+import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -105,7 +105,7 @@ public class TutorialPopups {
 	 * @param sideBar the left hand sidebar (for use when checking if has opened + button presses)
 	 * @param sideBarNodes the right hand sidebar (for use when checking if has opened + button presses)
      */
-	public void checkTaskCompleted(World world, SideBarIntensiveLearningMode sideBar, SideBarNodes sideBarNodes) {
+	public void checkTaskCompleted(World world, SideBar sideBar, SideBarNodes sideBarNodes) {
 		switch (stepCounter) {
 			case 0:
 				//+ or - pressed or scrolled and arrow keys pressed

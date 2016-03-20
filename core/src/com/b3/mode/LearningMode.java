@@ -3,7 +3,7 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
-import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
+import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.WorldSelectionHandler;
@@ -16,7 +16,7 @@ import com.b3.search.util.SearchAlgorithm;
  * Sets up small world, camera, input handler and launches the world paused (forcing / implying step-by-step)
  */
 public class LearningMode extends Mode {
-	private SideBarIntensiveLearningMode sideBar;
+	private SideBar sideBar;
 
 	/**
 	 * Constructs the world, sets up the camera, loads to worldmap and launches the world paused.
@@ -55,9 +55,7 @@ public class LearningMode extends Mode {
 		sideBarNodes.setStepthrough(true);
 		sideBarStage.addActor(sideBarNodes);
 
-
-		sideBar = new SideBarIntensiveLearningMode(sideBarStage, world);
-		sideBar.setController(game);
+		sideBar = SideBar.createModeSidebar(ModeType.LEARNING, world, sideBarStage);
 		sideBarStage.addActor(sideBar);
 	}
 

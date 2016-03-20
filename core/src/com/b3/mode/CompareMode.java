@@ -3,7 +3,7 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourPathFind;
-import com.b3.gui.sidebars.SideBarCompareMode;
+import com.b3.gui.sidebars.SideBar;
 import com.b3.input.InputHandler;
 import com.b3.input.WorldSelectionHandler;
 import com.b3.search.Node;
@@ -34,7 +34,7 @@ public class CompareMode extends Mode {
 	private Texture[] labels;
 	private SpriteBatch labelBatch;
 
-	private SideBarCompareMode sideBar;
+	private SideBar sideBar;
 	private Agent[] agents;
 
 	/**
@@ -61,8 +61,7 @@ public class CompareMode extends Mode {
 	@Override
 	protected void initSidebar() {
 		super.initSidebar();
-		sideBar = new SideBarCompareMode(sideBarStage, world);
-		sideBar.setController(game);
+		sideBar = SideBar.createModeSidebar(ModeType.COMPARE, world, sideBarStage);
 		sideBarStage.addActor(sideBar);
 	}
 

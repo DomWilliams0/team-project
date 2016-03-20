@@ -4,7 +4,7 @@ import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
 import com.b3.gui.popup.TutorialPopups;
-import com.b3.gui.sidebars.SideBarIntensiveLearningMode;
+import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.TutorialModeSelectionHandler;
@@ -20,14 +20,14 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class TutorialMode extends Mode {
 
-	private SideBarIntensiveLearningMode sideBar;
+	private SideBar sideBar;
 	private final TutorialPopups tutorialPopups;
 
 	/**
 	 * Constructs the world, sets up the camera, loads to worldmap and launches the world paused.
 	 *
 	 * @param game used to set up the world, contains directories to config files
-     */
+	 */
 	public TutorialMode(MainGame game) {
 		// create world
 		super(ModeType.TUTORIAL, game, "world/world_smaller_test_tiym.tmx", 45f, 25f, null, null);
@@ -42,8 +42,9 @@ public class TutorialMode extends Mode {
 	/**
 	 * Adds the special {@link TutorialModeSelectionHandler} which allows specfic clicks disabled, to focus
 	 * user to ONLY do as instructed.
+	 *
 	 * @param inputHandler the current input handler
-     */
+	 */
 	@Override
 	protected void registerFurtherInputProcessors(InputHandler inputHandler) {
 		// world clicking
@@ -58,15 +59,13 @@ public class TutorialMode extends Mode {
 		super.initSidebar();
 		sideBarNodes = new SideBarNodes(sideBarStage, world);
 
-		sideBar = new SideBarIntensiveLearningMode(sideBarStage, world);
-		sideBar.setController(game);
+		sideBar = SideBar.createModeSidebar(ModeType.LEARNING, world, sideBarStage);
 		sideBarStage.addActor(sideBar);
 		sideBarStage.addActor(sideBarNodes);
 	}
 
 	/**
 	 * Renders the world, the three sidebars and updates the world's position and zoom depending on input from the user via the input listeners.
-	 *
 	 */
 	@Override
 	protected void tick() {
@@ -104,8 +103,9 @@ public class TutorialMode extends Mode {
 
 	/**
 	 * sets the current position of the mouse to the nearest node
+	 *
 	 * @param currentPos the node the user's mouse is closed to
-     */
+	 */
 	public void setCurrentPos(Point currentPos) {
 		tutorialPopups.setCurrentPos(currentPos);
 	}
@@ -113,16 +113,18 @@ public class TutorialMode extends Mode {
 	/**
 	 * {@link com.b3.gui.PopupDescription} should only be shown after the tutorial mode has asked for the user to click
 	 * on it
+	 *
 	 * @return true if the {@link com.b3.gui.PopupDescription} should be shown
-     */
+	 */
 	public boolean needPopups() {
 		return (tutorialPopups.getCounter() >= 7);
 	}
 
 	/**
 	 * Sets the current page of the currently open pop-up
+	 *
 	 * @param currentPage the current page of the currently open pop-up
-     */
+	 */
 	public void setCurrentPage(int currentPage) {
 		tutorialPopups.setCurrentPage(currentPage);
 	}

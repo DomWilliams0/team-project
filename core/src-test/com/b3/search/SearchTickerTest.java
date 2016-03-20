@@ -2,6 +2,7 @@ package com.b3.search;
 
 import com.b3.TestConstants;
 import com.b3.gui.PseudocodeVisualiser;
+import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.SoundController;
 import com.b3.mode.ModeType;
 import com.b3.search.util.SearchAlgorithm;
@@ -166,6 +167,16 @@ public class SearchTickerTest {
 		for (SearchAlgorithm algorithm : algorithms) {
 			assert graph != null;
 			Node n1 = graph.getNode(new Point(x1, y1));
+//		if (modeType != ModeType.COMPARE) {
+//			sideBarNodes = new SideBarNodes(sideBarStage, world);
+//
+//			sideBarNodes.setStepthrough(true);
+//			sideBarStage.addActor(sideBarNodes);
+//
+//			if (modeType == modeType.PRACTICE) {
+//			}
+//		}
+
 			if (n1 == null)
 				throw new Exception("Point (" + x1 + ", " + y1 + ") not found in graph.");
 			Node n2 = graph.getNode(new Point(x2, y2));

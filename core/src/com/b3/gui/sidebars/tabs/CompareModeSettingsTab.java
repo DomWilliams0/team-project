@@ -5,7 +5,6 @@ import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.LabelComponent;
 import com.b3.gui.components.SliderComponent;
 import com.b3.gui.sidebars.SideBar;
-import com.b3.gui.sidebars.SideBarCompareMode;
 import com.b3.input.SoundController;
 import com.b3.search.SearchTicker;
 import com.b3.util.Config;
@@ -31,6 +30,11 @@ import java.util.Map;
 public class CompareModeSettingsTab extends Tab {
 
 	/**
+<<<<<<< Updated upstream
+=======
+	 * Creates the compare mode settings tab
+	 *
+>>>>>>> Stashed changes
 	 * @param skin           The libGDX skin
 	 * @param font           The font to apply
 	 * @param preferredWidth The tab width
@@ -42,7 +46,6 @@ public class CompareModeSettingsTab extends Tab {
 
 		// Extract data
 		World world = (World) data.get("world");
-		SideBarCompareMode sidebar = (SideBarCompareMode) parent;
 
 		tab.setFillParent(true);
 		tab.pad(20);
@@ -120,7 +123,7 @@ public class CompareModeSettingsTab extends Tab {
 		addBuildingMode.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				sidebar.close();
+				parent.close();
 
 				if (!world.getWorldGraph().getCurrentSearch().isTickedOnce()) {
 					Boolean currentBoolean = Config.getBoolean(ConfigKey.ADD_BUILDING_MODE);
@@ -145,7 +148,7 @@ public class CompareModeSettingsTab extends Tab {
 		removeBuildingButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				sidebar.close();
+				parent.close();
 
 				if (!world.getWorldGraph().getCurrentSearch().isTickedOnce()) {
 					Boolean currentBoolean = Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE);

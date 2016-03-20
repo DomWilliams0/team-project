@@ -3,8 +3,8 @@ package com.b3.mode;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.entity.ai.BehaviourMultiContinuousPathFind;
+import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarNodes;
-import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;
 import com.b3.input.PracticeModeWorldSelectionHandler;
 import com.b3.search.SearchTicker;
@@ -64,7 +64,7 @@ public class PracticeMode extends Mode {
 		sideBarStage.addActor(sideBarNodes);
 
 
-		sideBarStage.addActor(new SideBarPracticeMode(sideBarStage, world, game, 460));
+		sideBarStage.addActor(SideBar.createModeSidebar(ModeType.PRACTICE, world, sideBarStage));
 
 		popupStage = new Stage(new ScreenViewport());
 	}
