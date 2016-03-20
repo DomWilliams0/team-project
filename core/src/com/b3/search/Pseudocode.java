@@ -205,8 +205,8 @@ public class Pseudocode extends Observable {
 		String tempText = "";
 		switch (i) {
 			case 1: {
-				if (searchTicker.getMostRecentlyExpanded() != null)
-					tempText = searchTicker.getMostRecentlyExpanded().toString();
+				if (searchTicker.getFrontier().peek() != null)
+					tempText = searchTicker.getFrontier().peek().toString();
 				else
 					tempText = searchTicker.getStart().toString();
 				arrayList.set(i, tempText);
@@ -248,6 +248,7 @@ public class Pseudocode extends Observable {
 				else
 				if (searchTicker.getCurrentNeighbours() != null)
 					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
+				arrayList.set(5, tempText);
 				arrayList.set(7, tempText);
 			}
 			break;
@@ -257,6 +258,7 @@ public class Pseudocode extends Observable {
 				else
 				if (searchTicker.getCurrentNeighbours() != null)
 					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
+				arrayList.set(5, tempText);
 				arrayList.set(8, tempText);
 			}
 			break;
