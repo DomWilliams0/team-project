@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
  *
  * @author oxe410
  */
-public class CheckBoxComponent extends Component {
+public class CheckBoxComponent extends BaseComponent {
 
 	private CheckBox checkBox;
 
@@ -29,9 +29,9 @@ public class CheckBoxComponent extends Component {
 	/**
 	 * Creates an instance of a CheckBoxComponent with a set {@link Color}
 	 *
-	 * @param skin The checkbox libGDX skin
-	 * @param font The font to apply
-	 * @param text The text beside the checkbox
+	 * @param skin      The checkbox libGDX skin
+	 * @param font      The font to apply
+	 * @param text      The text beside the checkbox
 	 * @param fontColor the colour of the font
 	 */
 	public CheckBoxComponent(Skin skin, BitmapFont font, String text, Color fontColor) {

@@ -11,26 +11,26 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
  *
  * @author oxe410
  */
-public class MenuItemComponent extends ButtonComponent {
+public class MenuItemComponent extends ButtonComponent implements Component {
 
-    /**
-     * Creates a new menu item with a specific skin, font and text
-     *
-     * @param skin The button's skin ({@link Skin})
-     * @param font The font of {@link BitmapFont} that the text will be
-     * @param text The text to be contained in this label
-     */
-    public MenuItemComponent(Skin skin, BitmapFont font, String text) {
-        super(skin, font, text);
-    }
+	/**
+	 * Creates a new menu item with a specific skin, font and text
+	 *
+	 * @param skin The button's skin ({@link Skin})
+	 * @param font The font of {@link BitmapFont} that the text will be
+	 * @param text The text to be contained in this label
+	 */
+	public MenuItemComponent(Skin skin, BitmapFont font, String text) {
+		super(skin, font, text);
+	}
 
-    /**
-     * Adds a {@link ChangeListener} to the dropdown.
-     *
-     * @param listener The {@link ChangeListener} to add.
-     */
-    public void addListener(ChangeListener listener) {
-        getComponent().addListener(listener);
-    }
+	/**
+	 * Adds a {@link ChangeListener} to the dropdown.
+	 *
+	 * @param listener The {@link ChangeListener} to add.
+	 */
+	public void addListener(ChangeListener listener) {
+		getComponent().addListener(listener);
+	}
 
 }

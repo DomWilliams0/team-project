@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
  *
  * @author oxe410
  */
-public class SliderComponent {
+public class SliderComponent implements Component {
 
 	private Slider slider;
 

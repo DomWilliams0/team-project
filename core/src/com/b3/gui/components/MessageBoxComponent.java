@@ -20,7 +20,7 @@ import javax.swing.*;
  *
  * @author oxe410
  */
-public class MessageBoxComponent {
+public class MessageBoxComponent implements Component {
 
 	private Stage popupStage;
 	private Dialog dialog;
@@ -65,8 +65,8 @@ public class MessageBoxComponent {
 	 * Creates a dialog box from a table
 	 *
 	 * @param popupStage The popup stage
-	 * @param content The content represented as a {@link Table}
-     */
+	 * @param content    The content represented as a {@link Table}
+	 */
 	public MessageBoxComponent(Stage popupStage, Table content) {
 		// Get atlas, skin and font
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
@@ -130,9 +130,10 @@ public class MessageBoxComponent {
 
 	/**
 	 * Moves the component to the left slightly
+	 *
 	 * @param moveLeft the amount of pixels that the component shall be moved to the left, relative to the original
 	 *                 position
-     */
+	 */
 	public void transposeLeft(boolean moveLeft) {
 		this.moveLeft = moveLeft;
 	}

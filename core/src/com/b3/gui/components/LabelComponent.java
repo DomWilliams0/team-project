@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  *
  * @author oxe410
  */
-public class LabelComponent {
+public class LabelComponent implements Component {
 
 	protected Label label;
 
@@ -22,7 +22,7 @@ public class LabelComponent {
 	 *
 	 * @param skin The button's skin ({@link Skin})
 	 * @param text The text to be contained in this label
-     */
+	 */
 	public LabelComponent(Skin skin, String text) {
 		this(skin, text, Color.BLACK);
 	}
@@ -30,8 +30,8 @@ public class LabelComponent {
 	/**
 	 * Creates a new label with font colour being of colour {@code color}
 	 *
-	 * @param skin The button's skin ({@link Skin})
-	 * @param text The text to be contained in this label
+	 * @param skin  The button's skin ({@link Skin})
+	 * @param text  The text to be contained in this label
 	 * @param color The text's colour
 	 */
 	public LabelComponent(Skin skin, String text, Color color) {
@@ -45,10 +45,10 @@ public class LabelComponent {
 	 * Creates a new label using a different colour, font and font size than default
 	 *
 	 * @param fontLocation the location of the font as a directory location
-	 * @param fontSize the size of the font
-	 * @param text the text to be contained in this label
-	 * @param color the text's colour
-     */
+	 * @param fontSize     the size of the font
+	 * @param text         the text to be contained in this label
+	 * @param color        the text's colour
+	 */
 	public LabelComponent(String fontLocation, int fontSize, String text, Color color) {
 		BitmapFont font = Utils.getFont(fontLocation, fontSize);
 		font.getData().markupEnabled = true;
@@ -63,12 +63,12 @@ public class LabelComponent {
 	 * Creates a new label using a different font and font size than default, and can enable markup so that the specific
 	 * sections of text can be different colours
 	 *
-	 * @param fontLocation the location of the font as a directory location
-	 * @param fontSize the size of the font
-	 * @param text the text to be contained in this label
+	 * @param fontLocation  the location of the font as a directory location
+	 * @param fontSize      the size of the font
+	 * @param text          the text to be contained in this label
 	 * @param markupEnabled whether to colour the text according to the markup style noted in:
-	 * {@link com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData}
-     */
+	 *                      {@link com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData}
+	 */
 	public LabelComponent(String fontLocation, int fontSize, String text, boolean markupEnabled) {
 		BitmapFont font = Utils.getFont(fontLocation, fontSize);
 		font.getData().markupEnabled = markupEnabled;

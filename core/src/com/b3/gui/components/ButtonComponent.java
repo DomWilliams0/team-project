@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
  *
  * @author oxe410
  */
-public class ButtonComponent extends Component {
+public class ButtonComponent extends BaseComponent {
 
 	private TextButton textButton;
 	private Object data;
@@ -52,14 +52,14 @@ public class ButtonComponent extends Component {
 
 	/**
 	 * @return the data of the current button, as the Object that was set originally
-     */
+	 */
 	public Object getData() {
 		return data;
 	}
 
 	/**
 	 * @param data the data of any type that should be contained in this button component
-     */
+	 */
 	public void setData(Object data) {
 		this.data = data;
 	}

@@ -14,7 +14,7 @@ import java.text.MessageFormat;
  *
  * @author oxe410
  */
-public class ImageButtonComponent extends Component {
+public class ImageButtonComponent extends BaseComponent {
 
 	private ImageButton imageButton;
 	private Object data;
