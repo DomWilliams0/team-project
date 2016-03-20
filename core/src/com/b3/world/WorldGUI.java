@@ -42,7 +42,6 @@ public class WorldGUI {
 
 	private Point currentMousePos;
 
-	private boolean pseudoCodeEnabled;
 	private boolean shownOnce;
 
 	private Runnable prePopopRender;
@@ -243,20 +242,6 @@ public class WorldGUI {
 	 */
 	public void setCurrentMousePos(int screenX, int screenY) {
 		currentMousePos = new Point(screenX, screenY);
-	}
-
-	/**
-	 * @param enabled true if pseudocode mode is enabled; false otherwise
-	 */
-	public void setPseudoCode(boolean enabled) {
-		pseudoCodeEnabled = enabled;
-	}
-
-	/**
-	 * @return true if pseudocode mode is enabled; false otherwise
-	 */
-	public boolean getPseudoCode() {
-		return pseudoCodeEnabled;
 	}
 
 	/**

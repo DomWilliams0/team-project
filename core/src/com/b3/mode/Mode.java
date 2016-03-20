@@ -190,10 +190,7 @@ public abstract class Mode extends ScreenAdapter {
 		if (sideBarNodes != null) {
 			sideBarNodes.render();
 			WorldGUI worldGUI = world.getWorldGUI();
-			if (!worldGUI.getPseudoCode()) {
-				sideBarNodes.resetPseudoCode();
-				worldGUI.setPseudoCode(true);
-			}
+
 			if (worldGUI.getCurrentClick() != null) sideBarNodes.highlightNode(worldGUI.getCurrentClick(), true);
 			PopupDescription popupDescription = worldGUI.getPopupDescription();
 			if (sideBarNodes.hasNewClick()) {

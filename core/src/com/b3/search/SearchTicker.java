@@ -54,13 +54,13 @@ public class SearchTicker extends Observable {
 
 	// Pseudocode (inspect search)
 	private Pseudocode pseudocode;
-	private boolean inspectSearch;
-	private boolean completedPseudocodeTick;
+	private static boolean inspectSearch;
+	private static boolean completedPseudocodeTick;
+
 	private final ModeType mode;
 
 	public SearchTicker(WorldGraph worldGraph, ModeType mode) {
 		this.worldGraph = worldGraph;
-		inspectSearch = false;
 		tickedOnce = false;
 		completedPseudocodeTick = true;
 
@@ -73,16 +73,16 @@ public class SearchTicker extends Observable {
 		for (int i = 0; i < paused.length; i++) paused[i] = false;
 	}
 
-	public boolean isRenderProgress() {
-		return renderProgress;
-	}
-
-	public boolean isInspectingSearch() {
+	public static boolean isInspectingSearch() {
 		return inspectSearch || !completedPseudocodeTick;
 	}
 
-	public void setInspectSearch(boolean inspectSearch) {
-		this.inspectSearch = inspectSearch;
+	public static void setInspectSearch(boolean inspect) {
+		inspectSearch = inspect;
+	}
+
+	public boolean isRenderProgress() {
+		return renderProgress;
 	}
 
 	public void reset(SearchAlgorithm algorithm, Node start, Node end) {
@@ -395,7 +395,7 @@ public class SearchTicker extends Observable {
 	private void tickFinal() {
 		tickedOnce = true;
 
-		if (inspectSearch || !completedPseudocodeTick) {
+		if (isInspectingSearch()) {
 			tickPseudocode(pseudocode.getCurrentLine());
 			return;
 		}

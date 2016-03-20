@@ -66,10 +66,6 @@ public class LearningMode extends Mode {
 	 */
 	@Override
 	public void tick() {
-		if (!world.getWorldGUI().getPseudoCode()) {
-			sideBarNodes.resetPseudoCode();
-			world.getWorldGUI().setPseudoCode(true);
-		}
 		sideBar.render();
 	}
 

@@ -7,6 +7,7 @@ import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.gui.sidebars.SideBarPracticeMode;
 import com.b3.input.InputHandler;
 import com.b3.input.PracticeModeWorldSelectionHandler;
+import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Utils;
@@ -31,7 +32,6 @@ public class PracticeMode extends Mode {
 		// create world
 		super(ModeType.PRACTICE, game, "world/world_smaller_test_tiym.tmx", 45f, 20f, null, null);
 
-		world.getWorldGUI().setPseudoCode(true);
 		WorldGraph worldGraph = world.getWorldGraph();
 		worldGraph.setLearningModeNext(SearchAlgorithm.DEPTH_FIRST);
 		worldGraph.getCurrentSearch().pause(1);
@@ -88,8 +88,7 @@ public class PracticeMode extends Mode {
 		agent.setBehaviour(behaviour);
 
 		worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());
-
-		world.getWorldGraph().getCurrentSearch().setInspectSearch(true);
+		SearchTicker.setInspectSearch(true);
 	}
 
 	/**

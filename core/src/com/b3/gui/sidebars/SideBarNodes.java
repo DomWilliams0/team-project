@@ -170,15 +170,6 @@ public class SideBarNodes extends SideBar implements Disposable {
 	}
 
 	/**
-	 * Resets the pseudocode back to normal non-pseudocode search
-	 */
-	public void resetPseudoCode() {
-		SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
-		ticker.setInspectSearch(false);
-		//ticker.resume(1);
-	}
-
-	/**
 	 * Opens the sidebar
 	 */
 	@Override
@@ -206,7 +197,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 		NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
 		if (currentSearch != null) {
 			setStepthrough(currentSearch.isPaused(1));
-			nodesTab.setPseudocodeVisible(currentSearch.isInspectingSearch() || currentSearch.getMode()==ModeType.PRACTICE);
+			nodesTab.setPseudocodeVisible(SearchTicker.isInspectingSearch() || currentSearch.getMode() == ModeType.PRACTICE);
 		} else {
 			setStepthrough(false);
 			nodesTab.setPseudocodeVisible(false);
@@ -225,8 +216,8 @@ public class SideBarNodes extends SideBar implements Disposable {
 	/**
 	 * @return true if pseudocode inspection is enabled.
      */
-	public Boolean getPseudocodeBegin() {
-		return world.getWorldGraph().getCurrentSearch().isInspectingSearch();
+	public boolean getPseudocodeBegin() {
+		return SearchTicker.isInspectingSearch();
 	}
 
 	/**
