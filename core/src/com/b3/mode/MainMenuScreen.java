@@ -30,7 +30,7 @@ public class MainMenuScreen extends ScreenAdapter {
 	public static final float MAIN_OFFSET = 100;
 	public static final float SECONDARY_OFFSET = MAIN_OFFSET / 4;
 
-	public static final int ANIMATION_TIMER = 25;
+	public static final int ANIMATION_TIMER = 50;
 
 	private final Table wrapper;
 
