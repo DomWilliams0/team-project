@@ -10,13 +10,12 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SideBarPracticeMode extends SideBarNodes {
+public class SideBarPracticeMode extends SideBar {
 
 	private MainGame controller;
 
 	public SideBarPracticeMode(Stage stage, World world, MainGame controller, float preferredWidth) {
-		super(stage, world, preferredWidth, true, true);
-		//super(stage, world, true, "window_03", preferredWidth, new LinkedHashMap<>());
+		super(stage, world, true, "window_02", preferredWidth, new LinkedHashMap<>());
 
 		this.controller = controller;
 
@@ -26,9 +25,7 @@ public class SideBarPracticeMode extends SideBarNodes {
 			put("controller", controller);
 		}};
 
-		Map<String, Tab> additionalTabs = new LinkedHashMap<>();
-		additionalTabs.put("Settings", new PracticeModeSettingsTab(skin, font, preferredWidth, data));
-		addTabs(additionalTabs);
+		tabs.put("Settings", new PracticeModeSettingsTab(skin, font, preferredWidth, data));
 
 		initComponents();
 	}
