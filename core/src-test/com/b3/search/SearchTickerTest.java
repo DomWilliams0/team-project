@@ -2,7 +2,6 @@ package com.b3.search;
 
 import com.b3.TestConstants;
 import com.b3.gui.PseudocodeVisualiser;
-import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.SoundController;
 import com.b3.mode.ModeType;
 import com.b3.search.util.SearchAlgorithm;
@@ -12,9 +11,11 @@ import com.badlogic.gdx.audio.Sound;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -107,9 +108,8 @@ public class SearchTickerTest {
 		fieldSounds.set(null, new Sound[]{s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s});
 	}
 
-	private void setGraph(WorldGraph graph) throws Exception {
-		if (graph == null)
-			throw new Exception("Can't start tests. Graph is null.");
+	private void setGraph(WorldGraph graph) {
+		assertNotNull("Graph is null", graph);
 		this.graph = graph;
 		this.searchTicker = new SearchTicker(graph, ModeType.LEARNING);
 	}
@@ -117,8 +117,6 @@ public class SearchTickerTest {
 	/**
 	 * Tests the {@link SearchTicker SearchTicker's} path
 	 * generation.
-	 *
-	 * @throws Exception If the test fails.
 	 */
 	@Test
 	public void testTick() throws Exception {
@@ -160,28 +158,15 @@ public class SearchTickerTest {
 	 *                   not produce a path.
 	 * @param algorithms The {@link SearchAlgorithm SearchAlgorithms}
 	 *                   to test.
-	 * @throws Exception If the correct path is different
-	 *                   from the path produced.
 	 */
-	private void testTick(int x1, int y1, int x2, int y2, Point[] correct, SearchAlgorithm... algorithms) throws Exception {
+	private void testTick(int x1, int y1, int x2, int y2, Point[] correct, SearchAlgorithm... algorithms) {
+		assertNotNull(graph);
 		for (SearchAlgorithm algorithm : algorithms) {
-			assert graph != null;
 			Node n1 = graph.getNode(new Point(x1, y1));
-//		if (modeType != ModeType.COMPARE) {
-//			sideBarNodes = new SideBarNodes(sideBarStage, world);
-//
-//			sideBarNodes.setStepthrough(true);
-//			sideBarStage.addActor(sideBarNodes);
-//
-//			if (modeType == modeType.PRACTICE) {
-//			}
-//		}
 
-			if (n1 == null)
-				throw new Exception("Point (" + x1 + ", " + y1 + ") not found in graph.");
+			assertNotNull("Point (" + x1 + ", " + y1 + ") not found in graph.", n1);
 			Node n2 = graph.getNode(new Point(x2, y2));
-			if (n2 == null)
-				throw new Exception("Point (" + x2 + ", " + y2 + ") not found in graph.");
+			assertNotNull("Point (" + x2 + ", " + y2 + ") not found in graph.", n1);
 
 			searchTicker.reset(algorithm, n1, n2);
 
@@ -189,24 +174,14 @@ public class SearchTickerTest {
 				searchTicker.tick();
 
 			List<Node> path = searchTicker.getPath();
-			if (path.isEmpty() != (correct == null)) {
-				if (!path.isEmpty())
-					printPath(path);
-				throw new Exception("Path is " + (path.isEmpty() ? "" : "not ") + "empty expected otherwise.");
-			}
+			assertEquals("Path is " + (path.isEmpty() ? "" : "not ") + "empty expected otherwise.", path.isEmpty(), (correct == null));
+
 			if (correct == null)
 				return;
 
-			if (path.size() != correct.length) {
-				printPath(path);
-				throw new Exception("Wrong path size.");
-			}
-			for (int i = 0; i < correct.length; i++) {
-				if (!path.get(i).getPoint().equals(correct[i])) {
-					printPath(path);
-					throw new Exception("Wrong path.");
-				}
-			}
+			assertEquals("Wrong path size.", path.size(), correct.length);
+			for (int i = 0; i < correct.length; i++)
+				assertTrue("Wrong path.", path.get(i).getPoint().equals(correct[i]));
 		}
 	}
 
