@@ -2,27 +2,37 @@ package com.b3.gui;
 
 import com.b3.gui.components.LabelComponent;
 import com.b3.search.Pseudocode;
+import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Tuple;
 import com.b3.util.Utils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.StringBuilder;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 /**
  * Represents the pseudocode visualisation box
  *
- * @author oxe410
+ * @author oxe410, nbg481
  */
 public class PseudocodeVisualiser extends Table implements Observer {
 
@@ -96,7 +106,9 @@ public class PseudocodeVisualiser extends Table implements Observer {
 		Pseudocode pseudocode = (Pseudocode) o;
 
 		pseudocodeTable.clear();
-		for (Tuple<String, Tuple<Boolean, Integer>> line : pseudocode.getLines()) {
+		List<Tuple<String, Tuple<Boolean, Integer>>> lines = pseudocode.getLines();
+		for (int i = 0; i < lines.size(); i++) {
+			Tuple<String, Tuple<Boolean, Integer>> line = lines.get(i);
 			// Set label
 			Label.LabelStyle labelStyle = new Label.LabelStyle();
 			labelStyle.font = font;
@@ -108,6 +120,48 @@ public class PseudocodeVisualiser extends Table implements Observer {
 			Label label = new Label(line.getFirst(), labelStyle);
 			pseudocodeTable.add(label).align(Align.left).padLeft(line.getSecond().getSecond() * 20);
 			pseudocodeTable.row().align(Align.left).fill();
+
+			final int lineForListener = i;
+			label.addListener(new ClickListener() {
+
+				/**
+				 * Updates the pseudocode line to show the current value of all the variables in the string
+                 */
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					if (pseudocode.getAlgorithm() == SearchAlgorithm.A_STAR && lineForListener != 4 && lineForListener != 0) {
+						Tuple<String, String> replacement = pseudocode.getImportantInfo(lineForListener);
+						String currentText = label.getText().toString();
+						String newText = parseAndChange(currentText, replacement.getFirst(), replacement.getSecond());
+						label.setText(newText);
+					}
+					return super.touchDown(event, x, y, pointer, button);
+				}
+			});
 		}
+	}
+
+	/**
+	 * Parses the text and replaces all instances of itemToReplace with toReplaceWith in currentText
+	 * @param currentText the current text in the label
+	 * @param toReplaceWith the substring to insert into the current text
+	 * @param itemToReplace the substring to remove fromm the current text and insert toReplaceWith into
+     * @return
+     */
+	private String parseAndChange(String currentText, String toReplaceWith, String itemToReplace) {
+		if (toReplaceWith.equals("") || toReplaceWith.equals(" "))
+			toReplaceWith = "NULL";
+
+		if (itemToReplace.equals("-"))
+			return toReplaceWith;
+
+		//with space after; for " n = "...
+		String tempchange = currentText.replace(itemToReplace, toReplaceWith);
+		tempchange = tempchange.replace("frotier", "frontier");
+		tempchange = tempchange.replace("fro"+toReplaceWith+"tier", "frontier");
+		tempchange = tempchange.replace("ca"+toReplaceWith+"eFro"+toReplaceWith, "cameFrom");
+		tempchange = tempchange.replace("retur", "return");
+
+		return tempchange;
 	}
 }

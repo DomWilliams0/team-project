@@ -58,6 +58,7 @@ public class SearchTicker extends Observable {
 	private static boolean completedPseudocodeTick;
 
 	private final ModeType mode;
+	private String tentative_gString = "";
 
 	public SearchTicker(WorldGraph worldGraph, ModeType mode) {
 		this.worldGraph = worldGraph;
@@ -91,7 +92,7 @@ public class SearchTicker extends Observable {
 
 		this.algorithm = algorithm;
 
-		pseudocode = new Pseudocode(algorithm);
+		pseudocode = new Pseudocode(algorithm, this);
 		pseudocode.addObserver(PseudocodeVisualiser.getInstance());
 		pseudocode.highlight(0);
 
@@ -334,6 +335,8 @@ public class SearchTicker extends Observable {
 				// FOR
 				currentNeighbour = currentNeighbours.get(neighboursSoFar);
 
+				float tentative_g = costSoFarFunction.apply(mostRecentlyExpanded) + edgeCostFunction.apply(mostRecentlyExpanded, currentNeighbour);
+
 				if (line == 6) {
 					pseudocode.highlight(line + 1);
 					return;
@@ -345,7 +348,7 @@ public class SearchTicker extends Observable {
 				}
 
 				if (line == 8) {
-					float tentative_g = costSoFarFunction.apply(mostRecentlyExpanded) + edgeCostFunction.apply(mostRecentlyExpanded, currentNeighbour);
+					tentative_gString = tentative_g + " = " + costSoFarFunction.apply(mostRecentlyExpanded) + " + " + edgeCostFunction.apply(mostRecentlyExpanded, currentNeighbour);
 					if (tentative_g <= costSoFarFunction.apply(currentNeighbour)) {
 						cameFrom.put(currentNeighbour, mostRecentlyExpanded);
 						pseudocode.highlight(line + 1);
@@ -749,5 +752,9 @@ public class SearchTicker extends Observable {
 	 */
 	public ModeType getMode() {
 		return mode;
+	}
+
+	public String getTentative_gString() {
+		return tentative_gString;
 	}
 }

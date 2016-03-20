@@ -13,10 +13,12 @@ import java.util.stream.Collectors;
  * Contains the lines of pseudocode
  * Highlights the lines
  *
- * @author oxe410
+ * @author oxe410 nbg481
  */
 public class Pseudocode extends Observable {
 
+	private SearchTicker searchTicker;
+	private ArrayList<String> arrayList;
 	private SearchAlgorithm algorithm;
 	private List<Tuple<String, Tuple<Boolean, Integer>>> lines;
 	private int currentLine;
@@ -33,8 +35,10 @@ public class Pseudocode extends Observable {
 	 * Constructs a new pseudocode. Changes pseudocode depending on {@param algorithm}
 	 * @param algorithm the algorithm to tailor this pseudocode to
      */
-	public Pseudocode(SearchAlgorithm algorithm) {
+	public Pseudocode(SearchAlgorithm algorithm, SearchTicker searchTicker) {
 		this.algorithm = algorithm;
+		this.searchTicker = searchTicker;
+
 		currentLine = 0;
 		initLines();
 	}
@@ -139,6 +143,168 @@ public class Pseudocode extends Observable {
 
 		setChanged();
 		notifyObservers();
+
+		updateLines(i);
+	}
+
+	/**
+	 * Updates the lines depending on the algorithm and works out the link between the constants and variables
+	 *
+	 * @param i the line to evaluate for variables
+     */
+	private void updateLines(int i) {
+
+		if (arrayList == null) {
+			arrayList = new ArrayList<>(20);
+			for (int j = 0; j < 20; j++) {
+				arrayList.add(" ");
+			}
+		} else {
+			if (arrayList.size() >= i)
+				switch (algorithm) {
+					case A_STAR:
+					{
+						updateForAStar(i);
+						break;
+					}
+					case BREADTH_FIRST:
+					{
+						updateForBreathFirst(i);
+					}
+					case DEPTH_FIRST:
+					{
+						updateForDepthFirst(i);
+					}
+
+				}
+		}
+	}
+
+	/**
+	 * TODO
+     */
+	private String updateForDepthFirst(int i) {
+		return null;
+	}
+
+	/**
+	 * TODO
+     */
+	private String updateForBreathFirst(int i) {
+
+		return null;
+	}
+
+	/**
+	 * Updates the varibale-constant updating system
+	 *
+	 * @param i the line to evaluate
+	 * @return the string that the line was set to
+     */
+	private String updateForAStar(int i) {
+		String tempText = "";
+		switch (i) {
+			case 1: {
+				if (searchTicker.getMostRecentlyExpanded() != null)
+					tempText = searchTicker.getMostRecentlyExpanded().toString();
+				else
+					tempText = searchTicker.getStart().toString();
+				arrayList.set(i, tempText);
+			}
+			break;
+			case 2: {
+				if (searchTicker.getMostRecentlyExpanded() != null)
+					tempText = searchTicker.getMostRecentlyExpanded().toString();
+				else
+					tempText = searchTicker.getStart().toString();
+				arrayList.set(i, tempText);
+			}
+			break;
+			case 4: {
+				if (searchTicker.getMostRecentlyExpanded() != null)
+					tempText = searchTicker.getMostRecentlyExpanded().toString();
+				else
+					tempText = searchTicker.getStart().toString();
+				arrayList.set(3, tempText);
+			}
+			break;
+			case 6: {
+				if (searchTicker.getCurrentNeighbour() != null)
+					tempText = searchTicker.getCurrentNeighbour().toString();
+				else
+					if (searchTicker.getCurrentNeighbours() != null)
+						tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
+				arrayList.set(5, tempText);
+			}
+			break;
+			case 7: {
+				tempText = searchTicker.getTentative_gString().toString();
+				arrayList.set(6, tempText);
+			}
+			break;
+			case 8: {
+				if (searchTicker.getCurrentNeighbour() != null)
+					tempText = searchTicker.getCurrentNeighbour().toString();
+				else
+				if (searchTicker.getCurrentNeighbours() != null)
+					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
+				arrayList.set(7, tempText);
+			}
+			break;
+			case 9: {
+				if (searchTicker.getCurrentNeighbour() != null)
+					tempText = searchTicker.getCurrentNeighbour().toString();
+				else
+				if (searchTicker.getCurrentNeighbours() != null)
+					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
+				arrayList.set(8, tempText);
+			}
+			break;
+			case 10: {
+				if (searchTicker.getCurrentNeighbour() != null)
+					tempText = searchTicker.getCurrentNeighbour().toString();
+				arrayList.set(9, tempText);
+			}
+			break;
+			case 11: {
+				if (searchTicker.getCurrentNeighbour() != null)
+					tempText = searchTicker.getCurrentNeighbour().toString();
+				arrayList.set(10, tempText);
+			}
+			break;
+		}
+
+		for (int j = i+1; j < arrayList.size(); j++)
+			arrayList.set(j, "");
+
+		return tempText;
+	}
+
+	/**
+	 * Gets the variables and their value
+	 *
+	 * @param i the line to evaluate
+	 * @return a {@link Tuple} of two strings, the first is the constants and the second the variable
+     */
+	public Tuple<String, String> getImportantInfo(int i) {
+		if (arrayList == null) {
+			return null;
+		}
+		if (arrayList.size() <= i) {
+			return null;
+		}
+
+		String replacement;
+		if (i <= 4)
+			replacement = "n";
+		else if (i == 5)
+			replacement = "m";
+		else if (i >= 7)
+			replacement = "m";
+		else
+			replacement = "-";
+
+		return new Tuple<String, String>(arrayList.get(i), replacement);
 	}
 
 }
