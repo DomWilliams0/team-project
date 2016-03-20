@@ -79,10 +79,6 @@ public class MainMenuScreen extends ScreenAdapter {
 		spriteTransForground = new Sprite(new Texture("transparentForeground.png"));
 
 
-//		wrapper.add(new Image(new Texture("icon_final.png")))
-//				.padBottom(padding * 8)
-//				.row();
-
 		ModeType[] modes = {ModeType.TUTORIAL, ModeType.LEARNING, ModeType.PRACTICE, ModeType.COMPARE};
 		for (ModeType modeType : modes) {
 			wrapper.add(createButton(modeType).getComponent()).center().pad(padding);
@@ -229,11 +225,9 @@ public class MainMenuScreen extends ScreenAdapter {
 		spriteBatch.end();
 	}
 
-
-
 	/**
 	 * Called whenever the window is resized
-	 * Keeps the two buttons centred by updating the table to fill the screen (and so the center of the table = the center of the screeN-
+	 * Keeps the two buttons centred by updating the table to fill the screen (and so the center of the table = the center of the screen)
 	 *
 	 * @param width  the current width of the window
 	 * @param height the current height of the window
@@ -256,6 +250,12 @@ public class MainMenuScreen extends ScreenAdapter {
 		mainMenuStage.dispose();
 	}
 
+	/**
+	 * Sets the offest the mouse is currently at from the center of the screen
+	 *
+	 * @param offsetX x amount of pixels away that the mouse is from the center of the screen (-ve is left from center; +ve is right from center)
+	 * @param offsetY y amount of pixels away that the mouse is from the center of the screen (-ve is above center; +ve is right from center)
+     */
 	public void setOffset(int offsetX, int offsetY) {
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;

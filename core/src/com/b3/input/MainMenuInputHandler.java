@@ -1,20 +1,11 @@
 package com.b3.input;
 
-import com.b3.gui.PopupDescription;
 import com.b3.mode.MainMenuScreen;
-import com.b3.mode.TutorialMode;
-import com.b3.search.Node;
-import com.b3.search.Point;
-import com.b3.search.WorldGraph;
-import com.b3.world.World;
-import com.b3.world.WorldCamera;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
 
 /**
+ * The input handler that handles input for the {@link MainMenuScreen}
  *
  * @author nbg481
  */
@@ -22,10 +13,22 @@ public class MainMenuInputHandler extends InputAdapter {
 
 	private final MainMenuScreen mainMenuScreen;
 
+	/**
+	 * Creates a new input handler for the {@link MainMenuScreen}
+	 * @param mainMenuScreen the {@link MainMenuScreen} that this class is linked to
+     */
 	public MainMenuInputHandler(MainMenuScreen mainMenuScreen) {
 		this.mainMenuScreen = mainMenuScreen;
 	}
 
+	/**
+	 * Called whenever the mouse is moved
+	 * Updates the paralax effect on the {@link MainMenuScreen}
+	 *
+	 * @param screenX the x position of the mouse
+	 * @param screenY the y posision of the mouse
+     * @return true if moved; false if not.
+     */
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		int xMax = Gdx.graphics.getWidth();
