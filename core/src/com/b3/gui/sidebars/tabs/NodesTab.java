@@ -23,27 +23,26 @@ import java.util.Map;
  *
  * @author oxe410
  */
-public class NodesTab implements Tab {
+public class NodesTab extends Tab {
 
-	private Table nodesTab, pseudocodeTable;
+	private Table pseudocodeTable;
 	private VisNodes ui;
 	private ButtonComponent nextBtn;
 
 	/**
-	 * Create a {@link NodesTab} object
-	 * @param skin The libGDX skin
-	 * @param font The font to apply
-	 * @param preferredWidth The width of the widget
-     * @param data Additional data
-     */
+	 * @param skin           The libGDX skin
+	 * @param font           The font to apply
+	 * @param preferredWidth The tab width
+	 * @param data           Additional data
+	 */
 	public NodesTab(Skin skin, BitmapFont font, float preferredWidth, Map<String, Object> data) {
+		super(skin, font, preferredWidth, null, data);
 
 		// Extract data
 		World world = (World) data.get("world");
 		Stage stage = (Stage) data.get("stage");
 
-		nodesTab = new Table();
-		nodesTab.setFillParent(true);
+		tab.setFillParent(true);
 
 		// Create the data table which will display the nodes
 		Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
@@ -69,16 +68,16 @@ public class NodesTab implements Tab {
 		nextBtn.getComponent().setVisible(MainGame.getCurrentMode() != ModeType.PRACTICE);
 
 		//put the nodes ui onto this
-		nodesTab.add(ui).maxWidth(preferredWidth).top().pad(20);
-		nodesTab.row();
-		nodesTab.add(nextBtn.getComponent());
-		nodesTab.row();
-		nodesTab.add(pseudocodeTable);
+		tab.add(ui).maxWidth(preferredWidth).top().pad(20);
+		tab.row();
+		tab.add(nextBtn.getComponent());
+		tab.row();
+		tab.add(pseudocodeTable);
 	}
 
 	/**
 	 * @return The node visualisation/UI object
-     */
+	 */
 	public VisNodes getUI() {
 		return ui;
 	}
@@ -89,10 +88,5 @@ public class NodesTab implements Tab {
 
 	public void setPseudocodeVisible(boolean enabled) {
 		pseudocodeTable.setVisible(enabled);
-	}
-
-	@Override
-	public Table getTab() {
-		return nodesTab;
 	}
 }

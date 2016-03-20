@@ -27,53 +27,51 @@ import java.util.Map;
  *
  * @author oxe410
  */
-public class CompareModeSettingsTab implements Tab {
-
-	private Table settingsTab;
+public class CompareModeSettingsTab extends Tab {
 
 	/**
-	 * Creates the compare mode settings tab
-	 * @param skin The libGDX skin
-	 * @param font The font to apply
+	 * @param skin           The libGDX skin
+	 * @param font           The font to apply
 	 * @param preferredWidth The tab width
-	 * @param parent The {@link SideBar} which contains this tab
-     * @param data Additional data
-     */
+	 * @param parent         The {@link SideBar} which contains this tab
+	 * @param data           Additional data
+	 */
 	public CompareModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
+		super(skin, font, preferredWidth, parent, data);
+
 		// Extract data
 		World world = (World) data.get("world");
 		SideBarCompareMode sidebar = (SideBarCompareMode) parent;
 
-		settingsTab = new Table();
-		settingsTab.setFillParent(true);
-		settingsTab.pad(20);
+		tab.setFillParent(true);
+		tab.pad(20);
 
 		skin.add("default", font, BitmapFont.class);
 
 		// Show grid checkbox
-		GuiUtils.createCheckbox(skin, font, settingsTab, "Show grid", ConfigKey.SHOW_GRID, preferredWidth);
+		GuiUtils.createCheckbox(skin, font, tab, "Show grid", ConfigKey.SHOW_GRID, preferredWidth);
 
 		// Flat buildings checkbox
-		GuiUtils.createCheckbox(skin, font, settingsTab, "Flat buildings", ConfigKey.FLATTEN_BUILDINGS,
+		GuiUtils.createCheckbox(skin, font, tab, "Flat buildings", ConfigKey.FLATTEN_BUILDINGS,
 				world::flattenBuildings, preferredWidth);
 
 		// Render static models checkbox
-		GuiUtils.createCheckbox(skin, font, settingsTab, "Static 3D objects", ConfigKey.RENDER_STATIC_MODELS,
+		GuiUtils.createCheckbox(skin, font, tab, "Static 3D objects", ConfigKey.RENDER_STATIC_MODELS,
 				(visible) -> world.getModelManager().setStaticsVisible(visible), preferredWidth);
 
 		// Agent model rendering toggle
-		GuiUtils.createCheckbox(skin, font, settingsTab, "3D agents", ConfigKey.RENDER_AGENT_MODELS, preferredWidth);
+		GuiUtils.createCheckbox(skin, font, tab, "3D agents", ConfigKey.RENDER_AGENT_MODELS, preferredWidth);
 
 		// Show paths checkbox
-//		GuiUtils.createCheckbox(skin, font, settingsTab, "Show paths", ConfigKey.SHOW_PATHS, preferredWidth);
+//		GuiUtils.createCheckbox(skin, font, tab, "Show paths", ConfigKey.SHOW_PATHS, preferredWidth);
 
 		// Search speed slider
 		LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
-		settingsTab.add(searchSpeedLabel.getComponent())
+		tab.add(searchSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
-		settingsTab.row();
+		tab.row();
 
 		SliderComponent searchSpeedSlider = new SliderComponent(skin,
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
@@ -87,19 +85,19 @@ public class CompareModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(searchSpeedSlider.getComponent())
+		tab.add(searchSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
+		tab.row();
 
 		// Game speed slider
 		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
-		settingsTab.add(gameSpeedLabel.getComponent())
+		tab.add(gameSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
-		settingsTab.row();
+		tab.row();
 
 		SliderComponent gameSpeedSlider = new SliderComponent(skin, 0f, 4f, 0.1f);
 		gameSpeedSlider.setValue(Config.getFloat(ConfigKey.GAME_SPEED));
@@ -110,11 +108,11 @@ public class CompareModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(gameSpeedSlider.getComponent())
+		tab.add(gameSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
+		tab.row();
 
 		// Add Building button
 		ButtonComponent addBuildingMode = new ButtonComponent(skin, font, "Add Building Mode");
@@ -135,11 +133,11 @@ public class CompareModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(addBuildingMode.getComponent())
+		tab.add(addBuildingMode.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
-		settingsTab.row();
+		tab.row();
 
 		// Remove Building button
 		ButtonComponent removeBuildingButton = new ButtonComponent(skin, font, "Remove Building");
@@ -160,11 +158,11 @@ public class CompareModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(removeBuildingButton.getComponent())
+		tab.add(removeBuildingButton.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
-		settingsTab.row();
+		tab.row();
 
 		//Play and Pause button
 		//String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
@@ -186,15 +184,10 @@ public class CompareModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(playPause.getComponent())
+		tab.add(playPause.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
-	}
-
-	@Override
-	public Table getTab() {
-		return settingsTab;
+		tab.row();
 	}
 }

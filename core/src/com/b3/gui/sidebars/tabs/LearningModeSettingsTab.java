@@ -25,27 +25,25 @@ import java.util.Map;
  *
  * @author oxe410
  */
-public class LearningModeSettingsTab implements Tab {
-
-	private Table settingsTab;
+public class LearningModeSettingsTab extends Tab {
 
 	/**
-	 * Creates the compare mode settings tab
-	 * @param skin The libGDX skin
-	 * @param font The font to apply
+	 * @param skin           The libGDX skin
+	 * @param font           The font to apply
 	 * @param preferredWidth The tab width
-	 * @param parent The {@link SideBar} which contains this tab
-	 * @param data Additional data
-     */
+	 * @param parent         The {@link SideBar} which contains this tab
+	 * @param data           Additional data
+	 */
 	public LearningModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
+		super(skin, font, preferredWidth, parent, data);
 
 		// Extract data
 		World world = (World) data.get("world");
 		SideBarIntensiveLearningMode sidebar = (SideBarIntensiveLearningMode) parent;
 
-		settingsTab = new Table();
-		settingsTab.setFillParent(true);
-		settingsTab.pad(20);
+		tab = new Table();
+		tab.setFillParent(true);
+		tab.pad(20);
 
 		skin.add("default", font, BitmapFont.class);
 
@@ -61,11 +59,11 @@ public class LearningModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(showLabelsCheckBox.getComponent())
+		tab.add(showLabelsCheckBox.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceBottom(10);
-		settingsTab.row();
+		tab.row();
 
 		// Search sounds checkbox
 		CheckBoxComponent soundsOn = new CheckBoxComponent(skin, font, "Search Sounds");
@@ -79,11 +77,11 @@ public class LearningModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(soundsOn.getComponent())
+		tab.add(soundsOn.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceBottom(10);
-		settingsTab.row();
+		tab.row();
 
 		// Pseudocode checkbox
 		CheckBoxComponent pseudocodeOn = new CheckBoxComponent(skin, font, "Pseudocode");
@@ -96,11 +94,11 @@ public class LearningModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(pseudocodeOn.getComponent())
+		tab.add(pseudocodeOn.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceBottom(10);
-		settingsTab.row();
+		tab.row();
 
 		// Add Building button
 		ButtonComponent addBuildingMode = new ButtonComponent(skin, font, "Add Building Mode");
@@ -121,11 +119,11 @@ public class LearningModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(addBuildingMode.getComponent())
+		tab.add(addBuildingMode.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
-		settingsTab.row();
+		tab.row();
 
 		// Remove Building button
 		ButtonComponent removeBuildingButton = new ButtonComponent(skin, font, "Remove Building Mode");
@@ -146,11 +144,11 @@ public class LearningModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(removeBuildingButton.getComponent())
+		tab.add(removeBuildingButton.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
-		settingsTab.row();
+		tab.row();
 
 		//Play and Pause button
 		ButtonComponent playPause = new ButtonComponent(skin, font, "Play");
@@ -193,11 +191,11 @@ public class LearningModeSettingsTab implements Tab {
 
 		// Search speed slider
 		LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
-		settingsTab.add(searchSpeedLabel.getComponent())
+		tab.add(searchSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
-		settingsTab.row();
+		tab.row();
 
 		SliderComponent searchSpeedSlider = new SliderComponent(skin,
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
@@ -211,19 +209,19 @@ public class LearningModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(searchSpeedSlider.getComponent())
+		tab.add(searchSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
+		tab.row();
 
 		// Game speed slider
 		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
-		settingsTab.add(gameSpeedLabel.getComponent())
+		tab.add(gameSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
-		settingsTab.row();
+		tab.row();
 
 		SliderComponent gameSpeedSlider = new SliderComponent(skin, 0f, 4f, 0.1f);
 		gameSpeedSlider.setValue(Config.getFloat(ConfigKey.GAME_SPEED));
@@ -234,33 +232,28 @@ public class LearningModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(gameSpeedSlider.getComponent())
+		tab.add(gameSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
+		tab.row();
 
-		settingsTab.add(labelNextSearch.getComponent())
+		tab.add(labelNextSearch.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(90);
-		settingsTab.row();
+		tab.row();
 
-		settingsTab.add(searchSelectBox.getComponent())
+		tab.add(searchSelectBox.getComponent())
 				.maxWidth(preferredWidth)
 				.spaceTop(10)
 				.spaceBottom(30);
-		settingsTab.row();
+		tab.row();
 
-		settingsTab.add(playPause.getComponent())
+		tab.add(playPause.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
-	}
-
-	@Override
-	public Table getTab() {
-		return settingsTab;
+		tab.row();
 	}
 }

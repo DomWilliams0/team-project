@@ -3,6 +3,7 @@ package com.b3.gui.sidebars.tabs;
 import com.b3.gui.components.LabelComponent;
 import com.b3.gui.components.SelectBoxComponent;
 import com.b3.gui.components.SliderComponent;
+import com.b3.gui.sidebars.SideBar;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -24,22 +25,20 @@ import java.util.Map;
  *
  * @author oxe410
  */
-public class PracticeModeSettingsTab implements Tab {
-
-	private Table settingsTab;
+public class PracticeModeSettingsTab extends Tab {
 
 	/**
-	 * Creates the practice mode settings tab
-	 * @param skin The libGDX skin
-	 * @param font The font to apply
+	 * @param skin           The libGDX skin
+	 * @param font           The font to apply
 	 * @param preferredWidth The tab width
-	 * @param data Additional data
-     */
-	public PracticeModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, Map<String, Object> data) {
+	 * @param parent         The {@link SideBar} which contains this tab
+	 * @param data           Additional data
+	 */
+	public PracticeModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
+		super(skin, font, preferredWidth, parent, data);
 
-		settingsTab = new Table();
-		settingsTab.setFillParent(true);
-		settingsTab.pad(20);
+		tab.setFillParent(true);
+		tab.pad(20);
 
 		// ======================
 		// === LABELS AND STU ===
@@ -79,11 +78,11 @@ public class PracticeModeSettingsTab implements Tab {
 
 		// Game speed slider
 		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
-		settingsTab.add(gameSpeedLabel.getComponent())
+		tab.add(gameSpeedLabel.getComponent())
 				.align(Align.left)
 				.maxWidth(preferredWidth)
 				.spaceTop(20);
-		settingsTab.row();
+		tab.row();
 
 		SliderComponent gameSpeedSlider = new SliderComponent(skin, 0f, 4f, 0.1f);
 		gameSpeedSlider.setValue(Config.getFloat(ConfigKey.GAME_SPEED));
@@ -94,47 +93,43 @@ public class PracticeModeSettingsTab implements Tab {
 			}
 		});
 
-		settingsTab.add(gameSpeedSlider.getComponent())
+		tab.add(gameSpeedSlider.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
+		tab.row();
 
-		settingsTab.add(searchSelectBox.getComponent())
+		tab.add(searchSelectBox.getComponent())
 				.maxWidth(preferredWidth)
 				.spaceTop(100)
 				.spaceBottom(30);
-		settingsTab.row();
+		tab.row();
 
-		settingsTab.add(labelOne.getComponent())
+		tab.add(labelOne.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
+		tab.row();
 
-		settingsTab.add(labelOneUnderneath.getComponent())
+		tab.add(labelOneUnderneath.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
+		tab.row();
 
-		settingsTab.add(labelTwo.getComponent())
+		tab.add(labelTwo.getComponent())
 				.align(Align.center)
 				.maxWidth(preferredWidth)
 				.spaceTop(5);
-		settingsTab.row();
+		tab.row();
 	}
 
 	/**
 	 * Sets the name of the tab
+	 *
 	 * @param name The name
-     */
+	 */
 	public void setName(String name) {
-		settingsTab.setName(name);
-	}
-
-	@Override
-	public Table getTab() {
-		return settingsTab;
+		tab.setName(name);
 	}
 }
