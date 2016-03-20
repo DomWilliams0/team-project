@@ -98,8 +98,6 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 					if (!actualNode.equals(node)) {
 						if (firstLoadAlert1) {
 							descriptionPopup.setText("Attention! This node is not the one to be selected for expansion.");
-							if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true);
-							else descriptionPopup.transposeLeft(false);
 							descriptionPopup.show();
 							firstLoadAlert1 = false;
 						}
@@ -115,14 +113,10 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 							currentStage = Stage.CURRENT_NODE_SELECTION;
 
 							descriptionPopup.setText("Great! You reached the target");
-							if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true);
-							else descriptionPopup.transposeLeft(false);
 							descriptionPopup.show();
 						} else {
 							if (firstTime) {
 								descriptionPopup.setText("Good! Now please select the nodes to add to the frontier.");
-								if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true);
-								else descriptionPopup.transposeLeft(false);
 								descriptionPopup.show();
 							}
 
@@ -150,8 +144,6 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 					if (!actualFrontier.contains(node)) {
 						if (firstLoadAlert2) {
 							descriptionPopup.setText("Attention! This node can't be added to the frontier.");
-							if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true);
-							else descriptionPopup.transposeLeft(false);
 							descriptionPopup.show();
 							firstLoadAlert2 = false;
 						}
@@ -172,8 +164,6 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 
 							if (firstTime) {
 								descriptionPopup.setText("Great! Now follow the algorithm steps in order to reach the goal node.");
-								if (SideBarNodes.s_isOpen) descriptionPopup.transposeLeft(true);
-								else descriptionPopup.transposeLeft(false);
 								descriptionPopup.show();
 								firstTime = !firstTime;
 							}

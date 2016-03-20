@@ -24,7 +24,6 @@ public class MessageBoxComponent extends GUIComponent {
 
 	private Stage popupStage;
 	private Dialog dialog;
-	private boolean moveLeft;
 
 	/**
 	 * Creates a dialog box
@@ -55,6 +54,7 @@ public class MessageBoxComponent extends GUIComponent {
 		dialog = new Dialog("", skin, "dialog");
 		dialog.pad(50, 50, 30, 50);
 		dialog.text(text);
+		dialog.setColor(Color.WHITE);
 		if (!additionalBtn.isEmpty())
 			dialog.button(additionalBtn);
 
@@ -73,7 +73,7 @@ public class MessageBoxComponent extends GUIComponent {
 		Skin skin = new Skin(atlas);
 		BitmapFont font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 20);
 
-		Window.WindowStyle windowStyle = new Window.WindowStyle(font, Color.BLACK, skin.getDrawable("window_03"));
+		Window.WindowStyle windowStyle = new Window.WindowStyle(font, Color.WHITE, skin.getDrawable("window_03"));
 		skin.add("dialog", windowStyle, Window.WindowStyle.class);
 
 		dialog = new Dialog("", skin, "dialog");
@@ -104,6 +104,7 @@ public class MessageBoxComponent extends GUIComponent {
 
 		if (lbl != null) {
 			lbl.setText(text);
+			lbl.getStyle().fontColor = Color.WHITE;
 		}
 	}
 
@@ -111,11 +112,8 @@ public class MessageBoxComponent extends GUIComponent {
 	 * Shows the current dialog
 	 */
 	public void show() {
-		if (moveLeft) {
-			dialog.show(popupStage).setPosition(10, Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
-		} else {
-			dialog.show(popupStage).setPosition(Gdx.graphics.getWidth() / 2 - dialog.getWidth() / 2, Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
-		}
+//		dialog.show(popupStage).setPosition(10, Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
+ 		dialog.show(popupStage).setPosition(Gdx.graphics.getWidth() / 2 - dialog.getWidth() / 2, Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
 	}
 
 	/**
@@ -126,16 +124,6 @@ public class MessageBoxComponent extends GUIComponent {
 	 */
 	public static void show(String infoMessage, String titleBar) {
 		JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
-	}
-
-	/**
-	 * Moves the component to the left slightly
-	 *
-	 * @param moveLeft the amount of pixels that the component shall be moved to the left, relative to the original
-	 *                 position
-	 */
-	public void transposeLeft(boolean moveLeft) {
-		this.moveLeft = moveLeft;
 	}
 
 	/**
