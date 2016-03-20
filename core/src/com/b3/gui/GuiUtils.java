@@ -3,11 +3,15 @@ package com.b3.gui;
 import com.b3.gui.components.CheckBoxComponent;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import java.util.function.Consumer;
@@ -64,6 +68,22 @@ public class GuiUtils {
 				.maxWidth(preferredWidth)
 				.spaceBottom(10);
 		table.row();
+	}
+
+	/**
+	 * Set the background colour of a given {@link Table}
+	 *
+	 * @param table The table
+	 * @param r Red colour component
+	 * @param g Green colour component
+	 * @param b Blue colour component
+	 * @param a Alpha component
+	 */
+	public static void setBackgroundColor(Table table, float r, float g, float b, float a) {
+		Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
+		pm1.setColor(r, g, b, a);
+		pm1.fill();
+		table.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
 	}
 
 }

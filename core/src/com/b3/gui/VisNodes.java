@@ -96,7 +96,7 @@ public class VisNodes extends Table {
 			justExpanded = ticker.getMostRecentlyExpanded();
 
 			//only update the shown data if we need to
-			if (!stepthrough || ticker.isUpdated() || ticker.isInspectingSearch()==descriptionShown) {
+			if (!stepthrough || ticker.isUpdated() || SearchTicker.isInspectingSearch() == descriptionShown) {
 				//tell the ticker we've used its data
 				ticker.setUpdated(false);
 				//render the data
@@ -104,7 +104,7 @@ public class VisNodes extends Table {
 						ticker.getFrontier(),
 						ticker.getVisited(),
 						ticker.getAlgorithm(),
-						(!ticker.isInspectingSearch() && ticker.getMode() != ModeType.PRACTICE)
+						(!SearchTicker.isInspectingSearch() && ticker.getMode() != ModeType.PRACTICE)
 				);
 			} else
 				render = 0;
@@ -131,7 +131,7 @@ public class VisNodes extends Table {
 				ticker.getFrontier(),
 				ticker.getVisited(),
 				ticker.getAlgorithm(),
-				(!ticker.isInspectingSearch() || ticker.getMode() != ModeType.PRACTICE)
+				(!SearchTicker.isInspectingSearch() || ticker.getMode() != ModeType.PRACTICE)
 		);
 	}
 
@@ -332,7 +332,7 @@ public class VisNodes extends Table {
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
 			float sh;
-			if (world.getWorldGraph().getCurrentSearch().isInspectingSearch() && world.getWorldGraph().getCurrentSearch().getMode() != ModeType.PRACTICE) {
+			if (SearchTicker.isInspectingSearch() && world.getWorldGraph().getCurrentSearch().getMode() != ModeType.PRACTICE) {
 				sh = h / 5;
 			} else {
 				sh = (float) (h / 2.75);

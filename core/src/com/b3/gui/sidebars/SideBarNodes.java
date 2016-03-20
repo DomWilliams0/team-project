@@ -214,13 +214,6 @@ public class SideBarNodes extends SideBar implements Disposable {
 	}
 
 	/**
-	 * @return true if pseudocode inspection is enabled.
-     */
-	public boolean getPseudocodeBegin() {
-		return SearchTicker.isInspectingSearch();
-	}
-
-	/**
 	 * When screen is resized update node bar accordingly
 	 *
 	 * @param width  The new width of the window.

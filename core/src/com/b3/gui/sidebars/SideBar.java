@@ -1,5 +1,6 @@
 package com.b3.gui.sidebars;
 
+import com.b3.gui.GuiUtils;
 import com.b3.gui.TabbedPane;
 import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.sidebars.tabs.Tab;
@@ -81,21 +82,6 @@ public abstract class SideBar extends Table {
 	}
 
 	/**
-	 * Set the background colour of this menu
-	 *
-	 * @param r Red colour component
-	 * @param g Green colour component
-	 * @param b Blue colour component
-	 * @param a Alpha component
-	 */
-	protected void setBackgroundColor(float r, float g, float b, float a) {
-		Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
-		pm1.setColor(r, g, b, a);
-		pm1.fill();
-		setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
-	}
-
-	/**
 	 * Create the basic components of the sidebar.
 	 * E.g.
 	 * <ol>
@@ -106,7 +92,7 @@ public abstract class SideBar extends Table {
 	 */
 	public void initComponents() {
 		// Set a default background colour
-		setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
+		GuiUtils.setBackgroundColor(this, 0.56f, 0.69f, 0.83f, 1);
 
 		// ===================
 		// === TABBED PANE ===

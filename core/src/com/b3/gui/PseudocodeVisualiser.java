@@ -44,7 +44,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
 		Table descriptionTable = new Table();
 		pseudocodeTable = new Table();
-		PseudocodeVisualiser.setBackgroundColor(pseudocodeTable, 0.2f, 0.2f, 0.2f, 0.6f);
+		GuiUtils.setBackgroundColor(pseudocodeTable, 0.2f, 0.2f, 0.2f, 0.6f);
 
 		// Add description labels
 		LabelComponent descLbl1 = new LabelComponent("aller/Aller_Bd.ttf", 18, getDescription(0), Color.BLACK);
@@ -54,21 +54,6 @@ public class PseudocodeVisualiser extends Table implements Observer {
 		add(descriptionTable);
 		row();
 		add(pseudocodeTable).padTop(25);
-	}
-
-	/**
-	 * Sets the background of a give table
-	 * @param table The table
-	 * @param r The red component
-	 * @param g The green component
-	 * @param b The blue component
-     * @param a The alpha component
-     */
-	private static void setBackgroundColor(Table table, float r, float g, float b, float a) {
-		Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
-		pm1.setColor(r, g, b, a);
-		pm1.fill();
-		table.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
 	}
 
 	/**
