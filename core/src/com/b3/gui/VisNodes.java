@@ -32,28 +32,7 @@ public class VisNodes extends Table {
 	private float timer;
 	private boolean stepthrough;
 	private ScrollPaneManager spm;
-
-	/**
-	 * Provides a description of how the search algorithms work,
-	 * giving instructions of how the nodes are managed.
-	 * <p>
-	 * todo should this be short / concise, or long / descriptive?
-	 * todo should this even exist any more
-	 */
-	private final String description =
-			"Description while waiting for next search:\n" +
-					"Starting at the start node, its \n" +
-					"neighbours (successors) are inspected.\n" +
-					"These are inserted into the data \n" +
-					"collection, which depends on the search.\n" +
-					"This collection forms the frontier, \n" +
-					"which we expand in the order defined\n" +
-					"by the collection (e.g. a stack \n" +
-					"being First In, First Out).\n" +
-					"\n" +
-					"With each expansion we mark the node \n" +
-					"as visited (using a hash set),\n" +
-					"to ensure we do not expand it again.";
+	private boolean descriptionShown;
 
 	private Node newVisited;
 	private List<Node> newFrontier;
@@ -116,7 +95,7 @@ public class VisNodes extends Table {
 		//check that the ticker exists; if it does, see if the ticker has data to render
 		if (ticker == null || ticker.getVisited() == null || ticker.getFrontier() == null) {
 			//no data to render, so render this with dummy contents.
-			render = render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST);
+			render = render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST, false);
 		} else {
 			//we have data to render. get the most recent changes from the ticker
 			newVisited = ticker.getMostRecentlyExpanded();
@@ -124,11 +103,11 @@ public class VisNodes extends Table {
 			justExpanded = ticker.getMostRecentlyExpanded();
 
 			//only update the shown data if we need to
-			if (!stepthrough || ticker.isUpdated()) {
+			if (!stepthrough || ticker.isUpdated() || ticker.isInspectingSearch()==descriptionShown) {
 				//tell the ticker we've used its data
 				ticker.setUpdated(false);
 				//render the data
-				render = render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm());
+				render = render(ticker.getFrontier(), ticker.getVisited(), ticker.getAlgorithm(), !ticker.isInspectingSearch());
 			} else
 				render = 0;
 		}
@@ -150,14 +129,15 @@ public class VisNodes extends Table {
 	 * If stepthrough mode is active, calling this will force a render regardless;
 	 * the calling function should ensure the search has been updated prior to calling this.
 	 *
-	 * @param front   the frontier to display
-	 * @param visited the visited set to display
-	 * @param alg     the current algorithm being used by the search
+	 * @param front   	the frontier to display
+	 * @param visited 	the visited set to display
+	 * @param alg     	the current algorithm being used by the search
+	 * @param showDesc	whether to show the dynamic description of the algorithm in progress
 	 * @return the state of the render  - 0: Not yet time to render
 	 * - 1: Rendered as normal
 	 * - 2: The scrollpane(s) are being dragged.
 	 */
-	public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg) {
+	public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg, boolean showDesc) {
 		//check if a scrollpane is being used
 		if (spm.scrollpanesBeingUsed()) {
 			return 2;
@@ -188,7 +168,8 @@ public class VisNodes extends Table {
 
 		//put the description on the sidebar
 		//BOTTOM of the sidebar
-		//setupDescription();
+		if (showDesc) setupDescription();
+		descriptionShown = showDesc;
 		return 1;
 	}
 
@@ -308,9 +289,6 @@ public class VisNodes extends Table {
 	 * @param rendermore Whether the data collections are being rendered
 	 */
 	private void setupTable(SearchAlgorithm alg, boolean rendermore) {
-		//clear the map of stored nodes with their wrapper tables
-//		cellmap.clear();
-
 		//clear the tables
 		clear();
 		spm.clear();
@@ -333,12 +311,12 @@ public class VisNodes extends Table {
 			addLabel("   ");
 			addLabel("Using Hash Set");
 			row();
-			//row 3 - note that highest frontier node is highest priority
-			addLabel("Highest Priority\n" +
-					"--------------------");
-			addLabel("   ");
-			addLabel("");
-			row();
+//			//row 3 - note that highest frontier node is highest priority
+//			addLabel("Highest Priority\n" +
+//					"--------------------");
+//			addLabel("   ");
+//			addLabel("");
+//			row();
 
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
@@ -350,11 +328,11 @@ public class VisNodes extends Table {
 			add(spm.getVp()).fill().height(sh).maxHeight(sh);
 			row();
 
-			//row 5 - note that lowest frontier node is lowest priority
-			addLabel("--------------------\n" +
-					"Lowest Priority");
-			addLabel("");
-			row();
+//			//row 5 - note that lowest frontier node is lowest priority
+//			addLabel("--------------------\n" +
+//					"Lowest Priority");
+//			addLabel("");
+//			row();
 
 		} else {
 			addLabel("No search in progress...");
@@ -368,13 +346,12 @@ public class VisNodes extends Table {
 
 	/**
 	 * Setup the description at the bottom of the sidebar.
-	 * Will either display the "what I've just done" prompts,
-	 * or a generic description.
+	 * Will display the "what I've just done" dynamic prompts.
 	 */
 	private void setupDescription() {
 		convertNodeReps();
 		stepString = new StringBuilder();
-		formatter = new Formatter(stepString, Locale.UK); //todo change locale based on config
+		formatter = new Formatter(stepString, Locale.UK);
 		formatter.format(expandedNode + "\n" +
 						addedToFrontier + "\n" +
 						nextNode,
@@ -414,42 +391,39 @@ public class VisNodes extends Table {
 	/**
 	 * Convert the nodes we have stored for later use
 	 * into the representations we wish to display them
-	 * Preferably uses the Node.toAdaptedString() method
-	 * as long as this method returns something desirable.
+	 * Preferably uses the {@link Node#toAdaptedString()} method
+	 * but only if this method returns something desirable.
 	 */
 	private void convertNodeReps() {
-		newVisitedStr = newVisited == null ? "<NOTHING>" : newVisited.toString();
-		newFrontierStr = newFrontier == null ? "<NOTHING>" : convertNewFrontier();
-		highestNodeStr = highestNode == null ? "<NOTHING>" : highestNode.toString();
+		newVisitedStr =
+				newVisited == null ? "<NOTHING>" : newVisited.toString();
+		newFrontierStr =
+				newFrontier == null ? "<NOTHING>" : convertNewFrontier();
+		highestNodeStr =
+				highestNode == null ? "<NOTHING>" : highestNode.toString();
 	}
 
 	/**
 	 * Returns a string representation of newFrontier
-	 * Based on current search algorithm being used
+	 * Displays the current priority next to the node.
 	 *
 	 * @return The string to display in the description
 	 */
 	private String convertNewFrontier() {
-		if (alg == SearchAlgorithm.A_STAR || alg == SearchAlgorithm.DIJKSTRA) {
-			//the algorithm uses a priority queue
-			//it can be hard to see where insertion occurs, so note this down in the description.
+		//it can be hard to see where insertion occurs, so note this down in the description.
 
-			String s = "";
-			int i = 0;
-			for (Node node : newFrontier) {
-				//add "#<priority number>: <node string>" to the string
-				s += "#" + (frontier.indexOf(node) + 1) + ": " + node.toString() + "  ";
-				//limit the string to only have 2 per row
-				//(only works for newFrontier list size < 5, since there should never be more than 4)
-				if (++i == 2) s += "\n";
-			}
-			//ensure there are always 2 rows here otherwise the sidebar will keep resizing
-			if (i < 2) s += "\n";
-			return s;
-		} else {
-			//DFS or BFS being used - insertion into frontier is easy to see
-			return newFrontier.toString();
+		String s = "";
+		int i = 0;
+		for (Node node : newFrontier) {
+			//add "#<priority number>: <node string>" to the string
+			s += "#" + (frontier.indexOf(node) + 1) + ": " + node.toString() + "  ";
+			//limit the string to only have 2 per row
+			//(only works for newFrontier list size < 5, since there should never be more than 4)
+			if (++i == 2) s += "\n";
 		}
+		//ensure there are always 2 rows here otherwise the sidebar will keep resizing
+		if (i < 2) s += "\n";
+		return s;
 	}
 
 	/**

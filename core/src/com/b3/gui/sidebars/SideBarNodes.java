@@ -39,6 +39,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 		mode = MainGame.getCurrentMode();
 		initTabs();
 		initComponents();
+		top();
 	}
 
 	public SideBarNodes(Stage stage, World world, float preferredWidth, boolean left, boolean deferred) {
@@ -155,12 +156,15 @@ public class SideBarNodes extends SideBar implements Disposable {
 	@Override
 	public void render() {
 		SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
+		NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
 		if (currentSearch != null) {
 			setStepthrough(currentSearch.isPaused(1));
+			nodesTab.setPseudocodeVisible(currentSearch.isInspectingSearch());
 		} else {
 			setStepthrough(false);
+			nodesTab.setPseudocodeVisible(false);
 		}
-		((NodesTab) tabs.get("Nodes")).getUI().render(currentSearch);
+		nodesTab.getUI().render(currentSearch);
 	}
 
 	/**

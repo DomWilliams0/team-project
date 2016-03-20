@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class NodesTab implements Tab {
 
-	private Table nodesTab;
+	private Table nodesTab, pseudocodeTable;
 	private VisNodes ui;
 	private ButtonComponent nextBtn;
 
@@ -51,7 +51,7 @@ public class NodesTab implements Tab {
 		ui = new VisNodes(stage, skin, world);
 
 		// Pseudocode
-		Table pseudocodeTable = new Table();
+		pseudocodeTable = new Table();
 
 		PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
 		pseudocodeTable.add(pseudocodeVisualiser).spaceBottom(30).row();
@@ -85,6 +85,10 @@ public class NodesTab implements Tab {
 
 	public ButtonComponent getNextBtn() {
 		return nextBtn;
+	}
+
+	public void setPseudocodeVisible(boolean enabled) {
+		pseudocodeTable.setVisible(enabled);
 	}
 
 	@Override
