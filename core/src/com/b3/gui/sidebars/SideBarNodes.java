@@ -239,7 +239,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 	public void resize(int width, int height) {
 		SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
 		NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
-		nodesTab.getUI().forceUpdateTable(currentSearch);
+		nodesTab.getUI().forceUpdateTable(currentSearch, mode);
 		super.resize(width, height);
 	}
 }

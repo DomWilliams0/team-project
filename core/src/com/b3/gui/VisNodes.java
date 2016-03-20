@@ -1,6 +1,7 @@
 package com.b3.gui;
 
 import com.b3.gui.components.LabelComponent;
+import com.b3.mode.Mode;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
@@ -80,14 +81,14 @@ public class VisNodes extends Table {
 	 * Render the table, using a given search ticker
 	 * This method will handle null values appropriately to save this occurring outside the object.
 	 *
-	 * @param ticker The search ticker whose values are to be rendered.
-	 */
+     * @param ticker The search ticker whose values are to be rendered.
+     */
 	public void render(SearchTicker ticker) {
 		int render;
 		//check that the ticker exists; if it does, see if the ticker has data to render
 		if (ticker == null || ticker.getVisited() == null || ticker.getFrontier() == null) {
 			//no data to render, so render this with dummy contents.
-			render = render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST, false);
+			render = render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST, false, ticker);
 		} else {
 			//we have data to render. get the most recent changes from the ticker
 			newVisited = ticker.getMostRecentlyExpanded();
@@ -103,7 +104,7 @@ public class VisNodes extends Table {
 						ticker.getFrontier(),
 						ticker.getVisited(),
 						ticker.getAlgorithm(),
-						(!ticker.isInspectingSearch() || ticker.getMode() == ModeType.PRACTICE)
+						(!ticker.isInspectingSearch() || ticker.getMode() == ModeType.PRACTICE), ticker
 				);
 			} else
 				render = 0;
@@ -123,14 +124,15 @@ public class VisNodes extends Table {
 
 	/**
 	 * This forces the node bar to reload it's data, and recalculate positioning of everything without informing the ticker
-	 * @param ticker {@link SearchTicker} of the current search
+     * @param ticker {@link SearchTicker} of the current search
+     * @param mode
      */
-	public void forceUpdateTable(SearchTicker ticker) {
+	public void forceUpdateTable(SearchTicker ticker, ModeType mode) {
 		render(
 				ticker.getFrontier(),
 				ticker.getVisited(),
 				ticker.getAlgorithm(),
-				(!ticker.isInspectingSearch() || ticker.getMode() == ModeType.PRACTICE)
+				(!ticker.isInspectingSearch() || ticker.getMode() == ModeType.PRACTICE), ticker
 		);
 	}
 
@@ -147,11 +149,13 @@ public class VisNodes extends Table {
 	 * - 1: Rendered as normal
 	 * - 2: The scrollpane(s) are being dragged.
 	 */
-	public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg, boolean showDesc) {
+	public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg, boolean showDesc, SearchTicker searchTicker) {
 		//check if a scrollpane is being used
 		if (spm.scrollpanesBeingUsed()) {
 			return 2;
 		}
+
+        System.out.println(showDesc);
 
 		this.alg = alg;
 
@@ -178,7 +182,7 @@ public class VisNodes extends Table {
 
 		//put the description on the sidebar
 		//BOTTOM of the sidebar
-		if (showDesc) setupDescription();
+		if (showDesc && searchTicker.getMode() != ModeType.PRACTICE) setupDescription();
 		descriptionShown = showDesc;
 		return 1;
 	}
@@ -321,12 +325,12 @@ public class VisNodes extends Table {
 			addLabel("   ");
 			addLabel("Using Hash Set");
 			row();
-//			//row 3 - note that highest frontier node is highest priority
-//			addLabel("Highest Priority\n" +
-//					"--------------------");
-//			addLabel("   ");
-//			addLabel("");
-//			row();
+			//row 3 - note that highest frontier node is highest priority
+			addLabel("Highest Priority\n" +
+					"--------------------");
+			addLabel("   ");
+			addLabel("");
+			row();
 
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();

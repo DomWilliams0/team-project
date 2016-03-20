@@ -39,6 +39,7 @@ public class SideBarPracticeMode extends SideBar {
 		tabs.put("Settings", new PracticeModeSettingsTab(skin, font, preferredWidth, data));
 
 		initComponents();
+
 	}
 
 	/**
