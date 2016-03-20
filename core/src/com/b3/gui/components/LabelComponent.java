@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  * Represents an on screen label.
  * An on-screen label is defined as a piece of text, with colour that is not clickable, selectable or interactive in
  * any way.
+ *
+ * @author oxe410
  */
 public class LabelComponent {
 

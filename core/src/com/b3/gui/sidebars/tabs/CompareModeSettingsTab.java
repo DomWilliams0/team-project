@@ -23,10 +23,23 @@ import com.badlogic.gdx.utils.Align;
 import java.util.Map;
 import java.util.function.Consumer;
 
+/**
+ * Represents the compare mode settings tab
+ *
+ * @author oxe410
+ */
 public class CompareModeSettingsTab implements Tab {
 
 	private Table settingsTab;
 
+	/**
+	 * Creates the compare mode settings tab
+	 * @param skin The libGDX skin
+	 * @param font The font to apply
+	 * @param preferredWidth The tab width
+	 * @param parent The {@link SideBar} which contains this tab
+     * @param data Additional data
+     */
 	public CompareModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
 		// Extract data
 		World world = (World) data.get("world");
@@ -204,10 +217,27 @@ public class CompareModeSettingsTab implements Tab {
 		settingsTab.row();
 	}
 
+	/**
+	 * Utility to create a checkbox
+	 * @param skin The libGDX skin
+	 * @param font The font to apply
+	 * @param table The parent tab
+	 * @param label The label next to the checkbox
+     * @param configKey The associated configuration key
+     */
 	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey) {
 		createCheckbox(skin, font, table, label, configKey, null);
 	}
 
+	/**
+	 * Utility to create a checkbox
+	 * @param skin The libGDX skin
+	 * @param font The font to apply
+	 * @param table The parent tab
+	 * @param label The label next to the checkbox
+	 * @param configKey The associated configuration key
+     * @param checkedListener
+     */
 	private void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey,
 								Consumer<Boolean> checkedListener) {
 		CheckBoxComponent checkBox = new CheckBoxComponent(skin, font, label);

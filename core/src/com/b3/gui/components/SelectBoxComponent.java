@@ -11,12 +11,20 @@ import com.badlogic.gdx.utils.Array;
 
 /**
  * Represents a dropdown menu.
+ *
+ * @author oxe410
  */
 public class SelectBoxComponent {
 
 	private Array items;
 	private SelectBox selectBox;
 
+	/**
+	 * Creates a selectbox component
+	 * @param skin The selectbox libGDX skin
+	 * @param font The font to apply
+	 * @param items The items to visualise
+     */
 	public SelectBoxComponent(Skin skin, BitmapFont font, Array items) {
 		this.items = items;
 

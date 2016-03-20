@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Represents a checkbox component
+ *
+ * @author oxe410
  */
 public class CheckBoxComponent extends Component {
 
@@ -59,18 +61,11 @@ public class CheckBoxComponent extends Component {
 		return checkBox.getText();
 	}
 
-	/**
-	 * @return the checkBox
-     */
 	@Override
 	public CheckBox getComponent() {
 		return checkBox;
 	}
 
-	/**
-	 * Adds a listener of this checkbox
-	 * @param listener The {@link ChangeListener} that is mapped to this checkbox, and listens for any changes
-	 */
 	@Override
 	public void addListener(ChangeListener listener) {
 		checkBox.addListener(listener);

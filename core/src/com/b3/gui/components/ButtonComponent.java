@@ -64,18 +64,11 @@ public class ButtonComponent extends Component {
 		this.data = data;
 	}
 
-	/**
-	 * @return the text button as a {@link TextButton}
-     */
 	@Override
 	public TextButton getComponent() {
 		return textButton;
 	}
 
-	/**
-	 * Adds a listener of this button
-	 * @param listener The {@link ChangeListener} that is mapped to this button, and listens for any changes
-     */
 	@Override
 	public void addListener(ChangeListener listener) {
 		textButton.addListener(listener);

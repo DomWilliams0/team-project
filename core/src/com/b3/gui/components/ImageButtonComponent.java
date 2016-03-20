@@ -11,6 +11,8 @@ import java.text.MessageFormat;
 
 /**
  * Represents an image button component
+ *
+ * @author oxe410
  */
 public class ImageButtonComponent extends Component {
 
@@ -61,10 +63,6 @@ public class ImageButtonComponent extends Component {
 		this.data = data;
 	}
 
-	/**
-	 * Adds a listener of this button
-	 * @param listener The {@link ChangeListener} that is mapped to this image button, and listens for any changes
-	 */
 	@Override
 	public void addListener(ChangeListener listener) {
 		imageButton.addListener(listener);

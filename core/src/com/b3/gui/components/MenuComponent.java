@@ -12,8 +12,9 @@ import com.badlogic.gdx.utils.Align;
 
 /**
  * A small sidebar that contains a limited number of buttons
+ *
+ * @author oxe410
  */
-
 public class MenuComponent extends Table {
 
     private final Sprite backgroundTexture;
@@ -40,20 +41,6 @@ public class MenuComponent extends Table {
     }
 
     /**
-     * Set the background colour of this menu
-     * @param r Red colour component
-     * @param g Green colour component
-     * @param b Blue colour component
-     * @param a Alpha component
-     */
-    private void setBackgroundColor(float r, float g, float b, float a) {
-        Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);
-        pm1.setColor(r, g, b, a);
-        pm1.fill();
-        setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pm1))));
-    }
-
-    /**
      * Renders the background of the menu component
      */
     public void render() {
@@ -66,7 +53,6 @@ public class MenuComponent extends Table {
      * Initialises the components
      */
     private void init() {
-//      setBackgroundColor(0.56f, 0.69f, 0.83f, 1);
         setPosition(0, Gdx.graphics.getHeight() - height);
         setSize(Gdx.graphics.getWidth(), height);
         align(Align.left);

@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
  * A {@link ButtonComponent} that is present in {@link MenuComponent}
  * Multiple MenuItemComponents are in one {@link MenuComponent}
  * {@link MenuComponent} only accepts MenuItemComponent not {@link ButtonComponent}
+ *
+ * @author oxe410
  */
 public class MenuItemComponent extends ButtonComponent {
 

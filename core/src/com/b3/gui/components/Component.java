@@ -10,6 +10,8 @@ import java.util.function.Function;
 /**
  * An abstract class of component that forms a base for any of the components.
  * A component is an on screen object of a UI type, e.g. a button, label or checkbox
+ *
+ * @author oxe410
  */
 public abstract class Component implements Observer {
 

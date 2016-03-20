@@ -61,6 +61,12 @@ public class MessageBoxComponent {
 		this.popupStage = popupStage;
 	}
 
+	/**
+	 * Creates a dialog box from a table
+	 *
+	 * @param popupStage The popup stage
+	 * @param content The content represented as a {@link Table}
+     */
 	public MessageBoxComponent(Stage popupStage, Table content) {
 		// Get atlas, skin and font
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));

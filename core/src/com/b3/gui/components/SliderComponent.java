@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Represents a slider
+ *
+ * @author oxe410
  */
 public class SliderComponent {
 
