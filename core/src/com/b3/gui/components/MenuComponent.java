@@ -37,6 +37,7 @@ public class MenuComponent extends GUIComponent {
 	public MenuComponent(float height) {
 		this.height = height;
 		backgroundTexture = new Sprite(new Texture("world/popups/emptycanvas250x250.png"));
+//		backgroundTexture = new Sprite(new Texture("transparentForeground.png"));
 		spriteBatch = new SpriteBatch();
 		table = new Table();
 		init();
@@ -47,7 +48,9 @@ public class MenuComponent extends GUIComponent {
 	 */
 	public void render() {
 		spriteBatch.begin();
-		spriteBatch.draw(backgroundTexture, (float) -19, Gdx.graphics.getHeight() - backgroundTexture.getHeight() + 75, 350, 100);
+		spriteBatch.draw(backgroundTexture, Gdx.graphics.getWidth()/ 2 - 175,
+				Gdx.graphics.getHeight() - backgroundTexture.getHeight() + 75,
+				350, 100);
 		spriteBatch.end();
 	}
 
@@ -79,7 +82,7 @@ public class MenuComponent extends GUIComponent {
 	 */
 	public void resize(int width, int height) {
 		spriteBatch = new SpriteBatch();
-		table.setPosition(0, height - this.height);
+		table.setPosition(width / 2 - 150, height - this.height);
 		table.setWidth(width);
 		table.setHeight(this.height);
 	}
