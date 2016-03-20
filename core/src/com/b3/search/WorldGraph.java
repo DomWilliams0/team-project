@@ -317,7 +317,7 @@ public class WorldGraph {
 		Collection<Node> nodes = graph.getNodes().values();
 		int index = Utils.RANDOM.nextInt(nodes.size());
 		for (Node node : nodes)
-			if (--index == 0)
+			if (index-- == 0)
 				return node;
 
 		return null;
