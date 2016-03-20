@@ -61,6 +61,7 @@ public class TutorialMode extends Mode {
 		sideBar = new SideBarIntensiveLearningMode(sideBarStage, world);
 		sideBar.setController(game);
 		sideBarStage.addActor(sideBar);
+		sideBarStage.addActor(sideBarNodes);
 	}
 
 	/**
@@ -71,6 +72,7 @@ public class TutorialMode extends Mode {
 	protected void tick() {
 		if (!world.getWorldGUI().getPseudoCode()) {
 			sideBarNodes.resetPseudoCode();
+			//sideBarNodes.render();
 			world.getWorldGUI().setPseudoCode(true);
 		}
 		sideBar.render();
