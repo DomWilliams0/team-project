@@ -5,6 +5,8 @@ import java.util.Set;
 
 /**
  * Describes a search algorithm.
+ * 
+ * @author bxd428
  */
 public enum SearchAlgorithm {
 

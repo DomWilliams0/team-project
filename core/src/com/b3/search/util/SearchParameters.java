@@ -9,6 +9,12 @@ import com.b3.search.util.takeable.Takeable;
 
 import java.util.function.Function;
 
+/**
+ * Essentially a utils for {@link SearchAlgorithm}.
+ * Contains all the functions that we did not want to put in the <code>enum</code>.
+ * 
+ * @author bxd428
+ */
 public class SearchParameters {
 
 	private static final Function2<Node, Node, Float> NOTHING;
@@ -87,4 +93,5 @@ public class SearchParameters {
 	public Function2<Node, Node, Float> getHeuristic() {
 		return h;
 	}
+	
 }

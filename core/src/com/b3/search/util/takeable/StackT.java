@@ -4,6 +4,8 @@ import java.util.Stack;
 
 /**
  * A {@link Stack} with a {@link #take()} method.
+ * 
+ * @author bxd428
  *
  * @param <E> The type of elements held in this {@link java.util.Collection}.
  */

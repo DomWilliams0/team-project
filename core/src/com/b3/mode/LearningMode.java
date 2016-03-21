@@ -7,6 +7,7 @@ import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.WorldSelectionHandler;
+import com.b3.search.SearchPauser;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
@@ -28,7 +29,7 @@ public class LearningMode extends Mode {
 				"world/world_smaller_test.tmx", 45f, 30f, null, null);
 
 		SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
-		currentSearch.pause(1);
+		currentSearch.pause(SearchPauser.PLAY_PAUSE_BUTTON);
 		currentSearch.setUpdated(true);
 	}
 

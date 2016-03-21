@@ -7,6 +7,11 @@ import java.io.FileNotFoundException;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for the {@link WorldGraph} class.
+ * 
+ * @author bxd428
+ */
 public class WorldGraphTest {
 
 	private WorldGraph graph;

@@ -13,6 +13,12 @@ import com.badlogic.gdx.utils.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The {@link TmxMapLoader} class but with less GDX.
+ * A lot of stolen code...
+ * 
+ * @author bxd428
+ */
 public class TmxMapLoaderBasic extends TmxMapLoader {
 
 	@Override

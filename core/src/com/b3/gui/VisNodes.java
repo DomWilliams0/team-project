@@ -1,10 +1,10 @@
 package com.b3.gui;
 
 import com.b3.gui.components.LabelComponent;
-import com.b3.mode.Mode;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
+import com.b3.search.SearchPauser;
 import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.search.util.takeable.PriorityQueueT;
@@ -113,11 +113,11 @@ public class VisNodes extends Table {
 		if (ticker != null) {
 			if (render == 2) {
 				//the scrollpanes are being used, so pause the ticker
-				ticker.pause(0);
+				ticker.pause(SearchPauser.SCROLL_PANE);
 			} else if (render == 1) {
 				//the scrollpanes are not being used, so release the #0 pause-lock
 				//(if somewhere else has paused it, this will not resume immediately)
-				ticker.resume(0);
+				ticker.resume(SearchPauser.SCROLL_PANE);
 			}
 		}
 	}

@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector3;
 /**
  * Essentially a wrapper around a {@link ModelInstance}.
  * But, does not actually contain the instance only the {@code transform}.
+ * 
+ * @author bxd428
  */
 public class ModelController {
 

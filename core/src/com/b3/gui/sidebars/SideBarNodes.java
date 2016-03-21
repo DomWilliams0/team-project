@@ -6,6 +6,7 @@ import com.b3.gui.sidebars.tabs.Tab;
 import com.b3.mode.ModeType;
 import com.b3.search.Node;
 import com.b3.search.Point;
+import com.b3.search.SearchPauser;
 import com.b3.search.SearchTicker;
 import com.b3.world.World;
 import com.badlogic.gdx.graphics.Color;
@@ -195,7 +196,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 		SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
 		NodesTab nodesTab = (NodesTab) tabs.get("Nodes");
 		if (currentSearch != null) {
-			setStepthrough(currentSearch.isPaused(1));
+			setStepthrough(currentSearch.isPaused(SearchPauser.PLAY_PAUSE_BUTTON));
 			nodesTab.setPseudocodeVisible(SearchTicker.isInspectingSearch() || currentSearch.getMode() == ModeType.PRACTICE);
 		} else {
 			setStepthrough(false);

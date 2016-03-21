@@ -24,6 +24,8 @@ import java.util.function.Consumer;
 /**
  * Handles all the {@link Model Models}.
  * Includes, loading and rendering.
+ *
+ * @author bxd428
  */
 public class ModelManager {
 

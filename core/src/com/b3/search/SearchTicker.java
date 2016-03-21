@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * An instance of a search in progress
  *
- * @author dxw405
+ * @author dxw405 bxd428
  */
 public class SearchTicker extends Observable {
 
@@ -40,11 +40,10 @@ public class SearchTicker extends Observable {
 	private Node start, end;
 
 	private float timer;
-	//array to identify who has told it to pause so conflicts don't occur
-	//0: scrollpane
-	//1: play/pause button
-	//4: stepthrough active
-	private final boolean[] paused;
+	/**
+	 * Identifies who has told it to pause so conflicts don't occur.
+	 */
+	private final EnumMap<SearchPauser, Boolean> paused;
 	private boolean updated;
 	private boolean tickedOnce;
 
@@ -69,9 +68,11 @@ public class SearchTicker extends Observable {
 
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
-		//setup pause status and ensure it is unpaused.
-		paused = new boolean[5];
-		for (int i = 0; i < paused.length; i++) paused[i] = false;
+		
+		this.paused = new EnumMap<>(SearchPauser.class);
+		for (SearchPauser pauser : SearchPauser.values()) {
+			paused.put(pauser, false);
+		}
 	}
 
 	public static boolean isInspectingSearch() {
@@ -576,10 +577,10 @@ public class SearchTicker extends Observable {
 	/**
 	 * Tell the ticker to pause
 	 *
-	 * @param index your identifier, to know when you tell it to resume
+	 * @param searchPauser your identifier, to know when you tell it to resume
 	 */
-	public void pause(int index) {
-		paused[index] = true;
+	public void pause(SearchPauser searchPauser) {
+		paused.put(searchPauser, true);
 
 		setChanged();
 		notifyObservers();
@@ -587,11 +588,11 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * Tell the ticker to resume
-	 *
-	 * @param index your identifier, to know if everyone has told it to resume.
+	 * 
+	 * @param searchPauser your identifier, to know when you tell it to resume
 	 */
-	public void resume(int index) {
-		paused[index] = false;
+	public void resume(SearchPauser searchPauser) {
+		paused.put(searchPauser, true);
 
 		setChanged();
 		notifyObservers();
@@ -603,18 +604,18 @@ public class SearchTicker extends Observable {
 	 * @return <code>true</code> if the search is paused.
 	 */
 	public boolean isPaused() {
-		for (boolean pause : paused) if (pause) return true;
+		for (boolean pause : paused.values()) if (pause) return true;
 		return false;
 	}
 
 	/**
-	 * query an individual index of paused as to whether it is paused.
+	 * Query an individual identifier of paused as to whether it is paused.
 	 *
-	 * @param index the index to query
-	 * @return wither paused[index] is true
+	 * @param searchPauser The identifier to query.
+	 * @return Whether {@link #paused} is <code>true</code> for the specified identifier.
 	 */
-	public boolean isPaused(int index) {
-		return paused[index];
+	public boolean isPaused(SearchPauser searchPauser) {
+		return paused.get(searchPauser);
 	}
 
 	/**

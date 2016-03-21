@@ -3,6 +3,7 @@ package com.b3.gui.sidebars.tabs;
 import com.b3.gui.components.*;
 import com.b3.gui.sidebars.SideBar;
 import com.b3.input.SoundController;
+import com.b3.search.SearchPauser;
 import com.b3.search.SearchTicker;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Config;
@@ -160,9 +161,9 @@ public class LearningModeSettingsTab extends Tab {
 			public void changed(ChangeEvent event, Actor actor) {
 				//SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
 				if (ticker.isPaused()) {
-					ticker.resume(1);
+					ticker.resume(SearchPauser.PLAY_PAUSE_BUTTON);
 				} else {
-					ticker.pause(1);
+					ticker.pause(SearchPauser.PLAY_PAUSE_BUTTON);
 					ticker.setUpdated(true);
 				}
 			}

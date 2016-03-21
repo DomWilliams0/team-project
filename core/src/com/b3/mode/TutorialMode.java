@@ -9,6 +9,7 @@ import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.TutorialModeSelectionHandler;
 import com.b3.search.Point;
+import com.b3.search.SearchPauser;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
 import com.badlogic.gdx.math.Vector2;
@@ -33,7 +34,7 @@ public class TutorialMode extends Mode {
 		super(game, "world/world_smaller_test_tiym.tmx", 45f, 25f, null, null);
 
 		world.getWorldGraph().setLearningModeNext(SearchAlgorithm.A_STAR);
-		world.getWorldGraph().getCurrentSearch().pause(1);
+		world.getWorldGraph().getCurrentSearch().pause(SearchPauser.PLAY_PAUSE_BUTTON);
 		world.getWorldGraph().getCurrentSearch().setUpdated(true);
 
 		tutorialPopups = new TutorialPopups();

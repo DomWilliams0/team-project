@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 /**
  * A {@link LinkedList} with a {@link #take()} method.
+ * 
+ * @author bxd428
  *
  * @param <E> The type of elements held in this {@link java.util.Collection}.
  */

@@ -6,6 +6,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for the {@link Config} class.
+ * 
+ * @author dxw405
+ */
 public class ConfigTest {
 
 	@Before

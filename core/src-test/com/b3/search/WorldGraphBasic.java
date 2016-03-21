@@ -10,6 +10,11 @@ import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+/**
+ * Helpers to create {@link WorldGraph WorldGraphs}.
+ * 
+ * @author bxd428
+ */
 public class WorldGraphBasic {
 
 	private static Field worldGraphField;

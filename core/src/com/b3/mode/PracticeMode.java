@@ -7,6 +7,7 @@ import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.input.InputHandler;
 import com.b3.input.PracticeModeWorldSelectionHandler;
+import com.b3.search.SearchPauser;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
@@ -34,7 +35,7 @@ public class PracticeMode extends Mode {
 
 		WorldGraph worldGraph = world.getWorldGraph();
 		worldGraph.setLearningModeNext(SearchAlgorithm.DEPTH_FIRST);
-		worldGraph.getCurrentSearch().pause(1);
+		worldGraph.getCurrentSearch().pause(SearchPauser.PLAY_PAUSE_BUTTON);
 		worldGraph.getCurrentSearch().setUpdated(true);
 	}
 

@@ -5,7 +5,7 @@ import com.b3.gui.components.ButtonComponent;
 import com.b3.gui.components.LabelComponent;
 import com.b3.gui.components.SliderComponent;
 import com.b3.gui.sidebars.SideBar;
-import com.b3.input.SoundController;
+import com.b3.search.SearchPauser;
 import com.b3.search.SearchTicker;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -120,7 +119,7 @@ public class CompareModeSettingsTab extends Tab {
 					searches
 							.stream()
 							.forEach(searchTicker -> {
-								searchTicker.pause(1);
+								searchTicker.pause(SearchPauser.PLAY_PAUSE_BUTTON);
 								searchTicker.setUpdated(true);
 							});
 					btnplaypause.setText("Play");
@@ -128,7 +127,7 @@ public class CompareModeSettingsTab extends Tab {
 				} else if (text.equals("Play")) {
 					searches
 							.stream()
-							.forEach(searchTicker -> searchTicker.resume(1));
+							.forEach(searchTicker -> searchTicker.resume(SearchPauser.PLAY_PAUSE_BUTTON));
 					btnplaypause.setText("Pause");
 				}
 			}

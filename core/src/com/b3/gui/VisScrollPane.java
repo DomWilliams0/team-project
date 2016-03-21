@@ -2,6 +2,7 @@ package com.b3.gui;
 
 import com.b3.search.Node;
 import com.b3.search.Point;
+import com.b3.search.SearchPauser;
 import com.b3.search.WorldGraphRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -109,7 +110,7 @@ public class VisScrollPane extends ScrollPane {
 				clickedNode = n;
 				//don't yet say that this is ready to be accessed; the user might be scrolling the pane.
 				clickedNodeUpdated = false;
-				vn.getWorld().getWorldGraph().getCurrentSearch().pause(2);
+				vn.getWorld().getWorldGraph().getCurrentSearch().pause(SearchPauser.VIS_SCROLL_PANE);
 				return true;
 			}
 			@Override
@@ -117,7 +118,7 @@ public class VisScrollPane extends ScrollPane {
 				//we have received an end-of-touch event
 				//ensure the scrollpanes aren't being used before saying the clicked node can be accessed
 				if (clickedNode.equals(n) && !scrollpaneBeingUsed()) clickedNodeUpdated = true;
-				vn.getWorld().getWorldGraph().getCurrentSearch().resume(2);
+				vn.getWorld().getWorldGraph().getCurrentSearch().resume(SearchPauser.VIS_SCROLL_PANE);
 			}
 
 			@Override

@@ -3,10 +3,7 @@ package com.b3.entity.ai;
 import com.b3.MainGame;
 import com.b3.entity.Agent;
 import com.b3.input.SoundController;
-import com.b3.search.Node;
-import com.b3.search.Point;
-import com.b3.search.SearchTicker;
-import com.b3.search.WorldGraph;
+import com.b3.search.*;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.world.World;
 import com.badlogic.gdx.math.Vector2;
@@ -86,7 +83,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 					shouldPlayFail = -1;
 					SearchAlgorithm algo = world.getWorldGraph().getLearningModeNext();
 					ticker.reset(algo, startNode, endNode);
-					ticker.pause(1);
+					ticker.pause(SearchPauser.PLAY_PAUSE_BUTTON);
 				} else {
 					if (!(path.get(path.size() - 1).x == endNode.getPoint().x &&
 							path.get(path.size() - 1).y == endNode.getPoint().y))
