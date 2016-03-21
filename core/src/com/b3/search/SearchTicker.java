@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * An instance of a search in progress
  *
- * @author dxw405 bxd428
+ * @author dxw405 bxd428 oxe410
  */
 public class SearchTicker extends Observable {
 
@@ -736,15 +736,6 @@ public class SearchTicker extends Observable {
      */
 	public boolean isTickedOnce() {
 		return tickedOnce;
-	}
-
-	/**
-	 * Resets the pseudocode information
-	 */
-	public void clearPseudocodeInfo() {
-		currentNeighbour = null;
-		currentNeighbours = new ArrayList<>();
-		neighboursSoFar = 0;
 	}
 
 	/**

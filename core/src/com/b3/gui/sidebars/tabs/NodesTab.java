@@ -46,6 +46,7 @@ public class NodesTab extends Tab {
 		Stage stage = (Stage) data.get("stage");
 
 		tab.setFillParent(true);
+		//tab.pad(20);
 
 		// Create the data table which will display the nodes
 		Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
@@ -56,7 +57,7 @@ public class NodesTab extends Tab {
 		pseudocodeTable = new Table();
 
 		PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
-		pseudocodeTable.add(pseudocodeVisualiser).spaceBottom(30).row();
+		pseudocodeTable.add(pseudocodeVisualiser).row();
 
 		// Next button
 		nextBtn = new ButtonComponent(skin, font, "Next step");
@@ -71,11 +72,10 @@ public class NodesTab extends Tab {
 		nextBtn.getComponent().setVisible(MainGame.getCurrentMode() != ModeType.PRACTICE);
 
 		//put the nodes ui onto this
-		tab.add(ui).maxWidth(preferredWidth).top().pad(20);
+		tab.add(ui).maxWidth(preferredWidth);
 		tab.row();
 		tab.add(nextBtn.getComponent());
 		tab.row();
-		tab.add(pseudocodeTable);
 	}
 
 	/**
@@ -90,7 +90,12 @@ public class NodesTab extends Tab {
 	}
 
 	public void setPseudocodeVisible(boolean enabled) {
-		pseudocodeTable.setVisible(enabled);
+		if (enabled && !pseudocodeTable.hasParent()) {
+			tab.add(pseudocodeTable);
+		}
+		else if (!enabled && pseudocodeTable.isDescendantOf(tab)) {
+			tab.removeActor(pseudocodeTable);
+		}
 	}
 	
 }
