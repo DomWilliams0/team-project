@@ -95,8 +95,11 @@ public class ScrollPaneManager {
 
 	/**
 	 * Check whether a {@link Node} clicked on by the user in one of the internal {@link VisScrollPane}s
-	 * Has a click which has not yet been viewed.
-	 * @return
+	 * has a click which has not yet been viewed.
+	 *
+	 * Marks it as updated, such that {@link #isClickedUpdated()} will return false until a new click is registered.
+	 *
+	 * @return <code>true</code> if there's a new click which hasn't yet been registered.
 	 */
 	public boolean isClickedUpdated() {
 		if (fp.isClickedUpdated()) {
@@ -162,7 +165,7 @@ public class ScrollPaneManager {
 	}
 
 	/**
-	 *
+	 * Defines which {@link VisScrollPane}s {@link VisScrollPane#isClickedUpdated()} method was most recently updated.
 	 */
 	private enum MostRecentlyUpdated {
 		NONE,

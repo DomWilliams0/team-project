@@ -43,37 +43,61 @@ public class VisScrollPane extends ScrollPane {
 
 	private boolean isFrontier;
 
+	/**
+	 * Create a new {@link VisScrollPane} with sufficient data to generate it.
+	 *
+	 * @param skin	The {@link Skin} with which to render the tables
+	 * @param style	The style with which to render the scroll pane.
+	 * @param isFrontier <code>true</code> if this is displaying frontier nodes, <code>false</code> if displaying visited.
+	 * @param vn	The {@link VisNodes} whose data is to be used as assistance in rendering data.
+	 */
 	public VisScrollPane(Skin skin, ScrollPaneStyle style, boolean isFrontier, VisNodes vn) {
 		this(new Table(skin), style, isFrontier, vn);
 	}
-
+	/**
+	 * Create a new {@link VisScrollPane} with sufficient data to generate it.
+	 *
+	 * @param t		The {@link Table} to display in this pane
+	 * @param style	The style with which to render the scroll pane.
+	 * @param isFrontier <code>true</code> if this is displaying frontier nodes, <code>false</code> if displaying visited.
+	 * @param vn	The {@link VisNodes} whose data is to be used as assistance in rendering data.
+	 */
 	private VisScrollPane(Table t, ScrollPaneStyle style, boolean isFrontier, VisNodes vn) {
 		super(t, style);
+		//grab data from parameters
 		outerTable = t;
 		tableSkin = t.getSkin();
-
-
 		this.isFrontier = isFrontier;
 		this.vn = vn;
 
-
 		t.top();
 
+		//initialise maps
 		cellmap = new HashMap<>();
 		colours = new HashMap<>();
 
+		//initialise colour data
 		pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
 		pm.setColor(defaultBackground);
 		pm.fill();
 		defaultTexture = new TextureRegionDrawable(new TextureRegion(new Texture(pm)));
 		colourTextureCache.put(defaultBackground, defaultTexture);
 
+		//setup styling decisions on the scrollpane
 		setFadeScrollBars(false);
 		setScrollingDisabled(true, false);
 	}
 
+	/**
+	 * Add a list of nodes to the table in this scrollpane.
+	 *
+	 * @param list The list of {@link Node}s to add to the table of this scrollpane
+	 */
 	public void add(List<Node> list) {
+		//keep track of index, but we don't display this unless this is holding frontier
 		int index = isFrontier ? 0 : -1;
+
+		//put the nodes in the list
 		for (Node n : list) {
 			addToTable(n, index);
 			if (isFrontier) index++;
@@ -83,13 +107,13 @@ public class VisScrollPane extends ScrollPane {
 
 
 	/**
-	 * Add a given node to the given table
-	 * Wraps the node in its own table, which is stored in the hashmap
-	 * So that it can later be highlighted.
+	 * Add a given {@link Node} to the table in this object
+	 * Wraps the node in its own {@link Table}, which is stored in the {@link HashMap}
+	 * So that it can later be highlighted with {@link #setCellColour(Node, boolean)}.
 	 *
 	 * Will apply any known colour to the node immediately.
 	 * @param n The node to display in the table.
-	 * @param i The priority of the node, or <code>-1</code> if not applicable.
+	 * @param i The priority of the node,or <code>-1</code> if not applicable.
 	 */
 	private void addToTable(Node n, int i) {
 		//create the wrapping table
@@ -143,13 +167,13 @@ public class VisScrollPane extends ScrollPane {
 	// CELL COLOURING
 	// -------------------------------------
 
-
 	/**
-	 * Apply the colour known to the hash map to the given node
+	 * Apply the colour known to the hash map to the given {@link Node}
 	 *
 	 * Adapted from code at http://stackoverflow.com/questions/24250791/make-scene2d-ui-table-with-alternate-row-colours
+	 *
 	 * @param n The node whose colour to apply
-	 * @return Whether the node was successfully highlighted
+	 * @return <code>true</code> if the node was successfully highlighted
 	 */
 	private boolean applyColour(Node n) {
 		//get the wrapping table which is displaying the node
@@ -157,11 +181,13 @@ public class VisScrollPane extends ScrollPane {
 		//there is no table
 		if (t == null) return false;
 
-		//get the desired colour, or default to white
+		//get the desired colour, or default to the default background
 		Color c = colours.getOrDefault(n, defaultBackground);
 
 		TextureRegionDrawable backgroundTexture = colourTextureCache.get(c);
 		if (backgroundTexture == null) {
+			//the colour has not been cached; we must generate a new texture.
+
 			//setup a pixmap with the desired colour
 			Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
 			pm.setColor(c);
