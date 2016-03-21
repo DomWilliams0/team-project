@@ -15,8 +15,7 @@ import java.util.Map;
 public abstract class Tab {
 
 	protected Table tab;
-
-
+	
 	/**
 	 * @param skin           The libGDX skin
 	 * @param font           The font to apply
@@ -28,11 +27,11 @@ public abstract class Tab {
 		tab = new Table();
 	}
 
-
 	/**
 	 * @return The inner tab representation
 	 */
 	public Table getTab() {
 		return tab;
 	}
+	
 }

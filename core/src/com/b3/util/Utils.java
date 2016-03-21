@@ -82,8 +82,7 @@ public abstract class Utils {
 	}
 
 	/**
-	 * A font cache from name and size to {@link BitmapFont}
-	 * .
+	 * A font cache from name and size to {@link BitmapFont}.
 	 */
 	private static final HashMap<Tuple<String, Integer>, BitmapFont> fontCache = new HashMap<>();
 

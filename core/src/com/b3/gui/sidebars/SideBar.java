@@ -331,8 +331,10 @@ public class SideBar extends Table {
 			}
 		}
 	}
-
-	public void render() {
-	}
+	
+	/**
+	 * Override to enable extra rendering.
+	 */
+	public void render() {}
 
 }

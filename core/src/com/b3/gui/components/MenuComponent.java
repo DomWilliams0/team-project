@@ -86,12 +86,10 @@ public class MenuComponent extends GUIComponent {
 		table.setWidth(width);
 		table.setHeight(this.height);
 	}
-
-	/**
-	 * @return The inner component
-	 */
+	
 	@Override
 	public Actor getComponent() {
 		return table;
 	}
+	
 }

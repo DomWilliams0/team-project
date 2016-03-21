@@ -226,4 +226,5 @@ public class SideBarNodes extends SideBar implements Disposable {
 		nodesTab.getUI().forceUpdateTable(currentSearch);
 		super.resize(width, height);
 	}
+	
 }

@@ -3,7 +3,6 @@ package com.b3.input;
 import com.b3.gui.PopupDescription;
 import com.b3.gui.components.MessageBoxComponent;
 import com.b3.gui.popup.Popup;
-import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchTicker;
@@ -27,6 +26,7 @@ enum Stage {
 }
 
 public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
+	
 	private boolean firstLoadAlert1;
 	private boolean firstLoadAlert2;
 

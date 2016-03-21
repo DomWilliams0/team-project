@@ -44,4 +44,5 @@ public class MainMenuInputHandler extends InputAdapter {
 
 		return super.mouseMoved(screenX, screenY);
 	}
+	
 }

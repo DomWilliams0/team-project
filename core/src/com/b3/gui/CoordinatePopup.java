@@ -75,4 +75,5 @@ public class CoordinatePopup {
 	public void resize() {
 		spriteBatch = new SpriteBatch();
 	}
+	
 }

@@ -59,10 +59,7 @@ public class CheckBoxComponent extends GUIComponent {
 	public CharSequence getText() {
 		return checkBox.getText();
 	}
-
-	/**
-	 * @return The inner button representation
-	 */
+	
 	@Override
 	public CheckBox getComponent() {
 		return checkBox;

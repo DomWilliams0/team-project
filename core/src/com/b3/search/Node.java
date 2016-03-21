@@ -152,5 +152,6 @@ public class Node implements Comparable<Node> {
 	public int compareTo(Node n) {
 		return point.compareTo(n.point);
 	}
+	
 }
 

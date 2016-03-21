@@ -98,9 +98,9 @@ public class WorldSelectionHandler extends InputAdapter {
 		if (node == null)
 			return false;
 
-		if (button == Input.Buttons.LEFT)
+		if (button == Input.Buttons.LEFT) {
 			world.getWorldGUI().setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
-		else {
+		} else {
 			world.getWorldGUI().setNextDestination(node.getPoint().getX(), node.getPoint().getY());
 		}
 
@@ -136,7 +136,9 @@ public class WorldSelectionHandler extends InputAdapter {
 		if (node != null) {
 			CoordinatePopup.visibility = true;
 			CoordinatePopup.setCoordinate(node.getPoint().getX(), node.getPoint().getY());
-		} else CoordinatePopup.visibility = false;
+		} else {
+			CoordinatePopup.visibility = false;
+		}
 
 		return super.mouseMoved(screenX, screenY);
 	}

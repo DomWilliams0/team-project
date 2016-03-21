@@ -33,14 +33,17 @@ public class ModelManager {
 	 * The {@link ModelInstance ModelInstances} to render,
 	 */
 	private final ArrayList<Tuple<ModelController, ModelInstance>> models = new ArrayList<>();
-
+	
+	/**
+	 * A {@link ArrayList list} of all the fixed position {@link Model Models}.
+	 */
 	private final ArrayList<ModelController> staticModels = new ArrayList<>();
 
 	/**
-	 * A map of {@link Model} names to "passBacks" that require a new
+	 * A map of {@link Model} names to {@code "passBacks"} that require a new
 	 * {@link ModelInstance}.
 	 * The model names in the map will be loaded at some point and
-	 * the "passBacks" will get their
+	 * the {@code "passBacks"} will get their
 	 * {@link ModelInstance ModelInstances}.
 	 */
 	private final HashMap<String, ArrayList<Tuple<ModelController, Consumer<Matrix4>>>> unloadedPassBacks = new HashMap<>();

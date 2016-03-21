@@ -40,10 +40,7 @@ public class ImageButtonComponent extends GUIComponent {
 
 		imageButton = new ImageButton(imageButtonStyle);
 	}
-
-	/**
-	 * @return The inner button representation
-	 */
+	
 	@Override
 	public ImageButton getComponent() {
 		return imageButton;
@@ -62,7 +59,5 @@ public class ImageButtonComponent extends GUIComponent {
 	public void setData(Object data) {
 		this.data = data;
 	}
-
-
-
+	
 }

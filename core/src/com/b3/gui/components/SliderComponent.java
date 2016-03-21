@@ -43,12 +43,10 @@ public class SliderComponent extends GUIComponent {
 	public void setValue(float value) {
 		slider.setValue(value);
 	}
-
-	/**
-	 * @return The inner component
-	 */
+	
 	@Override
 	public Slider getComponent() {
 		return slider;
 	}
+	
 }

@@ -71,6 +71,6 @@ public class SoundController {
 			sounds[soundIndex].stop();
 			id = -1;
 		}
-
 	}
+	
 }

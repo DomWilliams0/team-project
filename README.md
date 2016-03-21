@@ -24,6 +24,9 @@ The following are some guidelines for contributing to this project.
     * Between consecutive members (or initialisers) of a class: fields, constructors, methods, nested classes, static initialisers, instance initialisers.
 - Do not overly nest code.
 - Enums should not have whitespace before the bracket in their declaration. (i.e. `ENUM(1.2)`)
+- After the class definition there should be a blank line.
+- After the final method there should be a blank line.
+- All Java files should end with an empty line of whitespace.
 
 Examples:
 

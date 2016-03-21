@@ -19,7 +19,11 @@ public class WorldGraphBasic {
 
 	private static Field worldGraphField;
 	private static Method processMapTileTypesMethod;
-
+	
+	/**
+	 * Make the private fields in {@link World} accessible by reflection.
+	 * And assign their reflective objects to the above fields.
+	 */
 	static {
 		try {
 			worldGraphField = World.class.getDeclaredField("worldGraph");
@@ -30,7 +34,13 @@ public class WorldGraphBasic {
 			ex.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Load a real {@code .tmx} file into a {@link WorldGraph}.
+	 * @param mapName The name of the {@link .tmx} file to load.
+	 * @return A newly generated {@link WorldGraph} with the map loaded in.
+	 * @throws Exception If the map is unloadable or reflection fails or dolphins fly.
+	 */
 	public static WorldGraph getRealWorld(String mapName) throws Exception {
 		World world = new World();
 		TiledMap map = new TmxMapLoaderBasic().load("src-test/resources/test-worlds/" + mapName + ".tmx");
@@ -42,20 +52,35 @@ public class WorldGraphBasic {
 		processMapTileTypesMethod.invoke(world, map, false);
 		return graph;
 	}
-
+	
+	/**
+	 * Makes a very basic {@link WorldGraph} with some connections.
+	 * All edges are 1 in weight.
+	 * 
+	 * @return A newly generated {@link WorldGraph}.
+	 * @throws FileNotFoundException If someone deleted {@code graph.txt}.
+	 */
 	public static WorldGraph getBasicGraph() throws FileNotFoundException {
 		return getTextGraph("graph");
 	}
-
+	
+	/**
+	 * Creates a new {@link WorldGraph} from a file.
+	 * All edges are 1 in weight.
+	 *
+	 * @param graphName The name of the graph file.
+	 * @return The newly created {@link WorldGraph}.
+	 */
 	private static WorldGraph getTextGraph(String graphName) throws FileNotFoundException {
 		return fromFile("src-test/resources/test-worlds/" + graphName + ".txt");
 	}
 
 	/**
-	 * Creates a new graph from a file
+	 * Creates a new {@link WorldGraph} from a file.
+	 * All edges are 1 in weight.
 	 *
-	 * @param filename The file name
-	 * @return The newly created graph
+	 * @param filename The file name.
+	 * @return The newly created {@link WorldGraph}.
 	 */
 	private static WorldGraph fromFile(String filename) throws FileNotFoundException {
 		// Open file

@@ -27,7 +27,6 @@ public class ButtonComponent extends GUIComponent implements Observer {
 	 * @param text The text
 	 */
 	public ButtonComponent(Skin skin, BitmapFont font, String text) {
-
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 		skin.add("default", font, BitmapFont.class);
 		textButtonStyle.font = skin.getFont("default");
@@ -91,4 +90,5 @@ public class ButtonComponent extends GUIComponent implements Observer {
 		if (callback != null)
 			callback.accept(o);
 	}
+	
 }

@@ -28,4 +28,5 @@ public enum Key {
 	Key(int key) {
 		this.binding = key;
 	}
+	
 }

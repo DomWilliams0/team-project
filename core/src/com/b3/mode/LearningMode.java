@@ -17,6 +17,7 @@ import com.b3.search.util.SearchAlgorithm;
  * Sets up small world, camera, input handler and launches the world paused (forcing / implying step-by-step)
  */
 public class LearningMode extends Mode {
+	
 	private SideBar sideBar;
 
 	/**
@@ -93,4 +94,5 @@ public class LearningMode extends Mode {
 		super.resize(width, height);
 		sideBar.resize(width, height);
 	}
+	
 }

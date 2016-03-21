@@ -15,6 +15,7 @@ import java.util.TreeMap;
  * @author dxw405
  */
 public class KeyboardController extends InputAdapter {
+	
 	private static final Set<Integer> CONTROL_KEYS;
 
 	static {

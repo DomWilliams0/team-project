@@ -20,6 +20,7 @@ import java.util.Set;
  * @author oxe410 dxw405 nbg481 bxd428
  */
 public class WorldGraph {
+	
 	private final Graph graph;
 	private final WorldGraphRenderer renderer;
 
@@ -336,6 +337,5 @@ public class WorldGraph {
 		return node;
 
 	}
-
-
+	
 }

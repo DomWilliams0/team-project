@@ -17,4 +17,5 @@ abstract class GUIComponent {
 	public void addListener(EventListener listener) {
 		getComponent().addListener(listener);
 	}
+	
 }

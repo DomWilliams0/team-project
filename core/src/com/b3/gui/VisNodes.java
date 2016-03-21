@@ -490,4 +490,5 @@ public class VisNodes extends Table {
 	public Node getJustExpanded() {
 		return justExpanded;
 	}
+	
 }

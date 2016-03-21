@@ -79,12 +79,10 @@ public class SelectBoxComponent extends GUIComponent {
 	public void setSelected(Object selected) {
 		selectBox.setSelected(selected);
 	}
-
-	/**
-	 * @return The inner component
-	 */
+	
 	@Override
 	public Actor getComponent() {
 		return selectBox;
 	}
+	
 }

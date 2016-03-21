@@ -260,4 +260,5 @@ public class MainMenuScreen extends ScreenAdapter {
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 	}
+	
 }

@@ -131,4 +131,5 @@ public class PracticeModeSettingsTab extends Tab {
 	public void setName(String name) {
 		tab.setName(name);
 	}
+	
 }

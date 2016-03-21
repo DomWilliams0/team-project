@@ -80,12 +80,14 @@ public class TutorialModeSelectionHandler extends InputAdapter {
 
 		currentSelection = new Point((int) tempRayCast.x, (int) tempRayCast.y);
 
-		if (node != null)
-			if (button == Input.Buttons.LEFT)
+		if (node != null) {
+			if (button == Input.Buttons.LEFT) {
 				world.getWorldGUI().setCurrentClick(node.getPoint().getX(), node.getPoint().getY());
-			else {
+			} else {
 				world.getWorldGUI().setNextDestination(node.getPoint().getX(), node.getPoint().getY());
 			}
+		}
 		return true;
 	}
+	
 }

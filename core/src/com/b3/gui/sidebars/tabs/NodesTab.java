@@ -92,4 +92,5 @@ public class NodesTab extends Tab {
 	public void setPseudocodeVisible(boolean enabled) {
 		pseudocodeTable.setVisible(enabled);
 	}
+	
 }

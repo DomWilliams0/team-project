@@ -4,7 +4,7 @@ import com.b3.search.Point;
 
 /**
  * Links a point, or another object to a timer, to allow for animation
- *  @author nbg481
+ * @author nbg481
  */
 public class PointTimer {
 
@@ -68,7 +68,8 @@ public class PointTimer {
 	}
 
 	/**
-	 * @return true if the timer has been reduced to 0
+	 * @return <code>true</code> if the timer has been reduced to 0;
+	 *         <code>false</code> otherwise.
      */
 	public Boolean finishedTiming() {
 		return (timer <= 0);

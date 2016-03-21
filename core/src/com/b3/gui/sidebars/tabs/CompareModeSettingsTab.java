@@ -139,4 +139,5 @@ public class CompareModeSettingsTab extends Tab {
 				.spaceTop(5);
 		tab.row();
 	}
+	
 }

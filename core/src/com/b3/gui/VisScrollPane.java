@@ -288,4 +288,5 @@ public class VisScrollPane extends ScrollPane {
 		outerTable.clear();
 		cellmap.clear();
 	}
+	
 }

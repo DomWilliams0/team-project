@@ -126,7 +126,7 @@ public class HelpBox extends Table {
 	}
 
 	/**
-	 * Setup the help box for Learning mode
+	 * Setup the help box for {@link com.b3.mode.LearningMode}.
 	 */
 	private void setupLM() {
 		//todo this could probably be improved design-wise...
@@ -165,7 +165,7 @@ public class HelpBox extends Table {
 	}
 
 	/**
-	 * Setup the help box for Compare mode
+	 * Setup the help box for {@link com.b3.mode.CompareMode}.
 	 */
 	private void setupCM() {
 		addHelp(this, "This mode is to compare algorithms side-by-side in a large, lively world.", true)
@@ -195,7 +195,7 @@ public class HelpBox extends Table {
 	}
 
 	/**
-	 * Setup the help box for Try Yourself mode
+	 * Setup the help box for {@link com.b3.mode.PracticeMode}.
 	 */
 	private void setupTY() {
 		//todo part of this is incorrect ie interacting with world nodes
@@ -256,4 +256,5 @@ public class HelpBox extends Table {
 	private Cell addHelp(Table t, String s) {
 		return addHelp(t, s, false);
 	}
+	
 }

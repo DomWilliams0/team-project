@@ -125,12 +125,10 @@ public class MessageBoxComponent extends GUIComponent {
 	public static void show(String infoMessage, String titleBar) {
 		JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
 	}
-
-	/**
-	 * @return The inner component
-	 */
+	
 	@Override
 	public Actor getComponent() {
 		return dialog;
 	}
+	
 }

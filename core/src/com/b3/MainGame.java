@@ -109,7 +109,6 @@ public class MainGame extends Game {
 	}
 
 	/**
-	 *
 	 * @return the current mode this game is in
      */
 	public static ModeType getCurrentMode() {

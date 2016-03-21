@@ -255,4 +255,5 @@ public class LearningModeSettingsTab extends Tab {
 				.spaceTop(5);
 		tab.row();
 	}
+	
 }

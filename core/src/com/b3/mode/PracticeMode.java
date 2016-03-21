@@ -105,4 +105,5 @@ public class PracticeMode extends Mode {
 		super.resize(width, height);
 		popupStage.getViewport().update(width, height, true);
 	}
+	
 }

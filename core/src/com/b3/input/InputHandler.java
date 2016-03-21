@@ -36,4 +36,5 @@ public class InputHandler {
 	public void clear() {
 		inputMultiplexer.clear();
 	}
+	
 }

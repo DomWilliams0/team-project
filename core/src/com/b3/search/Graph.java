@@ -251,7 +251,6 @@ public class Graph {
 					addEdge(currentPoint, new Point(i, j - 1), 1);
 			}
 		}
-
-
 	}
+	
 }

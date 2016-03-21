@@ -758,4 +758,5 @@ public class SearchTicker extends Observable {
 	public String getTentative_gString() {
 		return tentative_gString;
 	}
+	
 }
