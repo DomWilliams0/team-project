@@ -180,8 +180,12 @@ public class Pseudocode extends Observable {
 	}
 
 	/**
-	 * TODO Javadoc
-     */
+	 * Updates the variable-constant updating system for BFS and DFS
+	 *
+	 * @param i the line to evaluate
+	 * @return the string that the line was set to
+	 */
+
 	private String updateForDFSandBFS(int i) {
 		String tempText = "";
 		switch (i) {
@@ -234,7 +238,7 @@ public class Pseudocode extends Observable {
 	}
 
 	/**
-	 * Updates the varibale-constant updating system
+	 * Updates the variable-constant updating system for A*
 	 *
 	 * @param i the line to evaluate
 	 * @return the string that the line was set to

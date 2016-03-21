@@ -10,8 +10,6 @@ Team members:
 
 ## Running the program
 
-[TODO]
-
 ## Contributing
 
 The following are some guidelines for contributing to this project.
