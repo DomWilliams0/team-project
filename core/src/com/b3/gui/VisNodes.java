@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import java.util.*;
 
 /**
- * A table which will display the frontier and visited nodes
+ * A {@link Table} which will display the frontier and visited {@link Node}s
  * in a useful way to inspect what is happening internally with the algorithm.
  * <p>
  * @author lxd417 oxe410
@@ -78,10 +78,10 @@ public class VisNodes extends Table {
 	}
 
 	/**
-	 * Render the table, using a given search ticker
-	 * This method will handle null values appropriately to save this occurring outside the object.
+	 * Render the {@link Table}, using a given {@link SearchTicker}
+	 * This method will handle <code>null</code> values appropriately to save this occurring outside the object.
 	 *
-     * @param ticker The search ticker whose values are to be rendered.
+     * @param ticker The {@link SearchTicker} whose values are to be rendered.
      */
 	public void render(SearchTicker ticker) {
 		int render;
@@ -123,7 +123,7 @@ public class VisNodes extends Table {
 	}
 
 	/**
-	 * This forces the node bar to reload it's data, and recalculate positioning of everything without informing the ticker
+	 * This forces the node bar to reload its data, and recalculate positioning of everything without informing the ticker
      * @param ticker {@link SearchTicker} of the current search
      */
 	public void forceUpdateTable(SearchTicker ticker) {
@@ -136,7 +136,7 @@ public class VisNodes extends Table {
 	}
 
 	/**
-	 * Render the table, preventing re-render based on time defined in config file.
+	 * Render the table, preventing re-render based on time defined in {@link Utils#}.
 	 * If stepthrough mode is active, calling this will force a render regardless;
 	 * the calling function should ensure the search has been updated prior to calling this.
 	 *
@@ -213,13 +213,13 @@ public class VisNodes extends Table {
 
 	/**
 	 * Update the timer and check if enough time has elapsed
+	 * Bases this on {@link ConfigKey#TIME_BETWEEN_TICKS}.
 	 *
 	 * @return <code>true</code> if the render should go ahead as planned
 	 */
 	private boolean updateTimer() {
 		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
 		timer += Utils.TRUE_DELTA_TIME;
-		System.out.println("Timer: " + timer + " | TDT: " + Utils.TRUE_DELTA_TIME);
 
 		//not enough time has elapsed since last tick - do nothing
 		if (timer < timeBetweenTicks)
