@@ -55,11 +55,6 @@ public class CompareModeSettingsTab extends Tab {
 
 		// Search speed slider
 		LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
-		tab.add(searchSpeedLabel.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceTop(20);
-		tab.row();
 
 		SliderComponent searchSpeedSlider = new SliderComponent(skin,
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
@@ -73,19 +68,8 @@ public class CompareModeSettingsTab extends Tab {
 			}
 		});
 
-		tab.add(searchSpeedSlider.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
-
 		// Game speed slider
 		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
-		tab.add(gameSpeedLabel.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceTop(20);
-		tab.row();
 
 		SliderComponent gameSpeedSlider = new SliderComponent(skin, 0f, 4f, 0.1f);
 		gameSpeedSlider.setValue(Config.getFloat(ConfigKey.GAME_SPEED));
@@ -95,12 +79,6 @@ public class CompareModeSettingsTab extends Tab {
 				Config.set(ConfigKey.GAME_SPEED, gameSpeedSlider.getValue());
 			}
 		});
-
-		tab.add(gameSpeedSlider.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
 
 		//Play and Pause button
 		//String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
@@ -130,11 +108,11 @@ public class CompareModeSettingsTab extends Tab {
 			}
 		});
 
-		tab.add(playPause.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
+		addComponent(searchSpeedLabel, Align.left, preferredWidth, 20, 0, 0, 0);
+		addComponent(searchSpeedSlider, Align.center, preferredWidth, 5, 0, 0, 0);
+		addComponent(gameSpeedLabel, Align.left, preferredWidth, 20, 0, 0, 0);
+		addComponent(gameSpeedSlider, Align.center, preferredWidth, 5, 0, 0, 0);
+		addComponent(playPause, Align.center, preferredWidth, 5, 0, 0, 0);
 	}
 	
 }

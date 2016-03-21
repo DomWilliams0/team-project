@@ -1,5 +1,6 @@
 package com.b3.gui.sidebars.tabs;
 
+import com.b3.gui.components.GUIComponent;
 import com.b3.gui.sidebars.SideBar;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -15,7 +16,8 @@ import java.util.Map;
 public abstract class Tab {
 
 	protected Table tab;
-	
+	protected SideBar parent;
+
 	/**
 	 * @param skin           The libGDX skin
 	 * @param font           The font to apply
@@ -27,6 +29,8 @@ public abstract class Tab {
 		tab = new Table();
 		tab.setFillParent(true);
 		tab.pad(20);
+
+		this.parent = parent;
 	}
 
 	/**
@@ -35,5 +39,16 @@ public abstract class Tab {
 	public Table getTab() {
 		return tab;
 	}
-	
+
+	public SideBar getParent() {
+		return parent;
+	}
+
+	public void addComponent(GUIComponent component, int alignment, float preferredWidth, float spaceTop, float spaceRight, float spaceBottom, float spaceLeft) {
+		tab.add(component.getComponent())
+				.align(alignment)
+				.maxWidth(preferredWidth)
+				.space(spaceTop, spaceLeft, spaceBottom, spaceRight);
+		tab.row();
+	}
 }

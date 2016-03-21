@@ -36,12 +36,11 @@ public class PracticeModeSettingsTab extends Tab {
 	public PracticeModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
 		super(skin, font, preferredWidth, parent, data);
 
-		// ======================
-		// === LABELS AND STU ===
-		// ======================
-
 		skin.add("default", font, BitmapFont.class);
 		//new LabelComponent("", 16, "", Color.BLACK)
+
+		// Labels
+		// ------
 		LabelComponent labelOne = new LabelComponent(skin, "Left click the nodes to see more information", Color.BLACK);
 		labelOne.getComponent().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
@@ -51,10 +50,10 @@ public class PracticeModeSettingsTab extends Tab {
 		LabelComponent labelTwo = new LabelComponent(skin, "Right click a node to set the next destination", Color.BLACK);
 		labelTwo.getComponent().setPosition(-20, Gdx.graphics.getHeight() / 2);
 
-		// ========================
-		// === WHAT SEARCH ALGO ===
-		// ========================
+		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
 
+		// Select boxes
+		// ------------
 		Object[] searches = SearchAlgorithm
 				.allNames()
 				.stream()
@@ -72,14 +71,8 @@ public class PracticeModeSettingsTab extends Tab {
 			}
 		});
 
-		// Game speed slider
-		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
-		tab.add(gameSpeedLabel.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceTop(20);
-		tab.row();
-
+		// Slider
+		// ------
 		SliderComponent gameSpeedSlider = new SliderComponent(skin, 0f, 4f, 0.1f);
 		gameSpeedSlider.setValue(Config.getFloat(ConfigKey.GAME_SPEED));
 		gameSpeedSlider.addListener(new ChangeListener() {
@@ -89,35 +82,12 @@ public class PracticeModeSettingsTab extends Tab {
 			}
 		});
 
-		tab.add(gameSpeedSlider.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
-
-		tab.add(searchSelectBox.getComponent())
-				.maxWidth(preferredWidth)
-				.spaceTop(100)
-				.spaceBottom(30);
-		tab.row();
-
-		tab.add(labelOne.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
-
-		tab.add(labelOneUnderneath.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
-
-		tab.add(labelTwo.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
+		addComponent(gameSpeedLabel, Align.left, preferredWidth, 20, 0, 0, 0);
+		addComponent(gameSpeedSlider, Align.center, preferredWidth, 5, 0, 0, 0);
+		addComponent(searchSelectBox, Align.center, preferredWidth, 100, 0, 0, 0);
+		addComponent(labelOne, Align.center, preferredWidth, 35, 0, 0, 0);
+		addComponent(labelOneUnderneath, Align.center, preferredWidth, 5, 0, 0, 0);
+		addComponent(labelTwo, Align.center, preferredWidth, 5, 0, 0, 0);
 	}
 
 	/**

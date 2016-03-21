@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
  *
  * @author dxw405 oxe410
  */
-abstract class GUIComponent {
+public abstract class GUIComponent {
 	/**
 	 * @return The inner component
 	 */

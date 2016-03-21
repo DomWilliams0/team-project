@@ -13,13 +13,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -56,12 +53,6 @@ public class LearningModeSettingsTab extends Tab {
 			}
 		});
 
-		tab.add(showLabelsCheckBox.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceBottom(10);
-		tab.row();
-
 		// Search sounds checkbox
 		CheckBoxComponent soundsOn = new CheckBoxComponent(skin, font, "Search Sounds");
 		soundsOn.getComponent().setChecked(Config.getBoolean(ConfigKey.SOUNDS_ON));
@@ -74,32 +65,19 @@ public class LearningModeSettingsTab extends Tab {
 			}
 		});
 
-		tab.add(soundsOn.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceBottom(10);
-		tab.row();
-
 		// Pseudocode checkbox
 		CheckBoxComponent pseudocodeOn = new CheckBoxComponent(skin, font, "Pseudocode");
 		pseudocodeOn.getComponent().setChecked(false);
 		pseudocodeOn.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				SearchTicker currentSearch = world.getWorldGraph().getCurrentSearch();
-				currentSearch.setInspectSearch(pseudocodeOn.getComponent().isChecked());
+				SearchTicker.setInspectSearch(pseudocodeOn.getComponent().isChecked());
 			}
 		});
 
-		tab.add(pseudocodeOn.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceBottom(10);
-		tab.row();
-
 		// Add Building button
-		ButtonComponent addBuildingMode = new ButtonComponent(skin, font, "Add Building Mode");
-		addBuildingMode.addListener(new ChangeListener() {
+		ButtonComponent addBuildingButton = new ButtonComponent(skin, font, "Add Building Mode");
+		addBuildingButton.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				parent.close();
@@ -115,12 +93,6 @@ public class LearningModeSettingsTab extends Tab {
 				}
 			}
 		});
-
-		tab.add(addBuildingMode.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(20);
-		tab.row();
 
 		// Remove Building button
 		ButtonComponent removeBuildingButton = new ButtonComponent(skin, font, "Remove Building Mode");
@@ -141,12 +113,6 @@ public class LearningModeSettingsTab extends Tab {
 			}
 		});
 
-		tab.add(removeBuildingButton.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(20);
-		tab.row();
-
 		//Play and Pause button
 		ButtonComponent playPause = new ButtonComponent(skin, font, "Play");
 		SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
@@ -157,7 +123,6 @@ public class LearningModeSettingsTab extends Tab {
 		playPause.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				//SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
 				if (ticker.isPaused()) {
 					ticker.resume(SearchPauser.PLAY_PAUSE_BUTTON);
 				} else {
@@ -188,11 +153,6 @@ public class LearningModeSettingsTab extends Tab {
 
 		// Search speed slider
 		LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
-		tab.add(searchSpeedLabel.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceTop(20);
-		tab.row();
 
 		SliderComponent searchSpeedSlider = new SliderComponent(skin,
 				Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS_MIN),
@@ -206,19 +166,8 @@ public class LearningModeSettingsTab extends Tab {
 			}
 		});
 
-		tab.add(searchSpeedSlider.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
-
 		// Game speed slider
 		LabelComponent gameSpeedLabel = new LabelComponent(skin, "Game speed", Color.BLACK);
-		tab.add(gameSpeedLabel.getComponent())
-				.align(Align.left)
-				.maxWidth(preferredWidth)
-				.spaceTop(20);
-		tab.row();
 
 		SliderComponent gameSpeedSlider = new SliderComponent(skin, 0f, 4f, 0.1f);
 		gameSpeedSlider.setValue(Config.getFloat(ConfigKey.GAME_SPEED));
@@ -229,29 +178,18 @@ public class LearningModeSettingsTab extends Tab {
 			}
 		});
 
-		tab.add(gameSpeedSlider.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
-
-		tab.add(labelNextSearch.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(90);
-		tab.row();
-
-		tab.add(searchSelectBox.getComponent())
-				.maxWidth(preferredWidth)
-				.spaceTop(10)
-				.spaceBottom(30);
-		tab.row();
-
-		tab.add(playPause.getComponent())
-				.align(Align.center)
-				.maxWidth(preferredWidth)
-				.spaceTop(5);
-		tab.row();
+		addComponent(showLabelsCheckBox, Align.left, preferredWidth, 0, 0, 10, 0);
+		addComponent(soundsOn, Align.left, preferredWidth, 0, 0, 10, 0);
+		addComponent(pseudocodeOn, Align.left, preferredWidth, 0, 0, 10, 0);
+		addComponent(addBuildingButton, Align.center, preferredWidth, 20, 0, 0, 0);
+		addComponent(removeBuildingButton, Align.center, preferredWidth, 20, 0, 0, 0);
+		addComponent(searchSpeedLabel, Align.left, preferredWidth, 20, 0, 0, 0);
+		addComponent(searchSpeedSlider, Align.center, preferredWidth, 5, 0, 0, 0);
+		addComponent(gameSpeedLabel, Align.left, preferredWidth, 20, 0, 0, 0);
+		addComponent(gameSpeedSlider, Align.center, preferredWidth, 5, 0, 0, 0);
+		addComponent(labelNextSearch, Align.center, preferredWidth, 90, 0, 0, 0);
+		addComponent(searchSelectBox, Align.center, preferredWidth, 20, 0, 0, 0);
+		addComponent(playPause, Align.center, preferredWidth, 5, 0, 0, 0);
 	}
 	
 }
