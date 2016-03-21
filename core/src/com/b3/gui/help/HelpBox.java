@@ -219,22 +219,22 @@ public class HelpBox extends Table {
 		);
 
 		sidebarsT = new Table(getSkin());
-		addHelp(sidebarsT, "The sidebar:", true);
+		addHelp(sidebarsT, "The sidebars:", true);
 		sidebarsT.row().row();
 		addHelp(sidebarsT, visbarhelp + "\n" +
 				"You can also edit game speed and next\n" +
-				"search algorithm in the sidebar."
+				"search algorithm in the settings sidebar."
 		);
 
 	}
 
 	/**
-	 * Adds some help text to the given table, in a label component formatted in the appropriate way
+	 * Adds some help text to the given {@link Table}, in a {@link LabelComponent} formatted in the appropriate way
 	 *
-	 * @param t       The table to add the text to
+	 * @param t       The {@link Table} to add the text to
 	 * @param s       The string to put in
 	 * @param isTitle Whether this is a title
-	 * @return The cell created in the table
+	 * @return The {@link Cell} created in the table
 	 */
 	private Cell addHelp(Table t, String s, boolean isTitle) {
 		Color c = isTitle ? Color.WHITE : Color.CYAN;
@@ -244,12 +244,12 @@ public class HelpBox extends Table {
 	}
 
 	/**
-	 * Adds some help text to the given table, in a label component formatted in the appropriate way
+	 * Adds some help text to the given {@link Table}, in a {@link LabelComponent} formatted in the appropriate way
 	 * Assumes the text is not a title as defined by {@link #addHelp(Table, String, boolean)}.
 	 *
-	 * @param t       The table to add the text to
+	 * @param t       The {@link Table} to add the text to
 	 * @param s       The string to put in
-	 * @return The cell created in the table
+	 * @return The {@link Cell} created in the table
 	 */
 	private Cell addHelp(Table t, String s) {
 		return addHelp(t, s, false);
