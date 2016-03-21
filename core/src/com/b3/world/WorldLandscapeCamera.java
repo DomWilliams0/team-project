@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Matrix4;
 /**
  * A world camera that renders a landscape behind
  * an existing world
+ *
+ * @author dxw405
  */
 public class WorldLandscapeCamera extends WorldCamera {
 

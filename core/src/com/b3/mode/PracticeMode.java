@@ -19,6 +19,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 /**
  * A mode to allow the user to practice what they've learnt by choosing what should be added to the frontier and
  * visited themselves
+ *
+ * @author oxe410
  */
 public class PracticeMode extends Mode {
 

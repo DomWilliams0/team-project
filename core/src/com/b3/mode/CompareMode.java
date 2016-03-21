@@ -20,6 +20,8 @@ import com.badlogic.gdx.math.Vector2;
  * A large scale world with comparison views but no pop-ups or data structue views to allow for users to see the differences
  * between the algorithms
  * Sets up large world, camera, input handler and launches the world paused (forcing / implying step-by-step)
+ *
+ * @author dxw405
  */
 public class CompareMode extends Mode {
 

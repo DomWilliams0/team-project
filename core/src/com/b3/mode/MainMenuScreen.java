@@ -131,8 +131,6 @@ public class MainMenuScreen extends ScreenAdapter {
 		mainMenuStage.act();
 		mainMenuStage.draw();
 
-		renderForeground();
-
 		if (pointTimer != null) {
 			pointTimer.decrementTimer();
 			float rgbColPercent = (float) (pointTimer.getTimer()) / (float) ANIMATION_TIMER;
@@ -150,8 +148,12 @@ public class MainMenuScreen extends ScreenAdapter {
 			}
 		}
 
+		renderForeground();
 	}
 
+	/**
+	 * Renders the foreground and adjusts the positioning of the buttons
+	 */
 	private void renderForeground() {
 		spriteBatch.begin();
 		spriteBatch.draw(spriteForground,

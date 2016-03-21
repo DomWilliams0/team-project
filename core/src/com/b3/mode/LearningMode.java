@@ -15,6 +15,8 @@ import com.b3.search.util.SearchAlgorithm;
 /**
  * A small scale world with step by step views and pop-ups to allow for uneducated 2nd year CS university students to learn about algorithms they should've learnt in year 1.
  * Sets up small world, camera, input handler and launches the world paused (forcing / implying step-by-step)
+ *
+ * @author dxw405 oxe410 nbg481
  */
 public class LearningMode extends Mode {
 	

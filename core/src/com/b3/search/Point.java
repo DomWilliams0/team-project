@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Represents a non-mutable point in 2 dimensions.
+ *
+ * @author dxw405 nbg481
  */
 public class Point implements Comparable<Point> {
 

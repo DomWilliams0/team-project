@@ -18,13 +18,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
+/**
+ * @author oxe410
+ */
 enum Stage {
 	CURRENT_NODE_SELECTION,
 	ADD_TO_FRONTIER_SELECTION,
 	ADD_TO_EXPLORED_SELECTION
 }
 
+/**
+ * @author oxe410
+ */
 public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 	
 	private boolean firstLoadAlert1;

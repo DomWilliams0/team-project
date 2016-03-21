@@ -4,6 +4,7 @@ import com.b3.search.Point;
 
 /**
  * Links a point, or another object to a timer, to allow for animation
+ *
  * @author nbg481
  */
 public class PointTimer {

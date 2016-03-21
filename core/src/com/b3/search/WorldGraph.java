@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * The rendered graph, that holds all running searches
  *
- * @author oxe410 dxw405 nbg481 bxd428
+ * @author nbg481 dxw405 oxe410
  */
 public class WorldGraph {
 	
@@ -337,5 +337,5 @@ public class WorldGraph {
 		return node;
 
 	}
-	
+
 }

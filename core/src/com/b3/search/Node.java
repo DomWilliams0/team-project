@@ -6,6 +6,8 @@ import java.util.TreeMap;
 
 /**
  * Describes a node in a graph
+ *
+ * @author dxw405 nbg481
  */
 public class Node implements Comparable<Node> {
 

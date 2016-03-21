@@ -20,6 +20,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
+/**
+ * A selection handlers, that deals with input into the world
+ * Takes the input and decides what class to call
+ *
+ * @author dxw405 nbg481
+ */
 public class WorldSelectionHandler extends InputAdapter {
 
 	protected static final Vector3 tempRayCast = new Vector3();
@@ -31,6 +37,15 @@ public class WorldSelectionHandler extends InputAdapter {
 		this.currentSelection = new Point(1, 1);
 	}
 
+	/**
+	 * Decides what to do when the user clicks on a place on the scren
+	 *
+	 * @param screenX the x position of the mouse
+	 * @param screenY the y position of the mouse
+	 * @param pointer unused
+	 * @param button the button clicked (left, right or middle)
+     * @return true when click is complete
+     */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		PopupManager popupManager = world.getWorldGUI().getPopupManager();
@@ -121,6 +136,13 @@ public class WorldSelectionHandler extends InputAdapter {
 		return true;
 	}
 
+	/**
+	 * Decides what to do when the mouse is moved on the screen
+	 *
+	 * @param screenX the x position of the mouse
+	 * @param screenY the y position of the mouse
+     * @return
+     */
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		// selecting a tile

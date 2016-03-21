@@ -5,6 +5,8 @@ package com.b3.util;
  *
  * @param <T> The type of the first element.
  * @param <U> The type of the second element.
+ *
+ * @author oxe410
  */
 public class Tuple<T, U> {
 

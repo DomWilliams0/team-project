@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * An instance of a search in progress
  *
- * @author dxw405 bxd428 oxe410 lxd417
+ * @author mainly dxw405, added to by all team
  */
 public class SearchTicker extends Observable {
 

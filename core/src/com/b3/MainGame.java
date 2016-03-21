@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 
 /**
  * Loads the current configuration file and sets up the input handler for the program (onClicks, onMouseOver etc.)
+ *
+ * @author dxw405 (small additions by nbg481 oxe410)
  */
 public class MainGame extends Game {
 

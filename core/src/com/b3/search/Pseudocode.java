@@ -229,7 +229,9 @@ public class Pseudocode extends Observable {
 			}
 			break;
 			case 6: {
-				if (searchTicker.getCurrentNeighbour() != null)
+				if (searchTicker.getMostRecentlyExpanded().getNeighbours() != null)
+					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toString();
+				else if (searchTicker.getCurrentNeighbour() != null)
 					tempText = searchTicker.getCurrentNeighbour().toString();
 				else
 					if (searchTicker.getCurrentNeighbours() != null)
@@ -248,7 +250,7 @@ public class Pseudocode extends Observable {
 				else
 				if (searchTicker.getCurrentNeighbours() != null)
 					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
-				arrayList.set(5, tempText);
+				arrayList.set(5, tempText + ": " + searchTicker.getMostRecentlyExpanded().getNeighbours().toString());
 				arrayList.set(7, tempText);
 			}
 			break;
@@ -258,7 +260,7 @@ public class Pseudocode extends Observable {
 				else
 				if (searchTicker.getCurrentNeighbours() != null)
 					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
-				arrayList.set(5, tempText);
+				arrayList.set(5, tempText + ": " + searchTicker.getMostRecentlyExpanded().getNeighbours().toString());
 				arrayList.set(8, tempText);
 			}
 			break;
