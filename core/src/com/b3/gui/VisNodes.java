@@ -159,7 +159,7 @@ public class VisNodes extends Table {
 		//stop it rendering every frame if we're on play mode
 		//if stepping through, it's safe to update every time the user clicks next
 		if (!stepthrough) {
-			if (updateTimer()) return 0;
+			if (!updateTimer()) return 0;
 		}
 
 		//check whether we need to render a data collection
@@ -214,11 +214,12 @@ public class VisNodes extends Table {
 	/**
 	 * Update the timer and check if enough time has elapsed
 	 *
-	 * @return if enough time has elapsed - true indicates the render should go ahead as planned
+	 * @return <code>true</code> if the render should go ahead as planned
 	 */
 	private boolean updateTimer() {
 		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
 		timer += Utils.TRUE_DELTA_TIME;
+		System.out.println("Timer: " + timer + " | TDT: " + Utils.TRUE_DELTA_TIME);
 
 		//not enough time has elapsed since last tick - do nothing
 		if (timer < timeBetweenTicks)
