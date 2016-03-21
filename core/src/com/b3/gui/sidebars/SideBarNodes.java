@@ -52,7 +52,6 @@ public class SideBarNodes extends SideBar implements Disposable {
 		mode = MainGame.getCurrentMode();
 		initTabs();
 		initComponents();
-		top();
 	}
 
 	/**

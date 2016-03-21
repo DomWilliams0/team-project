@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * An instance of a search in progress
  *
- * @author dxw405 bxd428 oxe410
+ * @author dxw405 bxd428 oxe410 lxd417
  */
 public class SearchTicker extends Observable {
 
@@ -589,10 +589,10 @@ public class SearchTicker extends Observable {
 	/**
 	 * Tell the ticker to resume
 	 * 
-	 * @param searchPauser your identifier, to know when you tell it to resume
+	 * @param searchPauser your identifier, to ensure the ticker only resumes if all pausers have told it to resume
 	 */
 	public void resume(SearchPauser searchPauser) {
-		paused.put(searchPauser, true);
+		paused.put(searchPauser, false);
 
 		setChanged();
 		notifyObservers();

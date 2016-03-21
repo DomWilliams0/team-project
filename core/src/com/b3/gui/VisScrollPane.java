@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * TODO JAVADOC
+ * Represents a {@link ScrollPane} with extra features suited for displaying {@link Node}s.
+ *
  * @author lxd417
  */
 public class VisScrollPane extends ScrollPane {

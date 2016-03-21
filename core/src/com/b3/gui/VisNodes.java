@@ -343,13 +343,6 @@ public class VisNodes extends Table {
 			addLabel("   ");
 			add(spm.getVp()).fill().height(sh).maxHeight(sh);
 			row();
-
-//			//row 5 - note that lowest frontier node is lowest priority
-//			addLabel("--------------------\n" +
-//					"Lowest Priority");
-//			addLabel("");
-//			row();
-
 		} else {
 			addLabel("No search in progress...");
 			row();
@@ -368,6 +361,7 @@ public class VisNodes extends Table {
 		convertNodeReps();
 		stepString = new StringBuilder();
 		formatter = new Formatter(stepString, Locale.UK);
+		//setup basic strings
 		String expandedNode = "I have just expanded the node:\n" +
 				"%s, which is now\n" +
 				"added to the visited set.\n";
@@ -376,10 +370,12 @@ public class VisNodes extends Table {
 				"%s\n";
 		String nextNode = "My next node to expand is\n" +
 				"%s";
+		//replace the %s occurrences in a C printf style
 		formatter.format(expandedNode + "\n" +
 						addedToFrontier + "\n" +
 						nextNode,
 				newVisitedStr, newFrontierStr, highestNodeStr);
+		//display the descriptions
 		addLabel(stepString.toString())
 				.colspan(3).spaceTop(15);
 	}
@@ -428,14 +424,14 @@ public class VisNodes extends Table {
 	}
 
 	/**
-	 * Returns a string representation of newFrontier
+	 * Returns a string representation of <code>newFrontier</code>
 	 * Displays the current priority next to the node.
+	 *
+	 * Makes it clearer in the dynamic description where the node was inserted into the frontier
 	 *
 	 * @return The string to display in the description
 	 */
 	private String convertNewFrontier() {
-		//it can be hard to see where insertion occurs, so note this down in the description.
-
 		String s = "";
 		int i = 0;
 		for (Node node : newFrontier) {
@@ -460,7 +456,7 @@ public class VisNodes extends Table {
 	}
 
 	/**
-	 * Get the coordinates of the node which has been clicked in the scroll panes
+	 * Get the coordinates of the node which has been clicked in the scroll panes.
 	 * Marks it as not updated any more.
 	 *
 	 * @return The clicked nodes coordinates
