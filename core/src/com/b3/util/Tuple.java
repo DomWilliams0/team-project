@@ -3,6 +3,7 @@ package com.b3.util;
 /**
  * Represents a pair of elements.
  *
+ * @author oxe410
  * @param <T> The type of the first element.
  * @param <U> The type of the second element.
  *
