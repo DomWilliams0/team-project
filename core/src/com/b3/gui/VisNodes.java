@@ -333,6 +333,7 @@ public class VisNodes extends Table {
 			//set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
 			float sh;
+			//make the panes smaller if the pseudocode is active, since this takes up a lot of space
 			if (SearchTicker.isInspectingSearch() || world.getWorldGraph().getCurrentSearch().getMode() == ModeType.PRACTICE) {
 				sh = h / 5;
 			} else {
@@ -425,7 +426,7 @@ public class VisNodes extends Table {
 	}
 
 	/**
-	 * Returns a string representation of <code>newFrontier</code>
+	 * Returns a string representation of <code>newFrontier</code>.
 	 * Displays the current priority next to the node.
 	 *
 	 * Makes it clearer in the dynamic description where the node was inserted into the frontier
@@ -457,8 +458,8 @@ public class VisNodes extends Table {
 	}
 
 	/**
-	 * Get the coordinates of the node which has been clicked in the scroll panes.
-	 * Marks it as not updated any more.
+	 * Get the coordinates of the {@link Node} which has been clicked in the scroll panes.
+	 * Marks it as not updated any more i.e. {@link #isClickedUpdated()} will return <code>false</code>.
 	 *
 	 * @return The clicked nodes coordinates
 	 */
@@ -481,8 +482,7 @@ public class VisNodes extends Table {
 	}
 
 	/**
-	 * @return the most recently expanded node, accessed using {@link SearchTicker}; I.E. the more recently expanded
-	 * node 
+	 * @return the most recently expanded node, which was accessed using {@link SearchTicker}
      */
 	public Node getJustExpanded() {
 		return justExpanded;
