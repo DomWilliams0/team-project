@@ -2,6 +2,7 @@ package com.b3.search;
 
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Tuple;
+import com.badlogic.gdx.graphics.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +58,9 @@ public class Pseudocode extends Observable {
 					add(new Tuple<>("[LIGHT_GRAY]visited[].add([PINK]n[])\n", new Tuple<>(false, 1)));
 					add(new Tuple<>("if [PINK]n[] is target:", new Tuple<>(false, 1)));
 					add(new Tuple<>("return constructed path\n", new Tuple<>(false, 2)));
-					add(new Tuple<>("for each node [FIREBRICK]m[] that is adjacent to [PINK]n[]:", new Tuple<>(false, 1)));
-					add(new Tuple<>("if [FIREBRICK]m[] not in [LIGHT_GRAY]visited[] and not in [GREEN]frontier[]:", new Tuple<>(false, 2)));
-					add(new Tuple<>("[GREEN]frontier[].add([FIREBRICK]m[])", new Tuple<>(false, 3)));
+					add(new Tuple<>("for each node [SCARLET]m[] that is adjacent to [PINK]n[]:", new Tuple<>(false, 1)));
+					add(new Tuple<>("if [SCARLET]m[] not in [LIGHT_GRAY]visited[] and not in [GREEN]frontier[]:", new Tuple<>(false, 2)));
+					add(new Tuple<>("[GREEN]frontier[].add([SCARLET]m[])", new Tuple<>(false, 3)));
 				}};
 				break;
 
@@ -71,12 +72,12 @@ public class Pseudocode extends Observable {
 					add(new Tuple<>("[LIGHT_GRAY]visited[].add([PINK]n[])\n", new Tuple<>(false, 1)));
 					add(new Tuple<>("if [PINK]n[] is target:", new Tuple<>(false, 1)));
 					add(new Tuple<>("return constructed path\n", new Tuple<>(false, 2)));
-					add(new Tuple<>("for each node [FIREBRICK]m[] that is adjacent to [PINK]n[]:", new Tuple<>(false, 1)));
+					add(new Tuple<>("for each node [SCARLET]m[] that is adjacent to [PINK]n[]:", new Tuple<>(false, 1)));
 					add(new Tuple<>("tentative_g <- g([PINK]n[]) + edgeCost([PINK]n[], [FIREBRICK]m[])", new Tuple<>(false, 2)));
-					add(new Tuple<>("if tentative_g <= g([FIREBRICK]m[]):", new Tuple<>(false, 2)));
-					add(new Tuple<>("cameFrom.put([FIREBRICK]m[], [PINK]n[])", new Tuple<>(false, 3)));
-					add(new Tuple<>("if [FIREBRICK]m[] not in [LIGHT_GRAY]visited[] and not in [GREEN]frontier[]:", new Tuple<>(false, 3)));
-					add(new Tuple<>("frontier.add([FIREBRICK]m[])", new Tuple<>(false, 4)));
+					add(new Tuple<>("if tentative_g <= g([SCARLET]m[]):", new Tuple<>(false, 2)));
+					add(new Tuple<>("cameFrom.put([SCARLET]m[], [PINK]n[])", new Tuple<>(false, 3)));
+					add(new Tuple<>("if [SCARLET]m[] not in [LIGHT_GRAY]visited[] and not in [GREEN]frontier[]:", new Tuple<>(false, 3)));
+					add(new Tuple<>("frontier.add([SCARLET]m[])", new Tuple<>(false, 4)));
 				}};
 				break;
 		}
