@@ -1,10 +1,13 @@
 package com.b3.gui;
 
+import com.b3.MainGame;
 import com.b3.gui.components.LabelComponent;
+import com.b3.mode.ModeType;
 import com.b3.search.Pseudocode;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Tuple;
 import com.b3.util.Utils;
+import com.b3.world.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -124,12 +127,12 @@ public class PseudocodeVisualiser extends Table implements Observer {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					System.out.println("CLICKED LINE: " + lineForListener);
-//					if (lineForListener != 4 && lineForListener != 0) {
+					if (lineForListener != 4 && lineForListener != 0 && MainGame.getCurrentMode() == ModeType.LEARNING) {
 						Tuple<String, String> replacement = pseudocode.getImportantInfo(lineForListener);
 						String currentText = label.getText().toString();
 						String newText = parseAndChange(currentText, replacement.getFirst(), replacement.getSecond());
 						label.setText(newText);
-//					}
+					}
 					return super.touchDown(event, x, y, pointer, button);
 				}
 			});
@@ -146,6 +149,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 	private String parseAndChange(String currentText, String toReplaceWith, String itemToReplace) {
 		if (toReplaceWith.equals("") || toReplaceWith.equals(" "))
 			toReplaceWith = "NULL";
+
 		if (toReplaceWith.equals("+"))
 			return currentText;
 
@@ -157,7 +161,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 		tempchange = tempchange.replace("frotier", "frontier");
 		tempchange = tempchange.replace("fro"+toReplaceWith+"tier", "frontier");
 		tempchange = tempchange.replace("ca"+toReplaceWith+"eFro"+toReplaceWith, "cameFrom");
-		tempchange = tempchange.replace("retur", "return");
+		tempchange = tempchange.replace("return", "return");
 		//Update conflics for DFS
 
 		return tempchange;
