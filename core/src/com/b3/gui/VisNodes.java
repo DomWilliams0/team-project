@@ -238,10 +238,10 @@ public class VisNodes extends Table {
 
 	 * Set a background colour for a cell in the scrollpanes based on the node.
 	 *
-	 * @param n               The node to highlight
-	 * @param c               The colour to set
-	 * @param singleHighlight whether this is to be the only highlighted node
-	 * @return whether the colour was successful
+	 * @param n               The {@link Node} to highlight
+	 * @param c               The {@link Color} to set
+	 * @param singleHighlight <code>true</code> if this is to be the only highlighted node
+	 * @return <code>true</code> the colour was successful
 	 */
 	public boolean setCellColour(Node n, Color c, boolean singleHighlight) {
 
@@ -249,12 +249,12 @@ public class VisNodes extends Table {
 	}
 
     /**
-     * Set a background colour for a cell in the scrollpanes based on the node.
+     * Set a background colour for a cell in the scrollpanes based on the {@link Node}.
      * The colour will match the colour of the node in the world.
      *
-     * @param n The node to highlight
-     * @param singleHighlight whether this is to be the only highlighted node
-     * @return whether the cell was coloured
+     * @param n The {@link Node} to highlight
+     * @param singleHighlight <code>true</code> if this is to be the only highlighted node
+     * @return <code>true</code> if the cell was successfully coloured
      */
     public boolean setCellColour(Node n, boolean singleHighlight) {
         //singleHighlight tells us if this is the only node to be highlighted,
@@ -297,8 +297,8 @@ public class VisNodes extends Table {
 	 * Adds the cells and rows required to make the table.
 	 * Nothing further needs be performed after calling this, add data to vt and ft
 	 *
-	 * @param alg        The search algorithm being used by the search
-	 * @param rendermore Whether the data collections are being rendered
+	 * @param alg        The {@link SearchAlgorithm} being used by the search
+	 * @param rendermore <code>true</code> if the data collections are being rendered
 	 */
 	private void setupTable(SearchAlgorithm alg, boolean rendermore) {
 		//clear the tables
