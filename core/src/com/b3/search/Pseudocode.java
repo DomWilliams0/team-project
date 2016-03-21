@@ -22,6 +22,7 @@ public class Pseudocode extends Observable {
 	private SearchAlgorithm algorithm;
 	private List<Tuple<String, Tuple<Boolean, Integer>>> lines;
 	private int currentLine;
+	private String firstFrontier;
 
 	/**
 	 * Constructs a new pseudocode
@@ -53,12 +54,12 @@ public class Pseudocode extends Observable {
 				lines = new ArrayList<Tuple<String, Tuple<Boolean, Integer>>>() {{
 					add(new Tuple<>("while [GREEN]frontier[] is not empty:", new Tuple<>(false, 0)));
 					add(new Tuple<>("[PINK]n[] <- [GREEN]frontier[].take()\n", new Tuple<>(false, 1)));
-					add(new Tuple<>("[LIGHT_GRAY]visited[].add(n)\n", new Tuple<>(false, 1)));
+					add(new Tuple<>("[LIGHT_GRAY]visited[].add([PINK]n[])\n", new Tuple<>(false, 1)));
 					add(new Tuple<>("if [PINK]n[] is target:", new Tuple<>(false, 1)));
 					add(new Tuple<>("return constructed path\n", new Tuple<>(false, 2)));
 					add(new Tuple<>("for each node [FIREBRICK]m[] that is adjacent to [PINK]n[]:", new Tuple<>(false, 1)));
 					add(new Tuple<>("if [FIREBRICK]m[] not in [LIGHT_GRAY]visited[] and not in [GREEN]frontier[]:", new Tuple<>(false, 2)));
-					add(new Tuple<>("[GREEN]frontier[].add(m)", new Tuple<>(false, 3)));
+					add(new Tuple<>("[GREEN]frontier[].add([FIREBRICK]m[])", new Tuple<>(false, 3)));
 				}};
 				break;
 
@@ -184,31 +185,23 @@ public class Pseudocode extends Observable {
 	private String updateForDepthFirst(int i) {
 		String tempText = "";
 		switch (i) {
-			case 2: {
+			case 1: {
 				if (searchTicker.getFrontier() != null)
 					if (searchTicker.getFrontier().size() >0)
-						tempText = searchTicker.getFrontier().peek().toString();
-				else
-					tempText = searchTicker.getStart().toString();
-				arrayList.set(1, tempText);
+						firstFrontier = searchTicker.getFrontier().peek().toString();
+
+			}
+			case 2: {
+				arrayList.set(1, firstFrontier);
 			}
 			break;
 			case 3: {
-				if (searchTicker.getFrontier() != null)
-					if (searchTicker.getFrontier().size() >0)
-						tempText = searchTicker.getFrontier().peek().toString();
-				else
-					tempText = searchTicker.getStart().toString();
-				arrayList.set(2, tempText);
+
+				arrayList.set(2, firstFrontier);
 			}
 			break;
 			case 4: {
-				if (searchTicker.getFrontier() != null)
-					if (searchTicker.getFrontier().size() >0)
-						tempText = searchTicker.getFrontier().peek().toString();
-				else
-					tempText = searchTicker.getStart().toString();
-				arrayList.set(3, tempText);
+				arrayList.set(3, firstFrontier);
 			}
 			break;
 			case 6: {
