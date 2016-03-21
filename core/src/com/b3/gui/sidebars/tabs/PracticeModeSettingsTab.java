@@ -36,9 +36,6 @@ public class PracticeModeSettingsTab extends Tab {
 	public PracticeModeSettingsTab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
 		super(skin, font, preferredWidth, parent, data);
 
-		tab.setFillParent(true);
-		tab.pad(20);
-
 		// ======================
 		// === LABELS AND STU ===
 		// ======================

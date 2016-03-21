@@ -25,6 +25,8 @@ public abstract class Tab {
 	 */
 	public Tab(Skin skin, BitmapFont font, float preferredWidth, SideBar parent, Map<String, Object> data) {
 		tab = new Table();
+		tab.setFillParent(true);
+		tab.pad(20);
 	}
 
 	/**

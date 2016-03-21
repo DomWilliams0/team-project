@@ -42,10 +42,6 @@ public class LearningModeSettingsTab extends Tab {
 		// Extract data
 		World world = (World) data.get("world");
 
-		tab = new Table();
-		tab.setFillParent(true);
-		tab.pad(20);
-
 		skin.add("default", font, BitmapFont.class);
 
 		// Flat buildings checkbox

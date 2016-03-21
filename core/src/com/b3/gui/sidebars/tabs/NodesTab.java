@@ -45,9 +45,6 @@ public class NodesTab extends Tab {
 		World world = (World) data.get("world");
 		Stage stage = (Stage) data.get("stage");
 
-		tab.setFillParent(true);
-		//tab.pad(20);
-
 		// Create the data table which will display the nodes
 		Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 		skin.add("default", labelStyle);

@@ -41,9 +41,6 @@ public class CompareModeSettingsTab extends Tab {
 		// Extract data
 		World world = (World) data.get("world");
 
-		tab.setFillParent(true);
-		tab.pad(20);
-
 		skin.add("default", font, BitmapFont.class);
 
 		// Show grid checkbox

@@ -37,7 +37,7 @@ public class SideBarNodes extends SideBar implements Disposable {
 	 * @param world the {@link World} that this sidebar is linked to
 	 */
 	public SideBarNodes(Stage stage, World world) {
-		this(stage, world, 460);
+		this(stage, world, 480);
 	}
 
 	/**
