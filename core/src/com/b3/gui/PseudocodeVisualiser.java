@@ -123,12 +123,13 @@ public class PseudocodeVisualiser extends Table implements Observer {
                  */
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					if (pseudocode.getAlgorithm() == SearchAlgorithm.A_STAR && lineForListener != 4 && lineForListener != 0) {
+					System.out.println("CLICKED LINE: " + lineForListener);
+//					if (lineForListener != 4 && lineForListener != 0) {
 						Tuple<String, String> replacement = pseudocode.getImportantInfo(lineForListener);
 						String currentText = label.getText().toString();
 						String newText = parseAndChange(currentText, replacement.getFirst(), replacement.getSecond());
 						label.setText(newText);
-					}
+//					}
 					return super.touchDown(event, x, y, pointer, button);
 				}
 			});
@@ -145,16 +146,19 @@ public class PseudocodeVisualiser extends Table implements Observer {
 	private String parseAndChange(String currentText, String toReplaceWith, String itemToReplace) {
 		if (toReplaceWith.equals("") || toReplaceWith.equals(" "))
 			toReplaceWith = "NULL";
+		if (toReplaceWith.equals("+"))
+			return currentText;
 
 		if (itemToReplace.equals("-"))
 			return toReplaceWith;
 
-		//with space after; for " n = "...
+		//Update conflics for A*
 		String tempchange = currentText.replace(itemToReplace, toReplaceWith);
 		tempchange = tempchange.replace("frotier", "frontier");
 		tempchange = tempchange.replace("fro"+toReplaceWith+"tier", "frontier");
 		tempchange = tempchange.replace("ca"+toReplaceWith+"eFro"+toReplaceWith, "cameFrom");
 		tempchange = tempchange.replace("retur", "return");
+		//Update conflics for DFS
 
 		return tempchange;
 	}

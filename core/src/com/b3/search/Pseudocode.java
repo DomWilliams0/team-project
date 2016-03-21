@@ -154,6 +154,8 @@ public class Pseudocode extends Observable {
      */
 	private void updateLines(int i) {
 
+		System.out.println("CURRENT LINE " + i);
+
 		if (arrayList == null) {
 			arrayList = new ArrayList<>(20);
 			for (int j = 0; j < 20; j++) {
@@ -163,19 +165,15 @@ public class Pseudocode extends Observable {
 			if (arrayList.size() >= i)
 				switch (algorithm) {
 					case A_STAR:
-					{
 						updateForAStar(i);
 						break;
-					}
 					case BREADTH_FIRST:
-					{
-						updateForBreathFirst(i);
-					}
-					case DEPTH_FIRST:
-					{
+//						updateForBreathFirst(i);
 						updateForDepthFirst(i);
-					}
-
+						break;
+					case DEPTH_FIRST:
+						updateForDepthFirst(i);
+						break;
 				}
 		}
 	}
@@ -184,14 +182,68 @@ public class Pseudocode extends Observable {
 	 * TODO
      */
 	private String updateForDepthFirst(int i) {
-		return null;
+		String tempText = "";
+		switch (i) {
+			case 2: {
+				if (searchTicker.getFrontier() != null)
+					if (searchTicker.getFrontier().size() >0)
+						tempText = searchTicker.getFrontier().peek().toString();
+				else
+					tempText = searchTicker.getStart().toString();
+				arrayList.set(1, tempText);
+			}
+			break;
+			case 3: {
+				if (searchTicker.getFrontier() != null)
+					if (searchTicker.getFrontier().size() >0)
+						tempText = searchTicker.getFrontier().peek().toString();
+				else
+					tempText = searchTicker.getStart().toString();
+				arrayList.set(2, tempText);
+			}
+			break;
+			case 4: {
+				if (searchTicker.getFrontier() != null)
+					if (searchTicker.getFrontier().size() >0)
+						tempText = searchTicker.getFrontier().peek().toString();
+				else
+					tempText = searchTicker.getStart().toString();
+				arrayList.set(3, tempText);
+			}
+			break;
+			case 6: {
+				if (searchTicker.getMostRecentlyExpanded().getNeighbours() != null)
+					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toString();
+				arrayList.set(5, tempText);
+			}
+			break;
+			case 7: {
+				if (searchTicker.getCurrentNeighbour() != null)
+					tempText = searchTicker.getCurrentNeighbour().toString();
+				arrayList.set(6, tempText);
+
+				if (searchTicker.getMostRecentlyExpanded().getNeighbours() != null)
+					arrayList.set(5, tempText + " : " + searchTicker.getMostRecentlyExpanded().getNeighbours().toString());
+			}
+			break;
+			case 8: {
+				if (searchTicker.getCurrentNeighbour() != null)
+					tempText = searchTicker.getCurrentNeighbour().toString();
+				arrayList.set(7, tempText);
+			}
+			break;
+		}
+
+		for (int j = i+1; j < arrayList.size(); j++)
+			arrayList.set(j, "");
+
+		return tempText;
 	}
 
 	/**
 	 * TODO
      */
 	private String updateForBreathFirst(int i) {
-
 		return null;
 	}
 
@@ -298,15 +350,30 @@ public class Pseudocode extends Observable {
 			return null;
 		}
 
-		String replacement;
-		if (i <= 4)
-			replacement = "n";
-		else if (i == 5)
-			replacement = "m";
-		else if (i >= 7)
-			replacement = "m";
-		else
-			replacement = "-";
+		String replacement = "";
+		if (algorithm == SearchAlgorithm.A_STAR) {
+			if (i <= 4)
+				replacement = "n";
+			else if (i == 5)
+				replacement = "m";
+			else if (i >= 7)
+				replacement = "m";
+			else
+				replacement = "-";
+			if (i == 4 || i == 0)
+				replacement = "+";
+		} else if (algorithm == SearchAlgorithm.DEPTH_FIRST || algorithm == SearchAlgorithm.BREADTH_FIRST) {
+			if (i <= 4)
+				replacement = "n";
+			else if (i == 5)
+				replacement = "m";
+			else if (i >= 7)
+				replacement = "m";
+			else
+				replacement = "m";
+			if (i == 4 || i == 0)
+				replacement = "+";
+		}
 
 		return new Tuple<String, String>(arrayList.get(i), replacement);
 	}
