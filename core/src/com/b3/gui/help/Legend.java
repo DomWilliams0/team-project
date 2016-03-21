@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
- * Provides an explanation of what colours in the software mean
- * i.e. the colours used to display the nodes or highlight in the sidebar.
- * This legend cannot be altered besides changing the colours in WorldGraph
+ * Provides an explanation of what colours in the simulation mean
+ * i.e. the colours used to display the nodes or highlight in the {@link com.b3.gui.VisScrollPane}s.
+ * This {@link Legend} cannot be altered besides changing the colours in {@link WorldGraphRenderer}
  * <p>
  * @author lxd417
  */
@@ -24,9 +24,9 @@ public class Legend extends Table {
 	private Skin skin;
 
 	/**
-	 * Create a new legend, using a given skin
+	 * Create a new {@link Legend}, using a given {@link Skin}
 	 *
-	 * @param skin The skin with which to render this legend.
+	 * @param skin The {@link Skin} with which to render this {@link Legend}.
 	 */
 	public Legend(Skin skin) {
 		super(skin);
@@ -39,7 +39,7 @@ public class Legend extends Table {
 	}
 
 	/**
-	 * Initialise the components of this legend
+	 * Initialise the components of this {@link Legend}
 	 * Populate it with data.
 	 */
 	private void initComponents() {
@@ -64,11 +64,11 @@ public class Legend extends Table {
 	}
 
 	/**
-	 * Add text to this table, highlighted in a given colour.
-	 * Also adds a row to the table.
+	 * Add text to this {@link Table}, highlighted in a given {@link Color}.
+	 * Also adds a {@link Table#row()} to this table.
 	 *
 	 * @param text The text to display
-	 * @param c    The colour to highlight the text in
+	 * @param c    The colour in which to highlight the text
 	 */
 	private void addLegend(String text, Color c) {
 		//set the colour

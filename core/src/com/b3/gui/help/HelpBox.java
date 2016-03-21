@@ -9,16 +9,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 /**
- * Provides help for the user based on the mode of the simulation.
+ * Provides help for the user based on the {@link com.b3.mode.ModeType} of the simulation.
  * Gives instructions on how the mode can be used and interacted with
- * And a legend to explain meaning of colours.
+ * And a {@link Legend} to explain meaning of colours.
  * <p>
  * @author lxd417
  */
@@ -40,8 +39,11 @@ public class HelpBox extends Table {
 			"such as simulation speed and search speed.\n" +
 			"You can also play/pause the search here.";
 
-	public HelpBox(Stage stage) {
-		Stage stage1 = stage;
+	/**
+	 * Create a new {@link HelpBox}.
+	 * Bases its text on the current {@link com.b3.mode.ModeType} in {@link MainGame#getCurrentMode()}
+	 */
+	public HelpBox() {
 		switch (MainGame.getCurrentMode()) {
 			case LEARNING:
 				preferredHeight = 390;
@@ -85,7 +87,7 @@ public class HelpBox extends Table {
 				setupCM();
 				break;
 			case PRACTICE:
-				setupTY();
+				setupPM();
 				break;
 		}
 
@@ -129,8 +131,6 @@ public class HelpBox extends Table {
 	 * Setup the help box for {@link com.b3.mode.LearningMode}.
 	 */
 	private void setupLM() {
-		//todo this could probably be improved design-wise...
-
 		addHelp(this, "This mode is to learn about a specific search algorithm in depth, in a small, focused world.", true)
 				.colspan(5);
 
@@ -197,9 +197,7 @@ public class HelpBox extends Table {
 	/**
 	 * Setup the help box for {@link com.b3.mode.PracticeMode}.
 	 */
-	private void setupTY() {
-		//todo part of this is incorrect ie interacting with world nodes
-		//todo not to worry atm though since help box inactive in this mode currently
+	private void setupPM() {
 		addHelp(this, "This mode is to practice your knowledge in a small, focused world", true)
 				.colspan(5);
 
@@ -240,7 +238,7 @@ public class HelpBox extends Table {
 	 * @return The cell created in the table
 	 */
 	private Cell addHelp(Table t, String s, boolean isTitle) {
-		Color c = isTitle ? Color.WHITE : Color.BLACK;
+		Color c = isTitle ? Color.WHITE : Color.CYAN;
 		int size = isTitle ? 20 : 16;
 		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", size, s, c);
 		return t.add(lbl.getComponent());
@@ -248,6 +246,7 @@ public class HelpBox extends Table {
 
 	/**
 	 * Adds some help text to the given table, in a label component formatted in the appropriate way
+	 * Assumes the text is not a title as defined by {@link #addHelp(Table, String, boolean)}.
 	 *
 	 * @param t       The table to add the text to
 	 * @param s       The string to put in

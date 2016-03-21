@@ -134,7 +134,7 @@ public abstract class Mode extends ScreenAdapter {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				// help popup
-				HelpBox helpBox = new HelpBox(menuStage);
+				HelpBox helpBox = new HelpBox();
 
 				MessageBoxComponent messageBoxComponent = new MessageBoxComponent(menuStage, helpBox);
 				messageBoxComponent.show();
