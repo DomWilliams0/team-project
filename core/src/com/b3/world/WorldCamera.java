@@ -24,8 +24,6 @@ public class WorldCamera extends PerspectiveCamera {
 	private TiledMapRenderer renderer;
 	protected final TiledMap map;
 
-	// todo redo camera restriction
-
 	/**
 	 * @param fieldOfViewY The field of view of the height, in degrees, the field of view for
 	 *                     the width will be calculated according to the aspect ratio.

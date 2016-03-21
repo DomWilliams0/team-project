@@ -178,10 +178,10 @@ public class WorldGUI {
 	 * camera.
 	 */
 	private float getZoomScalar() {
+		//TODO Dom remove config
 		if (Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) != 45)
 			System.err.println("Set max zoom in userconfig to 45, zoom only works with this so far...");
 
-		//TODO make it work for different max zooms
 		WorldCamera worldCamera = world.getWorldCamera();
 		float zoomScalar = worldCamera.getCurrentZoom();
 

@@ -25,7 +25,6 @@ public class DebugRenderer {
 	public DebugRenderer(World world) {
 		this.world = world;
 		spriteBatch = new SpriteBatch();
-		// todo box2d scale
 		renderer = new Box2DDebugRenderer();
 	}
 

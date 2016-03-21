@@ -185,7 +185,6 @@ public class HelpBox extends Table {
 		worldNodesT.row().row();
 		addHelp(worldNodesT,
 				"Hover over a node to display its coordinates."
-				//todo anything more??
 		);
 
 		sidebarsT = new Table(getSkin());

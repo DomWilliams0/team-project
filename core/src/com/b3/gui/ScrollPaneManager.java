@@ -14,7 +14,6 @@ import java.util.List;
  * These are managed internally as {@link VisScrollPane}s.
  *
  * @author lxd417
- * TODO JAVADOC
  */
 public class ScrollPaneManager {
 

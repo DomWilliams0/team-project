@@ -101,8 +101,6 @@ public class CompareMode extends Mode {
 		if (!allArrived)
 			return;
 
-		// todo user selects with mouse
-
 		graph.clearAllSearches();
 		Node nextTarget = world.getWorldGraph().getRandomNode();
 

@@ -173,7 +173,7 @@ public class LearningModeSettingsTab extends Tab {
 
 		LabelComponent labelNextSearch = new LabelComponent(skin, "The next search will use:", Color.BLACK);
 
-		Object[] searches = SearchAlgorithm.allNames().toArray(); // TODO - Not badly done with Object[].
+		Object[] searches = SearchAlgorithm.allNames().toArray();
 		SelectBoxComponent searchSelectBox = new SelectBoxComponent(skin, font, new Array(searches));
 		searchSelectBox.setSelected(searches[0]);
 

@@ -48,7 +48,7 @@ public class ModelController {
 	 * @param flipped      Whether the model's texture is flipped.
 	 */
 	public ModelController(String modelName, ModelManager modelManager, boolean flipped) {
-		this.flipped = flipped; // TODO - flipped should be fetched from a file with the model.
+		this.flipped = flipped;
 		setPositionAndRotation(0, 0, 0, 0);
 
 		modelManager.requestModel(this, modelName, (transform) -> {

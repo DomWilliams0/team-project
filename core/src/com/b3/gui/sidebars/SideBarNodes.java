@@ -24,10 +24,6 @@ import java.util.Map;
  */
 public class SideBarNodes extends SideBar implements Disposable {
 
-	/**
-	 * TODO - Should use non-static {@link #isOpen()}.
-	 */
-	public static boolean s_isOpen;
 	private ModeType mode;
 
 	/**
@@ -166,24 +162,6 @@ public class SideBarNodes extends SideBar implements Disposable {
 	 */
 	public Point getNewClick() {
 		return ((NodesTab) tabs.get("Nodes")).getUI().getClickedNode();
-	}
-
-	/**
-	 * Opens the sidebar
-	 */
-	@Override
-	public void open() {
-		super.open();
-		s_isOpen = true;
-	}
-
-	/**
-	 * Closes the sidebar
-	 */
-	@Override
-	public void close() {
-		super.close();
-		s_isOpen = false;
 	}
 
 	/**

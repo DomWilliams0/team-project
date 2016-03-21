@@ -394,7 +394,6 @@ public class PopupDescription {
 					//MULTI PAGE DONE if already expanded
 					if (currentSearch.getVisited().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
 						if (pageNo >= fullyExploredSprite.length) pageNo = 0; //reset to first page if necessary
-						//TODO Put some info around the screen somewhere
 						spriteBatch.draw(fullyExploredSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
 								(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 

@@ -79,7 +79,7 @@ public class World implements Disposable {
 	 * Creates a new world, for testing purposes only
 	 */
 	public World() {
-		// todo srsly unsafe
+		// TODO BEN get this out of here
 	}
 
 	/**
@@ -103,7 +103,6 @@ public class World implements Disposable {
 		buildings = new ArrayList<>();
 		buildingCache = new BuildingModelCache();
 
-		// todo shadows
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
@@ -168,7 +167,6 @@ public class World implements Disposable {
 			boolean cutLayer = layer.getName().equals("cut");
 
 			// remove nodes on invalid tiles
-			// todo assign costs to edges
 			for (int y = 0; y < tileLayer.getHeight(); y++) {
 				for (int x = 0; x < tileLayer.getWidth(); x++) {
 					TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
@@ -413,7 +411,7 @@ public class World implements Disposable {
 
 			buildingBody.createFixture(buildingDef);
 
-			shape.dispose(); // todo reuse shape and fixture for all buildings
+			shape.dispose();
 		}
 
 		worldGraph.addBuilding(building);
@@ -587,7 +585,6 @@ public class World implements Disposable {
 	 *
 	 * @param positionDeletion the coordinate as a {@link Vector2} to delete the building from
 	 */
-	//TODO make it so don't have to click in bottom left corner
 	public void removeBuilding(Vector2 positionDeletion) {
 		for (int i = 0; i < buildings.size(); i++) {
 			if (buildings.get(i).getTilePosition().equals(positionDeletion)) {

@@ -59,7 +59,7 @@ public class PracticeModeSettingsTab extends Tab {
 				.allNames()
 				.stream()
 				.filter(name -> SearchAlgorithm.fromName(name) == SearchAlgorithm.DEPTH_FIRST || SearchAlgorithm.fromName(name) == SearchAlgorithm.BREADTH_FIRST)
-				.toArray(); // TODO - Not badly done with Object[].
+				.toArray();
 		SelectBoxComponent searchSelectBox = new SelectBoxComponent(skin, font, new Array(searches));
 		searchSelectBox.setSelected(searches[0]);
 

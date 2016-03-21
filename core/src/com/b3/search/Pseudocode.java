@@ -2,7 +2,6 @@ package com.b3.search;
 
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Tuple;
-import com.badlogic.gdx.graphics.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,19 +170,19 @@ public class Pseudocode extends Observable {
 						break;
 					case BREADTH_FIRST:
 //						updateForBreathFirst(i);
-						updateForDepthFirst(i);
+						updateForDFSandBFS(i);
 						break;
 					case DEPTH_FIRST:
-						updateForDepthFirst(i);
+						updateForDFSandBFS(i);
 						break;
 				}
 		}
 	}
 
 	/**
-	 * TODO
+	 * TODO Javadoc
      */
-	private String updateForDepthFirst(int i) {
+	private String updateForDFSandBFS(int i) {
 		String tempText = "";
 		switch (i) {
 			case 1: {
@@ -232,13 +231,6 @@ public class Pseudocode extends Observable {
 			arrayList.set(j, "");
 
 		return tempText;
-	}
-
-	/**
-	 * TODO
-     */
-	private String updateForBreathFirst(int i) {
-		return null;
 	}
 
 	/**

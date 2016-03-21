@@ -153,7 +153,7 @@ public class TmxMapLoaderBasic extends TmxMapLoader {
 				props.put("margin", margin);
 				props.put("spacing", spacing);
 
-				int stopWidth = 628 - tilewidth; // TODO - Should really get the legit numbers not faked.
+				int stopWidth = 628 - tilewidth;
 				int stopHeight = 475 - tileheight;
 
 				int id = firstgid;
