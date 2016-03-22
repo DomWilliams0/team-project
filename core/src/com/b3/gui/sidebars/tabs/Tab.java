@@ -49,13 +49,13 @@ public abstract class Tab {
 
 	/**
 	 * Add a component to the tab
-	 * @param component The component to add
-	 * @param alignment Component alignment
-	 * @param preferredWidth The preferred width
-	 * @param spaceTop Top spacing
-	 * @param spaceRight Right spacing
-	 * @param spaceBottom Bottom spacing
-     * @param spaceLeft Left spacing
+	 * @param component 		The component to add
+	 * @param alignment 		Component alignment
+	 * @param preferredWidth 	The preferred width
+	 * @param spaceTop 			Top spacing
+	 * @param spaceRight 		Right spacing
+	 * @param spaceBottom 		Bottom spacing
+     * @param spaceLeft 		Left spacing
      */
 	public void addComponent(GUIComponent component, int alignment, float preferredWidth, float spaceTop, float spaceRight, float spaceBottom, float spaceLeft) {
 		tab.add(component.getComponent())
