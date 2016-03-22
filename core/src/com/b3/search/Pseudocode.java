@@ -155,8 +155,6 @@ public class Pseudocode extends Observable {
      */
 	private void updateLines(int i) {
 
-		System.out.println("CURRENT LINE " + i);
-
 		if (arrayList == null) {
 			arrayList = new ArrayList<>(20);
 			for (int j = 0; j < 20; j++) {
