@@ -155,7 +155,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
      */
 	private String parseAndChange(String currentText, String toReplaceWith, String itemToReplace) {
 		if (toReplaceWith.equals("") || toReplaceWith.equals(" "))
-			toReplaceWith = "NULL";
+			return currentText;
 
 		if (toReplaceWith.equals("+"))
 			return currentText;
