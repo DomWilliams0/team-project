@@ -49,7 +49,7 @@ public class TutorialPopups {
 				+ '\n' + "a high cost one by a [RED]red line[]" + '\n'
 				+ "The end node is represented by a [BLUE]blue diamond[]" + '\n'
 				+ "The start node is the [BLUE]blue node[] with a [ORANGE]orange circle[] around it,"
-				+ '\n' + "[LIGHT_GRAY]click on this to continue[]";
+				+ '\n' + "[LIGHT_GRAY]click on the start node to continue[]";
 		tutorialText[2] = "Open the left hand sidebar by"
 				+ '\n' + "[LIGHT_GRAY]clicking the arrow to the left[]";
 		tutorialText[3] = "[LIGHT_GRAY]Press play[] to start A* search"
