@@ -183,6 +183,11 @@ public abstract class Mode extends ScreenAdapter {
 		// world rendering
 		world.render();
 
+		// menu rendering
+		menu.render();
+		menuStage.act();
+		menuStage.draw();
+
 		// sidebar rendering
 		sideBarStage.act(Utils.TRUE_DELTA_TIME);
 		if (sideBarNodes != null) {
@@ -213,10 +218,7 @@ public abstract class Mode extends ScreenAdapter {
 		}
 		sideBarStage.draw();
 
-		// menu rendering
-		menu.render();
-		menuStage.act();
-		menuStage.draw();
+
 
 		tick();
 
