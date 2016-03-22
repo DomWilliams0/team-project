@@ -27,7 +27,7 @@ public class WorldGraphRenderer {
 	private static final Color NODE_COLOUR = Color.DARK_GRAY;
 	private static final Color SEARCH_EDGE_COLOUR = Color.YELLOW;
 	private static final Color CURRENT_NEIGHBOUR_COLOUR = Color.YELLOW;
-	private static final Color CURRENT_NEIGHBOURS_COLOUR = Color.FIREBRICK;
+	private static final Color CURRENT_NEIGHBOURS_COLOUR = Color.SKY;
 
 	private static final float NODE_RADIUS = 0.10f;
 	private static final Color BORDER_COLOUR = Color.BLACK;
@@ -56,7 +56,7 @@ public class WorldGraphRenderer {
 		this.shapeRenderer = null; // must be initialised with initRenderer()
 		finishedInitialAnimation = false;
 
-		colPath = SEARCH_EDGE_COLOUR;
+		colPath = new Color(SEARCH_EDGE_COLOUR);
 	}
 
 	/**
