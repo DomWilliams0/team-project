@@ -29,6 +29,7 @@ public class NodesTab extends Tab {
 	private Table pseudocodeTable;
 	private VisNodes ui;
 	private ButtonComponent nextBtn;
+	private int size;
 
 	/**
 	 * Create a {@link NodesTab} object
@@ -54,6 +55,7 @@ public class NodesTab extends Tab {
 		pseudocodeTable = new Table();
 
 		PseudocodeVisualiser pseudocodeVisualiser = PseudocodeVisualiser.getInstance(skin);
+		pseudocodeVisualiser.setNodesTab(this);
 		pseudocodeTable.add(pseudocodeVisualiser).row();
 
 		// Next button
@@ -62,6 +64,7 @@ public class NodesTab extends Tab {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
+				size = 0;
 				ticker.tick(true);
 			}
 		});
@@ -94,5 +97,12 @@ public class NodesTab extends Tab {
 			tab.removeActor(pseudocodeTable);
 		}
 	}
-	
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+	public int getSize() {
+		return size;
+	}
 }

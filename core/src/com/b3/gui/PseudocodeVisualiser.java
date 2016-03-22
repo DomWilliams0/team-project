@@ -2,12 +2,14 @@ package com.b3.gui;
 
 import com.b3.MainGame;
 import com.b3.gui.components.LabelComponent;
+import com.b3.gui.sidebars.tabs.NodesTab;
 import com.b3.mode.ModeType;
 import com.b3.search.Pseudocode;
 import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Tuple;
 import com.b3.util.Utils;
 import com.b3.world.World;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,6 +40,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 	private BitmapFont font;
 	private Pixmap pixmap;
 	private Table pseudocodeTable;
+	private NodesTab nodesTab;
 
 	/**
 	 * Creates the default {@link PseudocodeVisualiser} object
@@ -131,6 +134,10 @@ public class PseudocodeVisualiser extends Table implements Observer {
 						Tuple<String, String> replacement = pseudocode.getImportantInfo(lineForListener);
 						String currentText = label.getText().toString();
 						String newText = parseAndChange(currentText, replacement.getFirst(), replacement.getSecond());
+						System.out.println(replacement.getSecond());
+						if (replacement.getFirst().length() > 11 && !replacement.getSecond().equals("-")) {
+							nodesTab.setSize(replacement.getFirst().length() * 10);
+						}
 						label.setText(newText);
 					}
 					return super.touchDown(event, x, y, pointer, button);
@@ -166,5 +173,9 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
 		return tempchange;
 	}
-	
+
+	public void setNodesTab(NodesTab nodesTab) {
+		this.nodesTab = nodesTab;
+	}
+
 }

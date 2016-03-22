@@ -282,8 +282,13 @@ public class Pseudocode extends Observable {
 			}
 			break;
 			case 7: {
-				tempText = searchTicker.getTentative_gString().toString();
-				arrayList.set(6, tempText);
+				if (searchTicker.getMostRecentlyExpanded() != null && searchTicker.getCurrentNeighbour() != null) {
+					Node mostRecentExpand = searchTicker.getMostRecentlyExpanded();
+					float gxFunction = searchTicker.getG(mostRecentExpand);
+					float cost = mostRecentExpand.getEdgeCost(searchTicker.getCurrentNeighbour());
+					float total = cost + gxFunction;
+					arrayList.set(6, total + " = " + cost + " + " + gxFunction);
+				}
 			}
 			break;
 			case 8: {

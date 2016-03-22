@@ -9,6 +9,7 @@ import com.b3.search.Point;
 import com.b3.search.SearchPauser;
 import com.b3.search.SearchTicker;
 import com.b3.world.World;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
@@ -180,6 +181,14 @@ public class SideBarNodes extends SideBar implements Disposable {
 			nodesTab.setPseudocodeVisible(false);
 		}
 		nodesTab.getUI().render(currentSearch);
+
+		if (isOpen) {
+			setSize(preferredWidth + nodesTab.getSize(), Gdx.graphics.getHeight());
+			setX(Gdx.graphics.getWidth() - preferredWidth - nodesTab.getSize());
+		} else {
+			setSize(preferredWidth, Gdx.graphics.getHeight());
+		}
+
 	}
 
 	/**
