@@ -38,7 +38,7 @@ public class MainMenuScreen extends ScreenAdapter {
 	private final SpriteBatch spriteBatch;
 	private final MainGame controller;
 	private final Sprite backgroundSprite;
-	private final Sprite spriteForground;
+	private Sprite spriteForground;
 	private final Sprite spriteTransForground;
 	private ShapeRenderer shapeRenderer;
 	private float aspectRatioY;
@@ -155,13 +155,15 @@ public class MainMenuScreen extends ScreenAdapter {
 	 * Renders the foreground and adjusts the positioning of the buttons
 	 */
 	private void renderForeground() {
-		spriteBatch.begin();
-		spriteBatch.draw(spriteForground,
-				Gdx.graphics.getWidth() / 2 - spriteForground.getWidth() / 2 + 20 + (float) offsetX / TERT_OFFSET,
-				Gdx.graphics.getHeight() - 100 - (float) offsetY / TERT_OFFSET,
-				spriteForground.getWidth() - 40,
-				spriteForground.getHeight() - 5);
-		spriteBatch.end();
+		if (Gdx.graphics.getHeight() > 578) {
+			spriteBatch.begin();
+			spriteBatch.draw(spriteForground,
+					Gdx.graphics.getWidth() / 2 - spriteForground.getWidth() / 2 + 20 + (float) offsetX / TERT_OFFSET,
+					Gdx.graphics.getHeight() - 100 - (float) offsetY / TERT_OFFSET,
+					spriteForground.getWidth() - 40,
+					spriteForground.getHeight() - 5);
+			spriteBatch.end();
+		}
 
 		//updates wrapper of buttons
 		wrapper.setPosition((float) offsetX / TERT_OFFSET, (float) -offsetY / TERT_OFFSET);
@@ -174,6 +176,17 @@ public class MainMenuScreen extends ScreenAdapter {
 	 * @param timer  the time before changing to the mode
 	 */
 	private void renderOverlayButtons(Color colour, int timer) {
+		if (timer == 2) {
+			Texture texture = new Texture("icon_final_inverted.png");
+			texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+			spriteForground = new Sprite(texture);
+		}
+
+		if (timer == ANIMATION_TIMER) {
+			Texture texture = new Texture("icon_final.png");
+			texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+			spriteForground = new Sprite(texture);
+		}
 		if (timer == 1) {
 			spriteBatch.begin();
 			spriteBatch.draw(spriteTransForground, // i love me some hard coded values that make no sense
@@ -262,5 +275,5 @@ public class MainMenuScreen extends ScreenAdapter {
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 	}
-	
+
 }
