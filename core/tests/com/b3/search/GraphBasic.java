@@ -31,7 +31,7 @@ public class GraphBasic {
 	 */
 	private static Graph getTextGraph(String graphName) throws FileNotFoundException {
 		Graph g = new Graph(30, 30);
-		fromFile(g, "src-test/resources/test-worlds/" + graphName + ".txt");
+		fromFile(g, "tests/resources/test-worlds/" + graphName + ".txt");
 		return g;
 	}
 

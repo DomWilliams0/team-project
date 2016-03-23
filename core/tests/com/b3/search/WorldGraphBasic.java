@@ -48,7 +48,7 @@ public class WorldGraphBasic {
 		Constructor intConstr = rf.newConstructorForSerialization(World.class, objDef);
 		World world = World.class.cast(intConstr.newInstance());
 		
-		TiledMap map = new TmxMapLoaderBasic().load("src-test/resources/test-worlds/" + mapName + ".tmx");
+		TiledMap map = new TmxMapLoaderBasic().load("tests/resources/test-worlds/" + mapName + ".tmx");
 		WorldGraph graph = new WorldGraph(
 				(int) map.getProperties().get("width"),
 				(int) map.getProperties().get("height")
@@ -78,7 +78,7 @@ public class WorldGraphBasic {
 	 */
 	private static WorldGraph getTextGraph(String graphName) throws FileNotFoundException {
 		WorldGraph g = new WorldGraph(30, 30);
-		GraphBasic.fromFile(g, "src-test/resources/test-worlds/" + graphName + ".txt");
+		GraphBasic.fromFile(g, "tests/resources/test-worlds/" + graphName + ".txt");
 		return g;
 	}
 

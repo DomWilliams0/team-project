@@ -15,11 +15,11 @@ sourceSets {
 
     test {
         java {
-            srcDirs = ["src-test"]
+            srcDirs = ["tests"]
         }
 
         resources {
-            srcDirs = ["src-test/resources"]
+            srcDirs = ["tests/resources"]
         }
     }
 }
