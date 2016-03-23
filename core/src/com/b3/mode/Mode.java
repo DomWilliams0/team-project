@@ -98,17 +98,29 @@ public abstract class Mode extends ScreenAdapter {
 
 	/**
 	 * Allows other {@link InputHandler} to watch over this world, and respond to inputs
+	 *
 	 * @param inputHandler the extra {@link InputHandler} to watch over this world
-     */
+	 */
 	protected abstract void registerFurtherInputProcessors(InputHandler inputHandler);
 
+	/**
+	 * Ticked once per frame. All rendering and stage acting goes in here
+	 */
 	protected abstract void tick();
 
+	/**
+	 * Instantiation that takes place _in_ the Mode constructor, after the world
+	 * has been loaded
+	 */
 	protected abstract void initialise();
 
+	/**
+	 * Further instantiation that takes place _after_ the constructor, when the
+	 * mode has been fully loaded
+	 */
 	public void finishInitialisation() {
 	}
-	
+
 	/**
 	 * Initialise the sidebars, making sure that the correct tabs are shown in learning mode
 	 */
@@ -116,6 +128,9 @@ public abstract class Mode extends ScreenAdapter {
 		sideBarStage = new Stage(new ScreenViewport());
 	}
 
+	/**
+	 * Creates the top toolbar with mode independent buttons, i.e. returning to the main menu
+	 */
 	private void initMenu() {
 		menuStage = new Stage(new ScreenViewport());
 		menu = new MenuComponent();
@@ -163,8 +178,9 @@ public abstract class Mode extends ScreenAdapter {
 
 	/**
 	 * Renders the world, sidebars, screen and keyboard controllers
+	 *
 	 * @param delta the difference in time since last tick
-     */
+	 */
 	@Override
 	public void render(float delta) {
 		// delta time
@@ -219,7 +235,6 @@ public abstract class Mode extends ScreenAdapter {
 		sideBarStage.draw();
 
 
-
 		tick();
 
 		if (keyboardController.shouldExit())
@@ -228,9 +243,10 @@ public abstract class Mode extends ScreenAdapter {
 
 	/**
 	 * Reshuffle the sidebars to keep centered when the user resizes the window
-	 * @param width the new width of the window UI
+	 *
+	 * @param width  the new width of the window UI
 	 * @param height the new height of the window UI
-     */
+	 */
 	@Override
 	public void resize(int width, int height) {
 		camera.viewportWidth = width;
@@ -269,5 +285,5 @@ public abstract class Mode extends ScreenAdapter {
 	public void dispose() {
 		world.dispose();
 	}
-	
+
 }
