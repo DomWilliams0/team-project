@@ -10,9 +10,12 @@ Team members:
 
 ## Running the program
 
-```
-./gradlew run
-```
+This application uses gradle to manage dependencies, and can be built and run by using the provided script ```gradlew```.
+
+To run unit tests, use ```./gradlew test```
+
+To run the application, use ```./gradlew run```
+
 
 ## Contributing
 
