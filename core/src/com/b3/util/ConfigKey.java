@@ -126,7 +126,48 @@ public enum ConfigKey {
 	/**
 	 * The font the application will use for displaying text.
 	 */
-	FONT_FILE("font-file");
+	FONT_FILE("font-file"),
+	
+	/**
+	 * The colour used for the {@link com.b3.search.Node Nodes} in the frontier.
+	 */
+	FRONTIER_COLOUR("frontier-colour"),
+	/**
+	 * The colour used for the {@link com.b3.search.Node Nodes} in the last frontier.
+	 */
+	LAST_FRONTIER_COLOUR("last-frontier-colour"),
+	/**
+	 * The colour used for the {@link com.b3.search.Node Nodes} that have just been expanded.
+	 */
+	JUST_EXPANDED_COLOUR("just-expanded-colour"),
+	/**
+	 * The colour used for the visited {@link com.b3.search.Node Nodes}.
+	 */
+	VISITED_COLOUR("visited-colour"),
+	/**
+	 * The colour of the edges that have no cost.
+	 */
+	EDGE_COLOUR("edge-colour"),
+	/**
+	 * The colour used for the {@link com.b3.search.Node Nodes} that yet to be reached by the search.
+	 */
+	NODE_COLOUR("node-colour"),
+	/**
+	 * The colour used for the current path.
+	 */
+	SEARCH_EDGE_COLOUR("search-edge-colour"),
+	/**
+	 * The colour used in the {@link com.b3.search.Pseudocode} for the
+	 * neighbour, which is being evaluated, of the current
+	 * {@link com.b3.search.Node}, which is being expanded.
+	 */
+	CURRENT_NEIGHBOUR_COLOUR("current-neighbour-colour"),
+	/**
+	 * The colour used in the {@link com.b3.search.Pseudocode} for the
+	 * neighbours of the current {@link com.b3.search.Node}, which is
+	 * being expanded.
+	 */
+	CURRENT_NEIGHBOURS_COLOUR("current-neighbours-colour");
 
 	private final String key;
 

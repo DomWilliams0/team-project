@@ -3,7 +3,8 @@ package com.b3.gui;
 import com.b3.search.Node;
 import com.b3.search.Point;
 import com.b3.search.SearchPauser;
-import com.b3.search.WorldGraphRenderer;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -270,15 +271,15 @@ public class VisScrollPane extends ScrollPane {
 		if (cellmap.get(n) != null) {
 			//it is, so check if the node is in frontier or visited.
 			if (!isFrontier)
-				c = WorldGraphRenderer.VISITED_COLOUR;
+				c = Config.getColor(ConfigKey.VISITED_COLOUR);
 			else
-				c = WorldGraphRenderer.FRONTIER_COLOUR;
+				c = Config.getColor(ConfigKey.FRONTIER_COLOUR);
 		}
 
 		//check whether the node is actually a new frontier or just expanded
 		//done after table-check so that these colours take precedence.
-		if (vn.getNewFrontier()!=null && vn.getNewFrontier().contains(n)) c = WorldGraphRenderer.LAST_FRONTIER_COLOUR;
-		if (vn.getJustExpanded()!=null && vn.getJustExpanded().equals(n)) c = WorldGraphRenderer.JUST_EXPANDED_COLOUR;
+		if (vn.getNewFrontier()!=null && vn.getNewFrontier().contains(n)) c = Config.getColor(ConfigKey.LAST_FRONTIER_COLOUR);
+		if (vn.getJustExpanded()!=null && vn.getJustExpanded().equals(n)) c = Config.getColor(ConfigKey.JUST_EXPANDED_COLOUR);
 		return c;
 	}
 

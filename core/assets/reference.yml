@@ -32,3 +32,13 @@ event-generation-max-time: 10
 
 texture-atlas: gui/ui-blue.atlas
 font-file: aller/Aller_Rg.ttf
+
+frontier-colour: 32CD32 # Lime
+last-frontier-colour: 00FFFF # Cyan
+just-expanded-colour: FF69B4 # Pink
+visited-colour: BFBFBF # Light Grey
+edge-colour: 000000 # Black
+node-colour: 3F3F3F # Dark Grey
+search-edge-colour: FFFF00 # Yellow
+current-neighbour-colour: FFFF00 # Yellow
+current-neighbours-colour: 87CEEB # Sky

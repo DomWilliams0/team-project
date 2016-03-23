@@ -1,6 +1,9 @@
 package com.b3.util;
 
+import com.badlogic.gdx.graphics.Color;
+
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -158,6 +161,27 @@ public class Config {
 	 */
 	public static Float getFloat(ConfigKey key) {
 		return get(key, Float.class);
+	}
+	
+	/**
+	 * A {@link Map} between hex colour codes and {@link Color Colours}.
+	 * The hex codes should be in the form {@code "FF00FF"} if the alpha is {@code FF},
+	 * otherwise {@code "FF00FF33"}.
+	 */
+	private static final HashMap<String, Color> COLOUR_CACHE = new HashMap<>();
+	
+	public static Color getColor(ConfigKey key) {
+		String hex = getString(key).toUpperCase();
+		hex = hex.charAt(0) == '#' ? hex.substring(1) : hex;
+		if (hex.length() == 8 && hex.substring(6, 8).equals("FF")) {
+			hex = hex.substring(0, 6);
+		}
+		Color colour = COLOUR_CACHE.get(hex);
+		if (colour == null) {
+			colour = Color.valueOf(hex);
+			COLOUR_CACHE.put(hex, colour);
+		}
+		return colour;
 	}
 
 }

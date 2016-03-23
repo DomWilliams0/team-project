@@ -19,16 +19,6 @@ import java.util.Set;
  */
 public class WorldGraphRenderer {
 
-	public static final Color FRONTIER_COLOUR = Color.LIME;
-	public static final Color LAST_FRONTIER_COLOUR = Color.CYAN;
-	public static final Color JUST_EXPANDED_COLOUR = Color.PINK;
-	public static final Color VISITED_COLOUR = Color.LIGHT_GRAY;
-	private static final Color EDGE_COLOUR = Color.BLACK;
-	private static final Color NODE_COLOUR = Color.DARK_GRAY;
-	private static final Color SEARCH_EDGE_COLOUR = Color.YELLOW;
-	private static final Color CURRENT_NEIGHBOUR_COLOUR = Color.YELLOW;
-	private static final Color CURRENT_NEIGHBOURS_COLOUR = Color.SKY;
-
 	private static final float NODE_RADIUS = 0.10f;
 	private static final Color BORDER_COLOUR = Color.BLACK;
 	private static final float BORDER_THICKNESS = 1.3f; // relative to node radius
@@ -56,7 +46,7 @@ public class WorldGraphRenderer {
 		this.shapeRenderer = null; // must be initialised with initRenderer()
 		finishedInitialAnimation = false;
 
-		colPath = new Color(SEARCH_EDGE_COLOUR);
+		colPath = new Color(Config.getColor(ConfigKey.SEARCH_EDGE_COLOUR));
 	}
 
 	/**
@@ -149,28 +139,28 @@ public class WorldGraphRenderer {
 				renderSearchNodes(Color.BLACK, visited, zoomScalarInside);
 
 				// visited nodes
-				renderSearchNodes(VISITED_COLOUR, visited, zoomScalarInside);
+				renderSearchNodes(Config.getColor(ConfigKey.VISITED_COLOUR), visited, zoomScalarInside);
 
 				// frontier
-				renderSearchNodes(FRONTIER_COLOUR, frontier, zoomScalarInside);
+				renderSearchNodes(Config.getColor(ConfigKey.FRONTIER_COLOUR), frontier, zoomScalarInside);
 
 				// last frontier
-				renderSearchNodes(LAST_FRONTIER_COLOUR, lastFront, zoomScalarInside);
+				renderSearchNodes(Config.getColor(ConfigKey.LAST_FRONTIER_COLOUR), lastFront, zoomScalarInside);
 
 				//just expanded
 				if (justExpanded != null) {
-					shapeRenderer.setColor(JUST_EXPANDED_COLOUR);
-					renderSingleSearchNode(JUST_EXPANDED_COLOUR, justExpanded, zoomScalarInside);
+					shapeRenderer.setColor(Config.getColor(ConfigKey.JUST_EXPANDED_COLOUR));
+					renderSingleSearchNode(Config.getColor(ConfigKey.JUST_EXPANDED_COLOUR), justExpanded, zoomScalarInside);
 				}
 
 				// current neighbours
 				if (searchTicker.isInspectingSearch() && currentNeighbours != null)
-					renderSearchNodes(CURRENT_NEIGHBOURS_COLOUR, currentNeighbours, zoomScalarInside);
+					renderSearchNodes(Config.getColor(ConfigKey.CURRENT_NEIGHBOURS_COLOUR), currentNeighbours, zoomScalarInside);
 
 				// current neighbour (to be analysed)
 				Node currentNeighbour = searchTicker.getCurrentNeighbour();
 				if (searchTicker.isInspectingSearch() && currentNeighbour != null)
-					renderSingleSearchNode(CURRENT_NEIGHBOUR_COLOUR, currentNeighbour, zoomScalarInside);
+					renderSingleSearchNode(Config.getColor(ConfigKey.CURRENT_NEIGHBOUR_COLOUR), currentNeighbour, zoomScalarInside);
 			}
 		}
 
@@ -280,7 +270,7 @@ public class WorldGraphRenderer {
 	 * @param searchTicker an instance of {@link SearchTicker}, which contains recent information about all node's status
      */
 	private void renderZoomedOutSearch(SearchTicker searchTicker) {
-		shapeRenderer.setColor(SEARCH_EDGE_COLOUR);
+		shapeRenderer.setColor(Config.getColor(ConfigKey.SEARCH_EDGE_COLOUR));
 
 		List<Node> path = searchTicker.getPath();
 		for (int i = 0, pathSize = path.size(); i < pathSize - 1; i++) {
@@ -305,7 +295,7 @@ public class WorldGraphRenderer {
 		//if inital openeing animation finished then tell GUI to show intro popup
 		finishedInitialAnimation = (counter<=1.5);
 
-		Color nodeColour = zoomScalar > 2 ? Color.BLACK : NODE_COLOUR;
+		Color nodeColour = zoomScalar > 2 ? Color.BLACK : Config.getColor(ConfigKey.NODE_COLOUR);
 		Set<Point> points = worldGraph.getNodes().keySet();
 
 		// border
@@ -398,7 +388,7 @@ public class WorldGraphRenderer {
 				Float colouringRedValue = neighbour.getValue() - 1;
 
 				if (colouringRedValue <= 1) {
-					shapeRenderer.setColor(EDGE_COLOUR);
+					shapeRenderer.setColor(Config.getColor(ConfigKey.EDGE_COLOUR));
 				} else {
 					Color col = new Color(((colouringRedValue + 1) * 25) / 100, 0, 0, 0);
 					shapeRenderer.setColor(col);
