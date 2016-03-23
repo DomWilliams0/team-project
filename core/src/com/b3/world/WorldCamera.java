@@ -41,6 +41,10 @@ public class WorldCamera extends PerspectiveCamera {
 		lookAt(startX, startY, 0);
 		update();
 
+		// ensures camera zoom is not 0, which leads to invisible popups
+		// until the camera is zoomed
+		zoom(0);
+
 		inputDelta = new Vector2();
 
 		renderer = new OrthogonalTiledMapRenderer(tmx, 1f / Utils.TILESET_RESOLUTION);
