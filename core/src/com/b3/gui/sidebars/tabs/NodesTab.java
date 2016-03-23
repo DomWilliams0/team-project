@@ -71,7 +71,7 @@ public class NodesTab extends Tab {
 
 		nextBtn.getComponent().setVisible(MainGame.getCurrentMode() != ModeType.PRACTICE);
 
-		//put the nodes ui onto this
+		// put the nodes ui onto this
 		tab.add(ui).maxWidth(preferredWidth);
 		tab.row();
 		tab.add(nextBtn.getComponent());

@@ -72,9 +72,9 @@ public class Popup {
 			justOpen = false;
 		}
 
-		//if has not ran out of time
+		// if has not ran out of time
 		if (noOfTicksDisplay != 0) {
-			//decrement time left allowed on screen
+			// decrement time left allowed on screen
 			long change = (System.currentTimeMillis() - startSeconds);
 
 			noOfTicksDisplay = noOfTicksDisplay - ((int) change / 10);
@@ -85,7 +85,7 @@ public class Popup {
 			int width = Gdx.graphics.getWidth();
 			int height = Gdx.graphics.getHeight();
 
-			//zoom animation
+			// zoom animation
 			float imgWidth;
 			float imgHeight;
 			if (noOfTicksDisplay < 50) {
@@ -97,7 +97,7 @@ public class Popup {
 					imgWidth = sprite.getWidth();
 				}
 			} else {
-				//if first 50 ticks
+				// if first 50 ticks
 				if (noOfTicksDisplay > (maxTicks - 25)) {
 					imgHeight = sprite.getHeight() / (25 - (maxTicks - noOfTicksDisplay));
 					if (noOfTicksDisplay > (maxTicks - 12)) {

@@ -30,7 +30,7 @@ public class ScrollPaneManager {
 	 */
 	public ScrollPaneManager(Stage stage, VisNodes vn) {
 		Skin skin = vn.getSkin();
-		//setup the style for the panes
+		// setup the style for the panes
 		ScrollPane.ScrollPaneStyle style = new ScrollPane.ScrollPaneStyle();
 		style.background = vn.getBackground();
 		style.hScroll = skin.getDrawable("scroll_back_hor");
@@ -38,11 +38,11 @@ public class ScrollPaneManager {
 		style.vScroll = skin.getDrawable("scroll_back_ver");
 		style.vScrollKnob = skin.getDrawable("knob_02");
 
-		//make the scroll panes
+		// make the scroll panes
 		vp = new VisScrollPane(skin, style, false, vn);
 		fp = new VisScrollPane(skin, style, true, vn);
 
-		//put the panes on the stage
+		// put the panes on the stage
 		stage.addActor(vp);
 		stage.addActor(fp);
 	}
@@ -125,14 +125,14 @@ public class ScrollPaneManager {
 	 * @return The most recently clicked {@link Node} coordinates in the {@link VisScrollPane}s, or <code>null</code> if no node was clicked
 	 */
 	public Point getClickedNode() {
-		//check which is most recently updated
+		// check which is most recently updated
 		switch (mru) {
 			case FP:
 				return fp.getClickedNode();
 			case VP:
 				return vp.getClickedNode();
 		}
-		//there has been no clicked node
+		// there has been no clicked node
 		return null;
 	}
 
@@ -145,9 +145,9 @@ public class ScrollPaneManager {
 	 * @return <code>true</code> if the colour operation was successful
 	 */
 	public boolean setCellColour(Node n, boolean singleHighlight) {
-		//apply the colour to both panes, and check if one application was successful
+		// apply the colour to both panes, and check if one application was successful
 		boolean applied = vp.setCellColour(n, singleHighlight);
-		//short circuit to ensure the colour is applied to fp.
+		// short circuit to ensure the colour is applied to fp.
 		applied = fp.setCellColour(n, singleHighlight) || applied;
 
 		return applied;

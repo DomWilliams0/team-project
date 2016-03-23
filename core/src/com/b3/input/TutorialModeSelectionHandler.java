@@ -64,15 +64,15 @@ public class TutorialModeSelectionHandler extends InputAdapter {
 		// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
 		PopupDescription popupDescription = world.getWorldGUI().getPopupDescription();
 		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
-			//old node so change page number
+			// old node so change page number
 			if (popupDescription.getPopupShowing())
-				//if popup showing
+				// if popup showing
 				popupDescription.resetCounterAnimation();
 			popupDescription.flipPageRight();
 		} else {
-			//new node so reset page number
+			// new node so reset page number
 			if (popupDescription.getPopupShowing())
-				//if popup showing
+				// if popup showing
 				popupDescription.resetPage();
 		}
 

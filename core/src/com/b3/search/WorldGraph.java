@@ -28,7 +28,7 @@ public class WorldGraph extends Graph {
 
 	private Vector2 wantedNextDestination;
 
-	//search algorithm wanted for learning mode only (Leave as null if compare mode)
+	// search algorithm wanted for learning mode only (Leave as null if compare mode)
 	private SearchAlgorithm learningModeNext = null;
 
 	/**

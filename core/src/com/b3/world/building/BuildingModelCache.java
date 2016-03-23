@@ -65,24 +65,24 @@ public class BuildingModelCache implements Disposable {
 
 			float changer = (float) (0.5 * dimensions.z);
 
-			//if not flat buildings render all the texture
+			// if not flat buildings render all the texture
 			if (!flat) {
 				modelBuilder.begin();
-				//modelBuilder.part("front", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(brick)))
+				// modelBuilder.part("front", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(brick)))
 				//		.rect(-2f,-2f,-2f, -2f,2f,-2f,  2f,2f,-2, 2f,-2f,-2f, 0,0,-1);
-				modelBuilder.part("back", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(topSide))) //ACTUAL TOP
+				modelBuilder.part("back", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(topSide))) // ACTUAL TOP
 						.rect(-2f, 2f, 2f, -2f, -2f, 2f, 2f, -2f, 2f, 2f, 2f, 2f, 0, 0, 1);
-				modelBuilder.part("bottom", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSideFlipped))) //ACTUAL FRONT
+				modelBuilder.part("bottom", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSideFlipped))) // ACTUAL FRONT
 						.rect(-2f, -2f, 2f, -2f, -2f, -changer, 2f, -2f, -changer, 2f, -2f, 2f, 0, -1, 0);
-				modelBuilder.part("top", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSideFlipped))) //ACTUAL BACK
+				modelBuilder.part("top", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSideFlipped))) // ACTUAL BACK
 						.rect(-2f, 2f, -changer, -2f, 2f, 2f, 2f, 2f, 2f, 2f, 2f, -changer, 0, 1, 0);
-				modelBuilder.part("left", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) //LEFT
+				modelBuilder.part("left", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) // LEFT
 						.rect(-2f, -2f, 2f, -2f, 2f, 2f, -2f, 2f, -changer, -2f, -2f, -changer, -1, 0, 0);
-				modelBuilder.part("right", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) //RIGHT
+				modelBuilder.part("right", GL20.GL_TRIANGLES, attr, new Material(TextureAttribute.createDiffuse(nightSide))) // RIGHT
 						.rect(2f, -2f, -changer, 2f, 2f, -changer, 2f, 2f, 2f, 2f, -2f, 2f, 1, 0, 0);
 				model = modelBuilder.end();
 			} else {
-				//otherwise just a plain box - good for effeciency as users won't actually see the buidlings textures when they are flat
+				// otherwise just a plain box - good for effeciency as users won't actually see the buidlings textures when they are flat
 				model = builder.createBox(dimensions.x, dimensions.y, dimensions.z,
 						new Material(), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 			}

@@ -78,7 +78,7 @@ public class SideBar extends Table {
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(Config.getString(ConfigKey.TEXTURE_ATLAS)));
 		this.skin = new Skin(atlas);
 		this.font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 16);
-		//this.skin.add("default", font, BitmapFont.class);
+		// this.skin.add("default", font, BitmapFont.class);
 
 		// Set position and size
 		setPosition(left ? -preferredWidth : Gdx.graphics.getWidth(), 0);

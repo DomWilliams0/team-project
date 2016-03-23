@@ -22,7 +22,7 @@ public class PopupManager {
 	 * @param mode the current mode the user is in
 	 */
 	public PopupManager(ModeType mode) {
-		//load error textures
+		// load error textures
 		Texture tempTexture = new Texture("world/popups/errorBuildings.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		buildingErrorPopup = new Popup(new Sprite(tempTexture));

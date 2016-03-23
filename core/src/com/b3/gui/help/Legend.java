@@ -36,7 +36,7 @@ public class Legend extends Table {
 		this.skin = skin;
 		pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
 
-		//setup this and its parts
+		// setup this and its parts
 		left();
 		initComponents();
 	}
@@ -46,21 +46,21 @@ public class Legend extends Table {
 	 * Populate it with data.
 	 */
 	private void initComponents() {
-		//Encapsulate the title in a label and add it
+		// Encapsulate the title in a label and add it
 		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 20, "Legend:", Color.WHITE);
 		add(lbl.getComponent());
 		row();
 
-		//Visited
+		// Visited
 		addLegend("Visited set", Config.getColor(ConfigKey.VISITED_COLOUR));
 
-		//Just Expanded
+		// Just Expanded
 		addLegend("Just Expanded", Config.getColor(ConfigKey.JUST_EXPANDED_COLOUR));
 
-		//New frontier
+		// New frontier
 		addLegend("New Frontier Node", Config.getColor(ConfigKey.LAST_FRONTIER_COLOUR));
 
-		//Frontier
+		// Frontier
 		addLegend("Frontier Nodes", Config.getColor(ConfigKey.FRONTIER_COLOUR));
 
 		pm.dispose();
@@ -74,21 +74,21 @@ public class Legend extends Table {
 	 * @param c    The colour in which to highlight the text
 	 */
 	private void addLegend(String text, Color c) {
-		//set the colour
+		// set the colour
 		pm.setColor(c);
 		pm.fill();
-		//setup the colour in a drawable
+		// setup the colour in a drawable
 		TextureRegionDrawable trd = new TextureRegionDrawable(new TextureRegion(new Texture(new PixmapTextureData(pm, null, false, false))));
 
-		//setup the wrapping table
+		// setup the wrapping table
 		Table t = new Table(skin);
-		//apply the colour
+		// apply the colour
 		t.setBackground(trd);
 
-		//setup text in wrapping label
+		// setup text in wrapping label
 		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", 16, text, Color.BLACK);
 
-		//add the components
+		// add the components
 		t.add(lbl.getComponent()).left();
 		add(t).left();
 		row();

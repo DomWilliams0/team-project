@@ -71,7 +71,7 @@ public class PopupDescription {
 	 * Load all of the textures that will be used in render tester - faster to load them now rather than when user clicks on it.
 	 */
 	private void loadTextures() {
-		//Load current node sprites (2 pages + 1 (dfs, bfs or A*)) + costs A*
+		// Load current node sprites (2 pages + 1 (dfs, bfs or A*)) + costs A*
 		currentNodeSprite = new Sprite[6];
 		Texture tempTexture = new Texture("world/popups/currentnode250x250.JPG.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -92,7 +92,7 @@ public class PopupDescription {
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		currentNodeSprite[5] = new Sprite(tempTexture);
 
-		//Load start node sprites (2 pages)
+		// Load start node sprites (2 pages)
 		startNodeSprite = new Sprite[2];
 		tempTexture = new Texture("world/popups/startnode250x250.JPG.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -101,7 +101,7 @@ public class PopupDescription {
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		startNodeSprite[1] = new Sprite(tempTexture);
 
-		//Load end node sprites (2 pages)
+		// Load end node sprites (2 pages)
 		endNodeSprite = new Sprite[2];
 		tempTexture = new Texture("world/popups/endnode250x250.JPG.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -114,7 +114,7 @@ public class PopupDescription {
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		endNodeDFSBFS = new Sprite(tempTexture);
 
-		//Aqua nodes - just added to frontier
+		// Aqua nodes - just added to frontier
 		lastFrontierSprite = new Sprite[4];
 		tempTexture = new Texture("world/popups/lastF250x250.JPG.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -129,7 +129,7 @@ public class PopupDescription {
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		lastFrontierSprite[3] = new Sprite(tempTexture);
 
-		//green nodes - in frontire but not expanded yet
+		// green nodes - in frontire but not expanded yet
 		olderFrontierSprite = new Sprite[4];
 		tempTexture = new Texture("world/popups/oldF250x250.JPG.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -144,7 +144,7 @@ public class PopupDescription {
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		olderFrontierSprite[3] = new Sprite(tempTexture);
 
-		//fully explored (grey colours; two pages)
+		// fully explored (grey colours; two pages)
 		fullyExploredSprite = new Sprite[2];
 		tempTexture = new Texture("world/popups/fullyExplored250x250.JPG.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -154,7 +154,7 @@ public class PopupDescription {
 		fullyExploredSprite[1] = new Sprite(tempTexture);
 
 		numbers = new Sprite[10];
-		//Load Numbers
+		// Load Numbers
 		for (int i = 0; i <= 9; i++) {
 			tempTexture = new Texture("world/popups/digits/" + i + ".png");
 			tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -186,7 +186,7 @@ public class PopupDescription {
 		popupShowing = false;
 		float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
 
-		//SPRITES
+		// SPRITES
 		spriteBatch.setProjectionMatrix(worldCamera.combined);
 		spriteBatch.begin();
 
@@ -199,20 +199,20 @@ public class PopupDescription {
 		}
 
 		//----ALL RENDERS GO HERE---
-		//DONE MULTI-PAGES if start node
+		// DONE MULTI-PAGES if start node
 		if (currentSearch.getStart().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-			if (pageNo >= startNodeSprite.length) pageNo = 0; //reset to first page
+			if (pageNo >= startNodeSprite.length) pageNo = 0; // reset to first page
 			spriteBatch.draw(startNodeSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 			popupShowing = true;
 		} else if (currentSearch.getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
-			//DONE MULTI_PAGES if end node
+			// DONE MULTI_PAGES if end node
 			if (pageNo >= 3 && currentSearch.getAlgorithm() == SearchAlgorithm.A_STAR)
-				pageNo = 0; //reset to first page if neccessary
+				pageNo = 0; // reset to first page if neccessary
 			if (pageNo >= 2 && currentSearch.getAlgorithm() != SearchAlgorithm.A_STAR)
-				pageNo = 0; //reset to first page if neccessary
+				pageNo = 0; // reset to first page if neccessary
 
 			if (pageNo == 2) {
-				//calculate data needed
+				// calculate data needed
 				float x1;
 				float y1;
 				if (mostRecentExpand != null) {
@@ -232,20 +232,20 @@ public class PopupDescription {
 				float cost = SearchParameters.calculateEuclidean(euclideanStartNode, currentSearch.getEnd());
 
 				spriteBatch.end();
-				//draw lines
+				// draw lines
 				drawHeuristic(currentSearch);
 				spriteBatch.begin();
 				spriteBatch.setProjectionMatrix(worldCamera.combined);
-				//draw actual g(x)
+				// draw actual g(x)
 				drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
 
-				//draw y cost
+				// draw y cost
 				xCoord = x1;
 				yCoord = (y1 + y2) / 2;
 				cost = Math.abs(y1 - y2);
 				drawStaticNumberOnScreen((int) cost, xCoord, yCoord, scalingZoom);
 
-				//draw x cost
+				// draw x cost
 				xCoord = (x1 + x2) / 2;
 				yCoord = y2;
 				cost = Math.abs(x1 - x2);
@@ -272,10 +272,10 @@ public class PopupDescription {
 			popupShowing = true;
 
 		} else if (mostRecentExpand != null) {
-			//DONE MULTi-PAGES, needs cost breakdown though if recently expanded - current node being explored
+			// DONE MULTi-PAGES, needs cost breakdown though if recently expanded - current node being explored
 			if (mostRecentExpand.getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
 				stickyCurrentNode = true;
-				if (pageNo >= 4) pageNo = 0; //reset to first page if neccessary
+				if (pageNo >= 4) pageNo = 0; // reset to first page if neccessary
 				float gxFunction = currentSearch.getG(mostRecentExpand);
 
 				int convertedPageNo = pageNo;
@@ -293,24 +293,24 @@ public class PopupDescription {
 					}
 				}
 
-				//show normal pop-ups (first 2 pages)
+				// show normal pop-ups (first 2 pages)
 				if (pageNo != 3)
 					spriteBatch.draw(currentNodeSprite[convertedPageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 
-				//draw current g(x) function onto the screen (3rd page)
+				// draw current g(x) function onto the screen (3rd page)
 				if (pageNo == 2 && currentSearch.getAlgorithm() == SearchAlgorithm.A_STAR) {
 					drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 11), scalingZoom);
 				}
 
-				//show how costs are calulated (4th page)
+				// show how costs are calulated (4th page)
 				if (pageNo == 3) {
-					//if has been shown for a little while
+					// if has been shown for a little while
 					float animate;
 					if (counterAnimationFade < 200) {
-						//don't scale
+						// don't scale
 						animate = scalingZoom;
 					} else {
-						//do scale down (so all costs are shown)
+						// do scale down (so all costs are shown)
 						animate = scalingZoom - (counterAnimationFade - 200);
 						if (animate < 0) animate = 0;
 					}
@@ -327,9 +327,9 @@ public class PopupDescription {
 				}
 				popupShowing = true;
 			} else if (currentSearch.getLastFrontier() != null) {
-				//DONE MULTI PAGE if JUST added to stack / queue
+				// DONE MULTI PAGE if JUST added to stack / queue
 				if (currentSearch.getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-					if (pageNo >= 2) pageNo = 0; //reset to first page if neccessary
+					if (pageNo >= 2) pageNo = 0; // reset to first page if neccessary
 
 					int convertedPageNo = pageNo;
 					if (convertedPageNo == 1) {
@@ -358,8 +358,8 @@ public class PopupDescription {
 
 					popupShowing = true;
 				} else if (currentSearch.getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-					//DONE MULTIPAGE if the old frontier
-					if (pageNo >= 2) pageNo = 0; //reset to first page if neccessary
+					// DONE MULTIPAGE if the old frontier
+					if (pageNo >= 2) pageNo = 0; // reset to first page if neccessary
 
 					int convertedPageNo = pageNo;
 					if (convertedPageNo == 1)
@@ -391,9 +391,9 @@ public class PopupDescription {
 
 					popupShowing = true;
 				} else if (currentSearch.getVisited() != null) {
-					//MULTI PAGE DONE if already expanded
+					// MULTI PAGE DONE if already expanded
 					if (currentSearch.getVisited().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-						if (pageNo >= fullyExploredSprite.length) pageNo = 0; //reset to first page if necessary
+						if (pageNo >= fullyExploredSprite.length) pageNo = 0; // reset to first page if necessary
 						spriteBatch.draw(fullyExploredSprite[pageNo], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5),
 								(float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 
@@ -514,13 +514,13 @@ public class PopupDescription {
 	 * @param scalingZoom the current amount of zoom that the camera has.
 	 */
 	private void drawCostOnScreen(int cost, Point one, Point two, float scalingZoom) {
-		//change in x
+		// change in x
 		if (one.getY() == two.getY()) {
 			float x = (float) (one.getX() + two.getX()) / 2;
 			float y = one.getY();
 			drawStaticNumberOnScreen(cost, x, y, scalingZoom);
 		} else
-			//change in y
+			// change in y
 			if (one.getX() == two.getX()) {
 				float x = one.getX();
 				float y = (float) (one.getY() + two.getY()) / 2;
@@ -537,7 +537,7 @@ public class PopupDescription {
 	 * @param scalingZoom       the current amount of zoom that the camera has.
 	 */
 	private void drawStaticNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
-		//if single digits
+		// if single digits
 		if (number > 100 || number < 0) {
 			number = 99;
 			System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers; using this instead: " + number);
@@ -550,7 +550,7 @@ public class PopupDescription {
 				System.err.println("Error in drawStaticNumberOnScreen in " + number + ". E" + e);
 			}
 		} else {
-			//if not
+			// if not
 			int firstNo = number / 10;
 			int secondNo = number % 10;
 			float x1 = (float) (currentNodeClickX - scalingZoom / 2 + 0.5);
@@ -574,7 +574,7 @@ public class PopupDescription {
 	 * @param scalingZoom       the current amount of zoom that the camera has.
 	 */
 	private void drawNumberOnScreen(int number, float currentNodeClickX, float currentNodeClickY, float scalingZoom) {
-		//if single digits
+		// if single digits
 		if (number > 100 || number < 0) {
 			number = 99;
 			System.err.println("Currently, drawNumberOnScreen only works with < 100 numbers; using this instead: " + number);
@@ -583,7 +583,7 @@ public class PopupDescription {
 		if (number < 10) {
 			spriteBatch.draw(numbers[number], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, scalingZoom);
 		} else {
-			//if not
+			// if not
 			int firstNo = number / 10;
 			int secondNo = number % 10;
 			float x1 = (float) ((currentNodeClickX - scalingZoom / 2) + 0.5);

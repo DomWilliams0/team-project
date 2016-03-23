@@ -78,7 +78,7 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			} else {
 				List<Vector2> path = getPath();
 				if (path.size() == 0) {
-					//Path not completed properly, so show error and start again
+					// Path not completed properly, so show error and start again
 					world.getWorldGUI().getPopupManager().showBehaviourError();
 					shouldPlayFail = -1;
 					SearchAlgorithm algo = world.getWorldGraph().getLearningModeNext();

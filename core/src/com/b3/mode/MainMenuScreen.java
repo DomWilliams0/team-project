@@ -165,7 +165,7 @@ public class MainMenuScreen extends ScreenAdapter {
 			spriteBatch.end();
 		}
 
-		//updates wrapper of buttons
+		// updates wrapper of buttons
 		wrapper.setPosition((float) offsetX / TERT_OFFSET, (float) -offsetY / TERT_OFFSET);
 	}
 

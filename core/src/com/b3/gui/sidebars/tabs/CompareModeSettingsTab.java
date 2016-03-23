@@ -80,8 +80,8 @@ public class CompareModeSettingsTab extends Tab {
 			}
 		});
 
-		//Play and Pause button
-		//String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
+		// Play and Pause button
+		// String btnText = world.getWorldGraph().getCurrentSearch().isPaused(1) ? "Play" : "Pause";
 		ButtonComponent playPause = new ButtonComponent(skin, font, "Pause");
 		playPause.addListener(new ChangeListener() {
 			@Override

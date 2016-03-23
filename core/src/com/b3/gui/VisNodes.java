@@ -68,7 +68,7 @@ public class VisNodes extends Table {
 		stepString = new StringBuilder();
 		formatter = new Formatter(stepString, Locale.UK);
 
-		//anchor the table to the top-left position
+		// anchor the table to the top-left position
 		left().top();
 
 		spm = new ScrollPaneManager(stage, this);
@@ -87,21 +87,21 @@ public class VisNodes extends Table {
 	 */
 	public void render(SearchTicker ticker) {
 		int render;
-		//check that the ticker exists; if it does, see if the ticker has data to render
+		// check that the ticker exists; if it does, see if the ticker has data to render
 		if (ticker == null || ticker.getVisited() == null || ticker.getFrontier() == null) {
-			//no data to render, so render this with dummy contents.
+			// no data to render, so render this with dummy contents.
 			render = render(new StackT<>(), new HashSet<>(), SearchAlgorithm.DEPTH_FIRST, false);
 		} else {
-			//we have data to render. get the most recent changes from the ticker
+			// we have data to render. get the most recent changes from the ticker
 			newVisited = ticker.getMostRecentlyExpanded();
 			newFrontier = ticker.getLastFrontier();
 			justExpanded = ticker.getMostRecentlyExpanded();
 
-			//only update the shown data if we need to
+			// only update the shown data if we need to
 			if (!stepthrough || ticker.isUpdated() || SearchTicker.isInspectingSearch() == descriptionShown) {
-				//tell the ticker we've used its data
+				// tell the ticker we've used its data
 				ticker.setUpdated(false);
-				//render the data
+				// render the data
 				render = render(
 						ticker.getFrontier(),
 						ticker.getVisited(),
@@ -111,13 +111,13 @@ public class VisNodes extends Table {
 			} else
 				render = 0;
 		}
-		//pause or resume the ticker based on scrollpane usage
+		// pause or resume the ticker based on scrollpane usage
 		if (ticker != null) {
 			if (render == 2) {
-				//the scrollpanes are being used, so pause the ticker
+				// the scrollpanes are being used, so pause the ticker
 				ticker.pause(SearchPauser.SCROLL_PANE);
 			} else if (render == 1) {
-				//the scrollpanes are not being used, so release the #0 pause-lock
+				// the scrollpanes are not being used, so release the #0 pause-lock
 				//(if somewhere else has paused it, this will not resume immediately)
 				ticker.resume(SearchPauser.SCROLL_PANE);
 			}
@@ -152,36 +152,36 @@ public class VisNodes extends Table {
 	 * - 2: The scrollpane(s) are being dragged.
 	 */
 	public int render(Collection<Node> front, Set<Node> visited, SearchAlgorithm alg, boolean showDesc) {
-		//check if a scrollpane is being used
+		// check if a scrollpane is being used
 		if (spm.scrollpanesBeingUsed()) {
 			return 2;
 		}
 
 		this.alg = alg;
 
-		//stop it rendering every frame if we're on play mode
-		//if stepping through, it's safe to update every time the user clicks next
+		// stop it rendering every frame if we're on play mode
+		// if stepping through, it's safe to update every time the user clicks next
 		if (!stepthrough) {
 			if (!updateTimer()) return 0;
 		}
 
-		//check whether we need to render a data collection
+		// check whether we need to render a data collection
 		boolean rendermore = !front.isEmpty() || !visited.isEmpty();
 
-		//setup the table
-		//TOP of the sidebar
+		// setup the table
+		// TOP of the sidebar
 		setupTable(alg, rendermore);
 
-		//if we need to render a data collection
+		// if we need to render a data collection
 		if (rendermore) {
-			//put the data in the tables
-			//MIDDLE of the sidebar
+			// put the data in the tables
+			// MIDDLE of the sidebar
 			populateTables(front, visited);
 
 		}
 
-		//put the description on the sidebar
-		//BOTTOM of the sidebar
+		// put the description on the sidebar
+		// BOTTOM of the sidebar
 		if (showDesc) setupDescription();
 		descriptionShown = showDesc;
 		return 1;
@@ -194,14 +194,14 @@ public class VisNodes extends Table {
 	 * @param visited The visited nodes to display
 	 */
 	private void populateTables(Collection<Node> front, Set<Node> visited) {
-		//make the arraylist be ordered based on take-order of the collection
+		// make the arraylist be ordered based on take-order of the collection
 		frontier = sortFront(front);
 
-		//get the highest priority node
+		// get the highest priority node
 		if (frontier.size() > 0)
 			highestNode = frontier.get(0);
 
-		//get the visited set and sort it numerically by x then y
+		// get the visited set and sort it numerically by x then y
 		LinkedList<Node> visitedSorted = new LinkedList<>(visited);
 		Collections.sort(visitedSorted, (p1, p2) -> {
 			if (p1.getPoint().getX() == p2.getPoint().getX()) {
@@ -210,7 +210,7 @@ public class VisNodes extends Table {
 			return p1.getPoint().getX() - p2.getPoint().getX();
 		});
 
-		//populate the list tables
+		// populate the list tables
 		spm.addNodes(frontier, visitedSorted);
 	}
 
@@ -224,12 +224,12 @@ public class VisNodes extends Table {
 		float timeBetweenTicks = Config.getFloat(ConfigKey.TIME_BETWEEN_TICKS);
 		timer += Utils.TRUE_DELTA_TIME;
 
-		//not enough time has elapsed since last tick - do nothing
+		// not enough time has elapsed since last tick - do nothing
 		if (timer < timeBetweenTicks)
 			return false;
 
 		if (timer > 2 * timeBetweenTicks)
-			//it has been a long time since last render so reset it instead of decrementing it
+			// it has been a long time since last render so reset it instead of decrementing it
 			timer = 0;
 		else
 			// it hasn't been too long since last render so decrement it
@@ -259,8 +259,8 @@ public class VisNodes extends Table {
 	 * @return <code>true</code> if the cell was successfully coloured
 	 */
 	public boolean setCellColour(Node n, boolean singleHighlight) {
-		//singleHighlight tells us if this is the only node to be highlighted,
-		//so remove all other colours if this is true
+		// singleHighlight tells us if this is the only node to be highlighted,
+		// so remove all other colours if this is true
 		return spm.setCellColour(n, singleHighlight);
 	}
 
@@ -303,46 +303,46 @@ public class VisNodes extends Table {
 	 * @param rendermore <code>true</code> if the data collections are being rendered
 	 */
 	private void setupTable(SearchAlgorithm alg, boolean rendermore) {
-		//clear the tables
+		// clear the tables
 		clear();
 		spm.clear();
 
-		//we need to render the data collections
+		// we need to render the data collections
 		if (rendermore) {
-			//full title;
+			// full title;
 			addLabel("Running search using " + alg.getName(), true)
 					.colspan(3).spaceBottom(5);
 			row();
 
-			//row 1 - titles
+			// row 1 - titles
 			addLabel("Frontier");
 			addLabel("   ");
 			addLabel("Visited nodes");
 			row().padBottom(10);
 
-			//row 2 - description of data collections
+			// row 2 - description of data collections
 			addLabel(alg.getFrontierDescription());
 			addLabel("   ");
 			addLabel("Using Hash Set");
 			row();
-			//row 3 - note that highest frontier node is highest priority
+			// row 3 - note that highest frontier node is highest priority
 			addLabel("Highest Priority\n" +
 					"--------------------");
 			addLabel("   ");
 			addLabel("");
 			row();
 
-			//set up height to set for the scroll panes
+			// set up height to set for the scroll panes
 			float h = Gdx.graphics.getHeight();
 			float sh;
-			//make the panes smaller if the pseudocode is active, since this takes up a lot of space
+			// make the panes smaller if the pseudocode is active, since this takes up a lot of space
 			if (SearchTicker.isInspectingSearch() || world.getWorldGraph().getCurrentSearch().getMode() == ModeType.PRACTICE) {
 				sh = h / 5;
 			} else {
 				sh = (float) (h / 2.75);
 			}
 
-			//row 4 - display the scroll panes holding the collection tables
+			// row 4 - display the scroll panes holding the collection tables
 			add(spm.getFp()).fill().height(sh).maxHeight(sh);
 			addLabel("   ");
 			add(spm.getVp()).fill().height(sh).maxHeight(sh);
@@ -365,7 +365,7 @@ public class VisNodes extends Table {
 		convertNodeReps();
 		stepString = new StringBuilder();
 		formatter = new Formatter(stepString, Locale.UK);
-		//setup basic strings
+		// setup basic strings
 		String expandedNode = "I have just expanded the node:\n" +
 				"%s, which is now\n" +
 				"added to the visited set.\n";
@@ -374,12 +374,12 @@ public class VisNodes extends Table {
 				"%s\n";
 		String nextNode = "My next node to expand is\n" +
 				"%s";
-		//replace the %s occurrences in a C printf style
+		// replace the %s occurrences in a C printf style
 		formatter.format(expandedNode + "\n" +
 						addedToFrontier + "\n" +
 						nextNode,
 				newVisitedStr, newFrontierStr, highestNodeStr);
-		//display the descriptions
+		// display the descriptions
 		addLabel(stepString.toString())
 				.colspan(3).spaceTop(15);
 	}
@@ -404,10 +404,10 @@ public class VisNodes extends Table {
 	 * @return The cell created by adding the label
 	 */
 	private Cell addLabel(String text, boolean isTitle) {
-		//titles are a bit larger
+		// titles are a bit larger
 		int size = isTitle ? 18 : 16;
 
-		//make the label and add it
+		// make the label and add it
 		LabelComponent lbl = new LabelComponent("aller/Aller_Rg.ttf", size, text, Color.BLACK);
 		return add(lbl.getComponent());
 	}
@@ -439,13 +439,13 @@ public class VisNodes extends Table {
 		String s = "";
 		int i = 0;
 		for (Node node : newFrontier) {
-			//add "#<priority number>: <node string>" to the string
+			// add "#<priority number>: <node string>" to the string
 			s += "#" + (frontier.indexOf(node) + 1) + ": " + node.toString() + "  ";
-			//limit the string to only have 2 per row
+			// limit the string to only have 2 per row
 			//(only works for newFrontier list size < 5, since there should never be more than 4)
 			if (++i == 2) s += "\n";
 		}
-		//ensure there are always 2 rows here otherwise the sidebar will keep resizing
+		// ensure there are always 2 rows here otherwise the sidebar will keep resizing
 		if (i < 2) s += "\n";
 		return s;
 	}

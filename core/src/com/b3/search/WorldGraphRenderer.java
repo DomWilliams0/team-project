@@ -73,7 +73,7 @@ public class WorldGraphRenderer {
 		renderEdges();
 		renderNodes(counter, zoomScalar);
 
-		//if scaled back so much that nodes collapse in on each other, then show white lines on top
+		// if scaled back so much that nodes collapse in on each other, then show white lines on top
 		if (zoomScalar > 2) {
 			renderZoomedOutGraph(zoomScalar);
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -111,7 +111,7 @@ public class WorldGraphRenderer {
 	private void renderSearchTicker(float zoomScalar, SearchTicker searchTicker) {
 		boolean showPaths = Config.getBoolean(ConfigKey.SHOW_PATHS);
 
-		//red node for wrong node clicked in practice mode
+		// red node for wrong node clicked in practice mode
 		if (redNode != null)
 			if (!redNode.finishedTiming()) {
 				setRenderRed(zoomScalar);
@@ -119,7 +119,7 @@ public class WorldGraphRenderer {
 
 		renderPath(showPaths, searchTicker);
 
-		//if scaled back so much that nodes collapse in on each other, then show white lines on top
+		// if scaled back so much that nodes collapse in on each other, then show white lines on top
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
 		// render the current search
@@ -148,7 +148,7 @@ public class WorldGraphRenderer {
 				// last frontier
 				renderSearchNodes(Config.getColor(ConfigKey.LAST_FRONTIER_COLOUR), lastFront, zoomScalarInside);
 
-				//just expanded
+				// just expanded
 				if (justExpanded != null) {
 					shapeRenderer.setColor(Config.getColor(ConfigKey.JUST_EXPANDED_COLOUR));
 					renderSingleSearchNode(Config.getColor(ConfigKey.JUST_EXPANDED_COLOUR), justExpanded, zoomScalarInside);
@@ -298,7 +298,7 @@ public class WorldGraphRenderer {
 	private void renderNodes(float counter, float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-		//if inital openeing animation finished then tell GUI to show intro popup
+		// if inital openeing animation finished then tell GUI to show intro popup
 		finishedInitialAnimation = (counter <= 1.5);
 
 		Color nodeColour = zoomScalar > 2 ? Color.BLACK : Config.getColor(ConfigKey.NODE_COLOUR);

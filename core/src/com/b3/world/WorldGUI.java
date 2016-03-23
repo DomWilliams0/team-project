@@ -31,7 +31,7 @@ public class WorldGUI {
 	private int counterScaler;
 	private double pos;
 
-	//current node user has clicked on
+	// current node user has clicked on
 	private int currentNodeClickX;
 	private int currentNodeClickY;
 
@@ -109,14 +109,14 @@ public class WorldGUI {
 
 		checkForInitialPopup();
 
-		//pop-ups on nodes
+		// pop-ups on nodes
 		if (mode == LEARNING || mode == TUTORIAL)
 			popupDescription.render(currentNodeClickX, currentNodeClickY, world.getWorldGraph().getCurrentSearch());
 
-		//pop-ups to show current coordinate
+		// pop-ups to show current coordinate
 		coordinatePopup.render();
 
-		//render big pop-ups
+		// render big pop-ups
 		popupManager.render();
 	}
 
@@ -157,7 +157,7 @@ public class WorldGUI {
 			shapeRenderer.ellipse((float) (xNextDestination - (animationNextDestination / 2) + 0.5), (float) (yNextDestination - (animationNextDestination / 2) + 0.5), animationNextDestination, animationNextDestination);
 		}
 
-		//render add building overlay if needed
+		// render add building overlay if needed
 		if (Config.getBoolean(ConfigKey.ADD_BUILDING_MODE) || Config.getBoolean(ConfigKey.REMOVE_BUILDING_MODE)) {
 			boolean adding = Config.getBoolean(ConfigKey.ADD_BUILDING_MODE);
 			float x = currentMousePos.getX();
@@ -179,7 +179,7 @@ public class WorldGUI {
 	 * camera.
 	 */
 	private float getZoomScalar() {
-		//TODO Dom remove config
+		// TODO Dom remove config
 		if (Config.getFloat(ConfigKey.CAMERA_DISTANCE_MAXIMUM) != 45)
 			System.err.println("Set max zoom in userconfig to 45, zoom only works with this so far...");
 
@@ -197,7 +197,7 @@ public class WorldGUI {
 		}
 
 		if (counterScaler > 5) {
-			//too long in-between animations
+			// too long in-between animations
 			worldCamera.setCurrentZoom((float) (worldCamera.getActualZoom() + pos));
 		}
 		return zoomScalar;

@@ -50,7 +50,7 @@ public class WorldSelectionHandler extends InputAdapter {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		PopupManager popupManager = world.getWorldGUI().getPopupManager();
 
-		//Close error pop-ups if need
+		// Close error pop-ups if need
 		int popupCount = world.getWorldGUI().getPopupManager().length();
 		for (int i = 0; i < popupCount; i++) {
 			Popup popup = popupManager.getPopup(i);
@@ -60,7 +60,7 @@ public class WorldSelectionHandler extends InputAdapter {
 			}
 		}
 
-		//if near bottom of screen hitting the intensive learning mode button so ignore
+		// if near bottom of screen hitting the intensive learning mode button so ignore
 		if (screenX < 100 && screenY > Gdx.graphics.getHeight() - 100) {
 			return false;
 		}
@@ -96,15 +96,15 @@ public class WorldSelectionHandler extends InputAdapter {
 		// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
 		PopupDescription popupDescription = world.getWorldGUI().getPopupDescription();
 		if (currentSelection.x == (int) tempRayCast.x && currentSelection.y == (int) tempRayCast.y) {
-			//old node so change page number
+			// old node so change page number
 			if (popupDescription.getPopupShowing())
-				//if popup showing
+				// if popup showing
 				popupDescription.resetCounterAnimation();
 			popupDescription.flipPageRight();
 		} else {
-			//new node so reset page number
+			// new node so reset page number
 			if (popupDescription.getPopupShowing())
-				//if popup showing
+				// if popup showing
 				popupDescription.resetPage();
 		}
 

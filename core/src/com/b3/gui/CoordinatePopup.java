@@ -29,9 +29,9 @@ public class CoordinatePopup {
 	 */
 	public CoordinatePopup() {
 		spriteBatch = new SpriteBatch();
-		//load font from file
+		// load font from file
 		font = Utils.getFont(Config.getString(ConfigKey.FONT_FILE), 18);
-		//load texture
+		// load texture
 		Texture tempTexture = new Texture("world/popups/bottom_canvas.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		background = new Sprite(tempTexture);

@@ -113,7 +113,7 @@ public class LearningModeSettingsTab extends Tab {
 			}
 		});
 
-		//Play and Pause button
+		// Play and Pause button
 		ButtonComponent playPause = new ButtonComponent(skin, font, "Play");
 		SearchTicker ticker = world.getWorldGraph().getCurrentSearch();
 		ticker.addObserver(playPause);

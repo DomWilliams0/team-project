@@ -102,7 +102,7 @@ public class HelpBox extends Table {
 	 * Formatted in the desired way
 	 */
 	private void fillThis() {
-		//top row for sidebar info then interacting with the nodes in the world
+		// top row for sidebar info then interacting with the nodes in the world
 		add(sidebarsT);
 		String padding = "   ";
 		add(padding);
@@ -110,7 +110,7 @@ public class HelpBox extends Table {
 
 		row();
 
-		//bottom row for legend & controls for the world
+		// bottom row for legend & controls for the world
 		add(new Legend(getSkin())).left();
 		add(padding);
 		add(worldT);

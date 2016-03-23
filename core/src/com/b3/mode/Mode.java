@@ -214,18 +214,18 @@ public abstract class Mode extends ScreenAdapter {
 			PopupDescription popupDescription = worldGUI.getPopupDescription();
 			if (sideBarNodes.hasNewClick()) {
 				worldGUI.setCurrentClick(sideBarNodes.getNewClick().getX(), sideBarNodes.getNewClick().getY());
-				//check if need to change page
+				// check if need to change page
 				// Check if node page no. should be incremented or reset to beginning (as clicked on different node)
 				if (currentSelection.x == sideBarNodes.getNewClick().getX() && currentSelection.y == sideBarNodes.getNewClick().getY()) {
-					//old node so change page number
+					// old node so change page number
 					if (popupDescription.getPopupShowing())
-						//if popup showing
+						// if popup showing
 						popupDescription.resetCounterAnimation();
 					popupDescription.flipPageRight();
 				} else {
-					//new node so reset page number
+					// new node so reset page number
 					if (popupDescription.getPopupShowing())
-						//if popup showing
+						// if popup showing
 						popupDescription.resetPage();
 				}
 

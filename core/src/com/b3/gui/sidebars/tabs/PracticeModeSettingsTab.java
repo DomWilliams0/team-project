@@ -37,7 +37,7 @@ public class PracticeModeSettingsTab extends Tab {
 		super(skin, font, preferredWidth, parent, data);
 
 		skin.add("default", font, BitmapFont.class);
-		//new LabelComponent("", 16, "", Color.BLACK)
+		// new LabelComponent("", 16, "", Color.BLACK)
 
 		// Labels
 		// ------

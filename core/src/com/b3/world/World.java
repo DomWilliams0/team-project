@@ -582,7 +582,7 @@ public class World implements Disposable {
 		for (int i = 0; i < buildings.size(); i++) {
 			if (buildings.get(i).getTilePosition().equals(positionDeletion)) {
 				buildings.remove(i);
-				//has to be bottom left (assuming 4x4xZ dimensions)
+				// has to be bottom left (assuming 4x4xZ dimensions)
 
 				if (Config.getBoolean(ConfigKey.BUILDING_COLLISIONS)) {
 

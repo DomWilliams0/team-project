@@ -196,13 +196,13 @@ public class SearchTicker extends Observable {
 			worldGraph.getRenderer().resetPathFlicker();
 
 		if (timer > 2 * timeBetweenTicks)
-			//it has been a long time since last tick so reset it instead of decrementing it
+			// it has been a long time since last tick so reset it instead of decrementing it
 			timer = 0;
 		else
 			// it hasn't been too long since last tick so decrement it
 			timer -= timeBetweenTicks;
 
-		//check if we're supposed to be paused
+		// check if we're supposed to be paused
 		if (isPaused()) {
 			return;
 		}
@@ -222,7 +222,7 @@ public class SearchTicker extends Observable {
 		worldGraph.getRenderer().resetPathFlicker();
 
 		if (override)
-			//override current status
+			// override current status
 			tickFinal();
 		else
 			// tick, but check pause status and timer.
@@ -252,7 +252,7 @@ public class SearchTicker extends Observable {
 			return;
 		}
 
-		//Node node;
+		// Node node;
 
 		if (line == 1) {
 			mostRecentlyExpanded = frontier.take();
@@ -420,7 +420,7 @@ public class SearchTicker extends Observable {
 
 		Node node = frontier.take();
 
-		//record us expanding this node
+		// record us expanding this node
 		mostRecentlyExpanded = node;
 
 		visited.add(node);
@@ -461,7 +461,7 @@ public class SearchTicker extends Observable {
 
 		setUpdated(true);
 
-		//TODO this is the sound 'wave' pings that sounds cool. Needs to be refactored out of here though.
+		// TODO this is the sound 'wave' pings that sounds cool. Needs to be refactored out of here though.
 		if (Config.getBoolean(ConfigKey.SOUNDS_ON) && mode == ModeType.LEARNING) {
 			if (worldGraph.getCurrentSearch().getStart() != null && worldGraph.getCurrentSearch().getEnd() != null && worldGraph.getCurrentSearch().getMostRecentlyExpanded() != null) {
 				Point currentNode = worldGraph.getCurrentSearch().getMostRecentlyExpanded().getPoint();
