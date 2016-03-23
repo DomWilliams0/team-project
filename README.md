@@ -10,6 +10,10 @@ Team members:
 
 ## Running the program
 
+```
+./gradlew run
+```
+
 ## Contributing
 
 The following are some guidelines for contributing to this project.
