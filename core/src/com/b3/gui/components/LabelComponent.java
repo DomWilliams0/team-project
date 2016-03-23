@@ -93,10 +93,10 @@ public class LabelComponent extends GUIComponent {
 	public void setText(String str) {
 		label.setText(str);
 	}
-	
+
 	@Override
 	public Label getComponent() {
 		return label;
 	}
-	
+
 }

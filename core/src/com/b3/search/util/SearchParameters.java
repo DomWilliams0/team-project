@@ -12,7 +12,7 @@ import java.util.function.Function;
 /**
  * Essentially a utils for {@link SearchAlgorithm}.
  * Contains all the functions that we did not want to put in the <code>enum</code>.
- * 
+ *
  * @author bxd428
  */
 public class SearchParameters {
@@ -93,5 +93,5 @@ public class SearchParameters {
 	public Function2<Node, Node, Float> getHeuristic() {
 		return h;
 	}
-	
+
 }

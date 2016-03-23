@@ -50,7 +50,7 @@ public class GuiUtils {
 	 * @param configKey The associated configuration key
 	 */
 	public static void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey,
-	                                  Consumer<Boolean> checkedListener, float preferredWidth) {
+									  Consumer<Boolean> checkedListener, float preferredWidth) {
 		CheckBoxComponent checkBox = new CheckBoxComponent(skin, font, label);
 		checkBox.getComponent().setChecked(Config.getBoolean(configKey));
 		checkBox.addListener(new ChangeListener() {
@@ -74,10 +74,10 @@ public class GuiUtils {
 	 * Set the background colour of a given {@link Table}
 	 *
 	 * @param table The table
-	 * @param r Red colour component
-	 * @param g Green colour component
-	 * @param b Blue colour component
-	 * @param a Alpha component
+	 * @param r     Red colour component
+	 * @param g     Green colour component
+	 * @param b     Blue colour component
+	 * @param a     Alpha component
 	 */
 	public static void setBackgroundColor(Table table, float r, float g, float b, float a) {
 		Pixmap pm1 = new Pixmap(1, 1, Pixmap.Format.RGB565);

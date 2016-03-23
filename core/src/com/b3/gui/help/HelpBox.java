@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
  * Gives instructions on how the mode can be used and interacted with
  * And a {@link Legend} to explain meaning of colours.
  * <p>
+ *
  * @author lxd417
  */
 public class HelpBox extends Table {
@@ -247,12 +248,12 @@ public class HelpBox extends Table {
 	 * Adds some help text to the given {@link Table}, in a {@link LabelComponent} formatted in the appropriate way
 	 * Assumes the text is not a title as defined by {@link #addHelp(Table, String, boolean)}.
 	 *
-	 * @param t       The {@link Table} to add the text to
-	 * @param s       The string to put in
+	 * @param t The {@link Table} to add the text to
+	 * @param s The string to put in
 	 * @return The {@link Cell} created in the table
 	 */
 	private Cell addHelp(Table t, String s) {
 		return addHelp(t, s, false);
 	}
-	
+
 }

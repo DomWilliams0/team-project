@@ -34,9 +34,9 @@ public class Node implements Comparable<Node> {
 	 * Currently not a more desired representation and uses the <code>XN</code> format
 	 * where <code>X</code> is the alphabetic character where A is 1, B is 2, etc of the X coordinate
 	 * and <code>N</code> is the numeric value of the Y coordinate
-	 *
+	 * <p>
 	 * i.e. B3 is the coordinate (1,3)
-	 *
+	 * <p>
 	 * We prefer the standard coordinate representation in {@link #toString()}, so we do not currently use this.
 	 *
 	 * @return an alternative string representation of the node
@@ -160,6 +160,6 @@ public class Node implements Comparable<Node> {
 	public int compareTo(Node n) {
 		return point.compareTo(n.point);
 	}
-	
+
 }
 

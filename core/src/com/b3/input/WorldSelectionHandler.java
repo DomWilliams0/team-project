@@ -43,9 +43,9 @@ public class WorldSelectionHandler extends InputAdapter {
 	 * @param screenX the x position of the mouse
 	 * @param screenY the y position of the mouse
 	 * @param pointer unused
-	 * @param button the button clicked (left, right or middle)
-     * @return true when click is complete
-     */
+	 * @param button  the button clicked (left, right or middle)
+	 * @return true when click is complete
+	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		PopupManager popupManager = world.getWorldGUI().getPopupManager();
@@ -141,8 +141,8 @@ public class WorldSelectionHandler extends InputAdapter {
 	 *
 	 * @param screenX the x position of the mouse
 	 * @param screenY the y position of the mouse
-     * @return
-     */
+	 * @return
+	 */
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		// selecting a tile

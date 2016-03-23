@@ -12,7 +12,8 @@ import com.b3.util.ConfigKey;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import static com.b3.mode.ModeType.*;
+import static com.b3.mode.ModeType.LEARNING;
+import static com.b3.mode.ModeType.TUTORIAL;
 
 /**
  * Deals with rendering a layer of interaction ontop of the graph - pop-ups, errors and heuristics

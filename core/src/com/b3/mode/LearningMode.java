@@ -20,7 +20,7 @@ import com.b3.search.util.SearchAlgorithm;
  * @author dxw405 oxe410 nbg481
  */
 public class LearningMode extends Mode {
-	
+
 	private SideBar sideBar;
 
 	/**
@@ -97,5 +97,5 @@ public class LearningMode extends Mode {
 		super.resize(width, height);
 		sideBar.resize(width, height);
 	}
-	
+
 }

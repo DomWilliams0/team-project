@@ -31,7 +31,7 @@ enum Stage {
  * @author oxe410
  */
 public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
-	
+
 	private boolean firstLoadAlert1;
 	private boolean firstLoadAlert2;
 
@@ -50,7 +50,7 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		for (int i = 0; i < world.getWorldGUI().getPopupManager().length(); i ++) {
+		for (int i = 0; i < world.getWorldGUI().getPopupManager().length(); i++) {
 			Popup popup = world.getWorldGUI().getPopupManager().getPopup(i);
 			if (popup.justOpen) {
 				popup.shouldClose = true;

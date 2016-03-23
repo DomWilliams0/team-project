@@ -16,10 +16,11 @@ public class PointTimer {
 
 	/**
 	 * Creates a new PointTimer, with a x and y coorindate and time to be open
-	 * @param x the x coordinate
-	 * @param y the y coordinate
+	 *
+	 * @param x     the x coordinate
+	 * @param y     the y coordinate
 	 * @param timer the time to count down from
-     */
+	 */
 	public PointTimer(int x, int y, int timer) {
 		this.x = x;
 		this.y = y;
@@ -41,14 +42,14 @@ public class PointTimer {
 
 	/**
 	 * @return the point this {@link PointTimer} is holding
-     */
+	 */
 	public Point getPoint() {
 		return new Point(x, y);
 	}
 
 	/**
 	 * @return the time left in this animation
-     */
+	 */
 	public int getTimer() {
 		return timer;
 	}
@@ -62,16 +63,17 @@ public class PointTimer {
 
 	/**
 	 * Reduces the timer by {@param change}
+	 *
 	 * @param change the amount the timer should be decremented by
-     */
+	 */
 	public void decrementTimer(int change) {
 		timer = timer - change;
 	}
 
 	/**
 	 * @return <code>true</code> if the timer has been reduced to 0;
-	 *         <code>false</code> otherwise.
-     */
+	 * <code>false</code> otherwise.
+	 */
 	public Boolean finishedTiming() {
 		return (timer <= 0);
 	}

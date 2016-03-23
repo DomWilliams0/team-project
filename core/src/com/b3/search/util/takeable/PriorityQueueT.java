@@ -7,10 +7,9 @@ import java.util.function.Function;
 /**
  * A {@link java.util.PriorityQueue} <b>like</b> structure with a {@link #peek()} and {@link #take()} method.
  * This is actually an {@link ArrayList} with prioritisation.
- * 
- * @author bxd428
  *
  * @param <E> The type of elements held in this {@link java.util.Collection}.
+ * @author bxd428
  */
 public class PriorityQueueT<E> extends ArrayList<E> implements Takeable<E> {
 

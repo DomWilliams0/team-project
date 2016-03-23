@@ -68,7 +68,7 @@ public class SearchTicker extends Observable {
 
 		setAllCompleted(true);
 		this.frontier = new StackT<>(); // placeholder
-		
+
 		this.paused = new EnumMap<>(SearchPauser.class);
 		for (SearchPauser pauser : SearchPauser.values()) {
 			paused.put(pauser, false);
@@ -497,11 +497,12 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * Contructs a path from the {@code start} to the {@code end} using the {@code map} generated throughout the search
-	 * @param map the map of nodes to each other nodes
+	 *
+	 * @param map   the map of nodes to each other nodes
 	 * @param start the start node of the path
-	 * @param end the end node of the path
-     * @return a {@link List} of {@link Node}s that is a path from {@code start} to {@code end}
-     */
+	 * @param end   the end node of the path
+	 * @return a {@link List} of {@link Node}s that is a path from {@code start} to {@code end}
+	 */
 	private List<Node> constructPath(Map<Node, Node> map, Node start, Node end) {
 
 		// Helper stack for inserting elements
@@ -528,15 +529,16 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * @return a {@link Takeable} list of {@link Node}s in the frontier
-     */
+	 */
 	public Takeable<Node> getFrontier() {
 		return frontier;
 	}
 
 	/**
 	 * Adds {@code node} to the frontier
+	 *
 	 * @param node the node to be added to the frontier
-     */
+	 */
 	public void addToFrontier(Node node) {
 		frontier.add(node);
 		setUpdated(true);
@@ -544,15 +546,16 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * @return a {@link Set} of type {@link Node} containing all the nodes in the visitied
-     */
+	 */
 	public Set<Node> getVisited() {
 		return visited;
 	}
 
 	/**
 	 * Adds a node to the visited set
+	 *
 	 * @param node the ndoe to add to the visited set
-     */
+	 */
 	public void addToVisited(Node node) {
 		visited.add(node);
 		setUpdated(true);
@@ -588,7 +591,7 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * Tell the ticker to resume
-	 * 
+	 *
 	 * @param searchPauser your identifier, to ensure the ticker only resumes if all pausers have told it to resume
 	 */
 	public void resume(SearchPauser searchPauser) {
@@ -683,39 +686,41 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * Sets the most recently expanded node to the {@code mostRecentlyExpanded}
+	 *
 	 * @param mostRecentlyExpanded the most recently expanded node
-     */
+	 */
 	public void setMostRecentlyExpanded(Node mostRecentlyExpanded) {
 		this.mostRecentlyExpanded = mostRecentlyExpanded;
 	}
 
 	/**
 	 * @return a {@link List} of type {@link Node} containing the nodes added to the frontier this tick
-     */
+	 */
 	public List<Node> getLastFrontier() {
 		return lastFrontier;
 	}
 
 	/**
 	 * Set the updated valude to {@code updated}
+	 *
 	 * @param updated the value to set the internal updated {@code SearchTicker} value to
-     */
+	 */
 	public void setUpdated(boolean updated) {
 		this.updated = updated;
 	}
 
 	/**
 	 * @return true if the search ticker has been changed since last update to {@code setUpdated}
-     */
+	 */
 	public boolean isUpdated() {
 		return updated;
 	}
 
 	/**
-	 * @param node a node
+	 * @param node  a node
 	 * @param child a node
-     * @return the g value from the {@code node} to {@code child}
-     */
+	 * @return the g value from the {@code node} to {@code child}
+	 */
 	public float getG(Node node, Node child) {
 		return costSoFarFunction.apply(node) + edgeCostFunction.apply(node, child);
 	}
@@ -733,13 +738,14 @@ public class SearchTicker extends Observable {
 
 	/**
 	 * @return true if SearchTicker has ticked once
-     */
+	 */
 	public boolean isTickedOnce() {
 		return tickedOnce;
 	}
 
 	/**
 	 * Get the current {@link ModeType} of the world in which this search is running
+	 *
 	 * @return the current {@link ModeType} of the world in which this search is running
 	 */
 	public ModeType getMode() {
@@ -749,5 +755,5 @@ public class SearchTicker extends Observable {
 	public String getTentative_gString() {
 		return tentative_gString;
 	}
-	
+
 }

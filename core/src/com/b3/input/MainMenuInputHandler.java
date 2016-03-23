@@ -15,8 +15,9 @@ public class MainMenuInputHandler extends InputAdapter {
 
 	/**
 	 * Creates a new input handler for the {@link MainMenuScreen}
+	 *
 	 * @param mainMenuScreen the {@link MainMenuScreen} that this class is linked to
-     */
+	 */
 	public MainMenuInputHandler(MainMenuScreen mainMenuScreen) {
 		this.mainMenuScreen = mainMenuScreen;
 	}
@@ -27,8 +28,8 @@ public class MainMenuInputHandler extends InputAdapter {
 	 *
 	 * @param screenX the x position of the mouse
 	 * @param screenY the y posision of the mouse
-     * @return true if moved; false if not.
-     */
+	 * @return true if moved; false if not.
+	 */
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		int xMax = Gdx.graphics.getWidth();
@@ -44,5 +45,5 @@ public class MainMenuInputHandler extends InputAdapter {
 
 		return super.mouseMoved(screenX, screenY);
 	}
-	
+
 }

@@ -47,21 +47,22 @@ public class VisScrollPane extends ScrollPane {
 	/**
 	 * Create a new {@link VisScrollPane} with sufficient data to generate it.
 	 *
-	 * @param skin	The {@link Skin} with which to render the tables
-	 * @param style	The style with which to render the scroll pane.
+	 * @param skin       The {@link Skin} with which to render the tables
+	 * @param style      The style with which to render the scroll pane.
 	 * @param isFrontier <code>true</code> if this is displaying frontier nodes, <code>false</code> if displaying visited.
-	 * @param vn	The {@link VisNodes} whose data is to be used as assistance in rendering data.
+	 * @param vn         The {@link VisNodes} whose data is to be used as assistance in rendering data.
 	 */
 	public VisScrollPane(Skin skin, ScrollPaneStyle style, boolean isFrontier, VisNodes vn) {
 		this(new Table(skin), style, isFrontier, vn);
 	}
+
 	/**
 	 * Create a new {@link VisScrollPane} with sufficient data to generate it.
 	 *
-	 * @param t		The {@link Table} to display in this pane
-	 * @param style	The style with which to render the scroll pane.
+	 * @param t          The {@link Table} to display in this pane
+	 * @param style      The style with which to render the scroll pane.
 	 * @param isFrontier <code>true</code> if this is displaying frontier nodes, <code>false</code> if displaying visited.
-	 * @param vn	The {@link VisNodes} whose data is to be used as assistance in rendering data.
+	 * @param vn         The {@link VisNodes} whose data is to be used as assistance in rendering data.
 	 */
 	private VisScrollPane(Table t, ScrollPaneStyle style, boolean isFrontier, VisNodes vn) {
 		super(t, style);
@@ -106,13 +107,13 @@ public class VisScrollPane extends ScrollPane {
 	}
 
 
-
 	/**
 	 * Add a given {@link Node} to the table in this object
 	 * Wraps the node in its own {@link Table}, which is stored in the {@link HashMap}
 	 * So that it can later be highlighted with {@link #setCellColour(Node, boolean)}.
-	 *
+	 * <p>
 	 * Will apply any known colour to the node immediately.
+	 *
 	 * @param n The node to display in the table.
 	 * @param i The priority of the node,or <code>-1</code> if not applicable.
 	 */
@@ -121,7 +122,7 @@ public class VisScrollPane extends ScrollPane {
 		Table row = new Table(tableSkin);
 		//put the priority if applicable
 		String prefix = "";
-		if (i>=0) prefix = ++i + ". ";
+		if (i >= 0) prefix = ++i + ". ";
 
 		//add the node text to the wrapping table
 		//edit here if you want to use adapted string
@@ -139,6 +140,7 @@ public class VisScrollPane extends ScrollPane {
 				vn.getWorld().getWorldGraph().getCurrentSearch().pause(SearchPauser.VIS_SCROLL_PANE);
 				return true;
 			}
+
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				//we have received an end-of-touch event
@@ -170,7 +172,7 @@ public class VisScrollPane extends ScrollPane {
 
 	/**
 	 * Apply the colour known to the hash map to the given {@link Node}
-	 *
+	 * <p>
 	 * Adapted from code at http://stackoverflow.com/questions/24250791/make-scene2d-ui-table-with-alternate-row-colours
 	 *
 	 * @param n The node whose colour to apply
@@ -205,6 +207,7 @@ public class VisScrollPane extends ScrollPane {
 
 	/**
 	 * Update the colour of all nodes known to this object.
+	 *
 	 * @return Whether all nodes were correctly highlighted
 	 */
 	private boolean applyColourAll() {
@@ -212,7 +215,7 @@ public class VisScrollPane extends ScrollPane {
 		boolean all = true;
 
 		//iterate over the cellmap keys, i.e. those nodes currently known by the in-progress search
-		for(Node n : cellmap.keySet()) {
+		for (Node n : cellmap.keySet()) {
 			//apply the colour and update all
 			//ordered this way to avoid short-circuit evaluation; we must apply all node colours regardless.
 			all = applyColour(n) && all;
@@ -224,8 +227,8 @@ public class VisScrollPane extends ScrollPane {
 	/**
 	 * Set a background colour for a cell in the scrollpanes based on the node.
 	 *
-	 * @param n The node to highlight
-	 * @param c The colour to set
+	 * @param n               The node to highlight
+	 * @param c               The colour to set
 	 * @param singleHighlight whether this is to be the only highlighted node
 	 * @return whether the colour was successful
 	 */
@@ -234,7 +237,7 @@ public class VisScrollPane extends ScrollPane {
 		//so remove all other colours if this is true
 		if (singleHighlight) colours.clear();
 		//store the given colour
-		colours.put(n,c);
+		colours.put(n, c);
 		//apply all node colours, since we may have deleted other colours by using this method.
 		return applyColourAll();
 	}
@@ -243,7 +246,7 @@ public class VisScrollPane extends ScrollPane {
 	 * Set a background colour for a cell in the scrollpanes based on the node.
 	 * The colour will match the colour of the node in the world.
 	 *
-	 * @param n The node to highlight
+	 * @param n               The node to highlight
 	 * @param singleHighlight whether this is to be the only highlighted node
 	 * @return whether the cell was coloured
 	 */
@@ -261,6 +264,7 @@ public class VisScrollPane extends ScrollPane {
 
 	/**
 	 * Get the colour of a given node as corresponds with the colours in the world
+	 *
 	 * @param n The node to query
 	 * @return The colour of the node in the world graph
 	 */
@@ -278,13 +282,16 @@ public class VisScrollPane extends ScrollPane {
 
 		//check whether the node is actually a new frontier or just expanded
 		//done after table-check so that these colours take precedence.
-		if (vn.getNewFrontier()!=null && vn.getNewFrontier().contains(n)) c = Config.getColor(ConfigKey.LAST_FRONTIER_COLOUR);
-		if (vn.getJustExpanded()!=null && vn.getJustExpanded().equals(n)) c = Config.getColor(ConfigKey.JUST_EXPANDED_COLOUR);
+		if (vn.getNewFrontier() != null && vn.getNewFrontier().contains(n))
+			c = Config.getColor(ConfigKey.LAST_FRONTIER_COLOUR);
+		if (vn.getJustExpanded() != null && vn.getJustExpanded().equals(n))
+			c = Config.getColor(ConfigKey.JUST_EXPANDED_COLOUR);
 		return c;
 	}
 
 	/**
 	 * Check if a scrollpane is being used ie being dragged or is otherwise scrolling
+	 *
 	 * @return Whether a scrollpane is being dragged / scrolled
 	 */
 	public boolean scrollpaneBeingUsed() {
@@ -293,6 +300,7 @@ public class VisScrollPane extends ScrollPane {
 
 	/**
 	 * Query whether the user has clicked a different node in the scroll panes
+	 *
 	 * @return Whether the user has clicked a different node in the scroll panes
 	 */
 	public boolean isClickedUpdated() {
@@ -302,6 +310,7 @@ public class VisScrollPane extends ScrollPane {
 	/**
 	 * Get the coordinates of the node which has been clicked in the scroll panes
 	 * Marks it as not updated any more.
+	 *
 	 * @return The clicked nodes coordinates
 	 */
 	public Point getClickedNode() {
@@ -316,5 +325,5 @@ public class VisScrollPane extends ScrollPane {
 		outerTable.clear();
 		cellmap.clear();
 	}
-	
+
 }

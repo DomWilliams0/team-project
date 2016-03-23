@@ -15,7 +15,7 @@ import java.util.Collections;
  * @author dxw405
  */
 public class ConfigurationFile {
-	
+
 	private ConfigurationProvider provider;
 
 	public ConfigurationFile(String referencePath) {
@@ -73,5 +73,5 @@ public class ConfigurationFile {
 	public <T> T get(String key, Class<T> type) {
 		return provider.getProperty(key, type);
 	}
-	
+
 }

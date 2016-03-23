@@ -6,11 +6,11 @@ package com.b3.search;
  * @author bxd428
  */
 public enum SearchPauser {
-	
+
 	SCROLL_PANE,
-	
+
 	PLAY_PAUSE_BUTTON,
-	
+
 	VIS_SCROLL_PANE
-	
+
 }

@@ -5,7 +5,6 @@ package com.b3.util;
  *
  * @param <T> The type of the first element.
  * @param <U> The type of the second element.
- *
  * @author oxe410
  */
 public class Tuple<T, U> {
@@ -63,7 +62,7 @@ public class Tuple<T, U> {
 
 	/**
 	 * @return the hashCode of this Tuple
-     */
+	 */
 	@Override
 	public int hashCode() {
 		return getFirst().hashCode();

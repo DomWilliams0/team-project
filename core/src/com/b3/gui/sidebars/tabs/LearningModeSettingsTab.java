@@ -191,5 +191,5 @@ public class LearningModeSettingsTab extends Tab {
 		addComponent(searchSelectBox, Align.center, preferredWidth, 20, 0, 0, 0);
 		addComponent(playPause, Align.center, preferredWidth, 5, 0, 0, 0);
 	}
-	
+
 }

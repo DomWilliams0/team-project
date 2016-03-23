@@ -22,5 +22,5 @@ public class MenuItemComponent extends ButtonComponent {
 	public MenuItemComponent(Skin skin, BitmapFont font, String text) {
 		super(skin, font, text);
 	}
-	
+
 }

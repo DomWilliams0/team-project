@@ -129,5 +129,5 @@ public class TutorialMode extends Mode {
 	public void setCurrentPage(int currentPage) {
 		tutorialPopups.setCurrentPage(currentPage);
 	}
-	
+
 }

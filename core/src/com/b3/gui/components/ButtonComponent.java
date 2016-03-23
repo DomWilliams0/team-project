@@ -90,5 +90,5 @@ public class ButtonComponent extends GUIComponent implements Observer {
 		if (callback != null)
 			callback.accept(o);
 	}
-	
+
 }

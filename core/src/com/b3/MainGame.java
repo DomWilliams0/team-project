@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 public class MainGame extends Game {
 
 	private static ModeType currentMode;
-	
+
 	private InputHandler inputHandler;
 	private SoundController sc;
 
@@ -83,7 +83,7 @@ public class MainGame extends Game {
 		Config.clearConfig();
 		ModeType modeBackup = currentMode;
 		currentMode = modeType;
-		
+
 		Mode m;
 		switch (modeType) {
 			case MENU:
@@ -112,7 +112,7 @@ public class MainGame extends Game {
 
 	/**
 	 * @return the current mode this game is in
-     */
+	 */
 	public static ModeType getCurrentMode() {
 		return currentMode;
 	}

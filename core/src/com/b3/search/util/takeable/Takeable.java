@@ -4,10 +4,9 @@ import java.util.Collection;
 
 /**
  * An extension of {@link Collection} with a {@link #peek()} and {@link #take()} method.
- * 
- * @author bxd428
  *
  * @param <E> The type of elements held in this {@link java.util.Collection}.
+ * @author bxd428
  */
 public interface Takeable<E> extends Collection<E> {
 

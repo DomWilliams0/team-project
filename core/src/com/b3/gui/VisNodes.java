@@ -26,6 +26,7 @@ import java.util.*;
  * A {@link Table} which will display the frontier and visited {@link Node}s
  * in a useful way to inspect what is happening internally with the algorithm.
  * <p>
+ *
  * @author lxd417 oxe410
  */
 public class VisNodes extends Table {
@@ -53,8 +54,9 @@ public class VisNodes extends Table {
 
 	/**
 	 * Create a new data visualisation table
+	 *
 	 * @param stage The stage with which to render
-	 * @param skin The skin of the table and scrollpanes (background of scrollpane is removed)
+	 * @param skin  The skin of the table and scrollpanes (background of scrollpane is removed)
 	 * @param world The world of the simulation
 	 */
 	public VisNodes(Stage stage, Skin skin, World world) {
@@ -81,8 +83,8 @@ public class VisNodes extends Table {
 	 * Render the {@link Table}, using a given {@link SearchTicker}
 	 * This method will handle <code>null</code> values appropriately to save this occurring outside the object.
 	 *
-     * @param ticker The {@link SearchTicker} whose values are to be rendered.
-     */
+	 * @param ticker The {@link SearchTicker} whose values are to be rendered.
+	 */
 	public void render(SearchTicker ticker) {
 		int render;
 		//check that the ticker exists; if it does, see if the ticker has data to render
@@ -124,8 +126,9 @@ public class VisNodes extends Table {
 
 	/**
 	 * This forces the node bar to reload its data, and recalculate positioning of everything without informing the ticker
-     * @param ticker {@link SearchTicker} of the current search
-     */
+	 *
+	 * @param ticker {@link SearchTicker} of the current search
+	 */
 	public void forceUpdateTable(SearchTicker ticker) {
 		render(
 				ticker.getFrontier(),
@@ -140,10 +143,10 @@ public class VisNodes extends Table {
 	 * If stepthrough mode is active, calling this will force a render regardless;
 	 * the calling function should ensure the search has been updated prior to calling this.
 	 *
-	 * @param front   	the frontier to display
-	 * @param visited 	the visited set to display
-	 * @param alg     	the current algorithm being used by the search
-	 * @param showDesc	whether to show the dynamic description of the algorithm in progress
+	 * @param front    the frontier to display
+	 * @param visited  the visited set to display
+	 * @param alg      the current algorithm being used by the search
+	 * @param showDesc whether to show the dynamic description of the algorithm in progress
 	 * @return the state of the render  - 0: Not yet time to render
 	 * - 1: Rendered as normal
 	 * - 2: The scrollpane(s) are being dragged.
@@ -235,7 +238,6 @@ public class VisNodes extends Table {
 	}
 
 	/**
-
 	 * Set a background colour for a cell in the scrollpanes based on the node.
 	 *
 	 * @param n               The {@link Node} to highlight
@@ -245,20 +247,20 @@ public class VisNodes extends Table {
 	 */
 	public boolean setCellColour(Node n, Color c, boolean singleHighlight) {
 
-        return spm.setCellColour(n, c, singleHighlight);
+		return spm.setCellColour(n, c, singleHighlight);
 	}
 
-    /**
-     * Set a background colour for a cell in the scrollpanes based on the {@link Node}.
-     * The colour will match the colour of the node in the world.
-     *
-     * @param n The {@link Node} to highlight
-     * @param singleHighlight <code>true</code> if this is to be the only highlighted node
-     * @return <code>true</code> if the cell was successfully coloured
-     */
-    public boolean setCellColour(Node n, boolean singleHighlight) {
-        //singleHighlight tells us if this is the only node to be highlighted,
-        //so remove all other colours if this is true
+	/**
+	 * Set a background colour for a cell in the scrollpanes based on the {@link Node}.
+	 * The colour will match the colour of the node in the world.
+	 *
+	 * @param n               The {@link Node} to highlight
+	 * @param singleHighlight <code>true</code> if this is to be the only highlighted node
+	 * @return <code>true</code> if the cell was successfully coloured
+	 */
+	public boolean setCellColour(Node n, boolean singleHighlight) {
+		//singleHighlight tells us if this is the only node to be highlighted,
+		//so remove all other colours if this is true
 		return spm.setCellColour(n, singleHighlight);
 	}
 
@@ -428,7 +430,7 @@ public class VisNodes extends Table {
 	/**
 	 * Returns a string representation of <code>newFrontier</code>.
 	 * Displays the current priority next to the node.
-	 *
+	 * <p>
 	 * Makes it clearer in the dynamic description where the node was inserted into the frontier
 	 *
 	 * @return The string to display in the description
@@ -469,23 +471,23 @@ public class VisNodes extends Table {
 
 	/**
 	 * @return the current {@link World} that this visNodes is linked to
-     */
+	 */
 	public World getWorld() {
 		return world;
 	}
 
 	/**
 	 * @return the frontier of the current search, accessed using {@link SearchTicker}
-     */
+	 */
 	public List<Node> getNewFrontier() {
 		return newFrontier;
 	}
 
 	/**
 	 * @return the most recently expanded node, which was accessed using {@link SearchTicker}
-     */
+	 */
 	public Node getJustExpanded() {
 		return justExpanded;
 	}
-	
+
 }

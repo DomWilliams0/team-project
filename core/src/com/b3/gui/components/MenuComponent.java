@@ -48,7 +48,7 @@ public class MenuComponent extends GUIComponent {
 	 */
 	public void render() {
 		spriteBatch.begin();
-		spriteBatch.draw(backgroundTexture, Gdx.graphics.getWidth()/ 2 - 175,
+		spriteBatch.draw(backgroundTexture, Gdx.graphics.getWidth() / 2 - 175,
 				Gdx.graphics.getHeight() - backgroundTexture.getHeight() + 75,
 				350, 100);
 		spriteBatch.end();
@@ -86,10 +86,10 @@ public class MenuComponent extends GUIComponent {
 		table.setWidth(width);
 		table.setHeight(this.height);
 	}
-	
+
 	@Override
 	public Actor getComponent() {
 		return table;
 	}
-	
+
 }

@@ -71,7 +71,7 @@ public class Config {
 	public static void unset(ConfigKey key) {
 		gameConfig.remove(key);
 	}
-	
+
 	/**
 	 * Completely clears the current config of any changes that were
 	 * made to it not specified in the config files.
@@ -162,14 +162,14 @@ public class Config {
 	public static Float getFloat(ConfigKey key) {
 		return get(key, Float.class);
 	}
-	
+
 	/**
 	 * A {@link Map} between hex colour codes and {@link Color Colours}.
 	 * The hex codes should be in the form {@code "FF00FF"} if the alpha is {@code FF},
 	 * otherwise {@code "FF00FF33"}.
 	 */
 	private static final HashMap<String, Color> COLOUR_CACHE = new HashMap<>();
-	
+
 	public static Color getColor(ConfigKey key) {
 		String hex = getString(key).toUpperCase();
 		hex = hex.charAt(0) == '#' ? hex.substring(1) : hex;

@@ -43,10 +43,10 @@ public class SliderComponent extends GUIComponent {
 	public void setValue(float value) {
 		slider.setValue(value);
 	}
-	
+
 	@Override
 	public Slider getComponent() {
 		return slider;
 	}
-	
+
 }

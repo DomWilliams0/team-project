@@ -114,5 +114,5 @@ public class CompareModeSettingsTab extends Tab {
 		addComponent(gameSpeedSlider, Align.center, preferredWidth, 5, 0, 0, 0);
 		addComponent(playPause, Align.center, preferredWidth, 5, 0, 0, 0);
 	}
-	
+
 }

@@ -181,7 +181,7 @@ public class PopupDescription {
 	 */
 	public void render(int currentNodeClickX, int currentNodeClickY, SearchTicker currentSearch) {
 		WorldCamera worldCamera = world.getWorldCamera();
-		
+
 		counterAnimationFade++;
 		popupShowing = false;
 		float scalingZoom = (float) (worldCamera.getActualZoom() / 4.5);
@@ -627,9 +627,9 @@ public class PopupDescription {
 
 	/**
 	 * @return the page of the currently opened pop-up
-     */
+	 */
 	public int getPageNo() {
 		return pageNo;
 	}
-	
+
 }

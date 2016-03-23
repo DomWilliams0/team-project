@@ -21,6 +21,7 @@ import java.util.Map;
  * Provides a table to display the frontier and visited nodes
  * As part of the gui.
  * <p>
+ *
  * @author lxd417 oxe410
  */
 public class SideBarNodes extends SideBar implements Disposable {
@@ -212,5 +213,5 @@ public class SideBarNodes extends SideBar implements Disposable {
 		nodesTab.getUI().forceUpdateTable(currentSearch);
 		super.resize(width, height);
 	}
-	
+
 }

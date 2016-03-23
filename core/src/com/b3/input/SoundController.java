@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 
 /**
  * Controls all of the sounds that will play during the lifetime of the program.
+ *
  * @author nbg481
  */
 public class SoundController {
@@ -64,13 +65,14 @@ public class SoundController {
 
 	/**
 	 * Stops soundIndex from playing, if already playing
+	 *
 	 * @param soundIndex the index of the sound to stop
-     */
+	 */
 	public static void stopSound(int soundIndex) {
 		if (id != -1) {
 			sounds[soundIndex].stop();
 			id = -1;
 		}
 	}
-	
+
 }

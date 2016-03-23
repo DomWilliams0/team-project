@@ -18,10 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * i.e. the colours used to display the nodes or highlight in the {@link com.b3.gui.VisScrollPane}s.
  * This {@link Legend} cannot be altered besides changing the colours in {@link WorldGraphRenderer}
  * <p>
+ *
  * @author lxd417
  */
 public class Legend extends Table {
-	
+
 	private Pixmap pm;
 	private Skin skin;
 

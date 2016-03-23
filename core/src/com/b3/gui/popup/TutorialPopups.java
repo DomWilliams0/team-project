@@ -101,10 +101,11 @@ public class TutorialPopups {
 
 	/**
 	 * Checks that the current task that the user has to do has been completed
-	 * @param world the tutorial world that the user is in
-	 * @param sideBar the left hand sidebar (for use when checking if has opened + button presses)
+	 *
+	 * @param world        the tutorial world that the user is in
+	 * @param sideBar      the left hand sidebar (for use when checking if has opened + button presses)
 	 * @param sideBarNodes the right hand sidebar (for use when checking if has opened + button presses)
-     */
+	 */
 	public void checkTaskCompleted(World world, SideBar sideBar, SideBarNodes sideBarNodes) {
 		switch (stepCounter) {
 			case 0:
@@ -171,21 +172,21 @@ public class TutorialPopups {
 
 	/**
 	 * @param currentPos the current position of the mouse on a node in the world
-     */
+	 */
 	public void setCurrentPos(Point currentPos) {
 		this.currentPos = currentPos;
 	}
 
 	/**
 	 * @return the task that the user is currently on
-     */
+	 */
 	public int getCounter() {
 		return stepCounter;
 	}
 
 	/**
 	 * @param currentPage the current page that the user is on in any of the {@link com.b3.gui.PopupDescription}
-     */
+	 */
 	public void setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
 	}

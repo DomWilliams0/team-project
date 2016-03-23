@@ -113,7 +113,7 @@ public class MessageBoxComponent extends GUIComponent {
 	 */
 	public void show() {
 //		dialog.show(popupStage).setPosition(10, Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
- 		dialog.show(popupStage).setPosition(Gdx.graphics.getWidth() / 2 - dialog.getWidth() / 2, Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
+		dialog.show(popupStage).setPosition(Gdx.graphics.getWidth() / 2 - dialog.getWidth() / 2, Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
 	}
 
 	/**
@@ -125,10 +125,10 @@ public class MessageBoxComponent extends GUIComponent {
 	public static void show(String infoMessage, String titleBar) {
 		JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
 	}
-	
+
 	@Override
 	public Actor getComponent() {
 		return dialog;
 	}
-	
+
 }

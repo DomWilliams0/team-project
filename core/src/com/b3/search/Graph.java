@@ -255,7 +255,7 @@ public class Graph {
 			}
 		}
 	}
-	
+
 	/**
 	 * @return A random {@link Node} from the graph
 	 */
@@ -265,10 +265,10 @@ public class Graph {
 		for (Node node : nodes)
 			if (index-- == 0)
 				return node;
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * @param except The node to not generate
 	 * @return A random {@link Node} from the graph that isn't <code>except</code>
@@ -278,8 +278,8 @@ public class Graph {
 		do {
 			node = getRandomNode();
 		} while (node.equals(except));
-		
+
 		return node;
 	}
-	
+
 }

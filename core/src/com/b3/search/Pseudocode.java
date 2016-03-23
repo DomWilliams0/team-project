@@ -34,8 +34,9 @@ public class Pseudocode extends Observable {
 
 	/**
 	 * Constructs a new pseudocode. Changes pseudocode depending on {@param algorithm}
+	 *
 	 * @param algorithm the algorithm to tailor this pseudocode to
-     */
+	 */
 	public Pseudocode(SearchAlgorithm algorithm, SearchTicker searchTicker) {
 		this.algorithm = algorithm;
 		this.searchTicker = searchTicker;
@@ -84,15 +85,16 @@ public class Pseudocode extends Observable {
 
 	/**
 	 * @return the {@link SearchAlgorithm} that this pseudocode visualisation is using
-     */
+	 */
 	public SearchAlgorithm getAlgorithm() {
 		return algorithm;
 	}
 
 	/**
 	 * Changes the pseudocode to match the new {@code algorithm}
+	 *
 	 * @param algorithm the algorithm to re-initialise this Pseuocode with
-     */
+	 */
 	public void setAlgorithm(SearchAlgorithm algorithm) {
 		this.algorithm = algorithm;
 		initLines();
@@ -103,29 +105,30 @@ public class Pseudocode extends Observable {
 
 	/**
 	 * @return a {@link Tuple} of all the lines of pseudocode
-     */
+	 */
 	public List<Tuple<String, Tuple<Boolean, Integer>>> getLines() {
 		return lines;
 	}
 
 	/**
 	 * @return the index of teh current line of pseudocode that is currently ighlighted
-     */
+	 */
 	public int getCurrentLine() {
 		return currentLine;
 	}
 
 	/**
 	 * @param currentLine the line that will be highlighted
-     */
+	 */
 	public void setCurrentLine(int currentLine) {
 		this.currentLine = currentLine;
 	}
 
 	/**
 	 * De-highlights the pseudocode and then highlights the current line of pseudocode
+	 *
 	 * @param i the line to highlight
-     */
+	 */
 	public void highlight(int i) {
 		// Un-highlight
 		lines = lines
@@ -138,8 +141,7 @@ public class Pseudocode extends Observable {
 			lines.set(i - 1, new Tuple<>(tuple.getFirst(), new Tuple<>(true, tuple.getSecond().getSecond())));
 
 			currentLine = i;
-		}
-		else
+		} else
 			currentLine = 0;
 
 		setChanged();
@@ -152,7 +154,7 @@ public class Pseudocode extends Observable {
 	 * Updates the lines depending on the algorithm and works out the link between the constants and variables
 	 *
 	 * @param i the line to evaluate for variables
-     */
+	 */
 	private void updateLines(int i) {
 
 		if (arrayList == null) {
@@ -189,7 +191,7 @@ public class Pseudocode extends Observable {
 		switch (i) {
 			case 1: {
 				if (searchTicker.getFrontier() != null)
-					if (searchTicker.getFrontier().size() >0)
+					if (searchTicker.getFrontier().size() > 0)
 						firstFrontier = searchTicker.getFrontier().peek().toString();
 
 			}
@@ -229,7 +231,7 @@ public class Pseudocode extends Observable {
 			break;
 		}
 
-		for (int j = i+1; j < arrayList.size(); j++)
+		for (int j = i + 1; j < arrayList.size(); j++)
 			arrayList.set(j, "");
 
 		return tempText;
@@ -240,7 +242,7 @@ public class Pseudocode extends Observable {
 	 *
 	 * @param i the line to evaluate
 	 * @return the string that the line was set to
-     */
+	 */
 	private String updateForAStar(int i) {
 		String tempText = "";
 		switch (i) {
@@ -273,9 +275,8 @@ public class Pseudocode extends Observable {
 					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toString();
 				else if (searchTicker.getCurrentNeighbour() != null)
 					tempText = searchTicker.getCurrentNeighbour().toString();
-				else
-					if (searchTicker.getCurrentNeighbours() != null)
-						tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
+				else if (searchTicker.getCurrentNeighbours() != null)
+					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
 				arrayList.set(5, tempText);
 			}
 			break;
@@ -292,8 +293,7 @@ public class Pseudocode extends Observable {
 			case 8: {
 				if (searchTicker.getCurrentNeighbour() != null)
 					tempText = searchTicker.getCurrentNeighbour().toString();
-				else
-				if (searchTicker.getCurrentNeighbours() != null)
+				else if (searchTicker.getCurrentNeighbours() != null)
 					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
 				arrayList.set(5, tempText + ": " + searchTicker.getMostRecentlyExpanded().getNeighbours().toString());
 				arrayList.set(7, tempText);
@@ -302,8 +302,7 @@ public class Pseudocode extends Observable {
 			case 9: {
 				if (searchTicker.getCurrentNeighbour() != null)
 					tempText = searchTicker.getCurrentNeighbour().toString();
-				else
-				if (searchTicker.getCurrentNeighbours() != null)
+				else if (searchTicker.getCurrentNeighbours() != null)
 					tempText = searchTicker.getMostRecentlyExpanded().getNeighbours().toArray()[0].toString();
 				arrayList.set(5, tempText + ": " + searchTicker.getMostRecentlyExpanded().getNeighbours().toString());
 				arrayList.set(8, tempText);
@@ -323,7 +322,7 @@ public class Pseudocode extends Observable {
 			break;
 		}
 
-		for (int j = i+1; j < arrayList.size(); j++)
+		for (int j = i + 1; j < arrayList.size(); j++)
 			arrayList.set(j, "");
 
 		return tempText;
@@ -334,7 +333,7 @@ public class Pseudocode extends Observable {
 	 *
 	 * @param i the line to evaluate
 	 * @return a {@link Tuple} of two strings, the first is the constants and the second the variable
-     */
+	 */
 	public Tuple<String, String> getImportantInfo(int i) {
 		if (arrayList == null) {
 			return null;

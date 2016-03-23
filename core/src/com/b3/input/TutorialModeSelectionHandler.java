@@ -89,5 +89,5 @@ public class TutorialModeSelectionHandler extends InputAdapter {
 		}
 		return true;
 	}
-	
+
 }

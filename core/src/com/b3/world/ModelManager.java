@@ -33,7 +33,7 @@ public class ModelManager {
 	 * The {@link ModelInstance ModelInstances} to render,
 	 */
 	private final ArrayList<Tuple<ModelController, ModelInstance>> models = new ArrayList<>();
-	
+
 	/**
 	 * A {@link ArrayList list} of all the fixed position {@link Model Models}.
 	 */

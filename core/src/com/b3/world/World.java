@@ -429,7 +429,7 @@ public class World implements Disposable {
 
 		if (Config.getBoolean(ConfigKey.LANDSCAPE_RENDERING))
 			landscapeCamera.renderWorld();
-		
+
 		worldCamera.renderWorld();
 
 		worldGUI.render();

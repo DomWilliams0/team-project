@@ -5,11 +5,8 @@ import com.b3.gui.components.LabelComponent;
 import com.b3.gui.sidebars.tabs.NodesTab;
 import com.b3.mode.ModeType;
 import com.b3.search.Pseudocode;
-import com.b3.search.util.SearchAlgorithm;
 import com.b3.util.Tuple;
 import com.b3.util.Utils;
-import com.b3.world.World;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -68,9 +65,10 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
 	/**
 	 * Returns the description to display on top of the pseudocode
+	 *
 	 * @param index Defines which description to choose
 	 * @return See above
-     */
+	 */
 	private String getDescription(int index) {
 		ArrayList<String> desc = new ArrayList<String>() {{
 			add("Pseudocode visualisation");
@@ -81,7 +79,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
 	/**
 	 * @return The default {@link PseudocodeVisualiser} object
-     */
+	 */
 	public static PseudocodeVisualiser getInstance() {
 		if (instance == null)
 			instance = new PseudocodeVisualiser();
@@ -91,7 +89,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 	/**
 	 * @param skin The libGDX skin
 	 * @return The default {@link PseudocodeVisualiser} object
-     */
+	 */
 	public static PseudocodeVisualiser getInstance(Skin skin) {
 		if (instance == null) {
 			instance = new PseudocodeVisualiser();
@@ -126,7 +124,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
 				/**
 				 * Updates the pseudocode line to show the current value of all the variables in the string
-                 */
+				 */
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					System.out.println("CLICKED LINE: " + lineForListener);
@@ -148,11 +146,12 @@ public class PseudocodeVisualiser extends Table implements Observer {
 
 	/**
 	 * Parses the text and replaces all instances of itemToReplace with toReplaceWith in currentText
-	 * @param currentText the current text in the label
+	 *
+	 * @param currentText   the current text in the label
 	 * @param toReplaceWith the substring to insert into the current text
 	 * @param itemToReplace the substring to remove fromm the current text and insert toReplaceWith into
-     * @return
-     */
+	 * @return
+	 */
 	private String parseAndChange(String currentText, String toReplaceWith, String itemToReplace) {
 		if (toReplaceWith.equals("") || toReplaceWith.equals(" "))
 			return currentText;
@@ -166,8 +165,8 @@ public class PseudocodeVisualiser extends Table implements Observer {
 		//Update conflics for A*
 		String tempchange = currentText.replace(itemToReplace, toReplaceWith);
 		tempchange = tempchange.replace("frotier", "frontier");
-		tempchange = tempchange.replace("fro"+toReplaceWith+"tier", "frontier");
-		tempchange = tempchange.replace("ca"+toReplaceWith+"eFro"+toReplaceWith, "cameFrom");
+		tempchange = tempchange.replace("fro" + toReplaceWith + "tier", "frontier");
+		tempchange = tempchange.replace("ca" + toReplaceWith + "eFro" + toReplaceWith, "cameFrom");
 		tempchange = tempchange.replace("return", "return");
 		//Update conflics for DFS
 

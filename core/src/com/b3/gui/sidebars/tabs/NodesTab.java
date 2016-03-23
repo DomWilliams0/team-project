@@ -92,8 +92,7 @@ public class NodesTab extends Tab {
 	public void setPseudocodeVisible(boolean enabled) {
 		if (enabled && !pseudocodeTable.hasParent()) {
 			tab.add(pseudocodeTable);
-		}
-		else if (!enabled && pseudocodeTable.isDescendantOf(tab)) {
+		} else if (!enabled && pseudocodeTable.isDescendantOf(tab)) {
 			tab.removeActor(pseudocodeTable);
 		}
 	}

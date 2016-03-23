@@ -32,7 +32,6 @@ public class BuildingModelCache implements Disposable {
 
 	/**
 	 * creates a new building model cache linked to a world
-	 *
 	 */
 	public BuildingModelCache() {
 		models = new HashMap<>();

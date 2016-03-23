@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author dxw405
  */
 public class DebugRenderer {
-	
+
 	private final SpriteBatch spriteBatch;
 	private final Box2DDebugRenderer renderer;
 	private final World world;
@@ -30,7 +30,7 @@ public class DebugRenderer {
 
 	/**
 	 * Renders the {@link World} using the current {@link PerspectiveCamera}.
-	 * 
+	 *
 	 * @param camera The {@link PerspectiveCamera} used to render the
 	 *               {@link #world} using the {@link #spriteBatch}.
 	 */

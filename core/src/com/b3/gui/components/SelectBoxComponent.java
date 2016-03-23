@@ -79,10 +79,10 @@ public class SelectBoxComponent extends GUIComponent {
 	public void setSelected(Object selected) {
 		selectBox.setSelected(selected);
 	}
-	
+
 	@Override
 	public Actor getComponent() {
 		return selectBox;
 	}
-	
+
 }

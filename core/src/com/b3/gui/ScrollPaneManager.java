@@ -26,7 +26,7 @@ public class ScrollPaneManager {
 	 * utilising a given {@link VisNodes}.
 	 *
 	 * @param stage The {@link Stage} on which to render the scrollpanes
-	 * @param vn The {@link VisNodes} whose data is to be used as assistants while rendering
+	 * @param vn    The {@link VisNodes} whose data is to be used as assistants while rendering
 	 */
 	public ScrollPaneManager(Stage stage, VisNodes vn) {
 		Skin skin = vn.getSkin();
@@ -49,8 +49,9 @@ public class ScrollPaneManager {
 
 	/**
 	 * Populate the {@link VisScrollPane}s with the given {@link Node}s
+	 *
 	 * @param frontier the frontier to render
-	 * @param visited the visited set (ordered as desired) to render
+	 * @param visited  the visited set (ordered as desired) to render
 	 */
 	public void addNodes(List<Node> frontier, List<Node> visited) {
 		vp.add(visited);
@@ -67,6 +68,7 @@ public class ScrollPaneManager {
 
 	/**
 	 * Get the {@link VisScrollPane} displaying the visited {@link Node}s
+	 *
 	 * @return The {@link VisScrollPane} displaying the visited {@link Node}s
 	 */
 	public VisScrollPane getVp() {
@@ -75,6 +77,7 @@ public class ScrollPaneManager {
 
 	/**
 	 * Get the {@link VisScrollPane} displaying the frontier {@link Node}s
+	 *
 	 * @return the {@link VisScrollPane} displaying the frontier {@link Node}s
 	 */
 	public VisScrollPane getFp() {
@@ -95,7 +98,7 @@ public class ScrollPaneManager {
 	/**
 	 * Check whether a {@link Node} clicked on by the user in one of the internal {@link VisScrollPane}s
 	 * has a click which has not yet been viewed.
-	 *
+	 * <p>
 	 * Marks it as updated, such that {@link #isClickedUpdated()} will return false until a new click is registered.
 	 *
 	 * @return <code>true</code> if there's a new click which hasn't yet been registered.
@@ -124,8 +127,10 @@ public class ScrollPaneManager {
 	public Point getClickedNode() {
 		//check which is most recently updated
 		switch (mru) {
-			case FP: return fp.getClickedNode();
-			case VP: return vp.getClickedNode();
+			case FP:
+				return fp.getClickedNode();
+			case VP:
+				return vp.getClickedNode();
 		}
 		//there has been no clicked node
 		return null;
@@ -135,8 +140,8 @@ public class ScrollPaneManager {
 	 * Colour a given {@link Node} in the {@link VisScrollPane}s.
 	 * The colour will match that of the node in the simulation.
 	 *
-	 * @param n 				The {@link Node} to highlight
-	 * @param singleHighlight	Whether all other colours should be removed (such that this is the only coloured node)
+	 * @param n               The {@link Node} to highlight
+	 * @param singleHighlight Whether all other colours should be removed (such that this is the only coloured node)
 	 * @return <code>true</code> if the colour operation was successful
 	 */
 	public boolean setCellColour(Node n, boolean singleHighlight) {
@@ -151,9 +156,9 @@ public class ScrollPaneManager {
 	/**
 	 * Colour a given {@link Node} in a given {@link Color} in the {@link VisScrollPane}s.
 	 *
-	 * @param n					The {@link Node} to highlight
-	 * @param c					The {@link Color} in which to highlight n
-	 * @param singleHighlight	Whether all other colours should be removed (such that this is the only coloured node)
+	 * @param n               The {@link Node} to highlight
+	 * @param c               The {@link Color} in which to highlight n
+	 * @param singleHighlight Whether all other colours should be removed (such that this is the only coloured node)
 	 * @return <code>true</code> if the colour operation was successful
 	 */
 	public boolean setCellColour(Node n, Color c, boolean singleHighlight) {
@@ -171,5 +176,5 @@ public class ScrollPaneManager {
 		FP,
 		VP
 	}
-	
+
 }

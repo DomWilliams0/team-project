@@ -42,17 +42,19 @@ public class CoordinatePopup {
 
 	/**
 	 * Sets the visibility of the coordinate picker
+	 *
 	 * @param visibility if true then can see pop-up, if false then cannot
-     */
+	 */
 	public void setVisibility(Boolean visibility) {
 		CoordinatePopup.visibility = visibility;
 	}
 
 	/**
 	 * sets the coordinate to display as (x, y)
+	 *
 	 * @param x the x coordinate the user's mouse is hovering on
 	 * @param y the y coordinate the user's mouse is hovering on
-     */
+	 */
 	public static void setCoordinate(int x, int y) {
 		coordinate = "(" + x + ", " + y + ")";
 	}
@@ -75,5 +77,5 @@ public class CoordinatePopup {
 	public void resize() {
 		spriteBatch = new SpriteBatch();
 	}
-	
+
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
  * Manages all the currently showing pop-ups in the world
+ *
  * @author nbg481 dxw405 bxd428
  */
 public class PopupManager {
@@ -17,8 +18,9 @@ public class PopupManager {
 
 	/**
 	 * Load all the correct images from the files ready to be shown, depending on the mode
+	 *
 	 * @param mode the current mode the user is in
-     */
+	 */
 	public PopupManager(ModeType mode) {
 		//load error textures
 		Texture tempTexture = new Texture("world/popups/errorBuildings.png");
@@ -96,7 +98,7 @@ public class PopupManager {
 
 	/**
 	 * @return the number of pop-ups that this manager is managing
-     */
+	 */
 	public int length() {
 		return 4;
 	}
@@ -104,7 +106,7 @@ public class PopupManager {
 	/**
 	 * @param i the index. Has to be less than the length
 	 * @return the pop-up of the index given
-     */
+	 */
 	public Popup getPopup(int i) {
 		switch (i) {
 			case 0:
@@ -118,5 +120,5 @@ public class PopupManager {
 		}
 		return null;
 	}
-	
+
 }

@@ -127,7 +127,7 @@ public enum ConfigKey {
 	 * The font the application will use for displaying text.
 	 */
 	FONT_FILE("font-file"),
-	
+
 	/**
 	 * The colour used for the {@link com.b3.search.Node Nodes} in the frontier.
 	 */

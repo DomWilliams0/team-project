@@ -92,8 +92,9 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Sets a node red for an fixed period of time. This is one tick of x left in the timer.
+	 *
 	 * @param zoomScalar the current zoom (scaled), so that red node is sized correctly
-     */
+	 */
 	private void setRenderRed(float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 		float zoomScalarInside = (float) (zoomScalar * 2.5);
@@ -192,10 +193,11 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Renders all the nodes of the graph
-	 * @param colour the colour to render the node
-	 * @param nodes the list of nodes to render on the screen
+	 *
+	 * @param colour           the colour to render the node
+	 * @param nodes            the list of nodes to render on the screen
 	 * @param zoomScalarInside the zoomScalar to decide how big the nodes should be, taking into account z position of {@code Camera}
-     */
+	 */
 	private void renderSearchNodes(Color colour, Collection<Node> nodes, float zoomScalarInside) {
 		shapeRenderer.setColor(colour);
 		nodes.stream()
@@ -204,10 +206,11 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Renders a single node with a black boarder around it
-	 * @param color The colour of the interior colour
-	 * @param node the node to render on the world
+	 *
+	 * @param color            The colour of the interior colour
+	 * @param node             the node to render on the world
 	 * @param zoomScalarInside the zoomScalar to decide how big the nodes should be, taking into account z position of {@code Camera}
-     */
+	 */
 	private void renderSingleSearchNode(Color color, Node node, float zoomScalarInside) {
 		shapeRenderer.setColor(Color.BLACK);
 		shapeRenderer.circle(
@@ -228,8 +231,9 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Renders the graph without any nodes, but a black background and lines only to represent edges and nodes of importance
+	 *
 	 * @param zoomScalar the zoomScalar to decide how big the nodes should be, taking into account z position of the {@code Camera}
-     */
+	 */
 	private void renderZoomedOutGraph(float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
@@ -267,8 +271,9 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Renders the nodes in the frontier, visited and other ones of importance
+	 *
 	 * @param searchTicker an instance of {@link SearchTicker}, which contains recent information about all node's status
-     */
+	 */
 	private void renderZoomedOutSearch(SearchTicker searchTicker) {
 		shapeRenderer.setColor(Config.getColor(ConfigKey.SEARCH_EDGE_COLOUR));
 
@@ -286,14 +291,15 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Renders all the nodes on the grid
-	 * @param counter the radius of nodes
+	 *
+	 * @param counter    the radius of nodes
 	 * @param zoomScalar the zoomScalar to decide how big the nodes should be, taking into account z position of the {@code Camera}
-     */
+	 */
 	private void renderNodes(float counter, float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
 		//if inital openeing animation finished then tell GUI to show intro popup
-		finishedInitialAnimation = (counter<=1.5);
+		finishedInitialAnimation = (counter <= 1.5);
 
 		Color nodeColour = zoomScalar > 2 ? Color.BLACK : Config.getColor(ConfigKey.NODE_COLOUR);
 		Set<Point> points = worldGraph.getNodes().keySet();
@@ -302,7 +308,7 @@ public class WorldGraphRenderer {
 		float tempFinalZoomScalar;
 		if (zoomScalar > 3) {
 			tempFinalZoomScalar = (float) (zoomScalar * 1.25);
-		} else  {
+		} else {
 			tempFinalZoomScalar = zoomScalar;
 		}
 
@@ -323,14 +329,15 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Renders a single search node with four scaling corners which are bigger by default the scale to cover the rest of the world
-	 * @param x x coordinate of node
-	 * @param y y coordinate of node
-	 * @param v radius of circle
+	 *
+	 * @param x                   x coordinate of node
+	 * @param y                   y coordinate of node
+	 * @param v                   radius of circle
 	 * @param tempFinalZoomScalar the zoom scalar for animation
-	 * @param counter the counter initial animation
+	 * @param counter             the counter initial animation
 	 */
 	private void renderSingleSearchNodeWithScaling(int x, int y, float v, float tempFinalZoomScalar, float counter) {
-		if (x == 0 && y == 0 || x == worldGraph.getWidth()-1 & y == worldGraph.getHeight()-1 || x == 0 && y == worldGraph.getHeight()-1 || x == worldGraph.getWidth()-1 & y ==0) {
+		if (x == 0 && y == 0 || x == worldGraph.getWidth() - 1 & y == worldGraph.getHeight() - 1 || x == 0 && y == worldGraph.getHeight() - 1 || x == worldGraph.getWidth() - 1 & y == 0) {
 			shapeRenderer.circle(x, y, v * tempFinalZoomScalar * counter * 2, WorldGraphRenderer.NODE_EDGES);
 		} else {
 			shapeRenderer.circle(x, y, v, WorldGraphRenderer.NODE_EDGES);
@@ -339,9 +346,10 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Renders the path ontop of the search
-	 * @param showPaths if true then render the path, otherwise not
+	 *
+	 * @param showPaths    if true then render the path, otherwise not
 	 * @param searchTicker an instance of {@link SearchTicker}, which contains the path to render
-     */
+	 */
 	private void renderPath(boolean showPaths, SearchTicker searchTicker) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -414,8 +422,9 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Sets the currently highlighted point to the given one
+	 *
 	 * @param highlightingPoint The point to highlight
-	 * @param colour The colour to highlight it with
+	 * @param colour            The colour to highlight it with
 	 */
 	public void highlightOver(Point highlightingPoint, Color colour) {
 		currentHighlightTimer = 100;
@@ -425,8 +434,9 @@ public class WorldGraphRenderer {
 
 	/**
 	 * Sets the current red-highlighted node to the given one
-	 * @param x The node X coordinate
-	 * @param y The node Y coordinate
+	 *
+	 * @param x    The node X coordinate
+	 * @param y    The node Y coordinate
 	 * @param time The time to stay red for
 	 */
 	public void highlightNodeRed(int x, int y, int time) {

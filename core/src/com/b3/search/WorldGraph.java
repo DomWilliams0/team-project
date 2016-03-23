@@ -19,7 +19,7 @@ import java.util.Set;
  * @author nbg481 dxw405 oxe410
  */
 public class WorldGraph extends Graph {
-	
+
 	private final WorldGraphRenderer renderer;
 
 	private SearchTicker latestSearchTicker;
