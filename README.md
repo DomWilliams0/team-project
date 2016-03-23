@@ -86,10 +86,10 @@ while (notFound) {
 Always JavaDoc everything. If some parts of code are unclear then put inline comments otherwise
 there is no need for additional ones (since it should be easily readable and understandable).
 
-- Use {@link Class} when refering to any class that isn't the current class and it isn't obvious. (Not enforced, use common sense)
+- Use {@link Class} when referring to any class that isn't the current class and it isn't obvious. (Not enforced, use common sense)
 - Use &lt;code&gt;native type&lt;/code&gt;, for things such as &lt;code&gt;true&lt;/code&gt; and &lt;code&gt;static&lt;/code&gt;.
 - Use &lt;code&gt;Java/Pseudo code&lt;/code&gt; for snippets of Java, Pseudo and any other types of code.
-- Use {@code paramName} when refering to a parameter elsewhere in the JavaDoc.
+- Use {@code paramName} when referring to a parameter elsewhere in the JavaDoc.
 - Try to keep documentation below the 71st column.
 - Documentation goes above annotations, since annotations "are still part of the code".
 

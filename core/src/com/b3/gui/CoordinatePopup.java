@@ -25,7 +25,7 @@ public class CoordinatePopup {
 	public static Boolean visibility;
 
 	/**
-	 * Sets up a new coordinate picker displayer
+	 * Sets up a new coordinate picker display-er
 	 */
 	public CoordinatePopup() {
 		spriteBatch = new SpriteBatch();
@@ -72,7 +72,7 @@ public class CoordinatePopup {
 	}
 
 	/**
-	 * Resises the coordinate picker, to be called whenever the viewport is resized.
+	 * Resizes the coordinate picker, to be called whenever the viewport is resized.
 	 */
 	public void resize() {
 		spriteBatch = new SpriteBatch();

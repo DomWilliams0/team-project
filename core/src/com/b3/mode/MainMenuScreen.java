@@ -38,8 +38,8 @@ public class MainMenuScreen extends ScreenAdapter {
 	private final SpriteBatch spriteBatch;
 	private final MainGame controller;
 	private final Sprite backgroundSprite;
-	private Sprite spriteForground;
-	private final Sprite spriteTransForground;
+	private Sprite spriteForeground;
+	private final Sprite spriteTransForeground;
 	private ShapeRenderer shapeRenderer;
 	private float aspectRatioY;
 
@@ -74,8 +74,8 @@ public class MainMenuScreen extends ScreenAdapter {
 
 		Texture texture = new Texture("icon_final.png");
 		texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-		spriteForground = new Sprite(texture);
-		spriteTransForground = new Sprite(new Texture("transparentForeground.png"));
+		spriteForeground = new Sprite(texture);
+		spriteTransForeground = new Sprite(new Texture("transparentForeground.png"));
 
 
 		ModeType[] modes = {ModeType.TUTORIAL, ModeType.LEARNING, ModeType.PRACTICE, ModeType.COMPARE};
@@ -157,11 +157,11 @@ public class MainMenuScreen extends ScreenAdapter {
 	private void renderForeground() {
 		if (Gdx.graphics.getHeight() > 578) {
 			spriteBatch.begin();
-			spriteBatch.draw(spriteForground,
-					Gdx.graphics.getWidth() / 2 - spriteForground.getWidth() / 2 + 20 + (float) offsetX / TERT_OFFSET,
+			spriteBatch.draw(spriteForeground,
+					Gdx.graphics.getWidth() / 2 - spriteForeground.getWidth() / 2 + 20 + (float) offsetX / TERT_OFFSET,
 					Gdx.graphics.getHeight() - 100 - (float) offsetY / TERT_OFFSET,
-					spriteForground.getWidth() - 40,
-					spriteForground.getHeight() - 5);
+					spriteForeground.getWidth() - 40,
+					spriteForeground.getHeight() - 5);
 			spriteBatch.end();
 		}
 
@@ -179,17 +179,17 @@ public class MainMenuScreen extends ScreenAdapter {
 		if (timer == 2) {
 			Texture texture = new Texture("icon_final_inverted.png");
 			texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-			spriteForground = new Sprite(texture);
+			spriteForeground = new Sprite(texture);
 		}
 
 		if (timer == ANIMATION_TIMER) {
 			Texture texture = new Texture("icon_final.png");
 			texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-			spriteForground = new Sprite(texture);
+			spriteForeground = new Sprite(texture);
 		}
 		if (timer == 1) {
 			spriteBatch.begin();
-			spriteBatch.draw(spriteTransForground, // i love me some hard coded values that make no sense
+			spriteBatch.draw(spriteTransForeground, // i love me some hard coded values that make no sense
 					(Gdx.graphics.getWidth() / 2 - 250) - (550 * (timer - 1)) / 2 + (float) offsetX / MAIN_OFFSET,
 					Gdx.graphics.getHeight() - Gdx.graphics.getHeight() - 50 - (775 * (timer - 1)) / 2 - (float) offsetY / MAIN_OFFSET,
 					500 * timer,
@@ -219,7 +219,7 @@ public class MainMenuScreen extends ScreenAdapter {
 	private void renderBackground() {
 		spriteBatch.begin();
 
-		// amount to overscale image by
+		// amount to over-scale image by
 		float overGrowth = 50;
 		// divider to prevent too much parallax effect
 		float divisor = SECONDARY_OFFSET;
@@ -266,7 +266,7 @@ public class MainMenuScreen extends ScreenAdapter {
 	}
 
 	/**
-	 * Sets the offest the mouse is currently at from the center of the screen
+	 * Sets the offset the mouse is currently at from the center of the screen
 	 *
 	 * @param offsetX x amount of pixels away that the mouse is from the center of the screen (-ve is left from center; +ve is right from center)
 	 * @param offsetY y amount of pixels away that the mouse is from the center of the screen (-ve is above center; +ve is right from center)

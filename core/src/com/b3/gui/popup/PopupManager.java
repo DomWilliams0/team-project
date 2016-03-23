@@ -79,7 +79,7 @@ public class PopupManager {
 	}
 
 	/**
-	 * Shows an errow when a path cannot be found to the final position
+	 * Shows an error when a path cannot be found to the final position
 	 */
 	public void showBehaviourError() {
 		behaviourError.showPopup(400);

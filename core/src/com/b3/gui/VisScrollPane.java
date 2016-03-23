@@ -271,7 +271,7 @@ public class VisScrollPane extends ScrollPane {
 	public Color getColorFromGraph(Node n) {
 		// default colour in case something goes very wrong
 		Color c = defaultBackground;
-		// check whether the ndde is in the tables
+		// check whether the node is in the tables
 		if (cellmap.get(n) != null) {
 			// it is, so check if the node is in frontier or visited.
 			if (!isFrontier)

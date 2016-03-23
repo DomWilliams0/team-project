@@ -41,7 +41,7 @@ public class TutorialMode extends Mode {
 	}
 
 	/**
-	 * Adds the special {@link TutorialModeSelectionHandler} which allows specfic clicks disabled, to focus
+	 * Adds the special {@link TutorialModeSelectionHandler} which allows specific clicks disabled, to focus
 	 * user to ONLY do as instructed.
 	 *
 	 * @param inputHandler the current input handler

@@ -139,7 +139,7 @@ public class World implements Disposable {
 	 * Takes a tile map and removes nodes and changes edge costs accordingly.
 	 *
 	 * @param map         The tile map to process and change the {@link #worldGraph} accordingly to.
-	 * @param renderBoxes if true then render the physics collidible boxes; false for testing
+	 * @param renderBoxes if true then render the physics collidable boxes; false for testing
 	 */
 	private void processMapTileTypes(TiledMap map, boolean renderBoxes) {
 		FixtureDef objectDef = null;

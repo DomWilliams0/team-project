@@ -15,10 +15,10 @@ public class SteeringArrive extends SteeringWithTarget {
 	private SteeringSeek seek;
 
 	public SteeringArrive(PhysicsComponent owner, SteeringTarget target,
-						  double arrivalThreshold, double deaccelerationDistance) {
+						  double arrivalThreshold, double decelerationDistance) {
 		super(owner, target);
 		this.arrivalThreshold = arrivalThreshold * arrivalThreshold;
-		this.deaccelerationDistance = deaccelerationDistance * deaccelerationDistance;
+		this.deaccelerationDistance = decelerationDistance * decelerationDistance;
 		this.seek = new SteeringSeek(owner, target);
 	}
 

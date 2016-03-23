@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * A large scale world with comparison views but no pop-ups or data structue views to allow for users to see the differences
+ * A large scale world with comparison views but no pop-ups or data structure views to allow for users to see the differences
  * between the algorithms
  * Sets up large world, camera, input handler and launches the world paused (forcing / implying step-by-step)
  *
@@ -54,7 +54,7 @@ public class CompareMode extends Mode {
 		for (int i = 0; i < labelAssets.length; i++)
 			labels[i] = new Texture(Gdx.files.internal("gui/search-labels/" + labelAssets[i] + "-label.png"));
 
-		world.getWorldGUI().setPrePopopRenderer(this::renderSearchLabels);
+		world.getWorldGUI().setPrePopupRenderer(this::renderSearchLabels);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class CompareMode extends Mode {
 	}
 
 	/**
-	 * Spawns three agents on the screen, one following A*, one folllowing DFS and one following BFS and starts them moving
+	 * Spawns three agents on the screen, one following A*, one following DFS and one following BFS and starts them moving
 	 * and searching for the end position
 	 */
 	@Override

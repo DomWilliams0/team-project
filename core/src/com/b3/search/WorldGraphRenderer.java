@@ -298,7 +298,7 @@ public class WorldGraphRenderer {
 	private void renderNodes(float counter, float zoomScalar) {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-		// if inital openeing animation finished then tell GUI to show intro popup
+		// if initial opening animation finished then tell GUI to show intro popup
 		finishedInitialAnimation = (counter <= 1.5);
 
 		Color nodeColour = zoomScalar > 2 ? Color.BLACK : Config.getColor(ConfigKey.NODE_COLOUR);

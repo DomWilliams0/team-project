@@ -160,13 +160,13 @@ public class PseudocodeVisualiser extends Table implements Observer {
 		if (itemToReplace.equals("-"))
 			return toReplaceWith;
 
-		// Update conflics for A*
+		// Update conflicts for A*
 		String tempchange = currentText.replace(itemToReplace, toReplaceWith);
 		tempchange = tempchange.replace("frotier", "frontier");
 		tempchange = tempchange.replace("fro" + toReplaceWith + "tier", "frontier");
 		tempchange = tempchange.replace("ca" + toReplaceWith + "eFro" + toReplaceWith, "cameFrom");
 		tempchange = tempchange.replace("return", "return");
-		// Update conflics for DFS
+		// Update conflicts for DFS
 
 		return tempchange;
 	}

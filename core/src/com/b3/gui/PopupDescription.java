@@ -207,9 +207,9 @@ public class PopupDescription {
 		} else if (currentSearch.getEnd().getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
 			// DONE MULTI_PAGES if end node
 			if (pageNo >= 3 && currentSearch.getAlgorithm() == SearchAlgorithm.A_STAR)
-				pageNo = 0; // reset to first page if neccessary
+				pageNo = 0; // reset to first page if necessary
 			if (pageNo >= 2 && currentSearch.getAlgorithm() != SearchAlgorithm.A_STAR)
-				pageNo = 0; // reset to first page if neccessary
+				pageNo = 0; // reset to first page if necessary
 
 			if (pageNo == 2) {
 				// calculate data needed
@@ -275,7 +275,7 @@ public class PopupDescription {
 			// DONE MULTi-PAGES, needs cost breakdown though if recently expanded - current node being explored
 			if (mostRecentExpand.getPoint().equals(new Point(currentNodeClickX, currentNodeClickY))) {
 				stickyCurrentNode = true;
-				if (pageNo >= 4) pageNo = 0; // reset to first page if neccessary
+				if (pageNo >= 4) pageNo = 0; // reset to first page if necessary
 				float gxFunction = currentSearch.getG(mostRecentExpand);
 
 				int convertedPageNo = pageNo;
@@ -302,7 +302,7 @@ public class PopupDescription {
 					drawNumberOnScreen((int) gxFunction, currentNodeClickX, currentNodeClickY + (scalingZoom / 11), scalingZoom);
 				}
 
-				// show how costs are calulated (4th page)
+				// show how costs are calculated (4th page)
 				if (pageNo == 3) {
 					// if has been shown for a little while
 					float animate;
@@ -316,12 +316,12 @@ public class PopupDescription {
 					}
 					spriteBatch.draw(currentNodeSprite[5], (float) ((currentNodeClickX - scalingZoom / 2) + 0.5), (float) (currentNodeClickY + 0.5), scalingZoom, animate);
 					List<Node> currentPath = currentSearch.getPath();
-					ArrayList<Integer> arrCostsCurrentSerach = getCostsAllNodes(currentPath);
+					ArrayList<Integer> arrCostsCurrentSearch = getCostsAllNodes(currentPath);
 
 					for (int i = 0; i < currentPath.size(); i++) {
-						if (arrCostsCurrentSerach.size() > 0) {
-							drawCostOnScreen(arrCostsCurrentSerach.get(0), currentPath.get(i).getPoint(), currentPath.get(i + 1).getPoint(), scalingZoom);
-							arrCostsCurrentSerach.remove(0);
+						if (arrCostsCurrentSearch.size() > 0) {
+							drawCostOnScreen(arrCostsCurrentSearch.get(0), currentPath.get(i).getPoint(), currentPath.get(i + 1).getPoint(), scalingZoom);
+							arrCostsCurrentSearch.remove(0);
 						}
 					}
 				}
@@ -329,7 +329,7 @@ public class PopupDescription {
 			} else if (currentSearch.getLastFrontier() != null) {
 				// DONE MULTI PAGE if JUST added to stack / queue
 				if (currentSearch.getLastFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
-					if (pageNo >= 2) pageNo = 0; // reset to first page if neccessary
+					if (pageNo >= 2) pageNo = 0; // reset to first page if necessary
 
 					int convertedPageNo = pageNo;
 					if (convertedPageNo == 1) {
@@ -359,7 +359,7 @@ public class PopupDescription {
 					popupShowing = true;
 				} else if (currentSearch.getFrontier().contains(new Node(new Point(currentNodeClickX, currentNodeClickY)))) {
 					// DONE MULTIPAGE if the old frontier
-					if (pageNo >= 2) pageNo = 0; // reset to first page if neccessary
+					if (pageNo >= 2) pageNo = 0; // reset to first page if necessary
 
 					int convertedPageNo = pageNo;
 					if (convertedPageNo == 1)
@@ -412,7 +412,7 @@ public class PopupDescription {
 	 * Given a search path (a list of nodes), it will find the costs between each and every pair of adjacent nodes in the list.
 	 *
 	 * @param path the path to generate the cost list for
-	 * @return ArrayList of Integer containing a list of costs corrosponding to the edge costs between the path given, in the correct (IE not reversed) order
+	 * @return ArrayList of Integer containing a list of costs corresponding to the edge costs between the path given, in the correct (IE not reversed) order
 	 */
 	private ArrayList<Integer> getCostsAllNodes(List<Node> path) {
 		ArrayList<Integer> arrTempCosts = new ArrayList<>();
@@ -488,7 +488,7 @@ public class PopupDescription {
 	 * total = firstNo + secondNo
 	 * onto the screen.
 	 *
-	 * @param total             the total value that will be displaed left of all other numbers
+	 * @param total             the total value that will be displaced left of all other numbers
 	 * @param firstNo           the number in between = and +
 	 * @param secondNo          the number most to the right
 	 * @param currentNodeClickX the x coordinate of a Node on the WorldGraph
@@ -506,9 +506,9 @@ public class PopupDescription {
 	/**
 	 * Draws an cost in the following format:
 	 * cost
-	 * onto the screen, inbetween
+	 * onto the screen, in-between
 	 *
-	 * @param cost        the value of g(x) to thus node. that will be displaed left of all other numbers
+	 * @param cost        the value of g(x) to thus node. that will be displayed left of all other numbers
 	 * @param one         the first node
 	 * @param two         the second node
 	 * @param scalingZoom the current amount of zoom that the camera has.

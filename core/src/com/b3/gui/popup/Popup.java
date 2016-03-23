@@ -25,7 +25,7 @@ public class Popup {
 	private long startSeconds;
 
 	/**
-	 * Creates a new pop-up in a closed positons (make this initally, and then call showPopup, takes time to load texture from file)
+	 * Creates a new pop-up in a closed positions (make this initially, and then call showPopup, takes time to load texture from file)
 	 * Note that render(); needs to be put in a current render method.
 	 *
 	 * @param sprite the texture / image file that this pop-up will display.

@@ -82,7 +82,7 @@ public class BuildingModelCache implements Disposable {
 						.rect(2f, -2f, -changer, 2f, 2f, -changer, 2f, 2f, 2f, 2f, -2f, 2f, 1, 0, 0);
 				model = modelBuilder.end();
 			} else {
-				// otherwise just a plain box - good for effeciency as users won't actually see the buidlings textures when they are flat
+				// otherwise just a plain box - good for efficiency as users won't actually see the buildings textures when they are flat
 				model = builder.createBox(dimensions.x, dimensions.y, dimensions.z,
 						new Material(), VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 			}

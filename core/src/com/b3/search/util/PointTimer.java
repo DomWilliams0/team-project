@@ -14,8 +14,10 @@ public class PointTimer {
 	private Object linkedObject;
 	private int timer;
 
+
+
 	/**
-	 * Creates a new PointTimer, with a x and y coorindate and time to be open
+	 * Creates a new PointTimer, with a x and y coordinate and time to be open
 	 *
 	 * @param x     the x coordinate
 	 * @param y     the y coordinate

@@ -24,10 +24,10 @@ public class MainMenuInputHandler extends InputAdapter {
 
 	/**
 	 * Called whenever the mouse is moved
-	 * Updates the paralax effect on the {@link MainMenuScreen}
+	 * Updates the parallax effect on the {@link MainMenuScreen}
 	 *
 	 * @param screenX the x position of the mouse
-	 * @param screenY the y posision of the mouse
+	 * @param screenY the y position of the mouse
 	 * @return true if moved; false if not.
 	 */
 	@Override

@@ -38,7 +38,7 @@ public class WorldSelectionHandler extends InputAdapter {
 	}
 
 	/**
-	 * Decides what to do when the user clicks on a place on the scren
+	 * Decides what to do when the user clicks on a place on the screen
 	 *
 	 * @param screenX the x position of the mouse
 	 * @param screenY the y position of the mouse

@@ -554,7 +554,7 @@ public class SearchTicker extends Observable {
 	/**
 	 * Adds a node to the visited set
 	 *
-	 * @param node the ndoe to add to the visited set
+	 * @param node the node to add to the visited set
 	 */
 	public void addToVisited(Node node) {
 		visited.add(node);
@@ -701,7 +701,7 @@ public class SearchTicker extends Observable {
 	}
 
 	/**
-	 * Set the updated valude to {@code updated}
+	 * Set the updated value to {@code updated}
 	 *
 	 * @param updated the value to set the internal updated {@code SearchTicker} value to
 	 */

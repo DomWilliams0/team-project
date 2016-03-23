@@ -32,7 +32,7 @@ public class MenuComponent extends GUIComponent {
 	/**
 	 * Creates a new menu component, of a specific height
 	 *
-	 * @param height the height in pixels of the meny component
+	 * @param height the height in pixels of the menu component
 	 */
 	public MenuComponent(float height) {
 		this.height = height;

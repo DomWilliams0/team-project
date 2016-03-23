@@ -52,7 +52,7 @@ public class MainGame extends Game {
 	}
 
 	/**
-	 * dispose of this object correclty, also cleanly closing the sound controller
+	 * Dispose of this object correctly, also cleanly closing the sound controller
 	 */
 	@Override
 	public void dispose() {

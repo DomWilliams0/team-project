@@ -27,7 +27,7 @@ public class PhysicsComponent implements Component {
 	public final float maxSpeed;
 
 	/**
-	 * The maximum acceliration of the agent.
+	 * The maximum acceleration of the agent.
 	 */
 	public final float maxAcceleration;
 

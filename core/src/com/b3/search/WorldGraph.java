@@ -120,7 +120,7 @@ public class WorldGraph extends Graph {
 
 	/**
 	 * @param entity check this entity to see if it is currently searching
-	 * @return true if the entity supplied is currently partwaythough a search
+	 * @return true if the entity supplied is currently part way though a search
 	 */
 	public boolean isAgentSearching(Entity entity) {
 		return entity instanceof Agent && searchTickers.containsKey(entity);

@@ -81,7 +81,7 @@ public class TutorialPopups {
 	}
 
 	/**
-	 * Renders the currently dispalying pop-up on screen
+	 * Renders the currently displaying pop-up on screen
 	 */
 	public void render() {
 		float xGraphic = Gdx.graphics.getWidth() / 2 - backgroundTexture.getWidth() / 2;

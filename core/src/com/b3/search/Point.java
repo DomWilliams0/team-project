@@ -64,7 +64,7 @@ public class Point implements Comparable<Point> {
 	}
 
 	/**
-	 * Geneates a new {@link Vector2} with the coordinates of this Point.
+	 * Generates a new {@link Vector2} with the coordinates of this Point.
 	 *
 	 * @return This point as a {@link Vector2}.
 	 */

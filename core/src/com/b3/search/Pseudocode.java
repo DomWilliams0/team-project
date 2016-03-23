@@ -111,7 +111,7 @@ public class Pseudocode extends Observable {
 	}
 
 	/**
-	 * @return the index of teh current line of pseudocode that is currently ighlighted
+	 * @return the index of the current line of pseudocode that is currently highlighted
 	 */
 	public int getCurrentLine() {
 		return currentLine;

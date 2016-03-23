@@ -63,7 +63,7 @@ public class Config {
 	}
 
 	/**
-	 * Unsets the given key, if it is set in the game config
+	 * Un-sets the given key, if it is set in the game config
 	 * Has no effect if the key does not exist
 	 *
 	 * @param key The key to unset

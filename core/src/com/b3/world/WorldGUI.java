@@ -45,12 +45,12 @@ public class WorldGUI {
 
 	private boolean shownOnce;
 
-	private Runnable prePopopRender;
+	private Runnable prePopupRender;
 
 	/**
 	 * Creates a new WorldGUI, fundamentally linked to a specific world
 	 *
-	 * @param world the world that this GUI will be overlayed ontop of
+	 * @param world the world that this GUI will be overlaid on top of
 	 */
 	public WorldGUI(World world) {
 		this.world = world;
@@ -68,7 +68,7 @@ public class WorldGUI {
 
 		popupDescription = new PopupDescription(world);
 		popupManager = new PopupManager(MainGame.getCurrentMode());
-		prePopopRender = null;
+		prePopupRender = null;
 	}
 
 	/**
@@ -104,8 +104,8 @@ public class WorldGUI {
 	public void renderPopups() {
 		ModeType mode = MainGame.getCurrentMode();
 
-		if (prePopopRender != null)
-			prePopopRender.run();
+		if (prePopupRender != null)
+			prePopupRender.run();
 
 		checkForInitialPopup();
 
@@ -268,7 +268,7 @@ public class WorldGUI {
 	 *
 	 * @param prePopopRender The new function to run
 	 */
-	public void setPrePopopRenderer(Runnable prePopopRender) {
-		this.prePopopRender = prePopopRender;
+	public void setPrePopupRenderer(Runnable prePopopRender) {
+		this.prePopupRender = prePopopRender;
 	}
 }
