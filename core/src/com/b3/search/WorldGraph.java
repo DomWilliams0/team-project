@@ -2,7 +2,6 @@ package com.b3.search;
 
 import com.b3.entity.Agent;
 import com.b3.search.util.SearchAlgorithm;
-import com.b3.util.Utils;
 import com.b3.world.World;
 import com.b3.world.building.Building;
 import com.badlogic.ashley.core.Entity;
@@ -19,9 +18,8 @@ import java.util.Set;
  *
  * @author nbg481 dxw405 oxe410
  */
-public class WorldGraph {
+public class WorldGraph extends Graph {
 	
-	private final Graph graph;
 	private final WorldGraphRenderer renderer;
 
 	private SearchTicker latestSearchTicker;
@@ -41,7 +39,7 @@ public class WorldGraph {
 	 * @param height the height of the graph
 	 */
 	public WorldGraph(int width, int height) {
-		this.graph = new Graph(width, height);
+		super(width, height);
 		this.renderer = new WorldGraphRenderer(this);
 		this.searchTickers = new LinkedHashMap<>();
 		this.wantedNextDestination = null;
@@ -75,109 +73,7 @@ public class WorldGraph {
 		int upToX = Math.round(dPos.x);
 		int upToY = Math.round(dPos.y);
 
-		graph.snipEdges(baseX, upToX, baseY, upToY);
-	}
-
-	/**
-	 * @return all the nodes on the graph as a linkedHashSet / Map<Point, Node>
-	 */
-	public Map<Point, Node> getNodes() {
-		return graph.getNodes();
-	}
-
-	/**
-	 * @param point The key
-	 * @return The node associated with the given key
-	 */
-	public Node getNode(Point point) {
-		return graph.getNode(point);
-	}
-
-	/**
-	 * @return size of graph in x dimension. -1 if not loaded / cleared object without new generation.
-	 */
-	public int getWidth() {
-		return graph.getWidth();
-	}
-
-	/**
-	 * @return size of graph in y dimension. -1 if not loaded / cleared object without new generation.
-	 */
-	public int getHeight() {
-		return graph.getHeight();
-	}
-
-	/**
-	 * Removes an edge (undirected or directed) between two nodes if it exists
-	 *
-	 * @param p1 The content of the first node
-	 * @param p2 The content of the second node
-	 * @return True if the edge existed and has been removed, false otherwise
-	 */
-	public boolean removeEdge(Point p1, Point p2) {
-		return graph.removeEdge(p1, p2);
-	}
-
-	/**
-	 * Tells whether the graph has a specific edge
-	 *
-	 * @param p1 The first Point
-	 * @param p2 The second Point
-	 * @return True if the graph has a p1 -- p2 edge, false otherwise
-	 */
-	public boolean hasEdge(Point p1, Point p2) {
-		return graph.hasEdge(p1, p2);
-	}
-
-	/**
-	 * Check whether there is node c in the table of nodes
-	 *
-	 * @param p The content of the node to search
-	 * @return True is the node exists, false otherwise
-	 */
-	public boolean hasNode(Point p) {
-		return graph.hasNode(p);
-	}
-
-	/**
-	 * Removes the given node from the graph, snipping all connected edges
-	 *
-	 * @param node The node to remove
-	 */
-	public void removeNode(Node node) {
-		graph.removeNode(node);
-	}
-
-	/**
-	 * Removes the node at the given point, if it exists
-	 *
-	 * @param point The position of the node to remove
-	 * @return True if the node existed and has been removed, otherwise false
-	 * @see {@link Graph#removeNode(Node)}
-	 */
-	public boolean removeNode(Point point) {
-		return graph.removeNode(point);
-	}
-
-	/**
-	 * Adds a new node to the graph
-	 *
-	 * @param p The node's tile position
-	 * @return The new node. If it exists then simply return it.
-	 */
-	public Node addNode(Point p) {
-		return graph.addNode(p);
-	}
-
-	/**
-	 * Adds an edge between 2 nodes
-	 *
-	 * @param p1   The content of the first node (source)
-	 * @param p2   The content of the second node (destination)
-	 * @param cost The edge cost
-	 */
-	public void addEdge(Point p1, Point p2, float cost) {
-		graph.addEdge(p1, p2, cost);
+		snipEdges(baseX, upToX, baseY, upToY);
 	}
 
 	/**
@@ -307,35 +203,7 @@ public class WorldGraph {
 	 * @param deletionTile The bottom left hand corner of the building to delete.
 	 */
 	public void removeBuilding(Vector2 deletionTile) {
-		graph.addNodesInSquare((int) deletionTile.x, (int) deletionTile.y, 4);
-	}
-
-
-	/**
-	 * @return A random {@link Node} from the graph
-	 */
-	public Node getRandomNode() {
-		Collection<Node> nodes = graph.getNodes().values();
-		int index = Utils.RANDOM.nextInt(nodes.size());
-		for (Node node : nodes)
-			if (index-- == 0)
-				return node;
-
-		return null;
-	}
-
-	/**
-	 * @param except The node to not generate
-	 * @return A random {@link Node} from the graph that isn't <code>except</code>
-	 */
-	public Node getRandomNode(Node except) {
-		Node node;
-		do {
-			node = getRandomNode();
-		} while (node.equals(except));
-
-		return node;
-
+		addNodesInSquare((int) deletionTile.x, (int) deletionTile.y, 4);
 	}
 
 }

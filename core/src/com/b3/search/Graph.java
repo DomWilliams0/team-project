@@ -1,6 +1,9 @@
 package com.b3.search;
 
+import com.b3.util.Utils;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -251,6 +254,32 @@ public class Graph {
 					addEdge(currentPoint, new Point(i, j - 1), 1);
 			}
 		}
+	}
+	
+	/**
+	 * @return A random {@link Node} from the graph
+	 */
+	public Node getRandomNode() {
+		Collection<Node> nodes = getNodes().values();
+		int index = Utils.RANDOM.nextInt(nodes.size());
+		for (Node node : nodes)
+			if (index-- == 0)
+				return node;
+		
+		return null;
+	}
+	
+	/**
+	 * @param except The node to not generate
+	 * @return A random {@link Node} from the graph that isn't <code>except</code>
+	 */
+	public Node getRandomNode(Node except) {
+		Node node;
+		do {
+			node = getRandomNode();
+		} while (node.equals(except));
+		
+		return node;
 	}
 	
 }

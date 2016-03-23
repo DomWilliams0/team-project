@@ -88,6 +88,7 @@ there is no need for additional ones (since it should be easily readable and und
 - Use &lt;code&gt;Java/Pseudo code&lt;/code&gt; for snippets of Java, Pseudo and any other types of code.
 - Use {@code paramName} when refering to a parameter elsewhere in the JavaDoc.
 - Try to keep documentation below the 71st column.
+- Documentation goes above annotations, since annotations "are still part of the code".
 
 ### Version Control
 

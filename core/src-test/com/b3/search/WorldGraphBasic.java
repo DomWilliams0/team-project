@@ -3,10 +3,10 @@ package com.b3.search;
 import com.b3.world.World;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoaderBasic;
+import sun.reflect.ReflectionFactory;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -42,7 +42,12 @@ public class WorldGraphBasic {
 	 * @throws Exception If the map is unloadable or reflection fails or dolphins fly.
 	 */
 	public static WorldGraph getRealWorld(String mapName) throws Exception {
-		World world = new World();
+		// Create a World object without calling the constructor.
+		ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
+		Constructor objDef = Object.class.getDeclaredConstructor();
+		Constructor intConstr = rf.newConstructorForSerialization(World.class, objDef);
+		World world = World.class.cast(intConstr.newInstance());
+		
 		TiledMap map = new TmxMapLoaderBasic().load("src-test/resources/test-worlds/" + mapName + ".tmx");
 		WorldGraph graph = new WorldGraph(
 				(int) map.getProperties().get("width"),
@@ -56,7 +61,7 @@ public class WorldGraphBasic {
 	/**
 	 * Makes a very basic {@link WorldGraph} with some connections.
 	 * All edges are 1 in weight.
-	 * 
+	 *
 	 * @return A newly generated {@link WorldGraph}.
 	 * @throws FileNotFoundException If someone deleted {@code graph.txt}.
 	 */
@@ -65,56 +70,15 @@ public class WorldGraphBasic {
 	}
 	
 	/**
-	 * Creates a new {@link WorldGraph} from a file.
+	 * Creates a new {@link Graph} from a file.
 	 * All edges are 1 in weight.
 	 *
 	 * @param graphName The name of the graph file.
 	 * @return The newly created {@link WorldGraph}.
 	 */
 	private static WorldGraph getTextGraph(String graphName) throws FileNotFoundException {
-		return fromFile("src-test/resources/test-worlds/" + graphName + ".txt");
-	}
-
-	/**
-	 * Creates a new {@link WorldGraph} from a file.
-	 * All edges are 1 in weight.
-	 *
-	 * @param filename The file name.
-	 * @return The newly created {@link WorldGraph}.
-	 */
-	private static WorldGraph fromFile(String filename) throws FileNotFoundException {
-		// Open file
-		BufferedReader br = new BufferedReader(new FileReader(filename));
-
-		// Create graph
 		WorldGraph g = new WorldGraph(30, 30);
-		g.getNodes().clear();
-
-		// Loop through file lines
-		br.lines().forEach((line) -> {
-			String[] parts = line.split(":");
-			String nodeStr = parts[0];
-			String neighboursStr = parts[1].substring(1); // Without initial space
-
-			String[] coords = nodeStr.replaceAll("[()]", "").split(",");
-			Point p = new Point(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-
-			// Add neighbours
-			if (!neighboursStr.isEmpty()) {
-				String[] neighbours = neighboursStr.split(" ");
-
-				for (String neighbour : neighbours) {
-					String[] coordsNeighbour = neighbour.replaceAll("[()]", "").split(",");
-					Point pn = new Point(Integer.parseInt(coordsNeighbour[0]), Integer.parseInt(coordsNeighbour[1]));
-
-					// Add edge between p and pn
-					g.addEdge(p, pn, 1f);
-				}
-			} else {
-				g.addNode(p);
-			}
-
-		});
+		GraphBasic.fromFile(g, "src-test/resources/test-worlds/" + graphName + ".txt");
 		return g;
 	}
 

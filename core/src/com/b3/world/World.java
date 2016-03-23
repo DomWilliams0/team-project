@@ -76,13 +76,6 @@ public class World implements Disposable {
 	private WorldGUI worldGUI;
 
 	/**
-	 * Creates a new world, for testing purposes only
-	 */
-	public World() {
-		// TODO BEN get this out of here
-	}
-
-	/**
 	 * Loads a TMX file from file
 	 * Initiates the world environment
 	 * Starts the building rendering ({@link Building}, {@link BuildingModelCache})

@@ -8,18 +8,18 @@ import java.io.FileNotFoundException;
 import static org.junit.Assert.*;
 
 /**
- * Tests for the {@link WorldGraph} class.
+ * Tests for the {@link Graph} class.
  * 
  * @author bxd428
  */
-public class WorldGraphTest {
+public class GraphTest {
 
-	private WorldGraph graph;
+	private Graph graph;
 
 	@Before
 	public void setUp() {
 		try {
-			graph = WorldGraphBasic.getBasicGraph();
+			graph = GraphBasic.getBasicGraph();
 		} catch (FileNotFoundException e) {
 			fail("Graph file not found");
 		}
@@ -27,29 +27,28 @@ public class WorldGraphTest {
 	}
 
 	/**
-	 * Tests the {@link WorldGraph#getNodes()} method.
+	 * Tests the {@link Graph#getNodes()} method.
 	 */
 	@Test
 	public void testGetNodes() {
-		testGetNodes(new WorldGraph(0, 0), true);
+		testGetNodes(new Graph(0, 0), true);
 		testGetNodes(graph, false);
 	}
 
 	/**
-	 * Test helper for the {@link WorldGraph#getNodes()}
+	 * Test helper for the {@link Graph#getNodes()}
 	 * method.
 	 *
-	 * @param worldGraph The {@link WorldGraph} to check.
-	 * @param empty      Whether the {@code graph} actually is
-	 *                   empty.
+	 * @param graph The {@link Graph} to check.
+	 * @param empty Whether the {@code graph} actually is empty.
 	 */
-	public void testGetNodes(WorldGraph worldGraph, boolean empty) {
-		boolean actualEmpty = worldGraph.getNodes().isEmpty();
+	private void testGetNodes(Graph graph, boolean empty) {
+		boolean actualEmpty = graph.getNodes().isEmpty();
 		assertEquals("There were" + (actualEmpty ? "n't any" : "") + " nodes", actualEmpty, empty);
 	}
 
 	/**
-	 * Tests the {@link WorldGraph#hasNode(Point)} method.
+	 * Tests the {@link Graph#hasNode(Point)} method.
 	 */
 	@Test
 	public void testHasNode() {
@@ -62,19 +61,19 @@ public class WorldGraphTest {
 
 	/**
 	 * Test helper for the
-	 * {@link WorldGraph#hasNode(Point)} method.
+	 * {@link Graph#hasNode(Point)} method.
 	 *
 	 * @param x     The x coordinate of the {@link Node}.
 	 * @param y     The y coordinate of the {@link Node}.
 	 * @param found Whether the {@link Node} exists or not.
 	 */
-	public void testHasNode(int x, int y, boolean found) {
+	private void testHasNode(int x, int y, boolean found) {
 		boolean node = graph.hasNode(new Point(x, y));
 		assertEquals("Node " + (node ? "" : "not ") + "found", node, found);
 	}
 
 	/**
-	 * Tests the {@link WorldGraph#getNode(Point)} method.
+	 * Tests the {@link Graph#getNode(Point)} method.
 	 */
 	@Test
 	public void testGetNode() {
@@ -83,19 +82,19 @@ public class WorldGraphTest {
 	}
 
 	/**
-	 * Tests the {@link WorldGraph#getNode(Point)} method.
+	 * Tests the {@link Graph#getNode(Point)} method.
 	 *
 	 * @param x     The x coordinate of the {@link Node}.
 	 * @param y     The y coordinate of the {@link Node}.
 	 * @param found Whether the {@link Node} exists or not.
 	 */
-	public void testGetNode(int x, int y, boolean found) {
+	private void testGetNode(int x, int y, boolean found) {
 		Node node = graph.getNode(new Point(x, y));
 		assertNotEquals("Node " + (node == null ? "not " : "") + "got", found, node == null);
 	}
 
 	/**
-	 * Tests the {@link WorldGraph#addNode(Point)} method.
+	 * Tests the {@link Graph#addNode(Point)} method.
 	 */
 	@Test
 	public void testAddNode() {
@@ -104,7 +103,7 @@ public class WorldGraphTest {
 
 	/**
 	 * Test helper for the
-	 * {@link WorldGraph#addNode(Point)} method.
+	 * {@link Graph#addNode(Point)} method.
 	 * First checks that the {@link Node} doesn't already
 	 * exist. Then adds it and checks that it was added.
 	 *
@@ -113,14 +112,14 @@ public class WorldGraphTest {
 	 * @param y The y coordinate of the {@link Node} to
 	 *          add.
 	 */
-	public void testAddNode(int x, int y) {
+	private void testAddNode(int x, int y) {
 		testGetNode(x, y, false);
 		graph.addNode(new Point(x, y));
 		testGetNode(x, y, true);
 	}
 
 	/**
-	 * Tests the {@link WorldGraph#hasEdge(Point, Point)}
+	 * Tests the {@link Graph#hasEdge(Point, Point)}
 	 * method.
 	 */
 	@Test
@@ -131,7 +130,7 @@ public class WorldGraphTest {
 
 	/**
 	 * Test helper for the the
-	 * {@link WorldGraph#hasEdge(Point, Point)} method.
+	 * {@link Graph#hasEdge(Point, Point)} method.
 	 *
 	 * @param x1    The x coordinate of the first {@link Node}
 	 *              on the edge.
@@ -143,14 +142,14 @@ public class WorldGraphTest {
 	 *              {@link Node} on the edge.
 	 * @param found Whether the edge exists or not.
 	 */
-	public void testHasEdge(int x1, int y1, int x2, int y2, boolean found) {
+	private void testHasEdge(int x1, int y1, int x2, int y2, boolean found) {
 		boolean edge = graph.hasEdge(new Point(x1, y1), new Point(x2, y2));
 		assertEquals("Edge " + (edge ? "" : "not ") + "found", edge, found);
 	}
 
 	/**
 	 * Tests the
-	 * {@link WorldGraph#addEdge(Point, Point, float)}
+	 * {@link Graph#addEdge(Point, Point, float)}
 	 * method.
 	 * First checks that the edge doesn't already exist.
 	 * Then adds it and checks that it was added.
@@ -162,7 +161,7 @@ public class WorldGraphTest {
 
 	/**
 	 * Test helper for the the
-	 * {@link WorldGraph#addEdge(Point, Point, float)}
+	 * {@link Graph#addEdge(Point, Point, float)}
 	 * method.
 	 * First checks that the edge doesn't already
 	 * exist. Then adds it and checks that it was added.
@@ -176,7 +175,7 @@ public class WorldGraphTest {
 	 * @param y2 The y coordinate of the second
 	 *           {@link Node} on the edge.
 	 */
-	public void testAddEdge(int x1, int y1, int x2, int y2) {
+	private void testAddEdge(int x1, int y1, int x2, int y2) {
 		testHasEdge(x1, y1, x2, y2, false);
 		graph.addEdge(new Point(x1, y1), new Point(x2, y2), 1f);
 		testHasEdge(x1, y1, x2, y2, true);
@@ -184,7 +183,7 @@ public class WorldGraphTest {
 
 	/**
 	 * Tests the
-	 * {@link WorldGraph#removeEdge(Point, Point)} method.
+	 * {@link Graph#removeEdge(Point, Point)} method.
 	 */
 	@Test
 	public void testRemoveEdge() {
@@ -193,7 +192,7 @@ public class WorldGraphTest {
 
 	/**
 	 * Test helper for the the
-	 * {@link WorldGraph#removeEdge(Point, Point)} method.
+	 * {@link Graph#removeEdge(Point, Point)} method.
 	 * First adds an edge (with checks) see
 	 * {@link #testAddEdge()}. Then removes it and checks
 	 * that it is deleted.
@@ -207,24 +206,26 @@ public class WorldGraphTest {
 	 * @param y2 The y coordinate of the second
 	 *           {@link Node} on the edge.
 	 */
-	public void testRemoveEdge(int x1, int y1, int x2, int y2) {
+	private void testRemoveEdge(int x1, int y1, int x2, int y2) {
 		testAddEdge(x1, y1, x2, y2);
 		graph.removeEdge(new Point(x1, y1), new Point(x2, y2));
 		testHasEdge(x1, y1, x2, y2, false);
 	}
-
-	@Test
+	
+	
+	
 	/**
 	 * Tests the {@link WorldGraph#getRandomNode()} and
 	 * {@link WorldGraph#getRandomNode(Node)} methods
 	 */
+	@Test
 	public void testRandomNode() {
 		for (int i = 0; i < 10000; i++) {
 			Node randomNode = graph.getRandomNode();
 			assertNotNull(randomNode);
 			assertTrue(graph.hasNode(randomNode.getPoint()));
 		}
-
+		
 		Node notMe = graph.getRandomNode();
 		for (int i = 0; i < 1000; i++) {
 			Node randomNode = graph.getRandomNode(notMe);
