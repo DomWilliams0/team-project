@@ -21,6 +21,16 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 	private BehaviourPathFind pathFind;
 	private final SearchAlgorithm originalAlgorithm;
 
+	/**
+	 * Construct a new behaviour
+	 *
+	 * @param agent	the {@link Agent} to follow this behaviour
+	 * @param startTile the {@link Vector2} that the {@link Agent} will start from
+	 * @param endTile the {@link Vector2} that represents the {@link Agent}'s destination
+	 * @param algorithm the {@link SearchAlgorithm} that this behaviour uses
+	 * @param worldGraph the {@link WorldGraph} to use for this search
+	 * @param world the world the {@link Agent} is on
+	 */
 	public BehaviourMultiPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph, World world) {
 		super(agent, null);
 		originalAlgorithm = algorithm;
@@ -29,6 +39,11 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 		graph = worldGraph;
 	}
 
+	/**
+	 * Ticks the behaviour, moving the {@link Agent} to a new position
+	 *
+	 * @param steeringOutput the {@link Vector2} that represents the current movement for the {@link Agent}
+	 */
 	@Override
 	public void tick(Vector2 steeringOutput) {
 		pathFind.tick(steeringOutput);
@@ -38,6 +53,9 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 		}
 	}
 
+	/**
+	 * @return true if the {@link Agent} has arrived at the destination node
+	 */
 	public boolean hasArrived() {
 		return pathFind.hasArrived();
 	}
@@ -62,16 +80,21 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 		goals.add(new Search(algorithm, goal));
 	}
 
+	/**
+	 * @return the type of this behaviour as a {@link BehaviourType}
+	 */
 	@Override
 	public BehaviourType getType() {
 		return pathFind.getType();
 	}
 
+	/**
+	 * @return true if the {@link Agent} has arrived at its destination for the first time
+	 */
 	@Override
 	public boolean hasArrivedForTheFirstTime() {
 		return pathFind.hasArrivedForTheFirstTime();
 	}
-
 
 	/**
 	 * A helper class to contain a goal and a search algorithm
@@ -86,6 +109,9 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 		}
 	}
 
+	/**
+	 * @return the {@link SearchTicker} that this behaviour is using
+	 */
 	@Override
 	public SearchTicker getSearchTicker() {
 		return pathFind.getSearchTicker();

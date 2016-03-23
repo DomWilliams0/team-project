@@ -10,6 +10,9 @@ import com.b3.world.World;
 import com.badlogic.gdx.math.Vector2;
 
 /**
+ * Behaviour to move agent from one node another node, following a specific path.
+ * When the {@link Agent} arrives, then another destination node is picked
+ *
  * @author dxw405
  */
 public class BehaviourMultiContinuousPathFind extends Behaviour implements BehaviourWithPathFind {
@@ -18,6 +21,14 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	private WorldGraph graph;
 	private SearchAlgorithm algorithm;
 
+	/**
+	 * Construct a new behaviour
+	 *
+	 * @param agent	the {@link Agent} to follow this behaviour
+	 * @param searchAlgorithm the {@link SearchAlgorithm} to use for this search
+	 * @param worldGraph the {@link WorldGraph} to use for this search
+	 * @param world the world the {@link Agent} is on
+	 */
 	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph, World world) {
 		super(agent, null);
 		graph = worldGraph;
@@ -25,6 +36,11 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 		pathFind = new BehaviourPathFind(agent, agent.getPhysicsComponent().getPosition(), Utils.pointToVector2(graph.getRandomNode().getPoint()), searchAlgorithm, world);
 	}
 
+	/**
+	 * Ticks the behaviour, moving the {@link Agent} to a new position
+	 *
+	 * @param steeringOutput the {@link Vector2} that represents the current movement for the {@link Agent}
+	 */
 	@Override
 	public void tick(Vector2 steeringOutput) {
 		pathFind.tick(steeringOutput);
@@ -42,21 +58,32 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 		}
 	}
 
-
+	/**
+	 * @return the {@link BehaviourType} of this behaviour
+	 */
 	@Override
 	public BehaviourType getType() {
 		return BehaviourType.FOLLOW_PATH;
 	}
 
+	/**
+	 * @return true if the {@link Agent} has arrived at its destination
+	 */
 	public boolean hasArrived() {
 		return pathFind.hasArrived();
 	}
 
+	/**
+	 * @return true if the {@link Agent} has arrived at its destination for the first time
+	 */
 	@Override
 	public boolean hasArrivedForTheFirstTime() {
 		return pathFind.hasArrivedForTheFirstTime();
 	}
 
+	/**
+	 * @return the {@link SearchTicker} that this behaviour is using
+	 */
 	@Override
 	public SearchTicker getSearchTicker() {
 		return pathFind.getSearchTicker();

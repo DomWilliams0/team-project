@@ -27,6 +27,15 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 	private SearchTicker ticker;
 	protected boolean wasArrivedLastFrame, hasArrivedThisFrame;
 
+	/**
+	 * Construct a new behaviour
+	 *
+	 * @param agent	the {@link Agent} to follow this behaviour
+	 * @param startTile the {@link Vector2} that the {@link Agent} will start from
+	 * @param endTile the {@link Vector2} that represents the {@link Agent}'s destination
+	 * @param algorithm the {@link SearchAlgorithm} that this behaviour uses
+	 * @param world the world the {@link Agent} is on
+	 */
 	public BehaviourPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, World world) {
 		super(agent, null);
 		WorldGraph worldGraph = world.getWorldGraph();
@@ -43,10 +52,23 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		ticker.reset(algorithm, startNode, endNode);
 	}
 
+	/**
+	 * @param worldGraph the {@link WorldGraph} to get the node from
+	 * @param tile the {@link Vector2} position to approximate to a {@link Node} on the {@link WorldGraph}
+	 * @return the {@link Node} that the tile is linked to on the worldGraph
+	 */
 	public Node getNodeFromTile(WorldGraph worldGraph, Vector2 tile) {
 		return worldGraph.getNode(new Point((int) tile.x, (int) tile.y));
 	}
 
+	/**
+	 * Check that the start and end {@link Node} on {@link WorldGraph} are not null
+	 *
+	 * @param start the start {@link Node}
+	 * @param startTile the start {@link Vector2} tile that relates to {@code start}
+	 * @param end the end {@link Node}
+	 * @param endTile the end {@link Vector2} tile that relates to {@code end}
+	 */
 	private void validateNotNull(Node start, Vector2 startTile, Node end, Vector2 endTile) {
 		if (start == null)
 			throw new IllegalArgumentException("Invalid start node: " + startTile);
@@ -54,16 +76,26 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			throw new IllegalArgumentException("Invalid end node: " + endTile);
 	}
 
-
+	/**
+	 * @return true if has arrived; false otherwise
+	 */
 	public boolean hasArrived() {
 		return ticker.isPathComplete() && steering != null && ((SteeringPathFollow) steering).hasArrived();
 	}
 
+	/**
+	 * @return the {@link BehaviourType} of this behaviour
+	 */
 	@Override
 	public BehaviourType getType() {
 		return BehaviourType.FOLLOW_PATH;
 	}
 
+	/**
+	 * Ticks the current {@link Agent} to follow the path
+	 *
+	 * @param steeringOutput the current position of the {@link Agent}
+	 */
 	@Override
 	public void tick(Vector2 steeringOutput) {
 		int shouldPlayFail = 0;
@@ -104,14 +136,19 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 		hasArrivedThisFrame = hasArrived();
 	}
 
+	/**
+	 * @return {@link List} of {@link Vector2} that this behaviour is following
+	 */
 	private List<Vector2> getPath() {
-
 		return ticker.getPath()
 				.stream()
 				.map(p -> new Vector2(p.getPoint().x, p.getPoint().y))
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * Fetches the path found from the {@link SearchTicker}
+	 */
 	private void updatePathFromTicker() {
 		List<Vector2> path =
 				ticker.getPath()
@@ -125,12 +162,17 @@ public class BehaviourPathFind extends Behaviour implements BehaviourWithPathFin
 			}
 	}
 
+	/**
+	 * @return true if the {@link Agent} has arrived for the first time
+	 */
 	@Override
 	public boolean hasArrivedForTheFirstTime() {
 		return hasArrivedThisFrame && !wasArrivedLastFrame;
 	}
 
-
+	/**
+	 * @return the {@link SearchTicker} that this behaviour is using
+	 */
 	@Override
 	public SearchTicker getSearchTicker() {
 		return ticker;

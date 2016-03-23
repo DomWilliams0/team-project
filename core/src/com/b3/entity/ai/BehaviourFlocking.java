@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Flocking behaviour to move all agents in a flocking-like behaviour
+ *
  * @author dxw405
  */
 public class BehaviourFlocking extends Behaviour {
