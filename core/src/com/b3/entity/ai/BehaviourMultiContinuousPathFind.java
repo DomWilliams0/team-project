@@ -11,9 +11,9 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Behaviour to move agent from one node another node, following a specific path.
- * When the {@link Agent} arrives, then another destination node is picked
+ * When the {@link Agent} arrives, then another destination node is picked.
  *
- * @author dxw405
+ * @author dxw405 nbg481
  */
 public class BehaviourMultiContinuousPathFind extends Behaviour implements BehaviourWithPathFind {
 
@@ -22,12 +22,10 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	private SearchAlgorithm algorithm;
 
 	/**
-	 * Construct a new behaviour
-	 *
-	 * @param agent	the {@link Agent} to follow this behaviour
+	 * @param agent           the {@link Agent} to follow this behaviour
 	 * @param searchAlgorithm the {@link SearchAlgorithm} to use for this search
-	 * @param worldGraph the {@link WorldGraph} to use for this search
-	 * @param world the world the {@link Agent} is on
+	 * @param worldGraph      the {@link WorldGraph} to use for this search
+	 * @param world           the world the {@link Agent} is on
 	 */
 	public BehaviourMultiContinuousPathFind(Agent agent, SearchAlgorithm searchAlgorithm, WorldGraph worldGraph, World world) {
 		super(agent, null);
@@ -37,9 +35,8 @@ public class BehaviourMultiContinuousPathFind extends Behaviour implements Behav
 	}
 
 	/**
-	 * Ticks the behaviour, moving the {@link Agent} to a new position
-	 *
-	 * @param steeringOutput the {@link Vector2} that represents the current movement for the {@link Agent}
+	 * Ticks the movement of the {@link Agent}, and stores the resulting steering
+	 * {@link Vector2} in <code>steeringOutput</code>
 	 */
 	@Override
 	public void tick(Vector2 steeringOutput) {

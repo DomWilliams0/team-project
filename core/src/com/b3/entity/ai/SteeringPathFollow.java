@@ -23,6 +23,11 @@ public class SteeringPathFollow extends Steering {
 	private SteeringArrive arriveSteering;
 	private TileSteeringTarget steeringTarget;
 
+	/**
+	 * @param entity               The entity who owns this {@link Steering}
+	 * @param nodeArrivalThreshold The distance from the goal that the entity should start slowing down
+	 * @param path                 The path to follow
+	 */
 	public SteeringPathFollow(PhysicsComponent entity, double nodeArrivalThreshold, List<Vector2> path) {
 		super(entity);
 
@@ -37,19 +42,41 @@ public class SteeringPathFollow extends Steering {
 		updateSeek();
 	}
 
+	/**
+	 * @param entity               The entity who owns this {@link Steering}
+	 * @param nodeArrivalThreshold The distance from the goal that the entity should start slowing down
+	 * @param path                 The path to follow
+	 */
 	public SteeringPathFollow(PhysicsComponent entity, double nodeArrivalThreshold, Vector2... path) {
 		this(entity, nodeArrivalThreshold, Arrays.asList(path));
 	}
 
+	/**
+	 * Creates a new steering with the default arrival threshold
+	 *
+	 * @param entity The entity who owns this {@link Steering}
+	 * @param path   The path to follow
+	 */
 	public SteeringPathFollow(PhysicsComponent entity, List<Vector2> path) {
 		this(entity, DEFAULT_ARRIVAL_THRESHOLD, path);
 	}
 
+	/**
+	 * Creates a new steering with the default arrival threshold
+	 *
+	 * @param entity The entity who owns this {@link Steering}
+	 * @param path   The path to follow
+	 */
 	public SteeringPathFollow(PhysicsComponent entity, Vector2... path) {
 		this(entity, DEFAULT_ARRIVAL_THRESHOLD, path);
 	}
 
 
+	/**
+	 * Called once per game update
+	 *
+	 * @param steeringOut The desired agent steering to apply
+	 */
 	@Override
 	public void tick(Vector2 steeringOut) {
 		// finished
@@ -68,18 +95,30 @@ public class SteeringPathFollow extends Steering {
 		steering.tick(steeringOut);
 	}
 
+	/**
+	 * @return True if the end of the path has been reached
+	 */
 	public boolean hasArrived() {
 		return arrived;
 	}
 
+	/**
+	 * @return The current goal of this {@link Steering}
+	 */
 	public Vector2 getCurrentGoal() {
 		return steeringTarget.getPosition();
 	}
 
+	/**
+	 * @return An immutable version of the full original path
+	 */
 	public List<Vector2> getFullPath() {
 		return originalPath;
 	}
 
+	/**
+	 * Sets the goal to the next tile if the current goal has been reached
+	 */
 	private void updateSeek() {
 		if (path.isEmpty()) {
 			arrived = true;

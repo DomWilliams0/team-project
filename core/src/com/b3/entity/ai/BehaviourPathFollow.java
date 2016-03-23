@@ -41,6 +41,9 @@ public class BehaviourPathFollow extends Behaviour {
 		return ((SteeringPathFollow) steering).getFullPath();
 	}
 
+	/**
+	 * @return the {@link BehaviourType} of this behaviour
+	 */
 	@Override
 	public BehaviourType getType() {
 		return BehaviourType.FOLLOW_PATH;

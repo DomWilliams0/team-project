@@ -14,19 +14,36 @@ public class SteeringArrive extends SteeringWithTarget {
 
 	private SteeringSeek seek;
 
+	/**
+	 * @param owner                  The entity who owns this {@link Steering}
+	 * @param target                 The target to seek to
+	 * @param arrivalThreshold       The maximum acceptable distance from the goal
+	 * @param deaccelerationDistance The distance from the goal at which to start slowing down
+	 */
 	public SteeringArrive(PhysicsComponent owner, SteeringTarget target,
-						  double arrivalThreshold, double decelerationDistance) {
+	                      double arrivalThreshold, double deaccelerationDistance) {
 		super(owner, target);
 		this.arrivalThreshold = arrivalThreshold * arrivalThreshold;
-		this.deaccelerationDistance = decelerationDistance * decelerationDistance;
+		this.deaccelerationDistance = deaccelerationDistance * deaccelerationDistance;
 		this.seek = new SteeringSeek(owner, target);
 	}
 
+	/**
+	 * Creates a new {@link Steering} with default threshold values
+	 *
+	 * @param owner  The entity who owns this {@link Steering}
+	 * @param target The target to seek to
+	 */
 	public SteeringArrive(PhysicsComponent owner, SteeringTarget target) {
 		this(owner, target, 0.25f, 1f);
 	}
 
 
+	/**
+	 * Called once per game update
+	 *
+	 * @param steeringOut The desired agent steering to apply
+	 */
 	@Override
 	public void tick(Vector2 steeringOut) {
 		// arrived

@@ -39,24 +39,43 @@ public abstract class IteratingSystem extends EntitySystem {
 		this.family = family;
 	}
 
+	/**
+	 * Called when this {@link System} is added to the given {@link Engine}
+	 */
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(family);
 	}
 
+	/**
+	 * Called when this {@link System} is remove from the given {@link Engine}
+	 */
 	@Override
 	public void removedFromEngine(Engine engine) {
 		entities = null;
 	}
 
+	/**
+	 * Called every frame before {@link IteratingSystem#processEntity(Entity, float)} is called
+	 * on every entity
+	 */
 	public void beginProcessing() {
 
 	}
 
+	/**
+	 * Called every frame after {@link IteratingSystem#processEntity(Entity, float)} is called
+	 * on every entity
+	 */
 	public void endProcessing() {
 
 	}
 
+	/**
+	 * Called every tick by the parent {@link Engine}
+	 *
+	 * @param deltaTime The delta time between the last and current frame
+	 */
 	@Override
 	public void update(float deltaTime) {
 		beginProcessing();
@@ -67,14 +86,14 @@ public abstract class IteratingSystem extends EntitySystem {
 	}
 
 	/**
-	 * @return set of entities processed by the system
+	 * @return {@link ImmutableArray} of entities processed by the system
 	 */
 	public ImmutableArray<Entity> getEntities() {
 		return entities;
 	}
 
 	/**
-	 * @return the Family used when the system was created
+	 * @return The {@link Family} used when the system was created
 	 */
 	public Family getFamily() {
 		return family;
@@ -84,7 +103,7 @@ public abstract class IteratingSystem extends EntitySystem {
 	 * This method is called on every entity on every update call of the EntitySystem. Override this to implement your system's
 	 * specific processing.
 	 *
-	 * @param entity    The current Entity being processed
+	 * @param entity    The current {@link Entity} being processed
 	 * @param deltaTime The delta time between the last and current frame
 	 */
 	protected abstract void processEntity(Entity entity, float deltaTime);

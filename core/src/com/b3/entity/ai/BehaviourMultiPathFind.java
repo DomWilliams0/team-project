@@ -10,7 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayDeque;
 
 /**
- * A behaviour that maintains a queue of goals, which will be travelled to sequentially
+ * A behaviour that maintains a queue of goals, which will be searched for
+ * and travelled to sequentially
  *
  * @author dxw405
  */
@@ -22,14 +23,12 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 	private final SearchAlgorithm originalAlgorithm;
 
 	/**
-	 * Construct a new behaviour
-	 *
-	 * @param agent	the {@link Agent} to follow this behaviour
-	 * @param startTile the {@link Vector2} that the {@link Agent} will start from
-	 * @param endTile the {@link Vector2} that represents the {@link Agent}'s destination
-	 * @param algorithm the {@link SearchAlgorithm} that this behaviour uses
+	 * @param agent      the {@link Agent} to follow this behaviour
+	 * @param startTile  the {@link Vector2} that the {@link Agent} will start from
+	 * @param endTile    the {@link Vector2} that represents the {@link Agent}'s destination
+	 * @param algorithm  the {@link SearchAlgorithm} that this behaviour uses
 	 * @param worldGraph the {@link WorldGraph} to use for this search
-	 * @param world the world the {@link Agent} is on
+	 * @param world      the world the {@link Agent} is on
 	 */
 	public BehaviourMultiPathFind(Agent agent, Vector2 startTile, Vector2 endTile, SearchAlgorithm algorithm, WorldGraph worldGraph, World world) {
 		super(agent, null);
@@ -40,9 +39,8 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 	}
 
 	/**
-	 * Ticks the behaviour, moving the {@link Agent} to a new position
-	 *
-	 * @param steeringOutput the {@link Vector2} that represents the current movement for the {@link Agent}
+	 * Ticks the movement of the {@link Agent}, and stores the resulting steering
+	 * {@link Vector2} in <code>steeringOutput</code>
 	 */
 	@Override
 	public void tick(Vector2 steeringOutput) {
@@ -81,7 +79,7 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 	}
 
 	/**
-	 * @return the type of this behaviour as a {@link BehaviourType}
+	 * @return The {@link BehaviourType} of the current behaviour
 	 */
 	@Override
 	public BehaviourType getType() {

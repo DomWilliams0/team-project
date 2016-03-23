@@ -46,6 +46,10 @@ public class BehaviourFlocking extends Behaviour {
 		wander = new BehaviourWander(agent);
 	}
 
+	/**
+	 * Ticks the movement of the {@link Agent}, and stores the resulting steering
+	 * {@link Vector2} in <code>steeringOutput</code>
+	 */
 	@Override
 	public void tick(Vector2 steeringOutput) {
 		steeringOutput.setZero();
@@ -59,17 +63,31 @@ public class BehaviourFlocking extends Behaviour {
 		tickSteering(separation, neighbours, additionVector, steeringOutput);
 	}
 
+	/**
+	 * Ticks the given flocking steering with the list of neighbours, to avoid recalculating 3x for every entity
+	 *
+	 * @param steering       The steering behaviour to tick
+	 * @param neighbours     The neighbours in range of the entity
+	 * @param additionVector The output behaviour for this specific steering, to be added to the grand total
+	 * @param steeringOutput The grand total cumulative steering output
+	 */
 	private void tickSteering(SteeringFlocking steering, List<PhysicsComponent> neighbours, Vector2 additionVector, Vector2 steeringOutput) {
 		steering.setNeighbours(neighbours);
 		steering.tick(additionVector);
 		steeringOutput.add(additionVector);
 	}
 
+	/**
+	 * @return The {@link BehaviourType} of the current behaviour
+	 */
 	@Override
 	public BehaviourType getType() {
 		return BehaviourType.FLOCK;
 	}
 
+	/**
+	 * Updates <code>neighbours</code> with the agents in the range of <code>DISTANCE</code> of this entity
+	 */
 	private void findNearestEntities() {
 
 		neighbours.clear();

@@ -14,6 +14,11 @@ public class SteeringSeek extends SteeringWithTarget {
 		super(entity, target);
 	}
 
+	/**
+	 * Called once per game update
+	 *
+	 * @param steeringOut The desired agent steering to apply
+	 */
 	@Override
 	public void tick(Vector2 steeringOut) {
 		steeringOut.set(

@@ -26,7 +26,7 @@ public class BehaviourWander extends Behaviour {
 	}
 
 	/**
-	 * @return the type of this behaviour
+	 * @return the {@link BehaviourType} of this behaviour
 	 */
 	@Override
 	public BehaviourType getType() {
@@ -34,9 +34,9 @@ public class BehaviourWander extends Behaviour {
 	}
 
 	/**
-	 * Moves the {@link Agent} linked to this behaviour.
+	 * Ticks the current {@link Agent} to follow the path
 	 *
-	 * @param steeringOutput the current position of the {@link Agent} linked to this behaviour
+	 * @param steeringOutput the current position of the {@link Agent}
 	 */
 	@Override
 	public void tick(Vector2 steeringOutput) {

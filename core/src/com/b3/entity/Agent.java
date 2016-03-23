@@ -65,15 +65,15 @@ public class Agent extends Entity {
 	}
 
 	/**
-	 * @return The entity's current behaviour
-	 * This is never null, but will be BehaviourNop when there is no current behaviour
+	 * @return The entity's current {@link Behaviour}
+	 * This is never null, but will be {@link BehaviourNop} when there is no current behaviour
 	 */
 	public Behaviour getBehaviour() {
 		return ai.behaviour;
 	}
 
 	/**
-	 * sets the behaviour of this current agent
+	 * Sets the behaviour of this current agent
 	 *
 	 * @param behaviour the behaviour that this agent should follow
 	 */
@@ -92,16 +92,16 @@ public class Agent extends Entity {
 	/**
 	 * Gets the world that this agent is in
 	 *
-	 * @return the world of type World that this agent it in
+	 * @return the world of type {@link World} that this agent it in
 	 */
 	public World getWorld() {
 		return world;
 	}
 
 	/**
-	 * Gets the PhysicsComponent that this agents is using
+	 * Gets the {@link PhysicsComponent} that this agents is using
 	 *
-	 * @return the PhysicsComponent that this agent is following
+	 * @return the {@link PhysicsComponent} that this agent is following
 	 */
 	public PhysicsComponent getPhysicsComponent() {
 		return physics;

@@ -20,7 +20,7 @@ public class BehaviourNop extends Behaviour {
 	}
 
 	/**
-	 * @return the type of behaviour as a {@link BehaviourType}
+	 * @return the type of this behaviour as a {@link BehaviourType}
 	 */
 	@Override
 	public BehaviourType getType() {
@@ -28,7 +28,7 @@ public class BehaviourNop extends Behaviour {
 	}
 
 	/**
-	 * Ticks the behaviour, doing nothing
+	 * Ticks the behaviour, moving the {@link Agent} to a new position
 	 *
 	 * @param steeringOutput the {@link Vector2} that represents the current movement for the {@link Agent}
 	 */

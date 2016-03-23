@@ -28,6 +28,8 @@ public class AISystem extends IteratingSystem {
 
 	/**
 	 * Creates a new AI system to process the steering of each entity.
+	 *
+	 * @param worldGraph The {@link WorldGraph} to use
 	 */
 	public AISystem(WorldGraph worldGraph) {
 		super(Family.all(PhysicsComponent.class, AIComponent.class).get());
@@ -41,7 +43,7 @@ public class AISystem extends IteratingSystem {
 	 * Process an entity, depending on its behaviour and the current progress of the search in the world,
 	 * will update the linear acceleration and velocity according to their steering rate.
 	 *
-	 * @param entity    The current Entity being processed
+	 * @param entity    The current {@link Entity} being processed
 	 * @param deltaTime The delta time between the last and current frame
 	 */
 	@Override

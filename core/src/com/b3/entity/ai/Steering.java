@@ -23,6 +23,9 @@ interface SteeringTarget {
 abstract class Steering {
 	protected PhysicsComponent entity;
 
+	/**
+	 * @param entity The entity that owns this {@link Steering}
+	 */
 	public Steering(PhysicsComponent entity) {
 		this.entity = entity;
 	}
@@ -34,10 +37,16 @@ abstract class Steering {
 	 */
 	public abstract void tick(Vector2 steeringOut);
 
+	/**
+	 * @return The entity that owns this {@link Steering}
+	 */
 	public PhysicsComponent getEntity() {
 		return entity;
 	}
 
+	/**
+	 * @param entity The new entity to own this {@link Steering}
+	 */
 	public void setEntity(PhysicsComponent entity) {
 		this.entity = entity;
 	}
@@ -56,10 +65,16 @@ abstract class SteeringWithTarget extends Steering {
 		this.target = target;
 	}
 
+	/**
+	 * @return The target
+	 */
 	public SteeringTarget getTarget() {
 		return target;
 	}
 
+	/**
+	 * @param target The new target
+	 */
 	public void setTarget(SteeringTarget target) {
 		this.target = target;
 	}
@@ -79,15 +94,21 @@ abstract class SteeringWithTarget extends Steering {
  */
 class EntitySteeringTarget implements SteeringTarget {
 
-	private PhysicsComponent physicsComponent;
+	private PhysicsComponent targetEntity;
 
-	EntitySteeringTarget(PhysicsComponent physicsComponent) {
-		this.physicsComponent = physicsComponent;
+	/**
+	 * @param entity The entity that is the target
+	 */
+	EntitySteeringTarget(PhysicsComponent entity) {
+		this.targetEntity = entity;
 	}
 
+	/**
+	 * @return A copy of the target's position
+	 */
 	@Override
 	public Vector2 getPosition() {
-		return new Vector2(physicsComponent.getPosition());
+		return new Vector2(targetEntity.getPosition());
 	}
 }
 
@@ -99,15 +120,24 @@ class EntitySteeringTarget implements SteeringTarget {
 class TileSteeringTarget implements SteeringTarget {
 	private Vector2 position;
 
+	/**
+	 * @param position The target tile
+	 */
 	TileSteeringTarget(Vector2 position) {
 		this.position = position;
 	}
 
+	/**
+	 * @return A copy of the target's position
+	 */
 	@Override
 	public Vector2 getPosition() {
 		return new Vector2(position);
 	}
 
+	/**
+	 * @param position The new target position
+	 */
 	public void setPosition(Vector2 position) {
 		this.position = position;
 	}

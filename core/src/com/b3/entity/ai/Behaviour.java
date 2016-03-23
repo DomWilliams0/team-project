@@ -4,7 +4,7 @@ import com.b3.entity.Agent;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * A base for behaviours that contain an Agent and a corresponding Steering behaviour
+ * A base for behaviours that contain an {@link Agent} and a corresponding {@link Steering} behaviour
  *
  * @author dxw405
  */
@@ -24,12 +24,13 @@ public abstract class Behaviour {
 	}
 
 	/**
-	 * @return the BehaviourType of the current behaviour
+	 * @return The {@link BehaviourType} of the current behaviour
 	 */
 	public abstract BehaviourType getType();
 
 	/**
-	 * Ticks the movement of the agent. Updates the position of the agent following the current steering input
+	 * Ticks the movement of the {@link Agent}, and stores the resulting steering
+	 * {@link Vector2} in <code>steeringOutput</code>
 	 */
 	public void tick(Vector2 steeringOutput) {
 		steering.tick(steeringOutput);

@@ -67,7 +67,7 @@ public class RenderSystem extends IteratingSystem {
 	/**
 	 * For each entity in the world, this will see where they are and make them wander around, taking into account nearby buildings and other entities
 	 *
-	 * @param entity    The current Entity being processed
+	 * @param entity    The current {@link Entity} being processed
 	 * @param deltaTime The delta time between the last and current frame
 	 */
 	public void processEntity(Entity entity, float deltaTime) {
@@ -92,7 +92,7 @@ public class RenderSystem extends IteratingSystem {
 	}
 
 	/**
-	 * The angle in degrees between the two input vector v1 and v2
+	 * Calculates the angle in degrees between the two input vector v1 and v2
 	 *
 	 * @param v1 the vector to be processed
 	 * @param v2 the vector to be processed
