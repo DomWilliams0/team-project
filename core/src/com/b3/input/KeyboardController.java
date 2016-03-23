@@ -29,13 +29,21 @@ public class KeyboardController extends InputAdapter {
 	private int zoomDelta;
 	private boolean exit;
 
+	/**
+	 * Creates a new instance of the keyboard controller
+	 */
 	public KeyboardController() {
 		zoomDelta = 0;
 		exit = false;
 		keys = new TreeMap<>(); // for faster iterating
 	}
 
-
+	/**
+	 * Decides what to do when the user presses a key on the keyboard
+	 *
+	 * @param keycode the integer representing the key pressed on the keyboard
+	 * @return true if key which has binding was pressed; false otherwise.
+	 */
 	@Override
 	public boolean keyDown(int keycode) {
 		if (CONTROL_KEYS.contains(keycode)) {
@@ -49,6 +57,12 @@ public class KeyboardController extends InputAdapter {
 		return false;
 	}
 
+	/**
+	 * Decides what to do when the user releases a key on the keyboard
+	 *
+	 * @param keycode the integer representing the key pressed on the keyboard
+	 * @return false
+	 */
 	@Override
 	public boolean keyUp(int keycode) {
 		if (CONTROL_KEYS.contains(keycode))
@@ -56,6 +70,12 @@ public class KeyboardController extends InputAdapter {
 		return false;
 	}
 
+	/**
+	 * Decides what to do when the user scrolls
+	 *
+	 * @param amount the amount of scrolling the user does
+	 * @return false
+	 */
 	@Override
 	public boolean scrolled(int amount) {
 		zoomDelta = amount;
@@ -83,6 +103,11 @@ public class KeyboardController extends InputAdapter {
 		});
 	}
 
+	/**
+	 * Updates the zoom on the world, depending on how much the user has zoomed
+	 *
+	 * @return true is zoom has changed; false otherwise
+	 */
 	public int pollZoom() {
 		int ret = zoomDelta; // mouse zoom
 
@@ -100,6 +125,11 @@ public class KeyboardController extends InputAdapter {
 		return ret;
 	}
 
+	/**
+	 * Checks if the user has pressed esc to exit the program
+	 *
+	 * @return true to exit; false otherwise
+	 */
 	public boolean shouldExit() {
 		boolean ret = exit;
 		exit = false;

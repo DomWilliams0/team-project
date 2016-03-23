@@ -19,6 +19,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * An enum to tell the world what stage {@link com.b3.mode.PracticeMode} is in.
+ * IE if the user is adding to the frontier or explored
+ *
  * @author oxe410
  */
 enum Stage {
@@ -28,6 +31,9 @@ enum Stage {
 }
 
 /**
+ * A selection handlers, that deals with input into the world
+ * Takes the input and decides what class to call
+ *
  * @author oxe410
  */
 public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
@@ -39,6 +45,12 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 	private MessageBoxComponent descriptionPopup;
 	private boolean firstTime;
 
+	/**
+	 * Creates a new selection handler linked to a world
+	 *
+	 * @param world the {@link com.b3.mode.PracticeMode} to link this selection handler to
+	 * @param popupStage the {@link com.badlogic.gdx.scenes.scene2d.Stage} to use
+	 */
 	public PracticeModeWorldSelectionHandler(World world, com.badlogic.gdx.scenes.scene2d.Stage popupStage) {
 		super(world);
 		this.currentStage = Stage.CURRENT_NODE_SELECTION;
@@ -48,6 +60,16 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 		this.firstLoadAlert2 = true;
 	}
 
+	/**
+	 * Decides what to do when the user presses on the world
+	 * Either: adds to the frontier, adds to the visited, or shows an error
+	 *
+	 * @param screenX the x position of the mouse
+	 * @param screenY the y position of the mouse
+	 * @param pointer unused
+	 * @param button  the button clicked (left, right or middle)
+	 * @return
+	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		for (int i = 0; i < world.getWorldGUI().getPopupManager().length(); i++) {

@@ -85,10 +85,18 @@ public class NodesTab extends Tab {
 		return ui;
 	}
 
+	/**
+	 * @return the {@link ButtonComponent} of the next button
+	 */
 	public ButtonComponent getNextBtn() {
 		return nextBtn;
 	}
 
+	/**
+	 * Sets the pseudocode visible or invisible
+	 *
+	 * @param enabled if true then set pseudocode visible; false -> invisible.
+	 */
 	public void setPseudocodeVisible(boolean enabled) {
 		if (enabled && !pseudocodeTable.hasParent()) {
 			tab.add(pseudocodeTable);
@@ -97,10 +105,18 @@ public class NodesTab extends Tab {
 		}
 	}
 
+	/**
+	 * If the pseudocode needs more space then increase this size
+	 *
+	 * @param size size to increase the background rendering by
+	 */
 	public void setSize(int size) {
 		this.size = size;
 	}
 
+	/**
+	 * @return the size to oversize the background to
+	 */
 	public int getSize() {
 		return size;
 	}

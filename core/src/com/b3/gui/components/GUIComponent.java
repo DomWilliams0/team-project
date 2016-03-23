@@ -14,6 +14,11 @@ public abstract class GUIComponent {
 	 */
 	public abstract Actor getComponent();
 
+	/**
+	 * Adds a listener to this GUIComponent
+	 *
+	 * @param listener the {@link EventListener} to add to this component
+	 */
 	public void addListener(EventListener listener) {
 		getComponent().addListener(listener);
 	}

@@ -127,12 +127,10 @@ public class PseudocodeVisualiser extends Table implements Observer {
 				 */
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					System.out.println("CLICKED LINE: " + lineForListener);
 					if (lineForListener != 4 && lineForListener != 0 && MainGame.getCurrentMode() == ModeType.LEARNING) {
 						Tuple<String, String> replacement = pseudocode.getImportantInfo(lineForListener);
 						String currentText = label.getText().toString();
 						String newText = parseAndChange(currentText, replacement.getFirst(), replacement.getSecond());
-						System.out.println(replacement.getSecond());
 						if (replacement.getFirst().length() > 11 && !replacement.getSecond().equals("-")) {
 							nodesTab.setSize(replacement.getFirst().length() * 10);
 						}

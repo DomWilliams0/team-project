@@ -21,7 +21,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
 /**
- * A selection handlers, that deals with input into the world
+ * A selection handler, that deals with input into the world
  * Takes the input and decides what class to call
  *
  * @author dxw405 nbg481

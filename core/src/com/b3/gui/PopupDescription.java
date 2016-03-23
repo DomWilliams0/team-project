@@ -49,7 +49,7 @@ public class PopupDescription {
 	private Sprite endNodeDFSBFS;
 
 	/**
-	 * Creates a new pop-up, with an empty canas
+	 * Creates a new pop-up, with an empty canvas
 	 *
 	 * @param world the world that this pop-up will be shown on top of
 	 */
