@@ -15,7 +15,6 @@ public class PointTimer {
 	private int timer;
 
 
-
 	/**
 	 * Creates a new PointTimer, with a x and y coordinate and time to be open
 	 *

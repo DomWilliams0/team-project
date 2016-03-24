@@ -259,7 +259,7 @@ public class TabbedPane extends Table {
 		}
 
 		public TabbedPaneStyle(Drawable titleBegin, Drawable titleEnd, Drawable bodyBackground, Drawable titleButtonSelected,
-							   Drawable titleButtonUnselected, BitmapFont font) {
+		                       Drawable titleButtonUnselected, BitmapFont font) {
 			this.titleBegin = titleBegin;
 			this.titleEnd = titleEnd;
 			this.bodyBackground = bodyBackground;

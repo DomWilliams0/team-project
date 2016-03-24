@@ -61,10 +61,10 @@ public class SideBar extends Table {
 	 * @param preferredWidth the preferred width of this sidebar
 	 */
 	SideBar(Stage stage,
-			World world,
-			boolean left,
-			String background,
-			float preferredWidth) {
+	        World world,
+	        boolean left,
+	        String background,
+	        float preferredWidth) {
 
 		this.stage = stage;
 		this.preferredWidth = preferredWidth;

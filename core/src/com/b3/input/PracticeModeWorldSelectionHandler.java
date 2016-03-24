@@ -48,7 +48,7 @@ public class PracticeModeWorldSelectionHandler extends WorldSelectionHandler {
 	/**
 	 * Creates a new selection handler linked to a world
 	 *
-	 * @param world the {@link com.b3.mode.PracticeMode} to link this selection handler to
+	 * @param world      the {@link com.b3.mode.PracticeMode} to link this selection handler to
 	 * @param popupStage the {@link com.badlogic.gdx.scenes.scene2d.Stage} to use
 	 */
 	public PracticeModeWorldSelectionHandler(World world, com.badlogic.gdx.scenes.scene2d.Stage popupStage) {

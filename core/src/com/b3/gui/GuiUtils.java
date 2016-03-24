@@ -50,7 +50,7 @@ public class GuiUtils {
 	 * @param configKey The associated configuration key
 	 */
 	public static void createCheckbox(Skin skin, BitmapFont font, Table table, String label, ConfigKey configKey,
-									  Consumer<Boolean> checkedListener, float preferredWidth) {
+	                                  Consumer<Boolean> checkedListener, float preferredWidth) {
 		CheckBoxComponent checkBox = new CheckBoxComponent(skin, font, label);
 		checkBox.getComponent().setChecked(Config.getBoolean(configKey));
 		checkBox.addListener(new ChangeListener() {

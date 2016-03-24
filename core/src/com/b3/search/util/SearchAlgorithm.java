@@ -37,7 +37,7 @@ public enum SearchAlgorithm {
 		this.shorthand = shorthand.toUpperCase();
 		this.frontierDescription = frontierDescription;
 	}
-	
+
 	/**
 	 * @param name the name of the algorithm chosen
 	 * @return the algorithm chosen as a enum of {@link SearchAlgorithm}
@@ -45,7 +45,7 @@ public enum SearchAlgorithm {
 	public static SearchAlgorithm fromName(String name) {
 		return NAMES.get(name);
 	}
-	
+
 	/**
 	 * @return a {@link Set} of {@link String} containing all the algorithms as strings
 	 */
@@ -59,7 +59,7 @@ public enum SearchAlgorithm {
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @param shorthand the shorthand name of the algorithm chosen
 	 * @return the algorithm chosen as a enum of {@link SearchAlgorithm}
@@ -67,14 +67,14 @@ public enum SearchAlgorithm {
 	public static SearchAlgorithm fromShorthand(String shorthand) {
 		return SHORTS.get(shorthand.toUpperCase());
 	}
-	
+
 	/**
 	 * @return a {@link Set} of {@link String} containing all the algorithms' shorthand names as strings
 	 */
 	public static Set<String> allShorthands() {
 		return SHORTS.keySet();
 	}
-	
+
 	/**
 	 * @return the shorthand abbreviation of the algorithm's name.
 	 */
@@ -88,5 +88,5 @@ public enum SearchAlgorithm {
 	public String getFrontierDescription() {
 		return frontierDescription;
 	}
-	
+
 }

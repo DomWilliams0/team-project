@@ -23,6 +23,7 @@ public class ConfigurationFile {
 
 	/**
 	 * Creates a new {@link ConfigurationFile} with no user config
+	 *
 	 * @param referencePath
 	 */
 	public ConfigurationFile(String referencePath) {
