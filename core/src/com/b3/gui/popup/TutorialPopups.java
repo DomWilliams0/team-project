@@ -73,7 +73,7 @@ public class TutorialPopups {
 				+ '\n' + "watch how the search works behind the scenes";
 		tutorialText[11] = "And that's it! You now know how to use this program"
 				+ '\n' + "but if you ever get stuck you can click on a help tab at the top"
-				+ '\n' + "You can go back to the main menu using the left side menu";
+				+ '\n' + "You can go back to the main menu using the top menu bar";
 
 		currentPos = new Point(1, 1);
 
