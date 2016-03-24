@@ -73,83 +73,83 @@ public class PopupDescription {
 	private void loadTextures() {
 		// Load current node sprites (2 pages + 1 (dfs, bfs or A*)) + costs A*
 		currentNodeSprite = new Sprite[6];
-		Texture tempTexture = new Texture("world/popups/currentnode250x250.JPG.png");
+		Texture tempTexture = new Texture("world/popups/english/currentnode/currentNode_DFSBFSASTAR_page1.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		currentNodeSprite[0] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/currentnode250x250.JPG_2.png");
+		tempTexture = new Texture("world/popups/english/currentnode/currentNode_DFSBFSASTAR_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		currentNodeSprite[1] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/currentnode250x250.JPG_3-DFS.png");
+		tempTexture = new Texture("world/popups/english/currentnode/currentNode_DFS_page3.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		currentNodeSprite[2] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/currentnode250x250.JPG_3-BFS.png");
+		tempTexture = new Texture("world/popups/english/currentnode/currentNode_BFS_page3.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		currentNodeSprite[3] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/currentnode250x250.JPG_3-A_STAR.png");
+		tempTexture = new Texture("world/popups/english/currentnode/currentNode_ASTAR_page3.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		currentNodeSprite[4] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/currentnode250x250.JPG_3-A_STAR2.png");
+		tempTexture = new Texture("world/popups/english/currentnode/currentNode_ASTAR_page4.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		currentNodeSprite[5] = new Sprite(tempTexture);
 
 		// Load start node sprites (2 pages)
 		startNodeSprite = new Sprite[2];
-		tempTexture = new Texture("world/popups/startnode250x250.JPG.png");
+		tempTexture = new Texture("world/popups/english/startnode/startNode_DFSBFSASTAR_page1.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		startNodeSprite[0] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/startnode250x250.JPG_2.png");
+		tempTexture = new Texture("world/popups/english/startnode/startNode_DFSBFSASTAR_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		startNodeSprite[1] = new Sprite(tempTexture);
 
 		// Load end node sprites (2 pages)
 		endNodeSprite = new Sprite[2];
-		tempTexture = new Texture("world/popups/endnode250x250.JPG.png");
+		tempTexture = new Texture("world/popups/english/endnode/endNode_ASTAR_page1.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		endNodeSprite[0] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/endnode250x250.JPG_2.png");
+		tempTexture = new Texture("world/popups/english/endnode/endNode_ASTAR_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		endNodeSprite[1] = new Sprite(tempTexture);
 
-		tempTexture = new Texture("world/popups/endnode250x250DFSBFS.png");
+		tempTexture = new Texture("world/popups/english/endnode/endNode_DFSBFS_page1.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		endNodeDFSBFS = new Sprite(tempTexture);
 
 		// Aqua nodes - just added to frontier
 		lastFrontierSprite = new Sprite[4];
-		tempTexture = new Texture("world/popups/lastF250x250.JPG.png");
+		tempTexture = new Texture("world/popups/english/lastfrontier/lastF_DBA_page1.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		lastFrontierSprite[0] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/lastF250x250.JPG-DFS.png");
+		tempTexture = new Texture("world/popups/english/lastfrontier/lastF_D_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		lastFrontierSprite[1] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/lastF250x250.JPG-BFS.png");
+		tempTexture = new Texture("world/popups/english/lastfrontier/lastF_B_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		lastFrontierSprite[2] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/lastF250x250.JPG-ASTAR.png");
+		tempTexture = new Texture("world/popups/english/lastfrontier/lastF_A_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		lastFrontierSprite[3] = new Sprite(tempTexture);
 
 		// green nodes - in frontire but not expanded yet
 		olderFrontierSprite = new Sprite[4];
-		tempTexture = new Texture("world/popups/oldF250x250.JPG.png");
+		tempTexture = new Texture("world/popups/english/oldfrontier/oldF_DBA_page1.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		olderFrontierSprite[0] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/oldF250x250.JPG-DFS.png");
+		tempTexture = new Texture("world/popups/english/oldfrontier/oldF_D_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		olderFrontierSprite[1] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/oldF250x250.JPG-BFS.png");
+		tempTexture = new Texture("world/popups/english/oldfrontier/oldF_B_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		olderFrontierSprite[2] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/oldF250x250.JPG-ASTAR.png");
+		tempTexture = new Texture("world/popups/english/oldfrontier/oldF_A_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		olderFrontierSprite[3] = new Sprite(tempTexture);
 
 		// fully explored (grey colours; two pages)
 		fullyExploredSprite = new Sprite[2];
-		tempTexture = new Texture("world/popups/fullyExplored250x250.JPG.png");
+		tempTexture = new Texture("world/popups/english/fullexplored/fullyExplored_DFSBFSASTAR_page1.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		fullyExploredSprite[0] = new Sprite(tempTexture);
-		tempTexture = new Texture("world/popups/fullyExplored250x250.JPG_2.png");
+		tempTexture = new Texture("world/popups/english/fullexplored/fullyExplored_DFSBFSASTAR_page2.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		fullyExploredSprite[1] = new Sprite(tempTexture);
 

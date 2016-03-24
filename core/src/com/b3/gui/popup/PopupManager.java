@@ -23,15 +23,15 @@ public class PopupManager {
 	 */
 	public PopupManager(ModeType mode) {
 		// load error textures
-		Texture tempTexture = new Texture("world/popups/errorBuildings.png");
+		Texture tempTexture = new Texture("world/popups/error/errorBuildings.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		buildingErrorPopup = new Popup(new Sprite(tempTexture));
 
-		tempTexture = new Texture("world/popups/errorCode.png");
+		tempTexture = new Texture("world/popups/error/errorCode.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		pseudocodeError = new Popup(new Sprite(tempTexture));
 
-		tempTexture = new Texture("world/popups/errorSearch.png");
+		tempTexture = new Texture("world/popups/error/errorSearch.png");
 		tempTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		behaviourError = new Popup(new Sprite(tempTexture));
 

@@ -43,9 +43,9 @@ public class BuildingModelCache implements Disposable {
 	 * load the textures that are required for buildings sides and roof
 	 */
 	private void loadTextures() {
-		nightSide = new Texture("world/popups/night_side_scaled_new.jpg");
-		nightSideFlipped = new Texture("world/popups/night_side_scaled_new_frontback.jpg");
-		topSide = new Texture("world/popups/roof.jpg");
+		nightSide = new Texture("world/textures/night_side_scaled_new.jpg");
+		nightSideFlipped = new Texture("world/textures/night_side_scaled_new_frontback.jpg");
+		topSide = new Texture("world/textures/roof.jpg");
 	}
 
 	/**
