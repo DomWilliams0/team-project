@@ -93,7 +93,7 @@ public class Pseudocode extends Observable {
 	/**
 	 * Changes the pseudocode to match the new {@code algorithm}
 	 *
-	 * @param algorithm the algorithm to re-initialise this Pseuocode with
+	 * @param algorithm the algorithm to re-initialise this pseudocode with
 	 */
 	public void setAlgorithm(SearchAlgorithm algorithm) {
 		this.algorithm = algorithm;

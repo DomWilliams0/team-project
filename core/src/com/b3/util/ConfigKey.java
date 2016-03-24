@@ -181,7 +181,7 @@ public enum ConfigKey {
 	}
 
 	/**
-	 * @return The text of the key in the YAML file.
+	 * @return The text of the key in the YML file.
 	 */
 	public String getKey() {
 		return key;

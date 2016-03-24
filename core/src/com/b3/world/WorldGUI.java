@@ -266,9 +266,9 @@ public class WorldGUI {
 	/**
 	 * Sets the function that is run before any popup rendering
 	 *
-	 * @param prePopopRender The new function to run
+	 * @param prePopupRender The new function to run
 	 */
-	public void setPrePopupRenderer(Runnable prePopopRender) {
-		this.prePopupRender = prePopopRender;
+	public void setPrePopupRenderer(Runnable prePopupRender) {
+		this.prePopupRender = prePopupRender;
 	}
 }

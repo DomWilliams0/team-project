@@ -72,7 +72,7 @@ public class PopupManager {
 	}
 
 	/**
-	 * Shows an error when the user tries to activate pseducode mode when search is not in progress
+	 * Shows an error when the user tries to activate pseudocode mode when search is not in progress
 	 */
 	public void showPseudocodeError() {
 		pseudocodeError.showPopup(750);

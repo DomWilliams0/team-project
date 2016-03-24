@@ -300,15 +300,15 @@ public class VisNodes extends Table {
 	 * Nothing further needs be performed after calling this, add data to vt and ft
 	 *
 	 * @param alg        The {@link SearchAlgorithm} being used by the search
-	 * @param rendermore <code>true</code> if the data collections are being rendered
+	 * @param renderMore <code>true</code> if the data collections are being rendered
 	 */
-	private void setupTable(SearchAlgorithm alg, boolean rendermore) {
+	private void setupTable(SearchAlgorithm alg, boolean renderMore) {
 		// clear the tables
 		clear();
 		spm.clear();
 
 		// we need to render the data collections
-		if (rendermore) {
+		if (renderMore) {
 			// full title;
 			addLabel("Running search using " + alg.getName(), true)
 					.colspan(3).spaceBottom(5);

@@ -545,7 +545,7 @@ public class SearchTicker extends Observable {
 	}
 
 	/**
-	 * @return a {@link Set} of type {@link Node} containing all the nodes in the visitied
+	 * @return a {@link Set} of type {@link Node} containing all the nodes in the visited
 	 */
 	public Set<Node> getVisited() {
 		return visited;

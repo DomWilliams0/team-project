@@ -148,7 +148,7 @@ public class PseudocodeVisualiser extends Table implements Observer {
 	 * @param currentText   the current text in the label
 	 * @param toReplaceWith the substring to insert into the current text
 	 * @param itemToReplace the substring to remove fromm the current text and insert toReplaceWith into
-	 * @return
+	 * @return The processed string
 	 */
 	private String parseAndChange(String currentText, String toReplaceWith, String itemToReplace) {
 		if (toReplaceWith.equals("") || toReplaceWith.equals(" "))
