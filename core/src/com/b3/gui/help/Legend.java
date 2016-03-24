@@ -42,7 +42,7 @@ public class Legend extends Table {
 	}
 
 	/**
-	 * Initialise the components of this {@link Legend}
+	 * Initialise the components of this {@link Legend}.
 	 * Populate it with data.
 	 */
 	private void initComponents() {

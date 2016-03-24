@@ -56,8 +56,8 @@ public abstract class Mode extends ScreenAdapter {
 	 * @param worldPath    The path of the world to load
 	 * @param startingFOV  The FOV to start at
 	 * @param startingZoom The zoom level to start at
-	 * @param startingX    The X coordinate to start at. Null for world centre
-	 * @param startingY    The Y coordinate to start at. Null for world centre
+	 * @param startingX    The X coordinate to start at. <code>Null</code> for world centre
+	 * @param startingY    The Y coordinate to start at. <code>Null</code> for world centre
 	 */
 	public Mode(MainGame mainGame, String worldPath, float startingFOV, float startingZoom, Float startingX, Float startingY) {
 
