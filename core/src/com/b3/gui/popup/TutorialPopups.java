@@ -4,6 +4,7 @@ import com.b3.gui.sidebars.SideBar;
 import com.b3.gui.sidebars.SideBarNodes;
 import com.b3.search.Node;
 import com.b3.search.Point;
+import com.b3.search.SearchTicker;
 import com.b3.util.Config;
 import com.b3.util.ConfigKey;
 import com.b3.util.Utils;
@@ -161,7 +162,7 @@ public class TutorialPopups {
 				}
 				break;
 			case 10:
-				if (world.getWorldGraph().getCurrentSearch().isInspectingSearch()) {
+				if (SearchTicker.isInspectingSearch()) {
 					stepCounter++;
 				}
 				break;

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * An instance of a search in progress
  *
- * @author mainly dxw405, added to by all team
+ * @author initially dxw405, added to by full team
  */
 public class SearchTicker extends Observable {
 
@@ -83,7 +83,7 @@ public class SearchTicker extends Observable {
 		inspectSearch = inspect;
 	}
 
-	public boolean isRenderProgress() {
+	boolean isRenderProgress() {
 		return renderProgress;
 	}
 
@@ -496,7 +496,7 @@ public class SearchTicker extends Observable {
 	}
 
 	/**
-	 * Contructs a path from the {@code start} to the {@code end} using the {@code map} generated throughout the search
+	 * Constructs a path from the {@code start} to the {@code end} using the {@code map} generated throughout the search
 	 *
 	 * @param map   the map of nodes to each other nodes
 	 * @param start the start node of the path
@@ -750,10 +750,6 @@ public class SearchTicker extends Observable {
 	 */
 	public ModeType getMode() {
 		return mode;
-	}
-
-	public String getTentative_gString() {
-		return tentative_gString;
 	}
 
 }

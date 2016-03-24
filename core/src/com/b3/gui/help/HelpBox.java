@@ -62,6 +62,9 @@ public class HelpBox extends Table {
 		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
+	/**
+	 * Adds the components for the current {@link Mode}
+	 */
 	private void initComponents() {
 		// ===============
 		// === STYLING ===

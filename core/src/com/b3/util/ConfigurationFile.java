@@ -12,12 +12,19 @@ import java.nio.file.Paths;
 import java.util.Collections;
 
 /**
+ * A configuration file which can have a base, reference config with default values,
+ * and an optional user config that overrides the base config.
+ *
  * @author dxw405
  */
 public class ConfigurationFile {
 
 	private ConfigurationProvider provider;
 
+	/**
+	 * Creates a new {@link ConfigurationFile} with no user config
+	 * @param referencePath
+	 */
 	public ConfigurationFile(String referencePath) {
 		this(referencePath, null);
 	}

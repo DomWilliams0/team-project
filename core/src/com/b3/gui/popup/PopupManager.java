@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 /**
  * Manages all the currently showing pop-ups in the world
  *
- * @author nbg481 dxw405 bxd428
+ * @author nbg481 bxd428
  */
 public class PopupManager {
 

@@ -36,8 +36,6 @@ public class VisScrollPane extends ScrollPane {
 	private Node clickedNode;
 	private boolean clickedNodeUpdated = false;
 
-	private TextureRegionDrawable defaultTexture;
-	private Pixmap pm;
 	private static final Color defaultBackground = new Color(0.56f, 0.69f, 0.83f, 1);
 
 	private VisNodes vn;
@@ -79,10 +77,10 @@ public class VisScrollPane extends ScrollPane {
 		colours = new HashMap<>();
 
 		// initialise colour data
-		pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
+		Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
 		pm.setColor(defaultBackground);
 		pm.fill();
-		defaultTexture = new TextureRegionDrawable(new TextureRegion(new Texture(pm)));
+		TextureRegionDrawable defaultTexture = new TextureRegionDrawable(new TextureRegion(new Texture(pm)));
 		colourTextureCache.put(defaultBackground, defaultTexture);
 
 		// setup styling decisions on the scrollpane

@@ -16,6 +16,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 
 /**
+ * A search agent in the world
+ *
  * @author dxw405
  */
 public class Agent extends Entity {
@@ -105,13 +107,5 @@ public class Agent extends Entity {
 	 */
 	public PhysicsComponent getPhysicsComponent() {
 		return physics;
-	}
-
-	public float getRadius() {
-		return render.radius;
-	}
-
-	public void setRadius(float radius) {
-		render.radius = radius;
 	}
 }

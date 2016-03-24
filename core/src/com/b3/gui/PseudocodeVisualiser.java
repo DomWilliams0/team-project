@@ -28,7 +28,7 @@ import java.util.Observer;
 /**
  * Represents the pseudocode visualisation box
  *
- * @author oxe410, nbg481
+ * @author oxe410 nbg481
  */
 public class PseudocodeVisualiser extends Table implements Observer {
 

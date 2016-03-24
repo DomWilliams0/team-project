@@ -16,7 +16,7 @@ import static com.b3.mode.ModeType.LEARNING;
 import static com.b3.mode.ModeType.TUTORIAL;
 
 /**
- * Deals with rendering a layer of interaction ontop of the graph - pop-ups, errors and heuristics
+ * Deals with rendering a layer of interaction on top of the graph - pop-ups, errors and heuristics
  *
  * @author nbg481
  */
@@ -52,7 +52,7 @@ public class WorldGUI {
 	 *
 	 * @param world the world that this GUI will be overlaid on top of
 	 */
-	public WorldGUI(World world) {
+	WorldGUI(World world) {
 		this.world = world;
 
 		animationNextDestination = 0;

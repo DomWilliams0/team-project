@@ -23,7 +23,7 @@ public class InputHandler {
 	}
 
 	/**
-	 * @return an instance of the input handler
+	 * @return The singleton {@link InputHandler}
 	 */
 	public static InputHandler getInstance() {
 		if (instance == null)
@@ -34,16 +34,16 @@ public class InputHandler {
 	/**
 	 * Adds a {@link InputProcessor} for the input handler to control
 	 *
-	 * @param inputProcessor the {@link InputProcessor} to
+	 * @param inputProcessor the {@link InputProcessor} to add
 	 */
 	public void addProcessor(InputProcessor inputProcessor) {
 		inputMultiplexer.addProcessor(inputProcessor);
 	}
 
 	/**
-	 * Adds a {@link InputProcessor} for the input handler to control
+	 * Removes a {@link InputProcessor} from the registered listeners
 	 *
-	 * @param inputProcessor
+	 * @param inputProcessor The {@link InputProcessor} to remove
 	 */
 	public void removeProcessor(InputProcessor inputProcessor) {
 		inputMultiplexer.removeProcessor(inputProcessor);

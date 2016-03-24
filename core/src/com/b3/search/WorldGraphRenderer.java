@@ -53,7 +53,7 @@ public class WorldGraphRenderer {
 	 * This allows tests to be run without initialising Gdx's graphics
 	 * It must be called before any calls to render
 	 */
-	public void initRenderer() {
+	void initRenderer() {
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.translate(0.5f, 0.5f, 0f);
 	}
@@ -155,12 +155,12 @@ public class WorldGraphRenderer {
 				}
 
 				// current neighbours
-				if (searchTicker.isInspectingSearch() && currentNeighbours != null)
+				if (SearchTicker.isInspectingSearch() && currentNeighbours != null)
 					renderSearchNodes(Config.getColor(ConfigKey.CURRENT_NEIGHBOURS_COLOUR), currentNeighbours, zoomScalarInside);
 
 				// current neighbour (to be analysed)
 				Node currentNeighbour = searchTicker.getCurrentNeighbour();
-				if (searchTicker.isInspectingSearch() && currentNeighbour != null)
+				if (SearchTicker.isInspectingSearch() && currentNeighbour != null)
 					renderSingleSearchNode(Config.getColor(ConfigKey.CURRENT_NEIGHBOUR_COLOUR), currentNeighbour, zoomScalarInside);
 			}
 		}

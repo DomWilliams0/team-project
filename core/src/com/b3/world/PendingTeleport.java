@@ -7,12 +7,16 @@ import com.badlogic.gdx.physics.box2d.Body;
  *
  * @author dxw405
  */
-public class PendingTeleport {
+class PendingTeleport {
 
-	public final Body body;
-	public final TeleportType teleportType;
+	final Body body;
+	final TeleportType teleportType;
 
-	public PendingTeleport(Body body, TeleportType teleportType) {
+	/**
+	 * @param body         The {@link Body} to teleport
+	 * @param teleportType Where to teleport this body to
+	 */
+	PendingTeleport(Body body, TeleportType teleportType) {
 		this.body = body;
 		this.teleportType = teleportType;
 	}
@@ -20,7 +24,7 @@ public class PendingTeleport {
 	/**
 	 * Where to teleport to.
 	 */
-	public enum TeleportType {
+	enum TeleportType {
 		TO_LEFT,
 		TO_TOP,
 		TO_RIGHT,

@@ -32,7 +32,7 @@ import java.util.Map;
  * Represents the basis of a sidebar.
  * Ensures consistent styles.
  *
- * @author oxe410
+ * @author oxe410 dxw405
  */
 public class SideBar extends Table {
 

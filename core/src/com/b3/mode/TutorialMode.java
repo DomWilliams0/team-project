@@ -76,6 +76,10 @@ public class TutorialMode extends Mode {
 		tutorialPopups.checkTaskCompleted(world, sideBar, sideBarNodes);
 	}
 
+	/**
+	 * Instantiation that takes place _in_ the Mode constructor, after the world
+	 * has been loaded
+	 */
 	@Override
 	public void initialise() {
 		WorldGraph worldGraph = world.getWorldGraph();

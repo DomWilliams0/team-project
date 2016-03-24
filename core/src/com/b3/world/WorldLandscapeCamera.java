@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Matrix4;
  *
  * @author dxw405
  */
-public class WorldLandscapeCamera extends WorldCamera {
+class WorldLandscapeCamera extends WorldCamera {
 
 	private WorldCamera mainWorld;
 	private float renderOffsetX;
@@ -25,7 +25,7 @@ public class WorldLandscapeCamera extends WorldCamera {
 	 * @param startY       The starting Y coordinate
 	 * @param startZoom    The starting Z coordinate
 	 */
-	public WorldLandscapeCamera(float fieldOfViewY, TiledMap tmx, float startX, float startY, float startZoom, WorldCamera mainWorld) {
+	WorldLandscapeCamera(float fieldOfViewY, TiledMap tmx, float startX, float startY, float startZoom, WorldCamera mainWorld) {
 		super(fieldOfViewY, LandscapeGenerator.generate(tmx), startX, startY, startZoom);
 		this.mainWorld = mainWorld;
 
@@ -37,6 +37,9 @@ public class WorldLandscapeCamera extends WorldCamera {
 	}
 
 
+	/**
+	 * Renders the tilemap
+	 */
 	@Override
 	public void renderWorld() {
 		combined.set(new Matrix4(mainWorld.combined)
@@ -46,7 +49,7 @@ public class WorldLandscapeCamera extends WorldCamera {
 
 	/**
 	 * Generates a landscape TiledMap, extrapolating
-	 * the tiles on the edges of the given TiledMap
+	 * the tiles on the edges of the given {@link TiledMap}
 	 */
 	private static class LandscapeGenerator {
 
@@ -59,7 +62,7 @@ public class WorldLandscapeCamera extends WorldCamera {
 		/**
 		 * @param originalMap The TiledMap to extrapolate
 		 */
-		public LandscapeGenerator(TiledMap originalMap) {
+		LandscapeGenerator(TiledMap originalMap) {
 			exampleLayer = originalMap.getLayers().getByType(TiledMapTileLayer.class).first();
 
 			landscapeMap = new TiledMap();
@@ -200,7 +203,7 @@ public class WorldLandscapeCamera extends WorldCamera {
 		 * @param tmx The tiled map to generate a landscape for
 		 * @return The newly generated landscape tiled map
 		 */
-		public static TiledMap generate(TiledMap tmx) {
+		static TiledMap generate(TiledMap tmx) {
 			return new LandscapeGenerator(tmx).landscapeMap;
 		}
 	}

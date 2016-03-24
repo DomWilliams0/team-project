@@ -233,6 +233,13 @@ public class Graph {
 		return sb.toString();
 	}
 
+	/**
+	 * Adds nodes in all spaces in the given range
+	 *
+	 * @param x    The start X coordinate
+	 * @param y    The start Y coordinate
+	 * @param size The width and height of the area to fill with nodes
+	 */
 	public void addNodesInSquare(int x, int y, int size) {
 
 		// add nodes

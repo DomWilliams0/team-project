@@ -78,7 +78,7 @@ public class SearchParameters {
 			case BREADTH_FIRST:
 				return new LinkedListT<>();
 			case DIJKSTRA:
-				return new PriorityQueueT<>(getGScore::apply);
+				return new PriorityQueueT<>(getGScore);
 			case A_STAR:
 				return new PriorityQueueT<>((n) -> getGScore.apply(n) + heuristic.apply(n, end));
 			default:

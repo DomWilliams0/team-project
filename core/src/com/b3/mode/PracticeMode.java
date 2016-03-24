@@ -79,9 +79,12 @@ public class PracticeMode extends Mode {
 	protected void tick() {
 		popupStage.act(Utils.TRUE_DELTA_TIME);
 		popupStage.draw();
-
 	}
 
+	/**
+	 * Instantiation that takes place _in_ the Mode constructor, after the world
+	 * has been loaded
+	 */
 	@Override
 	public void initialise() {
 		WorldGraph worldGraph = world.getWorldGraph();

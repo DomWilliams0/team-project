@@ -73,6 +73,10 @@ public class LearningMode extends Mode {
 		sideBar.render();
 	}
 
+	/**
+	 * Instantiation that takes place _in_ the Mode constructor, after the world
+	 * has been loaded
+	 */
 	@Override
 	public void initialise() {
 		//get the default starting algorithm from the config file
@@ -101,5 +105,4 @@ public class LearningMode extends Mode {
 		super.resize(width, height);
 		sideBar.resize(width, height);
 	}
-
 }

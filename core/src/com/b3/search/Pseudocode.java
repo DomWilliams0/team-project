@@ -367,7 +367,7 @@ public class Pseudocode extends Observable {
 				replacement = "+";
 		}
 
-		return new Tuple<String, String>(arrayList.get(i), replacement);
+		return new Tuple<>(arrayList.get(i), replacement);
 	}
 
 }

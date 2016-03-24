@@ -24,7 +24,7 @@ import com.badlogic.gdx.math.collision.Ray;
  * A selection handler, that deals with input into the world
  * Takes the input and decides what class to call
  *
- * @author dxw405 nbg481
+ * @author nbg481 dxw405
  */
 public class WorldSelectionHandler extends InputAdapter {
 

@@ -59,7 +59,7 @@ public abstract class Mode extends ScreenAdapter {
 	 * @param startingX    The X coordinate to start at. <code>Null</code> for world centre
 	 * @param startingY    The Y coordinate to start at. <code>Null</code> for world centre
 	 */
-	public Mode(MainGame mainGame, String worldPath, float startingFOV, float startingZoom, Float startingX, Float startingY) {
+	Mode(MainGame mainGame, String worldPath, float startingFOV, float startingZoom, Float startingX, Float startingY) {
 
 		game = mainGame;
 		InputHandler inputHandler = game.getInputHandler();

@@ -160,6 +160,10 @@ public class CompareMode extends Mode {
 		labelBatch.end();
 	}
 
+	/**
+	 * Instantiation that takes place _in_ the Mode constructor, after the world
+	 * has been loaded
+	 */
 	@Override
 	protected void initialise() {
 	}

@@ -7,7 +7,7 @@ import com.badlogic.gdx.Input;
  *
  * @author dxw405
  */
-public enum Key {
+enum Key {
 
 	UP(Input.Keys.UP),
 	DOWN(Input.Keys.DOWN),
