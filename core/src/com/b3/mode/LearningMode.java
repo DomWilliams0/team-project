@@ -11,6 +11,8 @@ import com.b3.search.SearchPauser;
 import com.b3.search.SearchTicker;
 import com.b3.search.WorldGraph;
 import com.b3.search.util.SearchAlgorithm;
+import com.b3.util.Config;
+import com.b3.util.ConfigKey;
 
 /**
  * A small scale world with step by step views and pop-ups to allow for users with limited knowledge
@@ -73,11 +75,14 @@ public class LearningMode extends Mode {
 
 	@Override
 	public void initialise() {
+		//get the default starting algorithm from the config file
+		SearchAlgorithm defaultAlg = Config.getAlgorithm(ConfigKey.DEFAULT_SEARCH_ALGORITHM, SearchAlgorithm.DEPTH_FIRST);
+
 		WorldGraph worldGraph = world.getWorldGraph();
-		worldGraph.setLearningModeNext(SearchAlgorithm.A_STAR);
+		worldGraph.setLearningModeNext(defaultAlg);
 		Agent agent = world.spawnAgent(world.getTileSize().scl(0.5f));
 		BehaviourMultiContinuousPathFind behaviour = new BehaviourMultiContinuousPathFind(
-				agent, SearchAlgorithm.A_STAR, worldGraph, world);
+				agent, defaultAlg, worldGraph, world);
 		agent.setBehaviour(behaviour);
 
 		worldGraph.setCurrentSearch(agent, behaviour.getSearchTicker());

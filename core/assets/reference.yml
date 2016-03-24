@@ -42,3 +42,5 @@ node-colour: 3F3F3F # Dark Grey
 search-edge-colour: FFFF00 # Yellow
 current-neighbour-colour: FFFF00 # Yellow
 current-neighbours-colour: 87CEEB # Sky
+
+default-search-algorithm: A_STAR

@@ -1,5 +1,6 @@
 package com.b3.util;
 
+import com.b3.search.util.SearchAlgorithm;
 import com.badlogic.gdx.graphics.Color;
 
 import java.util.EnumMap;
@@ -161,6 +162,25 @@ public class Config {
 	 */
 	public static Float getFloat(ConfigKey key) {
 		return get(key, Float.class);
+	}
+
+	/**
+	 * Gets a {@link SearchAlgorithm} from the config file.
+	 * Defaults to def if not found or the config representation is unrecognised.
+	 *
+	 * @param key Key for desired Algorithm
+	 * @param def Default {@link SearchAlgorithm} to return if none found
+	 * @return The {@link SearchAlgorithm} referring to Key, or def if none found.
+	 */
+	public static SearchAlgorithm getAlgorithm(ConfigKey key, SearchAlgorithm def) {
+		String algStr = getString(key).toUpperCase();
+		switch (algStr) {
+			case "A_STAR" : return SearchAlgorithm.A_STAR;
+			case "DFS" : return SearchAlgorithm.DEPTH_FIRST;
+			case "BFS" : return SearchAlgorithm.BREADTH_FIRST;
+			case "DIJ" : return SearchAlgorithm.DIJKSTRA;
+			default : return def;
+		}
 	}
 
 	/**

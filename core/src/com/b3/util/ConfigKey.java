@@ -167,7 +167,12 @@ public enum ConfigKey {
 	 * neighbours of the current {@link com.b3.search.Node}, which is
 	 * being expanded.
 	 */
-	CURRENT_NEIGHBOURS_COLOUR("current-neighbours-colour");
+	CURRENT_NEIGHBOURS_COLOUR("current-neighbours-colour"),
+	/**
+	 * The default {@link com.b3.search.util.SearchAlgorithm} to load
+	 * for {@link com.b3.mode.ModeType#LEARNING} mode.
+	 */
+	DEFAULT_SEARCH_ALGORITHM("default-search-algorithm");
 
 	private final String key;
 

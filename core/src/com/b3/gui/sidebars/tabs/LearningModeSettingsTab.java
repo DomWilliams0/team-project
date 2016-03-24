@@ -150,6 +150,8 @@ public class LearningModeSettingsTab extends Tab {
 				world.getWorldGraph().setLearningModeNext(algorithm);
 			}
 		});
+		//ensure the box is showing the default algorithm selected
+		searchSelectBox.setSelected(world.getWorldGraph().getCurrentSearch().getAlgorithm().getName());
 
 		// Search speed slider
 		LabelComponent searchSpeedLabel = new LabelComponent(skin, "Search speed", Color.BLACK);
