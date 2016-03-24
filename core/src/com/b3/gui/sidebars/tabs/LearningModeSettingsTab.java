@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -138,7 +139,7 @@ public class LearningModeSettingsTab extends Tab {
 
 		LabelComponent labelNextSearch = new LabelComponent(skin, "The next search will use:", Color.BLACK);
 
-		Object[] searches = SearchAlgorithm.allNames().toArray();
+		Object[] searches = Arrays.copyOfRange(SearchAlgorithm.allNames().toArray(), 0, SearchAlgorithm.allNames().size()-1);
 		SelectBoxComponent searchSelectBox = new SelectBoxComponent(skin, font, new Array(searches));
 		searchSelectBox.setSelected(searches[0]);
 
