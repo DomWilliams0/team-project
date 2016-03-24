@@ -97,7 +97,7 @@ public class BehaviourMultiPathFind extends Behaviour implements BehaviourWithPa
 	/**
 	 * A helper class to contain a goal and a search algorithm
 	 */
-	private class Search {
+	private static class Search {
 		public final SearchAlgorithm algorithm;
 		public final Vector2 goal;
 

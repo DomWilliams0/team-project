@@ -212,8 +212,6 @@ public class GraphTest {
 		testHasEdge(x1, y1, x2, y2, false);
 	}
 	
-	
-	
 	/**
 	 * Tests the {@link WorldGraph#getRandomNode()} and
 	 * {@link WorldGraph#getRandomNode(Node)} methods

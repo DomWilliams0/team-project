@@ -22,6 +22,8 @@ remove-building-mode: false
 game-speed: 1
 sound-on: false
 
+default-search-algorithm: ASTR
+
 time-between-ticks-min: 0.05
 time-between-ticks: 0.5
 time-between-ticks-max: 1.0
@@ -42,5 +44,3 @@ node-colour: 3F3F3F # Dark Grey
 search-edge-colour: FFFF00 # Yellow
 current-neighbour-colour: FFFF00 # Yellow
 current-neighbours-colour: 87CEEB # Sky
-
-default-search-algorithm: A_STAR

@@ -173,14 +173,8 @@ public class Config {
 	 * @return The {@link SearchAlgorithm} referring to Key, or def if none found.
 	 */
 	public static SearchAlgorithm getAlgorithm(ConfigKey key, SearchAlgorithm def) {
-		String algStr = getString(key).toUpperCase();
-		switch (algStr) {
-			case "A_STAR" : return SearchAlgorithm.A_STAR;
-			case "DFS" : return SearchAlgorithm.DEPTH_FIRST;
-			case "BFS" : return SearchAlgorithm.BREADTH_FIRST;
-			case "DIJ" : return SearchAlgorithm.DIJKSTRA;
-			default : return def;
-		}
+		SearchAlgorithm alg = SearchAlgorithm.fromShorthand(getString(key));
+		return alg == null ? def : alg;
 	}
 
 	/**
